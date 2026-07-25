@@ -46,8 +46,12 @@ const QuoteIcon = ({ width, height }) => (
   </svg>
 );
 
-const StarIcon = ({ size }) => (
-  <svg viewBox="0 0 24 24" style={{ width: size, height: size, flexShrink: 0 }} fill="#FFC107">
+const StarIcon = ({ size, filled = true }) => (
+  <svg
+    viewBox="0 0 24 24"
+    style={{ width: size, height: size, flexShrink: 0 }}
+    fill={filled ? '#FFC107' : 'rgba(255,255,255,0.35)'}
+  >
     <path d="M12 2l2.9 6.26L22 9.27l-5 4.87L18.18 21 12 17.27 5.82 21 7 14.14l-5-4.87 7.1-1.01L12 2z" />
   </svg>
 );
@@ -129,7 +133,7 @@ function VideoCard({ item }) {
           </div>
           <div className="flex items-center" style={{ gap: 'clamp(1px, 0.1vw, 2px)' }}>
             {Array.from({ length: 5 }).map((_, i) => (
-              <StarIcon key={i} size="clamp(8px, 0.773vw, 11.13px)" />
+              <StarIcon key={i} size="clamp(8px, 0.773vw, 11.13px)" filled={i < (item.rating || 5)} />
             ))}
           </div>
         </div>
@@ -191,8 +195,19 @@ function VideoCard({ item }) {
   );
 }
 
-export default function VideoTestimonialCarousel({ testimonials }) {
-  const DATA = testimonials?.length ? testimonials : DEFAULT_TESTIMONIALS;
+export default function VideoTestimonialCarousel({ reviews }) {
+  const DATA = reviews?.cards?.length
+    ? reviews.cards.map((c, i) => ({
+        id: i + 1,
+        img: c.image || DEFAULT_TESTIMONIALS[i % DEFAULT_TESTIMONIALS.length]?.img,
+        video: c.video || '',
+        avatar: c.image || DEFAULT_TESTIMONIALS[i % DEFAULT_TESTIMONIALS.length]?.avatar,
+        name: c.name,
+        quote: c.quote,
+        role: c.role,
+        rating: c.rating || 5,
+      }))
+    : DEFAULT_TESTIMONIALS;
 
   return (
     <section

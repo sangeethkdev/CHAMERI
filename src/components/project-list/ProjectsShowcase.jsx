@@ -37,8 +37,25 @@ const PROJECTS = [
   },
 ];
 
-export default function ProjectsShowcase({ projects }) {
-  const DATA = projects?.length ? projects : PROJECTS;
+// The backend doesn't store a per-card link, and the site only has two
+// standalone project pages today — route by matching the card's heading
+// against them, falling back to the Kiwano Villa page.
+const resolveHref = (heading = '') =>
+  /villament/i.test(heading) ? '/kiwano-villament' : '/kiwano';
+
+export default function ProjectsShowcase({ cardsSection, projects }) {
+  const DATA = cardsSection?.cards?.length
+    ? cardsSection.cards.map((c, i) => ({
+        id: i,
+        tag: c.title || PROJECTS[i % PROJECTS.length]?.tag,
+        title: c.heading || PROJECTS[i % PROJECTS.length]?.title,
+        description: c.subheading || PROJECTS[i % PROJECTS.length]?.description,
+        image: c.image || PROJECTS[i % PROJECTS.length]?.image,
+        href: resolveHref(c.heading),
+      }))
+    : projects?.length
+    ? projects
+    : PROJECTS;
 
   return (
     <div className="relative w-full">
