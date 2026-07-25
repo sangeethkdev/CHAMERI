@@ -25,6 +25,7 @@ import NewNavbar from "@/components/common/NewNavbar";
 
 export default function TestimonialHero({ hero }) {
   const heading = hero?.heading || "Let's Create \nSomething Exceptional.";
+  const image = hero?.image || "/dummyimages/93ea3b68dd0f3cef6bc8fd39cb67ca7fed7d3057.png";
 
   return (
     <section
@@ -36,7 +37,7 @@ export default function TestimonialHero({ hero }) {
       {/* ── BACKGROUND IMAGE ───────────────────────────────────────────── */}
       <div className="absolute inset-0 w-full h-full -z-10">
         <Image
-          src="/dummyimages/93ea3b68dd0f3cef6bc8fd39cb67ca7fed7d3057.png"
+          src={image}
           alt="Chameri villa exterior"
           fill
           priority

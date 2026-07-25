@@ -175,8 +175,17 @@ const ArrowIcon = ({ size }) => (
   </svg>
 );
 
-export default function TestimonialCarousel({ testimonials }) {
-  const DATA = testimonials?.length ? testimonials : DEFAULT_TESTIMONIALS;
+export default function TestimonialCarousel({ reviews }) {
+  const DATA = reviews?.cards?.length
+    ? reviews.cards.map((c, i) => ({
+        id: i + 1,
+        quote: c.quote,
+        name: c.name,
+        role: c.role,
+        avatar: c.image || DEFAULT_TESTIMONIALS[i % DEFAULT_TESTIMONIALS.length]?.avatar,
+        googleScore: c.rating ? c.rating.toFixed(1) : '5.0',
+      }))
+    : DEFAULT_TESTIMONIALS;
   const total = DATA.length;
   const [current, setCurrent] = useState(0);
 
