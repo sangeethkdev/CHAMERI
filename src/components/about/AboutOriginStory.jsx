@@ -12,7 +12,126 @@ import React from 'react';
  */
 export default function AboutOriginStory({ story }) {
   return (
-    <section style={{ width: '100%', backgroundColor: '#EDE7DE' }}>
+    <>
+      {/* ── Mobile (iPhone 13/14-sized screens) — static stacked layout ── */}
+      <section className="block md:hidden" style={{ width: '100%', backgroundColor: '#EDE7DE' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            paddingTop: 40,
+            paddingBottom: 40,
+            paddingLeft: 12,
+            paddingRight: 12,
+            gap: 35,
+          }}
+        >
+          {/* Pill + Heading */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '7.2px',
+                height: 20,
+                padding: '0 7.2px',
+                width: 'fit-content',
+                borderRadius: 90,
+              }}
+            >
+              <div
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: '2px',
+                  backgroundColor: '#334454',
+                  flexShrink: 0,
+                }}
+              />
+              <span
+                style={{
+                  fontFamily: "var(--font-geist, 'Geist'), system-ui, sans-serif",
+                  fontWeight: 400,
+                  fontSize: '10px',
+                  lineHeight: '12px',
+                  letterSpacing: '0.04em',
+                  textTransform: 'uppercase',
+                  color: '#1A1A1A',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                origin story
+              </span>
+            </div>
+
+            <h2
+              style={{
+                width: '100%',
+                fontFamily: "var(--font-roundo, 'Roundo'), system-ui, sans-serif",
+                fontWeight: 500,
+                fontSize: '32px',
+                lineHeight: '36.6px',
+                letterSpacing: '-0.73px',
+                color: '#1A1A1A',
+                margin: 0,
+              }}
+            >
+              {story?.heading || 'Elegant Spaces For Built Views Photo Frame'}
+            </h2>
+          </div>
+
+          {/* Logo + Text */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 36 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/Group (1).svg"
+              alt="Chameri Icon"
+              style={{ width: '149.87px', height: '198.72px', objectFit: 'contain' }}
+            />
+
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 16,
+                fontFamily: "var(--font-geist, 'Geist'), system-ui, sans-serif",
+                fontWeight: 400,
+                fontSize: '18px',
+                lineHeight: '21.8px',
+                letterSpacing: '-0.44px',
+                color: '#222F30CC',
+              }}
+            >
+              {story?.description
+                ? <p style={{ margin: 0 }}>{story.description}</p>
+                : <>
+                    <p style={{ margin: 0 }}>
+                      <strong style={{ fontWeight: 600 }}>Since 1985</strong>, Chameri has been
+                      dedicated to creating thoughtfully designed spaces that blend functionality,
+                      craftsmanship, and timeless aesthetics. With decades of experience, the company
+                      has built a reputation for delivering high-quality residential and commercial
+                      projects tailored to the unique aspirations of every client. From concept
+                      development to final execution, Chameri focuses on innovation, attention to
+                      detail, and lasting value innovation, attention to detail, and lasting value
+                    </p>
+                    <p style={{ margin: 0 }}>
+                      The <strong style={{ fontWeight: 600 }}>founder</strong> of Chameri established
+                      the company with a clear vision of combining creativity, integrity, and
+                      professional expertise to shape meaningful architectural experiences. Guided by
+                      a passion for design and a commitment to quality, the founder has played a key
+                      role in building strong client relationships dedication, and continuous
+                      innovation, the founder
+                    </p>
+                  </>
+              }
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Desktop — existing fluid layout ── */}
+      <section className="hidden md:block" style={{ width: '100%', backgroundColor: '#EDE7DE' }}>
       <div
         style={{
           width: '100%',
@@ -187,5 +306,6 @@ export default function AboutOriginStory({ story }) {
 
       </div>
     </section>
+    </>
   );
 }

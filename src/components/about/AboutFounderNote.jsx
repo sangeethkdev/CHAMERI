@@ -229,13 +229,170 @@ import React from 'react';
  */
 export default function AboutFounderNote({ founder }) {
   return (
-    <section
-      style={{
-        width: '100%',
-        backgroundColor: '#EDE7DE',
-        borderTop: '1px solid rgba(33, 35, 37, 0.2)',
-      }}
-    >
+    <>
+      {/* ── Mobile (iPhone 13/14-sized screens) — static stacked layout ── */}
+      <section
+        className="block md:hidden"
+        style={{
+          width: '100%',
+          backgroundColor: '#EDE7DE',
+          borderTop: '1px solid rgba(33, 35, 37, 0.2)',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            paddingTop: 24,
+            paddingRight: 18,
+            paddingBottom: 40,
+            paddingLeft: 18,
+            gap: 10,
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {/* Pill */}
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '7.2px',
+                height: 20,
+                padding: '0 7.2px',
+                width: 'fit-content',
+                borderRadius: 90,
+              }}
+            >
+              <div
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: '2px',
+                  backgroundColor: '#334454',
+                  flexShrink: 0,
+                }}
+              />
+              <span
+                style={{
+                  fontFamily: "var(--font-geist, 'Geist'), system-ui, sans-serif",
+                  fontWeight: 400,
+                  fontSize: '10px',
+                  lineHeight: '12px',
+                  letterSpacing: '0.04em',
+                  textTransform: 'uppercase',
+                  color: '#1A1A1A',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                founder note
+              </span>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 27 }}>
+              {/* Founder image */}
+              <div
+                style={{
+                  width: '100%',
+                  maxWidth: 'clamp(385px, 42vw, 800px)',
+                  height: 'clamp(394px, 42vw, 800px)',
+                  borderRadius: '6.73px',
+                  overflow: 'hidden',
+                  backgroundColor: '#D1CDCA',
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={founder?.image || "/dummyimages/8276099377b328194b10337a1dc6e4999a4103d5.png"}
+                  alt="Founder"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                  }}
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              </div>
+
+              {/* Quote + author */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <svg
+                  width="clamp(18px, 1.68vw, 32px)"
+                  height="clamp(14px, 1.30vw, 24px)"
+                  viewBox="0 0 25 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ flexShrink: 0 }}
+                >
+                  <path
+                    d="M10.8242 0H6.01221C2.7041 0 0.5 2.50391 0.5 6.46875C0.5 12.3789 3.86182 17.0703 10.373 17.9297V13.8047C6.88379 13.0625 5.23438 10.5977 5.23438 7.375H10.8242V0ZM24.6211 0H19.8091C16.501 0 14.2969 2.50391 14.2969 6.46875C14.2969 12.3789 17.6587 17.0703 24.1699 17.9297V13.8047C20.6807 13.0625 19.0312 10.5977 19.0312 7.375H24.6211V0Z"
+                    fill="#1A1A1A"
+                  />
+                </svg>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 25 }}>
+                  <p
+                    style={{
+                      width: '100%',
+                      fontFamily: "var(--font-roundo, 'Roundo'), system-ui, sans-serif",
+                      fontWeight: 500,
+                      fontSize: '32px',
+                      lineHeight: '33.28px',
+                      letterSpacing: '-0.67px',
+                      color: '#1A1A1A',
+                      margin: 0,
+                    }}
+                  >
+                    {founder?.quote || "Unrivaled customer service, cutting edge design and quality. Fluid Glass is firmly lodged in our list of prefer suppliers of glazing products."}
+                  </p>
+
+                  <div style={{ width: '181.42px', maxWidth: '100%', display: 'flex', flexDirection: 'column' }}>
+                    <h3
+                      style={{
+                        fontFamily: "var(--font-geist, 'Geist'), system-ui, sans-serif",
+                        fontWeight: 400,
+                        fontSize: '19px',
+                        lineHeight: '26px',
+                        color: '#1A1A1A',
+                        margin: 0,
+                      }}
+                    >
+                      {founder?.name || 'Vaidas Vileikis'}
+                    </h3>
+                    <span
+                      style={{
+                        fontFamily: "var(--font-geist, 'Geist'), system-ui, sans-serif",
+                        fontWeight: 500,
+                        fontSize: '11px',
+                        lineHeight: '14px',
+                        letterSpacing: '0.86px',
+                        textTransform: 'uppercase',
+                        color: '#1A1A1A',
+                        opacity: 0.5,
+                        paddingTop: '4.5px',
+                      }}
+                    >
+                      {founder?.role || 'Founder'}{founder?.architectsName ? `, ${founder.architectsName}` : ', Name Architects'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Desktop — existing fluid layout ── */}
+      <section
+        className="hidden md:block"
+        style={{
+          width: '100%',
+          backgroundColor: '#EDE7DE',
+          borderTop: '1px solid rgba(33, 35, 37, 0.2)',
+        }}
+      >
       {/* ── Outer wrapper ─────────────────────────────────────────── */}
       <div
         style={{
@@ -462,5 +619,6 @@ export default function AboutFounderNote({ founder }) {
         </div>
       </div>
     </section>
+    </>
   );
 }

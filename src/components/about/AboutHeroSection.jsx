@@ -44,15 +44,98 @@ export default function AboutHeroSection({ hero }) {
   );
 
   return (
-    <section
-      ref={containerRef}
-      style={{
-        position: 'relative',
-        width: '100%',
-        height: 'calc(min(86.806vw, 1250px) + 100vh)',
-        backgroundColor: '#EDE7DE',
-      }}
-    >
+    <>
+      {/* Mobile hero (iPhone 13/14-sized screens) — static frame, no scroll-pin animation */}
+      <section
+        className="block md:hidden"
+        style={{
+          position: 'relative',
+          width: '100%',
+          backgroundColor: '#EDE7DE',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            paddingTop: 76,
+            paddingBottom: 24,
+            gap: 8,
+          }}
+        >
+          <h1
+            style={{
+              width: 'min(341px, 90vw)',
+              fontFamily:
+                "var(--font-roundo), 'Roundo', var(--font-outfit), system-ui, sans-serif",
+              fontWeight: 500,
+              fontSize: '36.6px',
+              lineHeight: '36.6px',
+              letterSpacing: '-0.73px',
+              textAlign: 'center',
+              color: '#1A1A1A',
+              margin: 0,
+              padding: 0,
+            }}
+          >
+            {hero?.heading || 'Crafting Timeless Villas & Landmark Spaces'}
+          </h1>
+
+          <p
+            style={{
+              width: 'min(341px, 90vw)',
+              fontFamily:
+                "var(--font-roundo), 'Roundo', var(--font-outfit), system-ui, sans-serif",
+              fontWeight: 500,
+              fontSize: '22.6px',
+              lineHeight: '41.6px',
+              letterSpacing: '-0.83px',
+              textAlign: 'center',
+              color: '#1A1A1A',
+              margin: 0,
+              padding: 0,
+            }}
+          >
+            {hero?.subheading || 'since 1985'}
+          </p>
+        </div>
+
+        <div
+          style={{
+            position: 'relative',
+            width: '100%',
+            height: 'min(86.806vw, 1250px)',
+            overflow: 'hidden',
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/image 9.svg"
+            alt="Chameri architectural villa sketch"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center top',
+            }}
+          />
+        </div>
+      </section>
+
+      {/* Desktop hero — pin-and-reveal scroll animation */}
+      <section
+        className="hidden md:block"
+        ref={containerRef}
+        style={{
+          position: 'relative',
+          width: '100%',
+          height: 'calc(min(86.806vw, 1250px) + 100vh)',
+          backgroundColor: '#EDE7DE',
+        }}
+      >
       <div
         style={{
           position: 'sticky',
@@ -120,7 +203,7 @@ export default function AboutHeroSection({ hero }) {
             top: '12%',
             left: '50%',
             transform: 'translateX(-50%)',
-            width: 'clamp(280px, 46.37vw, 667.67px)',
+            width: 'clamp(min(341px, 90vw), 46.37vw, 667.67px)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -134,8 +217,8 @@ export default function AboutHeroSection({ hero }) {
               fontFamily:
                 "var(--font-roundo), 'Roundo', var(--font-outfit), system-ui, sans-serif",
               fontWeight: 500,
-              fontSize: 'clamp(22px, 4.167vw, 60px)',
-              lineHeight: 'clamp(26px, 4.593vw, 66.14px)',
+              fontSize: 'clamp(36.6px, 4.167vw, 60px)',
+              lineHeight: 'clamp(36.6px, 4.593vw, 66.14px)',
               letterSpacing: 'clamp(-3.05px, -0.212vw, -0.6px)',
               textAlign: 'center',
               color: '#1A1A1A',
@@ -152,8 +235,8 @@ export default function AboutHeroSection({ hero }) {
               fontFamily:
                 "var(--font-roundo), 'Roundo', var(--font-outfit), system-ui, sans-serif",
               fontWeight: 500,
-              fontSize: 'clamp(15px, 2.778vw, 40px)',
-              lineHeight: 'clamp(22px, 4.593vw, 66.14px)',
+              fontSize: 'clamp(22.6px, 2.778vw, 40px)',
+              lineHeight: 'clamp(41.6px, 4.593vw, 66.14px)',
               letterSpacing: 'clamp(-3.05px, -0.212vw, -0.6px)',
               textAlign: 'center',
               color: '#1A1A1A',
@@ -166,5 +249,6 @@ export default function AboutHeroSection({ hero }) {
         </div>
       </div>
     </section>
+    </>
   );
 }
