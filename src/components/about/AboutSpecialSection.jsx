@@ -36,6 +36,242 @@ const STATIC_FEATURES = [
 const IMG_W = 281.95;
 const IMG_H = 353.64;
 
+/* ── Mobile (≤767px) version ─────────────────────────────────────────
+   Same scroll-driven behavior as desktop: the outer section creates a
+   tall scroll track, the panel pins, and exactly one item is active at
+   a time. On mobile the active item expands in place (image + text),
+   while inactive items collapse to just their title. */
+function MobileSpecialSection({ features, title }) {
+  const N = features.length;
+  const containerRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  });
+
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    const clamped = Math.max(0, Math.min(0.9999, latest));
+    setActiveIndex(Math.floor(clamped * N));
+  });
+
+  useEffect(() => {
+    const clamped = Math.max(0, Math.min(0.9999, scrollYProgress.get()));
+    setActiveIndex(Math.floor(clamped * N));
+  }, [scrollYProgress, N]);
+
+  return (
+    <section
+      ref={containerRef}
+      className="about-special-mobile"
+      style={{ height: `${(N + 1) * 100}vh`, position: 'relative' }}
+    >
+      {/* ── Sticky panel ──────────────────────────────────────────── */}
+      <div
+        style={{
+          position: 'sticky',
+          top: 0,
+          minHeight: '100vh',
+          width: '100%',
+          backgroundColor: '#EDE7DE',
+          overflow: 'hidden',
+          paddingTop: 10,
+          paddingBottom: 40,
+          boxSizing: 'border-box',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
+        }}
+      >
+        {/* ── Header: label + heading ─────────────────────────────── */}
+        <div
+          style={{
+            width: '100%',
+            paddingLeft: 12,
+            paddingRight: 12,
+            boxSizing: 'border-box',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10,
+            flexShrink: 0,
+          }}
+        >
+          {/* Label */}
+          <div style={{ height: 20, display: 'flex', alignItems: 'center' }}>
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 7.2,
+                paddingLeft: 2,
+                paddingRight: 2,
+                height: 20,
+                borderRadius: 90,
+              }}
+            >
+              <div
+                style={{
+                  width: 9,
+                  height: 9,
+                  backgroundColor: '#334454',
+                  borderRadius: 2,
+                  flexShrink: 0,
+                }}
+              />
+              <span
+                style={{
+                  fontFamily: "var(--font-geist,'Geist'),system-ui,sans-serif",
+                  fontWeight: 400,
+                  fontSize: 10,
+                  lineHeight: 1.2,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: '#1A1A1A',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                What Makes Us Special
+              </span>
+            </div>
+          </div>
+
+          {/* Heading */}
+          <h2
+            style={{
+              maxWidth: 346.5,
+              fontFamily: "var(--font-roundo,'Roundo'),system-ui,sans-serif",
+              fontWeight: 500,
+              fontSize: 32,
+              lineHeight: '36.6px',
+              letterSpacing: '-0.73px',
+              color: '#000000',
+              margin: 0,
+            }}
+          >
+            {title}
+          </h2>
+        </div>
+
+        {/* ── Accordion list ──────────────────────────────────────── */}
+        <div
+          style={{
+            width: '100%',
+            padding: '10px 15px',
+            boxSizing: 'border-box',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10,
+          }}
+        >
+          {features.map((feature, index) => {
+            const isActive = index === activeIndex;
+
+            return (
+              <div
+                key={index}
+                style={{
+                  width: '100%',
+                  borderBottom: '1px solid #D9D3CC',
+                  paddingTop: 10,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  boxSizing: 'border-box',
+                }}
+              >
+                {/* Title (always visible) */}
+                <motion.h3
+                  animate={{ color: isActive ? '#000000' : '#6B859E' }}
+                  transition={{ duration: 0.4, ease: 'easeInOut' }}
+                  style={{
+                    fontFamily: "var(--font-roundo,'Roundo'),system-ui,sans-serif",
+                    fontWeight: 500,
+                    fontSize: 24.94,
+                    lineHeight: '29.83px',
+                    letterSpacing: '-0.52px',
+                    margin: 0,
+                    whiteSpace: 'pre-line',
+                  }}
+                >
+                  {feature.title}
+                </motion.h3>
+
+                {/* Description: only visible when active */}
+                <motion.div
+                  animate={{
+                    height: isActive ? 'auto' : 0,
+                    opacity: isActive ? 1 : 0,
+                    marginTop: isActive ? 12 : 0,
+                  }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ overflow: 'hidden' }}
+                >
+                  <p
+                    style={{
+                      fontFamily: "var(--font-geist,'Geist'),system-ui,sans-serif",
+                      fontWeight: 400,
+                      fontSize: 14,
+                      lineHeight: '17.69px',
+                      color: '#000000',
+                      margin: 0,
+                    }}
+                  >
+                    {feature.description}
+                  </p>
+                </motion.div>
+
+                {/* Image below text: expands to 234px when active */}
+                <motion.div
+                  animate={{
+                    height: isActive ? 234 : 0,
+                    marginTop: isActive ? 22 : 0,
+                    opacity: isActive ? 1 : 0,
+                  }}
+                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  style={{
+                    position: 'relative',
+                    width: '100%',
+                    overflow: 'hidden',
+                    borderRadius: 8,
+                    flexShrink: 0,
+                  }}
+                >
+                  <AnimatePresence>
+                    {isActive && (
+                      <motion.div
+                        key={`m-content-${index}`}
+                        initial={{ y: '100%', opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: '-20%', opacity: 0 }}
+                        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                        style={{ position: 'absolute', inset: 0 }}
+                      >
+                        <Image
+                          src={feature.image}
+                          alt={feature.title}
+                          fill
+                          style={{ objectFit: 'cover' }}
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+
+                {/* Bottom padding: 16 active / 10 inactive */}
+                <motion.div
+                  animate={{ height: isActive ? 16 : 10 }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ flexShrink: 0 }}
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function AboutSpecialSection({ specialSection }) {
   const apiItems = [
     specialSection?.first,
@@ -74,10 +310,25 @@ export default function AboutSpecialSection({ specialSection }) {
   }, [scrollYProgress]);
 
   return (
-    // Tall outer section creates the scroll track.
-    // (N + 1) × 100vh gives each item roughly 1 viewport of scroll travel.
+    <>
+    <style>{`
+      .about-special-mobile { display: none; }
+      @media (max-width: 767px) {
+        .about-special-desktop { display: none; }
+        .about-special-mobile  { display: block; }
+      }
+    `}</style>
+
+    <MobileSpecialSection
+      features={features}
+      title={specialSection?.title || 'Each project tells its own story of precision.'}
+    />
+
+    {/* Tall outer section creates the scroll track.
+        (N + 1) × 100vh gives each item roughly 1 viewport of scroll travel. */}
     <section
       ref={containerRef}
+      className="about-special-desktop"
       style={{ height: `${(N + 1) * 100}vh`, position: 'relative' }}
     >
       {/* ── Sticky panel: pins while the outer section scrolls ──────── */}
@@ -312,5 +563,6 @@ export default function AboutSpecialSection({ specialSection }) {
         </div>
       </div>
     </section>
+    </>
   );
 }

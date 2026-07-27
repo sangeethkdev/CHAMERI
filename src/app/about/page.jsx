@@ -26,8 +26,8 @@ export default async function AboutPage() {
       <AboutOriginStory story={about?.story} />
       <AboutFounderNote founder={about?.founder} />
       <AboutLogoSection workLogos={about?.workLogos} />
-      <AboutVisionMissionSection vision={about?.vision} mission={about?.mission} />
       <AboutSpecialSection specialSection={about?.specialSection} />
+      <AboutVisionMissionSection vision={about?.vision} mission={about?.mission} />
       <AboutBoardSection boardSection={about?.boardSection} />
       <AboutTestimonialSection testimonialSection={about?.testimonialSection} />
       <Footer />

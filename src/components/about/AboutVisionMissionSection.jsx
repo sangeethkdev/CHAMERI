@@ -472,12 +472,24 @@ export default function AboutVisionMissionSection({ vision, mission }) {
   const card1Expanded = card1Phase === 'expanded';
 
   return (
-    /**
+    <>
+    <style>{`
+      .vm-mobile { display: none; }
+      @media (max-width: 767px) {
+        .vm-desktop { display: none; }
+        .vm-mobile  { display: block; }
+      }
+    `}</style>
+
+    <MobileVisionMissionSection cards={cards} />
+
+    {/**
      * Outer wrapper: 200vh scroll track (totalCards * 100vh), full-bleed breakout.
      * negative margin trick keeps it edge-to-edge inside any padded parent.
-     */
+     */}
     <div
       ref={wrapperRef}
+      className="vm-desktop"
       style={{
         position: 'relative',
         height: '200vh',
@@ -642,6 +654,314 @@ export default function AboutVisionMissionSection({ vision, mission }) {
           pointerEvents: 'none',
         }}
       />
+    </div>
+    </>
+  );
+}
+
+/* ── Mobile (≤767px) version ─────────────────────────────────────────
+   Design baseline: 390 × 610 per card.
+   Same mechanism and timings as desktop:
+   – 200vh scroll track, sticky 100vh layers
+   – Card 1 auto-expands to full-bleed 2s after entering view
+     (1.5s cubic-bezier(0.22,1,0.36,1)), texts fade in 0.6s later
+   – Card 2 slides over Card 1 on scroll (sticky stacking),
+     revealed only after Card 1's expansion completes */
+function MobileVisionMissionSection({ cards }) {
+  const wrapperRef = useRef(null);
+  const [card1Phase, setCard1Phase] = useState('initial'); // 'initial' | 'expanded'
+  const [expansionDone, setExpansionDone] = useState(false);
+  const hasAutoExpanded = useRef(false);
+  const timerRef = useRef(null);
+
+  // ── Card 1: auto-expand after 2 s (same as desktop) ────────────────
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAutoExpanded.current) {
+          hasAutoExpanded.current = true;
+          timerRef.current = setTimeout(() => {
+            setCard1Phase('expanded');
+            setTimeout(() => {
+              setExpansionDone(true);
+            }, 1500);
+          }, 2000);
+        }
+      },
+      { threshold: 0.15 }
+    );
+    obs.observe(el);
+
+    return () => {
+      obs.disconnect();
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  const card1Expanded = card1Phase === 'expanded';
+
+  return (
+    <div
+      ref={wrapperRef}
+      className="vm-mobile"
+      style={{
+        position: 'relative',
+        // 200vh scroll track (same as desktop): each 100vh sticky panel
+        // gets a full viewport of dwell, so card 2 holds its final
+        // position for a beat before the section releases to whatever
+        // comes next — it doesn't get run over immediately.
+        height: '200vh',
+        width: '100vw',
+        marginLeft: 'calc(-1 * ((100vw - 100%) / 2))',
+        backgroundColor: '#EDE7DE',
+      }}
+    >
+      {/* ── Header pill (sticky over all stacked cards) ─────────────── */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          pointerEvents: 'none',
+          zIndex: 30,
+        }}
+      >
+        <div style={{ position: 'sticky', top: 0, width: '100%', height: '100vh' }}>
+          <div
+            style={{
+              position: 'absolute',
+              top: 11.58,
+              left: 13.2,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 7.2,
+              paddingLeft: 7.2,
+              paddingRight: 7.2,
+              height: 20,
+              borderRadius: 90,
+              pointerEvents: 'auto',
+            }}
+          >
+            <div
+              style={{
+                width: 10,
+                height: 10,
+                backgroundColor: '#334454',
+                borderRadius: 3,
+                flexShrink: 0,
+              }}
+            />
+            <span
+              style={{
+                fontFamily: "var(--font-geist,'Geist'),system-ui,sans-serif",
+                fontWeight: 400,
+                fontSize: 11,
+                lineHeight: 1.2,
+                letterSpacing: '-0.32px',
+                textTransform: 'uppercase',
+                color: '#1A1A1A',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              Vision &amp; Mission
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Card 1 — Vision (Sticky Layer 1) ────────────────────────── */}
+      <div
+        style={{
+          position: 'sticky',
+          top: 0,
+          width: '100%',
+          height: '100vh',
+          zIndex: 1,
+          overflow: 'hidden',
+          backgroundColor: '#EDE7DE',
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            top: card1Expanded ? 40 : 60,
+            left: card1Expanded ? 0 : 15,
+            width: card1Expanded ? '100%' : 'calc(100% - 30px)',
+            // Expanded fills 100% of the 100vh sticky panel (not a fixed
+            // px value) so it always reaches the panel's exact bottom
+            // edge, whatever the device's viewport height — this is what
+            // keeps card 2 flush against it with no gap.
+            height: card1Expanded ? '100%' : 780,
+            zIndex: 10,
+            overflow: 'hidden',
+            borderRadius: card1Expanded ? '0px' : '8px',
+            transition: [
+              'top           1.5s cubic-bezier(0.22,1,0.36,1)',
+              'left          1.5s cubic-bezier(0.22,1,0.36,1)',
+              'width         1.5s cubic-bezier(0.22,1,0.36,1)',
+              'height        1.5s cubic-bezier(0.22,1,0.36,1)',
+              'border-radius 1.5s ease',
+            ].join(', '),
+          }}
+        >
+          <Image
+            src={cards[0].image}
+            alt={cards[0].label}
+            fill
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+            priority
+          />
+          <Overlay />
+          <MobileCardTexts card={cards[0]} showTexts={card1Expanded} />
+        </div>
+      </div>
+
+      {/* ── Card 2 — Mission (Sticky Layer 2) ───────────────────────── */}
+      <div
+        style={{
+          position: 'sticky',
+          top: 0,
+          width: '100%',
+          height: '100vh',
+          zIndex: 2,
+          overflow: 'hidden',
+          // backgroundColor: '#EDE7DE',
+          opacity: expansionDone ? 1 : 0,
+          pointerEvents: expansionDone ? 'auto' : 'none',
+          transition: 'opacity 0.6s ease',
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            top: 40,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: 15,
+            overflow: 'hidden',
+          }}
+        >
+          <Image
+            src={cards[1].image}
+            alt={cards[1].label}
+            fill
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+            priority
+          />
+          <Overlay />
+          <MobileCardTexts card={cards[1]} showTexts={true} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Mobile card text overlays ──────────────────────────────────────
+   Positions from the 390 × 570 card spec (offsets relative to the
+   card's own box; original spec offsets included the 39.81px gap
+   above the card):
+     Heading : top 301.78 → 52.9%, left 19.88
+     Body    : top 385.88 → 67.7%, left 20, width 343
+     Divider : top 529.98 → 92.9%, left 15, width 360
+     Label   : top 539.82 → 94.7%, left 20
+   Same fade/slide reveal + 0.6s delay as desktop CardTexts. */
+function MobileCardTexts({ card, showTexts }) {
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        inset: 0,
+        zIndex: 2,
+        opacity: showTexts ? 1 : 0,
+        transform: showTexts ? 'translateY(0)' : 'translateY(12px)',
+        transition: [
+          'opacity   0.5s ease',
+          'transform 0.5s cubic-bezier(0.22,1,0.36,1)',
+        ].join(', '),
+        transitionDelay: showTexts ? '0.6s' : '0s',
+        pointerEvents: 'none',
+      }}
+    >
+      {/*
+        Bottom-anchored flow stack: heading → body → divider → label.
+        Elements stack in normal flow so text can never overlap, whatever
+        the screen width. At 390px wide the sizes/gaps match the design
+        spec; below that the fonts scale down fluidly via clamp().
+      */}
+      <div
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 40,
+          display: 'flex',
+          flexDirection: 'column',
+          paddingBottom: 12,
+        }}
+      >
+        {/* Heading */}
+        <h2
+          style={{
+            fontFamily: "var(--font-roundo,'Roundo'),system-ui,sans-serif",
+            fontWeight: 500,
+            fontSize: 'clamp(22px, 8.2vw, 32px)',
+            lineHeight: 1.145,
+            letterSpacing: '-0.73px',
+            color: '#FFFFFF',
+            margin: '0 20px 10px',
+            maxWidth: 350,
+          }}
+        >
+          {card.heading}
+        </h2>
+
+        {/* Body text */}
+        <p
+          style={{
+            fontFamily: "var(--font-geist,'Geist'),system-ui,sans-serif",
+            fontWeight: 400,
+            fontSize: 'clamp(14px, 4.73vw, 18.46px)',
+            lineHeight: 1.09,
+            letterSpacing: '-0.4px',
+            color: 'rgba(255,255,255,0.8)',
+            margin: '0 20px 20px',
+            maxWidth: 343.16,
+          }}
+        >
+          {card.body}
+        </p>
+
+        {/* Horizontal divider */}
+        <div
+          style={{
+            margin: '0 15px 10px',
+            height: 0,
+            borderTop: '0.92px solid #FFFFFF',
+          }}
+        />
+
+        {/* Card label ("VISION" / "MISSION") */}
+        <span
+          style={{
+            fontFamily: "var(--font-geist,'Geist'),system-ui,sans-serif",
+            fontWeight: 400,
+            fontSize: 'clamp(12px, 3.6vw, 14px)',
+            lineHeight: '17.94px',
+            letterSpacing: '-0.3px',
+            color: '#FFFFFF',
+            textTransform: 'uppercase',
+            margin: '0 20px',
+          }}
+        >
+          {card.label}
+        </span>
+      </div>
     </div>
   );
 }
