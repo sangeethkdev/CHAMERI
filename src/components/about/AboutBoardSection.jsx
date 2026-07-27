@@ -240,9 +240,21 @@ export default function AboutBoardSection({ boardSection }) {
         image: boardSection[key]?.image || STATIC_BOARD[i].image,
       }))
     : STATIC_BOARD;
+
   return (
+    <>
+      <style>{`
+        .board-mobile { display: none; }
+        @media (max-width: 767px) {
+          .board-desktop { display: none; }
+          .board-mobile  { display: block; }
+        }
+      `}</style>
+
+      <MobileBoardSection boardMembers={boardMembers} />
+
     <section
-      className="w-full flex flex-col"
+      className="w-full flex flex-col board-desktop"
       style={{
         backgroundColor: '#EDE7DE',
 
@@ -594,6 +606,185 @@ export default function AboutBoardSection({ boardSection }) {
             </div>
           </div>
         ))}
+      </div>
+    </section>
+    </>
+  );
+}
+
+/* ── Mobile (≤767px) version ─────────────────────────────────────────
+   Design baseline: 390 × 666.22.
+   Section: padding 48/16/20/16, gap 4.73.
+   Header: pill (icon + "BOARD OF DIRECTORS") above the heading, gap 10.
+   Grid: 2 × 2 cards, row-gap 11.95, column-gap 10.57, full-bleed
+   (breaks out of the section's 16px side padding). */
+function MobileBoardSection({ boardMembers }) {
+  return (
+    <section
+      className="board-mobile"
+      style={{
+        width: '100%',
+        boxSizing: 'border-box',
+        backgroundColor: '#EDE7DE',
+        paddingTop: 48,
+        paddingRight: 16,
+        paddingBottom: 20,
+        paddingLeft: 16,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 4.73,
+      }}
+    >
+      {/* ── Header: pill + heading ───────────────────────────────────── */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        {/* Pill */}
+        <div
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 7.2,
+            paddingLeft: 7.2,
+            paddingRight: 7.2,
+            height: 20,
+            borderRadius: 90,
+            flexShrink: 0,
+          }}
+        >
+          <div
+            style={{
+              width: 10,
+              height: 10,
+              backgroundColor: '#334454',
+              borderRadius: 3,
+              flexShrink: 0,
+            }}
+          />
+          <span
+            style={{
+              fontFamily: "var(--font-geist,'Geist'),system-ui,sans-serif",
+              fontWeight: 400,
+              fontSize: 12,
+              lineHeight: '19.44px',
+              letterSpacing: '-0.32px',
+              textTransform: 'uppercase',
+              color: '#000000',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            Board of Directors
+          </span>
+        </div>
+
+        {/* Heading */}
+        <h2
+          style={{
+            fontFamily: "var(--font-roundo,'Roundo'),system-ui,sans-serif",
+            fontWeight: 500,
+            fontSize: 32,
+            lineHeight: '36.6px',
+            letterSpacing: '-0.73px',
+            color: '#000000',
+            margin: 0,
+          }}
+        >
+          Elegant Spaces For Built Views Photo Frame
+        </h2>
+      </div>
+
+      {/* ── Cards grid: full-bleed, breaks out of the 16px side padding ── */}
+      <div
+        style={{
+          marginLeft: -16,
+          marginRight: -16,
+          padding: 10,
+          boxSizing: 'border-box',
+        }}
+      >
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            rowGap: 11.95,
+            columnGap: 10.57,
+          }}
+        >
+          {boardMembers.map((member) => (
+            <div
+              key={member.id}
+              style={{
+                position: 'relative',
+                width: '100%',
+                aspectRatio: '174.72 / 229.60',
+                borderRadius: 5.24,
+                overflow: 'hidden',
+              }}
+            >
+              <Image
+                src={member.image}
+                alt={member.name}
+                fill
+                style={{ objectFit: 'cover', objectPosition: 'center top' }}
+              />
+
+              {/* Gradient overlay */}
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'linear-gradient(0deg, #000000 0%, rgba(0,0,0,0) 39%)',
+                  zIndex: 1,
+                  pointerEvents: 'none',
+                }}
+              />
+
+              {/* Text block */}
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  width: '100%',
+                  paddingTop: 4.37,
+                  paddingBottom: 8.74,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: 2.94,
+                  zIndex: 2,
+                }}
+              >
+                <h3
+                  style={{
+                    fontFamily: "var(--font-inter,'Inter'),system-ui,sans-serif",
+                    fontWeight: 400,
+                    fontSize: 12,
+                    lineHeight: '10.48px',
+                    letterSpacing: '-0.03px',
+                    color: '#FFFFFF',
+                    margin: 0,
+                    textAlign: 'center',
+                  }}
+                >
+                  {member.name}
+                </h3>
+                <p
+                  style={{
+                    fontFamily: "var(--font-inter,'Inter'),system-ui,sans-serif",
+                    fontWeight: 400,
+                    fontSize: 5.5,
+                    lineHeight: '6.11px',
+                    letterSpacing: '0px',
+                    color: '#FFFFFF',
+                    margin: 0,
+                    textAlign: 'center',
+                  }}
+                >
+                  {member.designation}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
