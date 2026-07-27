@@ -70,6 +70,24 @@ export default function GalleryHero({ heroSection }) {
       className="relative w-full"
       style={{ height: `${N * 100}vh` }}
     >
+      {/*
+        Mobile (≤767px) typography override — Figma mobile spec (390px frame):
+        font-size 38px, line-height 42px, letter-spacing -2px, capitalize,
+        width 298.41px. Uses !important because the desktop clamp() values
+        are set inline on the h2 below, and only !important in a stylesheet
+        rule can win over an inline style.
+      */}
+      <style>{`
+        @media (max-width: 767px) {
+          .gallery-hero-heading {
+            width: min(298.41px, 90vw) !important;
+            font-size: 38px !important;
+            line-height: 42px !important;
+            letter-spacing: -2px !important;
+            text-transform: capitalize !important;
+          }
+        }
+      `}</style>
       {/* ── Sticky viewport ──────────────────────────────────────────── */}
       <section
         className="sticky top-0 w-full overflow-hidden"
@@ -124,7 +142,7 @@ export default function GalleryHero({ heroSection }) {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                className="text-white whitespace-pre-wrap"
+                className="text-white whitespace-pre-wrap gallery-hero-heading"
                 style={{
                   fontFamily: "var(--font-roundo),'Roundo',system-ui,sans-serif",
                   fontWeight: 500,

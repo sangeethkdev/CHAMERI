@@ -41,6 +41,12 @@ export default function GalleryGrid({ galleryImages }) {
     col3 = STATIC_COL3;
   }
 
+  // Mobile shows a single naturally-ordered column (1,2,3,4,5…) rather than
+  // the desktop masonry's column-by-column grouping — reconstruct that order
+  // from the three columns via id, since both API and static data assign
+  // ids sequentially before the round-robin column split.
+  const flatImages = [...col1, ...col2, ...col3].sort((a, b) => a.id - b.id);
+
   return (
     <section className="w-full flex flex-col items-center" style={{ backgroundColor: '#EDE7DE' }}>
       
@@ -56,32 +62,38 @@ export default function GalleryGrid({ galleryImages }) {
         }}
       >
         {/* Gallery Pill */}
-        <div 
+        <div
           className="flex items-center"
           style={{
-            padding: '7.2px 14px',
+            paddingTop: 'clamp(0px, 0.5vw, 7.2px)',
+            paddingBottom: 'clamp(0px, 0.5vw, 7.2px)',
+            paddingLeft: 'clamp(2px, 1vw, 14px)',
+            paddingRight: 'clamp(2px, 1vw, 14px)',
+            height: 'clamp(20px, 2.3vw, 33.4px)',
             borderRadius: '90px',
-            gap: '10px',
+            gap: 'clamp(7.2px, 0.7vw, 10px)',
             backgroundColor: '#EDE7DE',
           }}
         >
-          <div 
+          <div
             style={{
-              width: 'clamp(14px, 1.12vw, 19px)',
-              height: 'clamp(14px, 1.12vw, 19px)',
+              width: 'clamp(10px, 1.12vw, 19px)',
+              height: 'clamp(10px, 1.12vw, 19px)',
               borderRadius: '3px',
               backgroundColor: '#334454',
+              flexShrink: 0,
             }}
           />
-          <span 
+          <span
             style={{
               fontFamily: "var(--font-geist), 'Geist', sans-serif",
               fontWeight: 400,
-              fontSize: 'clamp(16.2px, 1.12vw, 22px)',
-              lineHeight: 'clamp(19.44px, 1.12vw, 19px)',
+              fontSize: 'clamp(11px, 1.12vw, 22px)',
+              lineHeight: 1.2,
               letterSpacing: '-0.32px',
               textTransform: 'uppercase',
               color: '#334454',
+              whiteSpace: 'nowrap',
             }}
           >
             Gallery
@@ -106,8 +118,24 @@ export default function GalleryGrid({ galleryImages }) {
           paddingBottom: 'clamp(30px, 3.54vw, 51px)'
         }}
       >
-        <div className="w-full flex flex-col md:flex-row" style={{ gap: 'clamp(15px, 2.08vw, 30px)' }}>
-          
+        {/* Mobile: single naturally-ordered column (1, 2, 3, 4, 5…) */}
+        <div className="flex md:hidden flex-col w-full" style={{ gap: 'clamp(15px, 2.08vw, 30px)' }}>
+          {flatImages.map((img) => (
+            <div key={img.id} className="relative w-full overflow-hidden" style={{ aspectRatio: `${img.w} / ${img.h}` }}>
+              <Image
+                src={img.src}
+                alt={img.alt}
+                fill
+                sizes="100vw"
+                className="object-cover"
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop/tablet: 3-column masonry */}
+        <div className="hidden md:flex w-full" style={{ gap: 'clamp(15px, 2.08vw, 30px)' }}>
+
           {/* Column 1 */}
           <div className="flex flex-col flex-1" style={{ gap: 'clamp(15px, 2.08vw, 30px)', flexBasis: '30.625%' }}>
             {col1.map((img) => (

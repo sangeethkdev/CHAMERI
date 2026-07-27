@@ -103,21 +103,25 @@ const GalleryContactUs = () => {
 
       {/* ── Outer wrapper ─────────────────────────────────────────────── */}
       <div
-        className="w-full mx-auto flex flex-col md:flex-row justify-between items-start gap-[40px] md:gap-0"
+        className="w-full mx-auto flex flex-col lg:flex-row justify-between items-start gap-[28px] lg:gap-0"
         style={{
           width:         '100%',
           maxWidth:      'clamp(375px, 100vw, 1920px)',
           minHeight:     'clamp(400px, 51.31vw, 739px)', // 739px at 1440px
-          paddingTop:    'clamp(40px, 5.56vw, 80px)',
+          paddingTop:    'clamp(20px, 5.56vw, 80px)',
           paddingRight:  'clamp(20px, 6.11vw, 88px)',
           paddingBottom: 'clamp(40px, 3.54vw, 51px)',
           paddingLeft:   'clamp(20px, 5.56vw, 80px)',
         }}
       >
 
-        {/* ══ LEFT ════════════════════════════════════════════════════════ */}
+        {/* ══ LEFT ════════════════════════════════════════════════════════
+            On mobile this wrapper becomes `contents` (renders no box of its own),
+            which promotes its TOP/BOTTOM children into the outer flex flow so they
+            can be reordered around the form via the `order-*` classes below.
+            At lg+ it reverts to a normal flex column, unchanged from before. */}
         <div
-          className="flex flex-col justify-between flex-shrink-0 w-full"
+          className="contents lg:flex lg:flex-col lg:justify-between flex-shrink-0 w-full"
           style={{
             width:     '100%',
             maxWidth:  'clamp(375px, 100vw, 450px)', // Exact Figma width
@@ -125,13 +129,10 @@ const GalleryContactUs = () => {
           }}
         >
 
-          {/* TOP — badge + description */}
+          {/* TOP — badge + heading (mobile only) + description — order-1 on mobile */}
           <div
-            className="flex flex-col"
-            style={{
-              gap:   'clamp(10px, 1.04vw, 15px)',
-              width: 'clamp(280px, 32vw, 620px)',
-            }}
+            className="order-1 lg:order-none w-full pt-[28px] pb-[6px] lg:pt-0 lg:pb-0 flex flex-col gap-[7px] lg:gap-[clamp(10px,1.04vw,15px)]"
+            style={{ width: 'clamp(280px, 32vw, 620px)' }}
           >
             {/* Badge */}
             <div
@@ -150,16 +151,23 @@ const GalleryContactUs = () => {
                 className="font-sans font-normal uppercase text-[#000000] tracking-widest"
                 style={{ fontSize: 'clamp(10px, 1vw, 18px)' }}
               >
-                Contact Us
+                Gallery
               </span>
             </div>
 
+            {/* Heading — mobile only; on lg+ the heading lives next to the form below */}
+            <h2
+              className="lg:hidden font-roundo font-medium text-[#000000] m-0"
+              style={{ fontSize: '32px', lineHeight: '36.6px', letterSpacing: '-0.73px' }}
+            >
+              Contact us
+            </h2>
+
             {/* Description */}
             <p
-              className="font-sans font-normal text-[#1C1C1CCC]"
+              className="font-sans font-normal text-[#1C1C1CCC] m-0 leading-[21px] lg:leading-none"
               style={{
                 fontSize:      'clamp(14px, 1.79vw, 40px)',
-                lineHeight:    '1',
                 letterSpacing: 'clamp(-0.5px, -0.07vw, -2px)',
               }}
             >
@@ -167,13 +175,12 @@ const GalleryContactUs = () => {
             </p>
           </div>
 
-          {/* BOTTOM — phone + email */}
+          {/* BOTTOM — phone + email — order-3 on mobile, so it renders after the form */}
           <div
-            className="flex flex-col"
-            style={{ gap: 'clamp(14px, 1.53vw, 22px)' }}
+            className="order-3 lg:order-none flex flex-col gap-[16px] lg:gap-[clamp(14px,1.53vw,22px)]"
           >
-            {/* Phone */}
-            <div className="flex flex-col gap-[8px]">
+            {/* Phone — order-2 on mobile (renders after Email, matching the reference) */}
+            <div className="order-2 lg:order-none flex flex-col gap-[8px]">
               <div className="flex items-center gap-[8px]">
                 <svg
                   viewBox="0 0 24 24" fill="none" stroke="#334454"
@@ -198,7 +205,7 @@ const GalleryContactUs = () => {
                 href="tel:+919876543210"
                 className="font-sans font-normal text-[#6B859E] hover:underline transition-all"
                 style={{
-                  fontSize:    'clamp(13.3px, 0.74vw, 24px)',
+                  fontSize:    'clamp(13.3px, 1.18vw, 28px)',
                   paddingLeft: 'clamp(20px, 0.95vw, 34.6px)',
                 }}
               >
@@ -206,8 +213,8 @@ const GalleryContactUs = () => {
               </a>
             </div>
 
-            {/* Email */}
-            <div className="flex flex-col gap-[8px]">
+            {/* Email — order-1 on mobile (renders before Phone, matching the reference) */}
+            <div className="order-1 lg:order-none flex flex-col gap-[8px]">
               <div className="flex items-center gap-[8px]">
                 <svg
                   viewBox="0 0 24 24" fill="none" stroke="#334454"
@@ -233,7 +240,7 @@ const GalleryContactUs = () => {
                 href="mailto:Chameri@gmail.com"
                 className="font-sans font-normal text-[#6B859E] hover:underline transition-all"
                 style={{
-                  fontSize:    'clamp(14px, 0.74vw, 24.3px)',
+                  fontSize:    'clamp(14px, 1.14vw, 28.3px)',
                   paddingLeft: 'clamp(20px, 0.95vw, 34.6px)',
                 }}
               >
@@ -243,20 +250,17 @@ const GalleryContactUs = () => {
           </div>
         </div>
 
-        {/* ══ RIGHT — form ════════════════════════════════════════════════ */}
-        <div
-          className="flex flex-col flex-shrink-0 w-full"
-          style={{
-            width:     'clamp(300px, 44.097vw, 740px)',
-            minHeight: 'clamp(380px, 42.22vw, 608px)', // 608px at 1440px
-            gap:       'clamp(6px, 0.69vw, 10px)', // 10px at 1440px
-          }}
-        >
-          {/* Heading */}
+        {/* ══ RIGHT — form ════════════════════════════════════════════════
+            `contents` on mobile so the form can be reordered (order-2) between
+            the TOP info block and the BOTTOM phone/email block above. */}
+        <div className="contents lg:flex lg:flex-col flex-shrink-0 w-full"
+        style={{
+          maxWidth:'clamp(100px,50.097vw,1140px)'
+        }}>
+          {/* Heading — hidden on mobile, shown here from lg+ (mobile version lives in the TOP block) */}
           <h2
-            className="font-roundo font-medium text-[#000000]"
+            className="hidden lg:block font-roundo font-medium text-[#000000]"
             style={{
-              marginLeft: 'clamp(40px, 2.50vw, 57px)',
               fontSize:      'clamp(40px, 4.51vw, 65px)',
               lineHeight:    'clamp(37.5px, 4.17vw, 60px)',
               letterSpacing: 'clamp(-0.5px, -0.06vw, -0.9px)',
@@ -268,57 +272,59 @@ const GalleryContactUs = () => {
           {/* Form */}
           <form
             onSubmit={(e) => e.preventDefault()}
-            className="flex flex-col bg-[#EDE7DE] w-full"
+            className="order-2 lg:order-none flex flex-col bg-[#EDE7DE] w-full lg:w-[clamp(400px,48.097vw,1240px)] lg:max-w-[clamp(300px,50.097vw,1140px)] gap-[20px] lg:gap-[clamp(25px,2.78vw,40px)] px-0 lg:px-[clamp(34px,3.82vw,55px)]"
             style={{
               paddingTop:    'clamp(17px, 1.88vw, 27px)',
               paddingBottom: 'clamp(17px, 1.88vw, 27px)',
-              paddingLeft:   'clamp(34px, 3.82vw, 55px)',
-              paddingRight:  'clamp(34px, 3.82vw, 55px)',
-              gap:           'clamp(25px, 2.78vw, 40px)',
+              paddingRight:  'clamp(7px, 1.88vw, 37px)',
               borderRadius:  'clamp(4px, 0.42vw, 6px)',
             }}
           >
-            {/* Name */}
-            <div>
-              <input
-                type="text" name="name" placeholder="Enter Your Name"
-                value={form.name} onChange={handleChange}
-                className={inputBase} style={inputStyle}
-              />
-            </div>
+            {/* Field group — its own tighter gap on mobile; on lg+ becomes `contents` so
+                Name/Email/Phone/Message rejoin the form's flat flex flow, unchanged from before. */}
+            <div className="flex flex-col gap-[10px] lg:contents">
+              {/* Name */}
+              <div>
+                <input
+                  type="text" name="name" placeholder="Enter Your Name"
+                  value={form.name} onChange={handleChange}
+                  className={inputBase} style={inputStyle}
+                />
+              </div>
 
-            {/* Email */}
-            <div>
-              <input
-                type="email" name="email" placeholder="Enter Email"
-                value={form.email} onChange={handleChange}
-                className={inputBase} style={inputStyle}
-              />
-            </div>
+              {/* Email */}
+              <div>
+                <input
+                  type="email" name="email" placeholder="Enter Email"
+                  value={form.email} onChange={handleChange}
+                  className={inputBase} style={inputStyle}
+                />
+              </div>
 
-            {/* Phone */}
-            <div
-              className="flex items-center border-b border-[#000000] bg-transparent w-full"
-              style={{ height: 'clamp(33.75px, 3.75vw, 54px)' }}
-            >
-              <PhoneInput
-                international defaultCountry="IN"
-                value={form.phone}
-                onChange={(val) => setForm({ ...form, phone: val })}
-                placeholder="Phone number"
-                className="contact-phone-input"
-                style={{ width: '100%', outline: 'none' }}
-              />
-            </div>
+              {/* Phone */}
+              <div
+                className="flex items-center border-b border-[#000000] bg-transparent w-full"
+                style={{ height: 'clamp(33.75px, 3.75vw, 54px)' }}
+              >
+                <PhoneInput
+                  international defaultCountry="IN"
+                  value={form.phone}
+                  onChange={(val) => setForm({ ...form, phone: val })}
+                  placeholder="Phone number"
+                  className="contact-phone-input"
+                  style={{ width: '100%', outline: 'none' }}
+                />
+              </div>
 
-            {/* Message */}
-            <div>
-              <textarea
-                name="message" placeholder="Type your message here..."
-                value={form.message} onChange={handleChange}
-                className={`${inputBase} resize-none`}
-                style={{ ...inputStyle, height: 'clamp(68.75px, 7.64vw, 110px)', paddingTop: 'clamp(5px, 0.56vw, 8px)' }}
-              />
+              {/* Message */}
+              <div>
+                <textarea
+                  name="message" placeholder="Type your message here..."
+                  value={form.message} onChange={handleChange}
+                  className={`${inputBase} resize-none`}
+                  style={{ ...inputStyle, height: 'clamp(68.75px, 7.64vw, 110px)', paddingTop: 'clamp(5px, 0.56vw, 8px)' }}
+                />
+              </div>
             </div>
 
             {/* Submit button */}
