@@ -474,10 +474,10 @@ export default function AboutVisionMissionSection({ vision, mission }) {
   return (
     <>
     <style>{`
-      .vm-mobile { display: none; }
+      .vm-mobile { display: none !important; }
       @media (max-width: 767px) {
-        .vm-desktop { display: none; }
-        .vm-mobile  { display: block; }
+        .vm-desktop { display: none !important; }
+        .vm-mobile  { display: block !important; }
       }
     `}</style>
 
@@ -575,7 +575,7 @@ export default function AboutVisionMissionSection({ vision, mission }) {
           ref={card1Ref}
           style={{
             position: 'absolute',
-            top: card1Expanded ? '5.5vw' : '8.983vw',
+            top: card1Expanded ? '3.5vw' : '8.983vw',
             left: card1Expanded ? '0' : '5vw',
             width: card1Expanded ? '100%' : '90vw',
             height: card1Expanded ? '100%' : '40.55vw',
@@ -609,7 +609,7 @@ export default function AboutVisionMissionSection({ vision, mission }) {
         style={{
           width: '100%',
           height: '95vh',
-          top: '4vw',
+          top: '3.5vw',
           zIndex: 2,
           overflow: 'hidden',
           backgroundColor: '#EDE7DE',

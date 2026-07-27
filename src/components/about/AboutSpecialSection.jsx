@@ -312,10 +312,10 @@ export default function AboutSpecialSection({ specialSection }) {
   return (
     <>
     <style>{`
-      .about-special-mobile { display: none; }
+      .about-special-mobile { display: none !important; }
       @media (max-width: 767px) {
-        .about-special-desktop { display: none; }
-        .about-special-mobile  { display: block; }
+        .about-special-desktop { display: none !important; }
+        .about-special-mobile  { display: block !important; }
       }
     `}</style>
 

@@ -244,10 +244,10 @@ export default function AboutBoardSection({ boardSection }) {
   return (
     <>
       <style>{`
-        .board-mobile { display: none; }
+        .board-mobile { display: none !important; }
         @media (max-width: 767px) {
-          .board-desktop { display: none; }
-          .board-mobile  { display: block; }
+          .board-desktop { display: none !important; }
+          .board-mobile  { display: block !important; }
         }
       `}</style>
 

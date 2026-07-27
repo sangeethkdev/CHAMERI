@@ -13,13 +13,24 @@ export default function AboutHeroSection({ hero }) {
     offset: ['start start', 'end end'],
   });
 
+  // Mobile has its own scroll track (different height ratio: 206.806vw vs
+  // desktop's 86.806vw), so it needs its own ref/progress/stickyStart —
+  // both sections are mounted at once (CSS toggles which is visible).
+  const mobileContainerRef = useRef(null);
+  const { scrollYProgress: mobileScrollYProgress } = useScroll({
+    target: mobileContainerRef,
+    offset: ['start start', 'end end'],
+  });
+
   const [stickyStart, setStickyStart] = useState(0.28);
+  const [mobileStickyStart, setMobileStickyStart] = useState(0.28);
 
   useEffect(() => {
     const handleResize = () => {
       if (typeof window !== 'undefined') {
         const vh = window.innerHeight;
         const vw = window.innerWidth;
+
         const sectionHeight = Math.min(vw * 0.86806, 1250);
         const revealDistance = vh; // 100vh
         const totalScrollRange = sectionHeight + revealDistance - vh;
@@ -28,6 +39,15 @@ export default function AboutHeroSection({ hero }) {
           setStickyStart(startScroll / totalScrollRange);
         } else {
           setStickyStart(0);
+        }
+
+        const mobileSectionHeight = Math.min(vw * 2.06806, 1250);
+        const mobileTotalScrollRange = mobileSectionHeight + revealDistance - vh;
+        const mobileStartScroll = mobileSectionHeight - vh;
+        if (mobileTotalScrollRange > 0 && mobileStartScroll > 0) {
+          setMobileStickyStart(mobileStartScroll / mobileTotalScrollRange);
+        } else {
+          setMobileStickyStart(0);
         }
       }
     };
@@ -43,19 +63,29 @@ export default function AboutHeroSection({ hero }) {
     ['inset(100% 0 0 0)', 'inset(100% 0 0 0)', 'inset(0% 0 0 0)']
   );
 
+  const mobileClipPath = useTransform(
+    mobileScrollYProgress,
+    [0, mobileStickyStart, 1],
+    ['inset(100% 0 0 0)', 'inset(100% 0 0 0)', 'inset(0% 0 0 0)']
+  );
+
   return (
     <>
-      {/* Mobile hero (iPhone 13/14-sized screens) — static frame, no scroll-pin animation */}
+      {/* Mobile hero (iPhone 13/14-sized screens) — same pin-and-reveal scroll animation as desktop */}
       <section
         className="block md:hidden"
+        ref={mobileContainerRef}
         style={{
           position: 'relative',
           width: '100%',
+          height: 'calc(min(206.806vw, 1250px) + 100vh)',
           backgroundColor: '#EDE7DE',
         }}
       >
         <div
           style={{
+            position: 'relative',
+            zIndex: 2,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -103,25 +133,51 @@ export default function AboutHeroSection({ hero }) {
 
         <div
           style={{
-            position: 'relative',
+            position: 'sticky',
+            top: 'calc(100vh - min(206.806vw, 1250px))',
             width: '100%',
-            height: 'min(86.806vw, 1250px)',
+            height: 'min(206.806vw, 1250px)',
             overflow: 'hidden',
+            backgroundColor: '#EDE7DE',
           }}
         >
+          {/* Background image (sketch) */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/image 9.svg"
             alt="Chameri architectural villa sketch"
             style={{
               position: 'absolute',
-              inset: 0,
+              top: 0,
+              left: 0,
               width: '100%',
               height: '100%',
               objectFit: 'cover',
               objectPosition: 'center top',
             }}
           />
+
+          {/* Colored Final Render (Scroll Revealed) */}
+          <motion.div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              zIndex: 1,
+              clipPath: mobileClipPath,
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/ad2b2e784dade57173773fcdb50ec2a988877826 (1).png"
+              alt="Chameri fully rendered villa"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center top',
+              }}
+            />
+          </motion.div>
         </div>
       </section>
 

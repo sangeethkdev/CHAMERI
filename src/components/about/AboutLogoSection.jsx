@@ -154,7 +154,7 @@ export default function AboutLogoSection({ workLogos }) {
           <div
             style={{
               /* 1200px @ 1440 → 83.33vw */
-              width: 'clamp(312px, 83.33vw, 1600px)',
+              width: 'clamp(312px, 87.33vw, 1800px)',
               /* 111px @ 1440 → 7.71vw */
               height: 'clamp(29px, 7.71vw, 148px)',
               /* 30px @ 1440 → 2.08vw */
