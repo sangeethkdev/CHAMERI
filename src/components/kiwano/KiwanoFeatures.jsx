@@ -105,6 +105,53 @@ const STATIC_FEATURES = [
   },
 ];
 
+// ── Reusable drag-to-scroll binding — one instance per horizontal track ──────
+function useDragScroll() {
+  const ref = useRef(null);
+  const isDragging = useRef(false);
+  const startX     = useRef(0);
+  const scrollLeft = useRef(0);
+  const touchStartX = useRef(0);
+  const touchScrollLeft = useRef(0);
+
+  const onMouseDown = useCallback((e) => {
+    isDragging.current = true;
+    startX.current     = e.pageX - ref.current.offsetLeft;
+    scrollLeft.current = ref.current.scrollLeft;
+    ref.current.style.cursor = "grabbing";
+  }, []);
+
+  const onMouseLeave = useCallback(() => {
+    isDragging.current = false;
+    if (ref.current) ref.current.style.cursor = "grab";
+  }, []);
+
+  const onMouseUp = useCallback(() => {
+    isDragging.current = false;
+    if (ref.current) ref.current.style.cursor = "grab";
+  }, []);
+
+  const onMouseMove = useCallback((e) => {
+    if (!isDragging.current) return;
+    e.preventDefault();
+    const x    = e.pageX - ref.current.offsetLeft;
+    const walk = (x - startX.current) * 1.2;
+    ref.current.scrollLeft = scrollLeft.current - walk;
+  }, []);
+
+  const onTouchStart = useCallback((e) => {
+    touchStartX.current    = e.touches[0].pageX;
+    touchScrollLeft.current = ref.current.scrollLeft;
+  }, []);
+
+  const onTouchMove = useCallback((e) => {
+    const diff = touchStartX.current - e.touches[0].pageX;
+    ref.current.scrollLeft = touchScrollLeft.current + diff;
+  }, []);
+
+  return { ref, onMouseDown, onMouseLeave, onMouseUp, onMouseMove, onTouchStart, onTouchMove };
+}
+
 export default function KiwanoFeatures({ features }) {
   const FEATURES = (features?.features?.length > 0)
     ? features.features.map((f, i) => ({
@@ -114,54 +161,156 @@ export default function KiwanoFeatures({ features }) {
         image: f.image || STATIC_FEATURES[i % STATIC_FEATURES.length]?.image,
       }))
     : STATIC_FEATURES;
-  const trackRef = useRef(null);
 
-  // ── Drag-to-scroll state ──────────────────────────────────────────────────
-  const isDragging = useRef(false);
-  const startX     = useRef(0);
-  const scrollLeft = useRef(0);
+  const {
+    ref:          desktopTrackRef,
+    onMouseDown:  onDesktopMouseDown,
+    onMouseLeave: onDesktopMouseLeave,
+    onMouseUp:    onDesktopMouseUp,
+    onMouseMove:  onDesktopMouseMove,
+    onTouchStart: onDesktopTouchStart,
+    onTouchMove:  onDesktopTouchMove,
+  } = useDragScroll();
 
-  const onMouseDown = useCallback((e) => {
-    isDragging.current = true;
-    startX.current     = e.pageX - trackRef.current.offsetLeft;
-    scrollLeft.current = trackRef.current.scrollLeft;
-    trackRef.current.style.cursor = "grabbing";
-  }, []);
-
-  const onMouseLeave = useCallback(() => {
-    isDragging.current = false;
-    if (trackRef.current) trackRef.current.style.cursor = "grab";
-  }, []);
-
-  const onMouseUp = useCallback(() => {
-    isDragging.current = false;
-    if (trackRef.current) trackRef.current.style.cursor = "grab";
-  }, []);
-
-  const onMouseMove = useCallback((e) => {
-    if (!isDragging.current) return;
-    e.preventDefault();
-    const x    = e.pageX - trackRef.current.offsetLeft;
-    const walk = (x - startX.current) * 1.2;
-    trackRef.current.scrollLeft = scrollLeft.current - walk;
-  }, []);
-
-  // Touch support ──────────────────────────────────────────────────────────
-  const touchStartX = useRef(0);
-  const touchScrollLeft = useRef(0);
-
-  const onTouchStart = useCallback((e) => {
-    touchStartX.current    = e.touches[0].pageX;
-    touchScrollLeft.current = trackRef.current.scrollLeft;
-  }, []);
-
-  const onTouchMove = useCallback((e) => {
-    const diff = touchStartX.current - e.touches[0].pageX;
-    trackRef.current.scrollLeft = touchScrollLeft.current + diff;
-  }, []);
+  const {
+    ref:          mobileTrackRef,
+    onMouseDown:  onMobileMouseDown,
+    onMouseLeave: onMobileMouseLeave,
+    onMouseUp:    onMobileMouseUp,
+    onMouseMove:  onMobileMouseMove,
+    onTouchStart: onMobileTouchStart,
+    onTouchMove:  onMobileTouchMove,
+  } = useDragScroll();
 
   return (
-    /* ── OUTER SECTION ───────────────────────────────────────────────────── */
+    <>
+    {/* ══════════════════════════════════════════════════════════════════════
+        MOBILE — stacked header + horizontal peek cards with overlapping
+        white caption panel (no hover on touch, so info is always visible)
+    ═══════════════════════════════════════════════════════════════════════ */}
+    <section
+      className="flex md:hidden"
+      style={{
+        flexDirection: "column",
+        width:         "100%",
+        background:    "#EDE7DE",
+        paddingTop:    "40px",
+        paddingBottom: "40px",
+        paddingLeft:   "22px",
+        paddingRight:  "22px",
+        gap:           "20px",
+        boxSizing:     "border-box",
+        overflowX:     "hidden",
+      }}
+    >
+      {/* Header */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "10px", width: "100%" }}>
+        {/* Tag pill */}
+        <div
+          style={{
+            display:      "inline-flex",
+            alignItems:   "center",
+            gap:          "7.2px",
+            height:       "20px",
+            padding:      "0 7.2px",
+            borderRadius: "90px",
+            width:        "fit-content",
+          }}
+        >
+          <span
+            style={{
+              width:        "10px",
+              height:       "10px",
+              borderRadius: "3px",
+              background:   "#334454",
+              flexShrink:   0,
+            }}
+          />
+          <span
+            style={{
+              fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+              fontWeight:    400,
+              fontSize:      "11px",
+              letterSpacing: "-0.32px",
+              textTransform: "uppercase",
+              color:         "#334454",
+              whiteSpace:    "nowrap",
+            }}
+          >
+            Our Features
+          </span>
+        </div>
+
+        {/* Title + body */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "6px", width: "100%" }}>
+          <h2
+            style={{
+              fontFamily:    "var(--font-roundo), 'Roundo', system-ui, sans-serif",
+              fontWeight:    500,
+              fontSize:      "32px",
+              lineHeight:    "36.6px",
+              letterSpacing: "-0.73px",
+              textTransform: "capitalize",
+              color:         "#000000",
+              margin:        0,
+            }}
+          >
+            {features?.heading || 'Luxury Smart Living Villa Feature Hubs'}
+          </h2>
+
+          <p
+            style={{
+              fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+              fontWeight:    400,
+              fontSize:      "14px",
+              lineHeight:    "21px",
+              letterSpacing: "0%",
+              color:         "#000000CC",
+              margin:        0,
+            }}
+          >
+            {features?.subheading || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim.'}
+          </p>
+        </div>
+      </div>
+
+      {/* Horizontal peek-card strip */}
+      <div
+        ref={mobileTrackRef}
+        onMouseDown={onMobileMouseDown}
+        onMouseLeave={onMobileMouseLeave}
+        onMouseUp={onMobileMouseUp}
+        onMouseMove={onMobileMouseMove}
+        onTouchStart={onMobileTouchStart}
+        onTouchMove={onMobileTouchMove}
+        style={{
+          display:         "flex",
+          alignItems:      "flex-start",
+          gap:             "18px",
+          width:           "calc(100% + 22px)",
+          marginLeft:      "-22px",
+          paddingLeft:     "22px",
+          paddingRight:    "22px",
+          paddingBottom:   "8px",
+          overflowX:       "auto",
+          overflowY:       "hidden",
+          cursor:          "grab",
+          scrollbarWidth:  "none",
+          msOverflowStyle: "none",
+          WebkitOverflowScrolling: "touch",
+          boxSizing:       "border-box",
+          userSelect:      "none",
+        }}
+      >
+        {FEATURES.map((feature) => (
+          <MobileFeatureCard key={feature.id} feature={feature} />
+        ))}
+      </div>
+    </section>
+
+    {/* ── DESKTOP ──────────────────────────────────────────────────────────── */}
+    <div className="hidden md:block">
+    {/* ── OUTER SECTION ───────────────────────────────────────────────────── */}
     <section
       style={{
         width:           "100%",
@@ -296,13 +445,13 @@ export default function KiwanoFeatures({ features }) {
       >
         {/* Scrollable track */}
         <div
-          ref={trackRef}
-          onMouseDown={onMouseDown}
-          onMouseLeave={onMouseLeave}
-          onMouseUp={onMouseUp}
-          onMouseMove={onMouseMove}
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
+          ref={desktopTrackRef}
+          onMouseDown={onDesktopMouseDown}
+          onMouseLeave={onDesktopMouseLeave}
+          onMouseUp={onDesktopMouseUp}
+          onMouseMove={onDesktopMouseMove}
+          onTouchStart={onDesktopTouchStart}
+          onTouchMove={onDesktopTouchMove}
           style={{
             position:        "absolute",
             top:             "clamp(12px, 1.444vw, 20.76px)",
@@ -331,6 +480,110 @@ export default function KiwanoFeatures({ features }) {
         </div>
       </div>
     </section>
+    </div>
+    </>
+  );
+}
+
+function MobileFeatureCard({ feature }) {
+  // Touch devices have no :hover, so the same reveal animation the desktop
+  // cards use on hover is triggered by tap here instead. The panel's own
+  // height animates (measured from the real title/description heights,
+  // since a wrapping 2-line title must never get clipped) rather than
+  // translating content within a fixed box like the desktop card does.
+  const [expanded, setExpanded] = useState(false);
+  const titleRef = useRef(null);
+  const descRef  = useRef(null);
+  const [collapsedH, setCollapsedH] = useState(60);
+  const [expandedH, setExpandedH]   = useState(200);
+
+  useLayoutEffect(() => {
+    const PAD_V = 28; // 14px top + 14px bottom padding
+    const titleH = titleRef.current?.offsetHeight || 26;
+    const descH  = descRef.current?.offsetHeight || 0;
+    setCollapsedH(titleH + PAD_V);
+    setExpandedH(titleH + 4 + descH + PAD_V); // 4 = title's marginBottom
+  }, []);
+
+  return (
+    <div
+      onClick={() => setExpanded((v) => !v)}
+      style={{ position: "relative", width: "260px", flexShrink: 0, cursor: "pointer" }}
+    >
+      {/* Image */}
+      <div
+        style={{
+          position:     "relative",
+          width:        "100%",
+          height:       "340px",
+          borderRadius: "12px",
+          overflow:     "hidden",
+          background:   "#1a1a1a",
+        }}
+      >
+        <Image
+          src={feature.image}
+          alt={feature.title}
+          fill
+          sizes="260px"
+          style={{ objectFit: "cover", objectPosition: "center" }}
+          draggable={false}
+        />
+      </div>
+
+      {/* White caption panel — overlaps the bottom of the image. Title is the
+          fixed anchor; description is clipped out of view until tapped, then
+          fades/grows in with the same easing/timing as the desktop hover reveal. */}
+      <div
+        style={{
+          position:     "relative",
+          marginTop:    "-44px",
+          marginLeft:   "12px",
+          marginRight:  "12px",
+          // background:   "#FFFFFF",
+          borderRadius: "8px",
+          overflow:     "hidden",
+          // boxShadow:    "0 4px 20px rgba(0,0,0,0.10)",
+          // maxHeight:    `${expanded ? expandedH : collapsedH}px`,
+          transition:   "max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
+        <div style={{ padding: "14px 16px" }}>
+          <span
+            ref={titleRef}
+            style={{
+              display:       "block",
+              fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+              fontWeight:    400,
+              fontSize:      "22px",
+              lineHeight:    "26px",
+              letterSpacing: "-0.44px",
+              textTransform: "capitalize",
+              color:         "#000000",
+              marginBottom:  "4px",
+            }}
+          >
+            {feature.title}
+          </span>
+          {/* <p
+            ref={descRef}
+            style={{
+              margin:        0,
+              fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+              fontWeight:    400,
+              fontSize:      "15px",
+              lineHeight:    "18px",
+              letterSpacing: "-0.39px",
+              color:         "#00000099",
+              opacity:       expanded ? 1 : 0,
+              transition:    "opacity 0.3s ease 0.15s",
+            }}
+          >
+            {feature.description}
+          </p> */}
+        </div>
+      </div>
+    </div>
   );
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, cloneElement } from "react";
 
 // ─── Spec icons ───────────────────────────────────────────────────────────────
 
@@ -408,6 +408,220 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
       }}
     >
       {/* ══════════════════════════════════════════════════════════════
+          MOBILE — stacked layout (logo, description, specs, map, brochure)
+      ══════════════════════════════════════════════════════════════ */}
+      <div className="flex md:hidden" style={{ flexDirection: "column", width: "100%", boxSizing: "border-box" }}>
+        {/* Logo + description */}
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "393px",
+            margin: "0 auto",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "7px",
+            padding: "32px 22px 24px",
+            boxSizing: "border-box",
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "299px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              paddingBottom: "18px",
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/icons/Kiwano-Logo-Color-2-Copy-e1772083713999-1024x219.png.svg"
+              alt="Kiwano Luxury Villas"
+              style={{ width: "100%", height: "auto", display: "block" }}
+            />
+          </div>
+
+          <p
+            style={{
+              width: "100%",
+              maxWidth: "349px",
+              fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+              fontWeight: 400,
+              fontSize: "16px",
+              lineHeight: "18px",
+              letterSpacing: "-0.64px",
+              textAlign: "center",
+              color: "#333333",
+              margin: 0,
+            }}
+          >
+            A modern residential concept that combines the privacy of a villa
+            with the convenience of apartment living. Kiwano Villaments are
+            designed for families seeking spacious homes, shared amenities,
+            and a well-connected community environment.
+          </p>
+        </div>
+
+        {/* Specs + map + brochure */}
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "393px",
+            margin: "0 auto",
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+            padding: "0 22px 40px",
+            boxSizing: "border-box",
+          }}
+        >
+          {/* Spec rows */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "5px", paddingBottom: "8px" }}>
+            {SPECS.map((spec) => (
+              <div
+                key={spec.label}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  width: "100%",
+                  paddingTop: "10px",
+                  paddingBottom: "14px",
+                  borderBottom: "1px solid rgba(0,0,0,0.2)",
+                  boxSizing: "border-box",
+                }}
+              >
+                <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "8px", flex: 1, minWidth: 0 }}>
+                  <div
+                    style={{
+                      width: "clamp(18px, 5.6vw, 24px)",
+                      height: "clamp(18px, 5.6vw, 24px)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {cloneElement(ICON_MAP[spec.icon], { width: 18, height: 18, stroke: "#334454" })}
+                  </div>
+                  <span
+                    style={{
+                      fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                      fontWeight: 500,
+                      fontSize: "clamp(13px, 4.5vw, 18px)",
+                      lineHeight: 1.6,
+                      letterSpacing: "-0.05em",
+                      color: "#333333",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {spec.label}
+                  </span>
+                </div>
+
+                <span
+                  style={{
+                    fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                    fontWeight: 400,
+                    fontSize: "clamp(13px, 4.5vw, 18px)",
+                    lineHeight: 1.6,
+                    letterSpacing: "-0.05em",
+                    color: "#333333",
+                    textAlign: "right",
+                    flexShrink: 0,
+                    marginLeft: "8px",
+                  }}
+                >
+                  {spec.value}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Map card */}
+          <div
+            style={{
+              width: "100%",
+              aspectRatio: "360 / 285.3",
+              borderRadius: "5.15px",
+              background: "#FFFFFF",
+              overflow: "hidden",
+              position: "relative",
+            }}
+          >
+            <ZoomableSitePlan />
+          </div>
+
+          {/* Caption + brochure link */}
+          <div style={{ opacity: 0.8, display: "flex", flexDirection: "column", gap: "2px", paddingTop: "4px" }}>
+            <p
+              style={{
+                fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                fontWeight: 400,
+                fontSize: "16.14px",
+                lineHeight: "121%",
+                letterSpacing: "0%",
+                color: "#000000",
+                margin: 0,
+              }}
+            >
+              {luxuryVillas?.subheading || 'Lorem ipsum dolor sit amet, consectetur'}
+            </p>
+
+            <div
+              onMouseEnter={() => setBrochureHovered(true)}
+              onMouseLeave={() => setBrochureHovered(false)}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                borderBottom: "1px solid #000000",
+                paddingBottom: "2px",
+                cursor: "pointer",
+                width: "fit-content",
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                  fontWeight: 600,
+                  fontSize: "16.14px",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                  color: "#041D35",
+                }}
+              >
+                Download Brochure
+              </span>
+
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                style={{
+                  transform: brochureHovered ? "rotate(0deg)" : "rotate(-45deg)",
+                  transition: "transform 0.25s ease",
+                  transformOrigin: "center",
+                  flexShrink: 0,
+                }}
+              >
+                <line x1="2" y1="10" x2="16" y2="10" stroke="#041D35" strokeWidth="1.8" strokeLinecap="round" />
+                <polyline points="10,4 16,10 10,16" stroke="#041D35" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ══════════════════════════════════════════════════════════════
+          DESKTOP
+      ══════════════════════════════════════════════════════════════ */}
+      <div className="hidden md:block">
+      {/* ══════════════════════════════════════════════════════════════
           FIRST MAIN DIV — Logo + Description
       ══════════════════════════════════════════════════════════════ */}
       <div
@@ -573,9 +787,9 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "center",
-                paddingTop: "10px",
+                paddingTop: "clamp(6px, 1.04vw, 10px)",
                 paddingRight: "10px",
-                paddingBottom: "20px",
+                paddingBottom: "clamp(8px, 1.56vw, 20px)",
                 paddingLeft: "10px",
                 borderBottom: "1px solid rgba(0,0,0,0.2)",
               }}
@@ -612,6 +826,7 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
             </div>
           ))}
         </div>
+      </div>
       </div>
     </section>
   );

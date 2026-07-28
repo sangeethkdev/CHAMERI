@@ -265,8 +265,8 @@ export default function AboutFounderNote({ founder }) {
             >
               <div
                 style={{
-                  width: 8,
-                  height: 8,
+                  width: 12,
+                  height: 12,
                   borderRadius: '2px',
                   backgroundColor: '#334454',
                   flexShrink: 0,
@@ -276,7 +276,7 @@ export default function AboutFounderNote({ founder }) {
                 style={{
                   fontFamily: "var(--font-geist, 'Geist'), system-ui, sans-serif",
                   fontWeight: 400,
-                  fontSize: '10px',
+                  fontSize: '14px',
                   lineHeight: '12px',
                   letterSpacing: '0.04em',
                   textTransform: 'uppercase',

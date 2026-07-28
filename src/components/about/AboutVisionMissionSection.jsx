@@ -581,7 +581,7 @@ export default function AboutVisionMissionSection({ vision, mission }) {
             height: card1Expanded ? '100%' : '40.55vw',
             zIndex: 10,
             overflow: 'hidden',
-            borderRadius: card1Expanded ? '0px' : 'clamp(4px, 0.56vw, 8px)',
+            // borderRadius: card1Expanded ? '0px' : 'clamp(4px, 0.56vw, 8px)',
             transition: [
               'top           1.5s cubic-bezier(0.22,1,0.36,1)',
               'left          1.5s cubic-bezier(0.22,1,0.36,1)',
@@ -799,7 +799,7 @@ function MobileVisionMissionSection({ cards }) {
             height: card1Expanded ? '100%' : 780,
             zIndex: 10,
             overflow: 'hidden',
-            borderRadius: card1Expanded ? '0px' : '8px',
+            // borderRadius: card1Expanded ? '0px' : '8px',
             transition: [
               'top           1.5s cubic-bezier(0.22,1,0.36,1)',
               'left          1.5s cubic-bezier(0.22,1,0.36,1)',

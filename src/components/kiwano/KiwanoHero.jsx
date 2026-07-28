@@ -186,37 +186,85 @@ export default function KiwanoHero({ hero }) {
           <div
             ref={textRef}
             style={{
-              position:       "absolute",
-              top:            "42.70%",
-              left:           "26.78%",
-              width:          "clamp(280px, 50.37vw, 697.67px)",
-              height:         "133px",
-              display:        "flex",
-              alignItems:     "center",
-              justifyContent: "center",
-              zIndex:         2,
-              opacity:        0,
-              transform:      "translateY(28px)",
-              willChange:     "opacity, transform",
-              pointerEvents:  "none",
+              position:      "absolute",
+              inset:         0,
+              zIndex:        2,
+              opacity:       0,
+              transform:     "translateY(28px)",
+              willChange:    "opacity, transform",
+              pointerEvents: "none",
             }}
           >
-            <h1
+            {/* Mobile — 390×725 frame, text box 298.41×168, centered in the padded (50px/50px) frame */}
+            <div
+              className="flex md:hidden"
               style={{
-                fontFamily:    "var(--font-roundo), 'Roundo', system-ui, sans-serif",
-                fontWeight:    500,
-                fontSize:      "clamp(28px, 4.167vw, 60px)",
-                lineHeight:    "66.14px",
-                letterSpacing: "-3.05px",
-                textAlign:     "center",
-                color:         "#ffffff",
-                margin:        0,
-                textShadow:    "0 4px 24px rgba(0,0,0,0.45)",
-                marginLeft:    "clamp(40px, 8.58vw, 100px)",
+                position:       "absolute",
+                inset:          0,
+                paddingTop:     "50px",
+                paddingBottom:  "50px",
+                alignItems:     "center",
+                justifyContent: "center",
               }}
             >
-              {hero?.heading || "Elegant Spaces For Built Views Photo Frame"}
-            </h1>
+              <div
+                style={{
+                  width:          "min(298.41px, 84vw)",
+                  height:         "168px",
+                  display:        "flex",
+                  alignItems:     "center",
+                  justifyContent: "center",
+                }}
+              >
+                <h1
+                  style={{
+                    fontFamily:    "var(--font-roundo), 'Roundo', system-ui, sans-serif",
+                    fontWeight:    500,
+                    fontSize:      "38px",
+                    lineHeight:    "42px",
+                    letterSpacing: "-2px",
+                    textAlign:     "center",
+                    textTransform: "capitalize",
+                    color:         "#ffffff",
+                    margin:        0,
+                    textShadow:    "0 4px 24px rgba(0,0,0,0.45)",
+                  }}
+                >
+                  {hero?.heading || "Elegant Spaces For Built Views Photo Frame"}
+                </h1>
+              </div>
+            </div>
+
+            {/* Desktop */}
+            <div
+              className="hidden md:flex"
+              style={{
+                position:       "absolute",
+                top:            "42.70%",
+                left:           "50%",
+                transform:      "translateX(-50%)",
+                width:          "clamp(280px, 50.37vw, 697.67px)",
+                height:         "133px",
+                alignItems:     "center",
+                justifyContent: "center",
+              }}
+            >
+              <h1
+                style={{
+                  fontFamily:    "var(--font-roundo), 'Roundo', system-ui, sans-serif",
+                  fontWeight:    500,
+                  fontSize:      "clamp(28px, 4.167vw, 60px)",
+                  lineHeight:    1.1,
+                  letterSpacing: "-0.05em",
+                  textAlign:     "center",
+                  color:         "#ffffff",
+                  margin:        0,
+                  textShadow:    "0 4px 24px rgba(0,0,0,0.45)",
+                }}
+              >
+                {hero?.heading || "Elegant Spaces For Built Views Photo Frame"}
+              </h1>
+            </div>
           </div>
         </div>
       </div>

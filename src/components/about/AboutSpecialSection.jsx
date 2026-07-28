@@ -72,16 +72,16 @@ function MobileSpecialSection({ features, title }) {
         style={{
           position: 'sticky',
           top: 0,
-          minHeight: '100vh',
+          height: '100dvh',
           width: '100%',
           backgroundColor: '#EDE7DE',
           overflow: 'hidden',
-          paddingTop: 10,
-          paddingBottom: 40,
+          paddingTop: 'clamp(6px, 1.5vh, 10px)',
+          paddingBottom: 'clamp(14px, 4vh, 40px)',
           boxSizing: 'border-box',
           display: 'flex',
           flexDirection: 'column',
-          gap: 2,
+          gap: 'clamp(2px, 0.6vh, 4px)',
         }}
       >
         {/* ── Header: label + heading ─────────────────────────────── */}
@@ -93,12 +93,12 @@ function MobileSpecialSection({ features, title }) {
             boxSizing: 'border-box',
             display: 'flex',
             flexDirection: 'column',
-            gap: 10,
+            gap: 'clamp(4px, 1.2vh, 10px)',
             flexShrink: 0,
           }}
         >
           {/* Label */}
-          <div style={{ height: 20, display: 'flex', alignItems: 'center' }}>
+          <div style={{ height: 'clamp(16px, 2.5vh, 20px)', display: 'flex', alignItems: 'center' }}>
             <div
               style={{
                 display: 'inline-flex',
@@ -106,7 +106,7 @@ function MobileSpecialSection({ features, title }) {
                 gap: 7.2,
                 paddingLeft: 2,
                 paddingRight: 2,
-                height: 20,
+                height: '100%',
                 borderRadius: 90,
               }}
             >
@@ -142,8 +142,8 @@ function MobileSpecialSection({ features, title }) {
               maxWidth: 346.5,
               fontFamily: "var(--font-roundo,'Roundo'),system-ui,sans-serif",
               fontWeight: 500,
-              fontSize: 32,
-              lineHeight: '36.6px',
+              fontSize: 'clamp(20px, 4.2vh, 32px)',
+              lineHeight: 1.15,
               letterSpacing: '-0.73px',
               color: '#000000',
               margin: 0,
@@ -153,29 +153,40 @@ function MobileSpecialSection({ features, title }) {
           </h2>
         </div>
 
-        {/* ── Accordion list ──────────────────────────────────────── */}
+        {/* ── Accordion list: flex:1 so it always fills exactly the
+             remaining height, no matter how short the screen is ────── */}
         <div
           style={{
             width: '100%',
-            padding: '10px 15px',
+            flex: 1,
+            minHeight: 0,
+            padding: '0 15px',
             boxSizing: 'border-box',
             display: 'flex',
             flexDirection: 'column',
-            gap: 10,
+            overflow: 'hidden',
+            gap: 'clamp(2px, 0.6vh, 6px)',
           }}
         >
           {features.map((feature, index) => {
             const isActive = index === activeIndex;
 
             return (
-              <div
+              <motion.div
                 key={index}
+                animate={{ flexGrow: isActive ? 1 : 0 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 style={{
                   width: '100%',
+                  flexShrink: 1,
+                  flexBasis: 'auto',
+                  minHeight: 0,
                   borderBottom: '1px solid #D9D3CC',
-                  paddingTop: 10,
+                  paddingTop: 'clamp(4px, 1vh, 10px)',
+                  paddingBottom: 'clamp(4px, 1vh, 10px)',
                   display: 'flex',
                   flexDirection: 'column',
+                  overflow: 'hidden',
                   boxSizing: 'border-box',
                 }}
               >
@@ -184,10 +195,11 @@ function MobileSpecialSection({ features, title }) {
                   animate={{ color: isActive ? '#000000' : '#6B859E' }}
                   transition={{ duration: 0.4, ease: 'easeInOut' }}
                   style={{
+                    flexShrink: 0,
                     fontFamily: "var(--font-roundo,'Roundo'),system-ui,sans-serif",
                     fontWeight: 500,
-                    fontSize: 24.94,
-                    lineHeight: '29.83px',
+                    fontSize: 'clamp(16px, 3.4vh, 24.94px)',
+                    lineHeight: 1.2,
                     letterSpacing: '-0.52px',
                     margin: 0,
                     whiteSpace: 'pre-line',
@@ -199,19 +211,22 @@ function MobileSpecialSection({ features, title }) {
                 {/* Description: only visible when active */}
                 <motion.div
                   animate={{
-                    height: isActive ? 'auto' : 0,
                     opacity: isActive ? 1 : 0,
-                    marginTop: isActive ? 12 : 0,
+                    marginTop: isActive ? 'clamp(6px, 1.5vh, 12px)' : 0,
                   }}
                   transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  style={{ overflow: 'hidden' }}
+                  style={{
+                    flexShrink: 0,
+                    height: isActive ? 'auto' : 0,
+                    overflow: 'hidden',
+                  }}
                 >
                   <p
                     style={{
                       fontFamily: "var(--font-geist,'Geist'),system-ui,sans-serif",
                       fontWeight: 400,
-                      fontSize: 14,
-                      lineHeight: '17.69px',
+                      fontSize: 'clamp(11px, 1.8vh, 14px)',
+                      lineHeight: 1.3,
                       color: '#000000',
                       margin: 0,
                     }}
@@ -220,20 +235,20 @@ function MobileSpecialSection({ features, title }) {
                   </p>
                 </motion.div>
 
-                {/* Image below text: expands to 234px when active */}
+                {/* Image: fills whatever space remains in the active row */}
                 <motion.div
                   animate={{
-                    height: isActive ? 234 : 0,
-                    marginTop: isActive ? 22 : 0,
+                    marginTop: isActive ? 'clamp(8px, 2vh, 22px)' : 0,
                     opacity: isActive ? 1 : 0,
                   }}
                   transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                   style={{
                     position: 'relative',
                     width: '100%',
+                    flex: isActive ? 1 : '0 0 0px',
+                    minHeight: 0,
                     overflow: 'hidden',
                     borderRadius: 8,
-                    flexShrink: 0,
                   }}
                 >
                   <AnimatePresence>
@@ -256,14 +271,7 @@ function MobileSpecialSection({ features, title }) {
                     )}
                   </AnimatePresence>
                 </motion.div>
-
-                {/* Bottom padding: 16 active / 10 inactive */}
-                <motion.div
-                  animate={{ height: isActive ? 16 : 10 }}
-                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  style={{ flexShrink: 0 }}
-                />
-              </div>
+              </motion.div>
             );
           })}
         </div>

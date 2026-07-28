@@ -89,7 +89,7 @@ export default function AboutHeroSection({ hero }) {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            paddingTop: 76,
+            paddingTop: 106,
             paddingBottom: 24,
             gap: 8,
           }}
@@ -148,7 +148,8 @@ export default function AboutHeroSection({ hero }) {
             alt="Chameri architectural villa sketch"
             style={{
               position: 'absolute',
-              top: 0,
+              // top: 0,
+              bottom: 80,
               left: 0,
               width: '100%',
               height: '100%',
