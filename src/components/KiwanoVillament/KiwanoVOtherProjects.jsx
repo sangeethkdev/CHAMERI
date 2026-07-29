@@ -13,6 +13,211 @@ export default function KiwanoOtherProjects({ otherProjects }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
+    <>
+    {/* ══════════════════════════════════════════════════════════════════════
+        MOBILE — iPhone 13/14 (390px) baseline, fluid across small screens
+    ═══════════════════════════════════════════════════════════════════════ */}
+    <section
+      className="flex md:hidden"
+      style={{
+        flexDirection: "column",
+        width:         "100%",
+        background:    "#EDE7DE",
+        boxSizing:     "border-box",
+      }}
+    >
+      {/* Header — Figma: w:390 h:172 pt:40 pr:16 pb:6 pl:16 gap:10 */}
+      <div
+        style={{
+          display:       "flex",
+          flexDirection: "column",
+          alignItems:    "center",
+          width:         "100%",
+          paddingTop:    "40px",
+          paddingRight:  "16px",
+          paddingBottom: "6px",
+          paddingLeft:   "16px",
+          gap:           "10px",
+          boxSizing:     "border-box",
+        }}
+      >
+        <h2
+          style={{
+            width:         "100%",
+            maxWidth:      "358px",
+            fontFamily:    "var(--font-roundo), 'Roundo', system-ui, sans-serif",
+            fontWeight:    500,
+            fontSize:      "clamp(24px, 8.2vw, 32px)",
+            lineHeight:    "36.6px",
+            letterSpacing: "-0.73px",
+            textAlign:     "center",
+            textTransform: "capitalize",
+            color:         "#000000",
+            margin:        0,
+          }}
+        >
+          {otherProjects?.heading || 'Explore Our Other Projects'}
+        </h2>
+        <p
+          style={{
+            width:         "100%",
+            maxWidth:      "286px",
+            fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+            fontWeight:    400,
+            fontSize:      "14px",
+            lineHeight:    "21px",
+            letterSpacing: "0",
+            textAlign:     "center",
+            color:         "#000000CC",
+            margin:        0,
+          }}
+        >
+          {otherProjects?.subheading || 'Explore crafted villa spaces with modern comfort built beautifully'}
+        </p>
+      </div>
+
+      {/* Project card — Figma: image w:349 h:495 top:12.24 left:20 radius:8 */}
+      <div
+        style={{
+          width:          "100%",
+          background:     "#EDE7DE",
+          display:        "flex",
+          justifyContent: "center",
+          paddingTop:     "12.24px",
+          paddingBottom:  "30px",
+          paddingLeft:    "20px",
+          paddingRight:   "20px",
+          boxSizing:      "border-box",
+        }}
+      >
+        <div
+          style={{
+            position:     "relative",
+            width:        "100%",
+            maxWidth:     "349px",
+            aspectRatio:  "349 / 495",
+            borderRadius: "8px",
+            overflow:     "hidden",
+            background:   "#1a1a1a",
+          }}
+        >
+          <Image
+            src={otherProjects?.image || "/dummyimages/e273958d502607f06d62edd61792f48b69b84f3e.jpg"}
+            alt="Kiwano Villaments"
+            fill
+            sizes="349px"
+            style={{ objectFit: "cover" }}
+          />
+
+          {/* Gradient overlay for text readability */}
+          <div
+            style={{
+              position:   "absolute",
+              inset:      0,
+              background: "linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 55%)",
+            }}
+          />
+
+          {/* Overlay content */}
+          <div
+            style={{
+              position:       "absolute",
+              left:           0,
+              right:          0,
+              bottom:         "26px",
+              display:        "flex",
+              flexDirection:  "column",
+              alignItems:     "center",
+              gap:            "10px",
+              paddingLeft:    "18px",
+              paddingRight:   "18px",
+              boxSizing:      "border-box",
+              textAlign:      "center",
+            }}
+          >
+            <h3
+              style={{
+                fontFamily:    "var(--font-roundo), 'Roundo', system-ui, sans-serif",
+                fontWeight:    500,
+                fontSize:      "clamp(28px, 10.3vw, 40px)",
+                lineHeight:    "1.1",
+                letterSpacing: "-3.05px",
+                color:         "#FFFFFF",
+                margin:        0,
+              }}
+            >
+              kiwano Villaments
+            </h3>
+            <p
+              style={{
+                width:         "100%",
+                maxWidth:      "312px",
+                fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                fontWeight:    400,
+                fontSize:      "12px",
+                lineHeight:    "16px",
+                letterSpacing: "-0.04px",
+                color:         "#FFFFFF",
+                margin:        0,
+              }}
+            >
+              Discover crafted living spaces where modern design meets timeless comfort for every family with smart layouts bright views and premium details built to inspire daily today always now us
+            </p>
+
+            <button
+              type="button"
+              style={{
+                display:        "flex",
+                alignItems:     "center",
+                justifyContent: "center",
+                gap:            "8px",
+                width:          "142px",
+                height:         "46px",
+                borderRadius:   "12px",
+                background:     "#6B859E",
+                border:         "none",
+                cursor:         "pointer",
+                marginTop:      "6px",
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                  fontWeight: 500,
+                  fontSize:   "15px",
+                  color:      "#EDE7DE",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Learn More
+              </span>
+              <div
+                style={{
+                  display:        "flex",
+                  alignItems:     "center",
+                  justifyContent: "center",
+                  width:          "30px",
+                  height:         "30px",
+                  borderRadius:   "7px",
+                  background:     "#EDE7DE",
+                  flexShrink:     0,
+                }}
+              >
+                <svg
+                  viewBox="0 0 32 24" fill="none" stroke="#000000" strokeWidth="2.5"
+                  style={{ width: "18px", height: "18px" }}
+                >
+                  <path d="M8 12h18M20 5l7 7-7 7" />
+                </svg>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* ── DESKTOP ──────────────────────────────────────────────────────────── */}
+    <div className="hidden md:block">
     <section
       style={{
         width: "100%",
@@ -257,5 +462,7 @@ export default function KiwanoOtherProjects({ otherProjects }) {
         </div>
       </div>
     </section>
+    </div>
+    </>
   );
 }
