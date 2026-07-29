@@ -690,7 +690,7 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
           display: "flex",
           flexDirection: "row",
           gap: "clamp(24px, 7.08vw, 102px)",
-          alignItems: "flex-start",
+          alignItems: "center",
         }}
       >
         {/* ── LEFT: floor plan card + brochure ── */}

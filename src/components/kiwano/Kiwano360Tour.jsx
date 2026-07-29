@@ -71,6 +71,101 @@ function ArrowSquare({ direction, onClick, pressed }) {
   );
 }
 
+/* ── Shared viewer content (photo + vignette + drag badge) ───────────────────
+   Used by both the mobile and desktop layouts so the pan/modal behaviour and
+   badge markup stay in one place. */
+function Viewer360Inner({
+  src, imgPosX, borderRadius,
+  pressedL, pressedR, onPressLeft, onPressRight, openModal,
+}) {
+  return (
+    <div
+      style={{
+        width:        "100%",
+        height:       "100%",
+        position:     "relative",
+        borderRadius,
+        overflow:     "hidden",
+        background:   "#1a1a1a",
+      }}
+    >
+      {/* ── STATIC PHOTO (pans via objectPosition) ───────────────── */}
+      <Image
+        src={src}
+        alt="Explore Every Angle Of Luxury Living — Kiwano Villa"
+        fill
+        priority
+        sizes="(max-width: 768px) 100vw, 1285px"
+        style={{
+          objectFit:      "cover",
+          objectPosition: `${imgPosX}% 50%`,
+          transition:     "object-position 0.25s ease-out",
+          userSelect:     "none",
+          pointerEvents:  "none",
+        }}
+        draggable={false}
+      />
+
+      {/* Subtle bottom vignette */}
+      <div
+        style={{
+          position:      "absolute",
+          inset:         0,
+          background:    "linear-gradient(to top, rgba(0,0,0,0.22) 0%, transparent 50%)",
+          zIndex:        1,
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* ── DRAG AROUND BADGE ─────────────────────────────────────── */}
+      <div
+        style={{
+          position:       "absolute",
+          top:            "50%",
+          left:           "50%",
+          transform:      "translate(-50%, -50%)",
+          zIndex:         2,
+          display:        "flex",
+          alignItems:     "center",
+          gap:            "10px",
+          padding:        "4px 6px",
+          borderRadius:   "8px",
+          background:     "rgba(237, 231, 222, 0.88)",
+          backdropFilter: "blur(10px)",
+          boxShadow:      "0 4px 20px rgba(0,0,0,0.22)",
+          whiteSpace:     "nowrap",
+          userSelect:     "none",
+        }}
+      >
+        <ArrowSquare direction="left" pressed={pressedL} onClick={onPressLeft} />
+
+        <button
+          onClick={openModal}
+          aria-label="Watch 360° villa tour"
+          title="Click to watch full 360° tour video"
+          style={{
+            background:    "transparent",
+            border:        "none",
+            cursor:        "pointer",
+            padding:       "0 2px",
+            fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+            fontWeight:    500,
+            fontSize:      "14px",
+            lineHeight:    "1",
+            letterSpacing: "0",
+            textTransform: "capitalize",
+            color:         "#334454",
+          }}
+        >
+          Drag Around
+        </button>
+
+        <ArrowSquare direction="right" pressed={pressedR} onClick={onPressRight} />
+      </div>
+    </div>
+  );
+}
+
 export default function Kiwano360Tour({ tour360 }) {
   /* ── Pan state (0 = centre, -40 = far left, +40 = far right) ─────────────── */
   const [panX, setPanX] = useState(0);           // percent offset
@@ -128,9 +223,116 @@ export default function Kiwano360Tour({ tour360 }) {
   return (
     <>
       {/* ════════════════════════════════════════════════════════════════════
-          MAIN SECTION
+          MOBILE — iPhone 13/14 (390px) baseline, fluid across small screens
+      ═══════════════════════════════════════════════════════════════════ */}
+      <section
+        className="flex md:hidden"
+        style={{
+          flexDirection: "column",
+          width:         "100%",
+          background:    "#EDE7DE",
+          boxSizing:     "border-box",
+        }}
+      >
+        {/* Header block — Figma: w:390 h:162 pt:30 pr:16 pb:6 pl:16 gap:10 */}
+        <div
+          style={{
+            display:       "flex",
+            flexDirection: "column",
+            alignItems:    "center",
+            width:         "100%",
+            paddingTop:    "30px",
+            paddingRight:  "16px",
+            paddingBottom: "6px",
+            paddingLeft:   "16px",
+            gap:           "10px",
+            boxSizing:     "border-box",
+          }}
+        >
+          {/* Title — Figma: w:358 h:74  Roundo 500 32px/36.6px ls:-0.73px */}
+          <h2
+            style={{
+              width:         "100%",
+              maxWidth:      "358px",
+              fontFamily:    "var(--font-roundo), 'Roundo', system-ui, sans-serif",
+              fontWeight:    500,
+              fontStyle:     "normal",
+              fontSize:      "clamp(24px, 8.2vw, 32px)",
+              lineHeight:    "36.6px",
+              letterSpacing: "-0.73px",
+              textAlign:     "center",
+              textTransform: "capitalize",
+              color:         "#000000",
+              margin:        0,
+              padding:       0,
+            }}
+          >
+            {tour360?.heading || 'Explore Every Angle Of Luxury Living'}
+          </h2>
+
+          {/* Subtitle — Figma: w:286 h:42  Geist 400 14px/21px */}
+          <p
+            style={{
+              width:         "100%",
+              maxWidth:      "286px",
+              fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+              fontWeight:    400,
+              fontSize:      "14px",
+              lineHeight:    "21px",
+              letterSpacing: "0",
+              textAlign:     "center",
+              color:         "#000000CC",
+              margin:        0,
+            }}
+          >
+            {tour360?.subheading || 'Explore crafted villa spaces with modern comfort built beautifully'}
+          </p>
+        </div>
+
+        {/* Viewer block — Figma: w:390 h:537, image w:341 h:495 top:12.5 left:25 */}
+        <div
+          style={{
+            width:          "100%",
+            background:     "#EDE7DE",
+            display:        "flex",
+            justifyContent: "center",
+            paddingTop:     "12.5px",
+            paddingBottom:  "30px",
+            paddingLeft:    "16px",
+            paddingRight:   "16px",
+            boxSizing:      "border-box",
+          }}
+        >
+          <div
+            style={{
+              position:     "relative",
+              width:        "100%",
+              maxWidth:     "341px",
+              aspectRatio:  "341 / 495",
+              borderRadius: "8px",
+              overflow:     "hidden",
+              background:   "#00000033",
+            }}
+          >
+            <Viewer360Inner
+              src={tour360?.media || "/dummyimages/allphoto-bangkok-imSqK_PD5R0-unsplash.jpg"}
+              imgPosX={imgPosX}
+              borderRadius="8px"
+              pressedL={pressedL}
+              pressedR={pressedR}
+              onPressLeft={() => { setPressedL(true); startPan("left"); }}
+              onPressRight={() => { setPressedR(true); startPan("right"); }}
+              openModal={openModal}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════════════════════════════
+          DESKTOP
           Figma: w:1436.91  h:1011.92  pt:60  pr:76  pb:110  pl:76  bg:#EDE7DE
       ═══════════════════════════════════════════════════════════════════ */}
+      <div className="hidden md:block">
       <section
         style={{
           width:         "100%",
@@ -196,7 +398,7 @@ export default function Kiwano360Tour({ tour360 }) {
                     fontWeight:    500,
                     fontStyle:     "normal",
                     fontSize:      "clamp(28px, 4.167vw, 60px)",
-                    lineHeight:    "66.14px",
+                    lineHeight:    "1.1",
                     letterSpacing: "-3.05px",
                     textAlign:     "center",
                     color:         "#222F30",
@@ -225,7 +427,7 @@ export default function Kiwano360Tour({ tour360 }) {
                 {tour360?.subheading || 'Explore crafted villa spaces with modern comfort built beautifully'}
               </p>
 
-              
+
             </div>
           </div>
 
@@ -241,124 +443,22 @@ export default function Kiwano360Tour({ tour360 }) {
             }}
           >
             {/* Viewer wrapper */}
-            <div
-              id="kiwano-360-viewer"
-              style={{
-                width:        "100%",
-                height:       "100%",
-                position:     "relative",
-                borderRadius: "clamp(8px, 0.833vw, 12px)",
-                overflow:     "hidden",
-                background:   "#1a1a1a",
-              }}
-            >
-              {/* ── STATIC PHOTO (pans via objectPosition) ───────────────── */}
-              <Image
+            <div id="kiwano-360-viewer" style={{ width: "100%", height: "100%" }}>
+              <Viewer360Inner
                 src={tour360?.media || "/dummyimages/allphoto-bangkok-imSqK_PD5R0-unsplash.jpg"}
-                alt="Explore Every Angle Of Luxury Living — Kiwano Villa"
-                fill
-                priority
-                sizes="(max-width: 768px) 100vw, 1285px"
-                style={{
-                  objectFit:      "cover",
-                  objectPosition: `${imgPosX}% 50%`,
-                  transition:     "object-position 0.25s ease-out",
-                  userSelect:     "none",
-                  pointerEvents:  "none",
-                }}
-                draggable={false}
+                imgPosX={imgPosX}
+                borderRadius="clamp(8px, 0.833vw, 12px)"
+                pressedL={pressedL}
+                pressedR={pressedR}
+                onPressLeft={() => { setPressedL(true); startPan("left"); }}
+                onPressRight={() => { setPressedR(true); startPan("right"); }}
+                openModal={openModal}
               />
-
-              {/* Subtle bottom vignette */}
-              <div
-                style={{
-                  position:      "absolute",
-                  inset:         0,
-                  background:    "linear-gradient(to top, rgba(0,0,0,0.22) 0%, transparent 50%)",
-                  zIndex:        1,
-                  pointerEvents: "none",
-                }}
-              />
-
-              {/* ── DRAG AROUND BADGE ─────────────────────────────────────
-                  Matches the reference image exactly:
-                  Pill shape — [← square]  Drag Around  [→ square]
-
-                  Behaviour:
-                    • ← hold → pans photo right (reveals left)
-                    • → hold → pans photo left  (reveals right)
-                    • "Drag Around" text click → opens 360 video modal
-              ──────────────────────────────────────────────────────── */}
-              <div
-                style={{
-                  position:       "absolute",
-                  top:            "50%",
-                  left:           "50%",
-                  transform:      "translate(-50%, -50%)",
-                  zIndex:         2,
-                  /* pill */
-                  display:        "flex",
-                  alignItems:     "center",
-                  gap:            "10px",
-                  padding:        "4px 6px",
-                  borderRadius:   "8px",
-                  background:     "rgba(237, 231, 222, 0.88)",  /* #EDE7DE 88% */
-                  backdropFilter: "blur(10px)",
-                  boxShadow:      "0 4px 20px rgba(0,0,0,0.22)",
-                  whiteSpace:     "nowrap",
-                  userSelect:     "none",
-                }}
-              >
-                {/* ← left arrow square */}
-                <ArrowSquare
-                  direction="left"
-                  pressed={pressedL}
-                  onClick={() => {
-                    setPressedL(true);
-                    startPan("left");
-                  }}
-                />
-
-                {/* "Drag Around" — click opens modal */}
-                <button
-                  id="kiwano-360-open"
-                  onClick={openModal}
-                  aria-label="Watch 360° villa tour"
-                  title="Click to watch full 360° tour video"
-                  style={{
-                    background:    "transparent",
-                    border:        "none",
-                    cursor:        "pointer",
-                    padding:       "0 2px",
-                    fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
-                    fontWeight:    500,
-                    fontSize:      "14px",
-                    lineHeight:    "1",
-                    letterSpacing: "0",
-                    textTransform: "capitalize",
-                    color:         "#334454",
-                  }}
-                >
-                  Drag Around
-                </button>
-
-                {/* → right arrow square */}
-                <ArrowSquare
-                  direction="right"
-                  pressed={pressedR}
-                  onClick={() => {
-                    setPressedR(true);
-                    startPan("right");
-                  }}
-                />
-              </div>
-
-              {/* Global mouseup / touchend — stop panning anywhere */}
-              {/* We attach these to window so releasing outside the button works */}
             </div>
           </div>
         </div>
       </section>
+      </div>
 
       {/* Stop pan on pointer up anywhere on page */}
       {/* (rendered as a transparent overlay only while a button is pressed) */}

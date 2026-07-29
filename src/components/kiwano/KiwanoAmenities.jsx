@@ -24,6 +24,10 @@ const AMENITIES = [
   { id: 12, name: "NH 66", time: "4 Minutes Away", icon: "road", lat: 11.7700, lng: 75.5100 },
 ];
 
+// Mobile shows a 2-column grid — chunk the flat list into pairs.
+const AMENITY_ROWS = [];
+for (let i = 0; i < AMENITIES.length; i += 2) AMENITY_ROWS.push(AMENITIES.slice(i, i + 2));
+
 /* ── SVG Icons ───────────────────────────────────────────────────────────── */
 
 function IconWrapper({ children }) {
@@ -141,6 +145,170 @@ export default function KiwanoAmenities({ amenities }) {
     : DEFAULT_MAP_SRC;
 
   return (
+    <>
+    {/* ══════════════════════════════════════════════════════════════════════
+        MOBILE — iPhone 13/14 (390px) baseline, fluid across small screens.
+        List/Map toggle and map view are hidden on mobile — list only.
+    ═══════════════════════════════════════════════════════════════════════ */}
+    <section
+      className="flex md:hidden"
+      style={{
+        flexDirection: "column",
+        width:         "100%",
+        background:    "#EDE7DE",
+        paddingTop:    "40px",
+        paddingRight:  "22px",
+        paddingBottom: "40px",
+        paddingLeft:   "22px",
+        gap:           "20px",
+        boxSizing:     "border-box",
+      }}
+    >
+      {/* Header — Figma: w:346.5 h:173 gap:10 */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "10px", width: "100%" }}>
+        {/* Tag pill */}
+        <div
+          style={{
+            display:      "inline-flex",
+            alignItems:   "center",
+            gap:          "7.2px",
+            height:       "20px",
+            padding:      "0 7.2px",
+            borderRadius: "90px",
+            width:        "fit-content",
+          }}
+        >
+          <span
+            style={{
+              width:        "10px",
+              height:       "10px",
+              borderRadius: "3px",
+              background:   "#334454",
+              flexShrink:   0,
+            }}
+          />
+          <span
+            style={{
+              fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+              fontWeight:    400,
+              fontSize:      "12px",
+              lineHeight:    "19.44px",
+              letterSpacing: "-0.32px",
+              textTransform: "uppercase",
+              color:         "#000000",
+              whiteSpace:    "nowrap",
+            }}
+          >
+            Surrounding Amenities
+          </span>
+        </div>
+
+        {/* Title + subtitle — Figma: w:346.5 h:143 gap:6 */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "6px", width: "100%" }}>
+          <h2
+            style={{
+              width:         "100%",
+              fontFamily:    "var(--font-roundo), 'Roundo', system-ui, sans-serif",
+              fontWeight:    500,
+              fontSize:      "clamp(24px, 8.2vw, 32px)",
+              lineHeight:    "36.6px",
+              letterSpacing: "-0.73px",
+              color:         "#000000",
+              margin:        0,
+            }}
+          >
+            {amenities?.heading || 'Proven Trust Value Modern Homes Leader'}
+          </h2>
+          <p
+            style={{
+              width:         "100%",
+              fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+              fontWeight:    400,
+              fontSize:      "14px",
+              lineHeight:    "21px",
+              letterSpacing: "0",
+              color:         "#000000CC",
+              margin:        0,
+            }}
+          >
+            {amenities?.subheading || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim.'}
+          </p>
+        </div>
+      </div>
+
+      {/* 2-column amenity grid — Figma: w:365 h:1122 gap:26 padding:10, 6 rows of 2 */}
+      <div
+        style={{
+          width:      "100%",
+          display:    "flex",
+          flexDirection: "column",
+          gap:        "26px",
+          padding:    "10px",
+          boxSizing:  "border-box",
+        }}
+      >
+        {AMENITY_ROWS.map((row, i) => (
+          <div key={i} style={{ display: "flex", width: "100%", gap: "21px" }}>
+            {row.map((amenity) => (
+              <div
+                key={amenity.id}
+                onClick={() => handleItemClick(amenity)}
+                style={{
+                  flex:          1,
+                  minWidth:      0,
+                  display:       "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  gap:           "12px",
+                  padding:       "10px",
+                  borderBottom:  "1px solid #6B859E",
+                  boxSizing:     "border-box",
+                  cursor:        "pointer",
+                }}
+              >
+                {/* Icon + name — Figma: w:142 h:112 gap:6 */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                  {getAmenityIcon(amenity.icon)}
+                  <h3
+                    style={{
+                      fontFamily:    "var(--font-roundo), 'Roundo', system-ui, sans-serif",
+                      fontWeight:    500,
+                      fontSize:      "clamp(15px, 4.6vw, 18px)",
+                      lineHeight:    "25.92px",
+                      letterSpacing: "0",
+                      color:         "#000000",
+                      margin:        0,
+                    }}
+                  >
+                    {amenity.name}
+                  </h3>
+                </div>
+
+                {/* Time — Figma: w:127 h:21  Geist 400 16px  color:#4A5452 —
+                    sits at the card's bottom edge, its border-bottom reads as the underline */}
+                <span
+                  style={{
+                    fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                    fontWeight:    400,
+                    fontSize:      "clamp(13px, 4.1vw, 16px)",
+                    lineHeight:    "100%",
+                    letterSpacing: "0",
+                    color:         "#4A5452",
+                    textTransform: "capitalize",
+                    paddingBottom: "8px",
+                  }}
+                >
+                  {amenity.time}
+                </span>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    {/* ── DESKTOP ──────────────────────────────────────────────────────────── */}
+    <div className="hidden md:block">
     <section
       style={{
         width: "100%",
@@ -203,7 +371,7 @@ export default function KiwanoAmenities({ amenities }) {
                 fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
                 fontWeight: 400,
                 fontSize: "clamp(12px, 1.125vw, 16px)",
-                lineHeight: "19.44px",
+                lineHeight: "1.2",
                 letterSpacing: "-0.32px",
                 textTransform: "uppercase",
                 color: "#222F30",
@@ -220,7 +388,6 @@ export default function KiwanoAmenities({ amenities }) {
               display: "flex",
               flexWrap: "wrap",
               alignItems: "center",
-              justifyContent: "space-between",
               gap: "20px",
             }}
           >
@@ -240,103 +407,100 @@ export default function KiwanoAmenities({ amenities }) {
               {amenities?.heading || 'Luxury Smart Living Villa Feature Hubs'}
             </h2>
 
-            {/* Subtitle & Toggle */}
+            {/* Subtitle — direct sibling of the title & toggle so
+                justify-content:space-between pins the toggle to the far
+                right of the row instead of hugging the subtitle's edge */}
+            <p
+              style={{
+                fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                fontWeight: 400,
+                fontSize: "clamp(14px, 1.389vw, 20px)",
+                lineHeight: "clamp(18px, 1.514vw, 21.8px)",
+                letterSpacing: "-0.44px",
+                color: "#222F30CC",
+                maxWidth: "clamp(300px, 41.667vw, 505px)",
+                minWidth: 0,
+                flex: "1 1 auto",
+                margin: 0,
+              }}
+            >
+              {amenities?.subheading || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim.'}
+            </p>
+
+            {/* Toggle Buttons */}
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
-                flexWrap: "wrap",
-                gap: "clamp(20px, 7.29vw, 105px)",
+                gap: "25px",
+                padding: "8px 12px",
+                borderRadius: "5px",
+                border: "1px solid #6B859E",
+                background: "transparent",
+                flexShrink: 0,
+                marginLeft: "auto",
               }}
             >
-              <p
-                style={{
-                  fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
-                  fontWeight: 400,
-                  fontSize: "clamp(14px, 1.389vw, 20px)",
-                  lineHeight: "clamp(18px, 1.514vw, 21.8px)",
-                  letterSpacing: "-0.44px",
-                  color: "#222F30CC",
-                  maxWidth: "clamp(300px, 41.667vw, 505px)",
-                  margin: 0,
-                }}
-              >
-                {amenities?.subheading || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim.'}
-              </p>
-
-              {/* Toggle Buttons */}
-              <div
+              <button
+                onClick={() => setViewMode("list")}
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "25px",
-                  padding: "8px 12px",
-                  borderRadius: "5px",
-                  border: "1px solid #6B859E",
-                  background: "transparent",
+                  gap: "5px",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  opacity: viewMode === "list" ? 1 : 0.48,
+                  padding: 0,
+                  color: "#222F30",
+                  transition: "opacity 0.2s ease",
                 }}
               >
-                <button
-                  onClick={() => setViewMode("list")}
+                <IconWrapper><ListIcon /></IconWrapper>
+                <span
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "5px",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    opacity: viewMode === "list" ? 1 : 0.48,
-                    padding: 0,
-                    color: "#222F30",
-                    transition: "opacity 0.2s ease",
+                    fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                    fontWeight: 400,
+                    fontSize: "clamp(14px, 1.389vw, 20px)",
+                    lineHeight: "1.09",
+                    letterSpacing: "-0.44px",
                   }}
                 >
-                  <IconWrapper><ListIcon /></IconWrapper>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
-                      fontWeight: 400,
-                      fontSize: "clamp(14px, 1.389vw, 20px)",
-                      lineHeight: "21.8px",
-                      letterSpacing: "-0.44px",
-                    }}
-                  >
-                    List
-                  </span>
-                </button>
+                  List
+                </span>
+              </button>
 
-                <button
-                  onClick={() => {
-                    setSelectedAmenity(null);
-                    setViewMode("map");
-                  }}
+              <button
+                onClick={() => {
+                  setSelectedAmenity(null);
+                  setViewMode("map");
+                }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "5px",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  opacity: viewMode === "map" ? 1 : 0.48,
+                  padding: 0,
+                  color: "#222F30",
+                  transition: "opacity 0.2s ease",
+                }}
+              >
+                <IconWrapper><MapIcon /></IconWrapper>
+                <span
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "5px",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    opacity: viewMode === "map" ? 1 : 0.48,
-                    padding: 0,
-                    color: "#222F30",
-                    transition: "opacity 0.2s ease",
+                    fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                    fontWeight: 400,
+                    fontSize: "clamp(14px, 1.389vw, 20px)",
+                    lineHeight: "1.09",
+                    letterSpacing: "-0.44px",
                   }}
                 >
-                  <IconWrapper><MapIcon /></IconWrapper>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
-                      fontWeight: 400,
-                      fontSize: "clamp(14px, 1.389vw, 20px)",
-                      lineHeight: "21.8px",
-                      letterSpacing: "-0.44px",
-                    }}
-                  >
-                    Map
-                  </span>
-                </button>
-              </div>
+                  Map
+                </span>
+              </button>
             </div>
           </div>
         </div>
@@ -413,8 +577,8 @@ export default function KiwanoAmenities({ amenities }) {
                             style={{
                               fontFamily: "var(--font-roundo), 'Roundo', system-ui, sans-serif",
                               fontWeight: 500,
-                              fontSize: "24px",
-                              lineHeight: "25.92px",
+                              fontSize: "clamp(18px, 1.667vw, 24px)",
+                              lineHeight: 1.08,
                               color: "#222F30",
                               margin: 0,
                             }}
@@ -429,7 +593,7 @@ export default function KiwanoAmenities({ amenities }) {
                             style={{
                               fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
                               fontWeight: 400,
-                              fontSize: "18px",
+                              fontSize: "clamp(14px, 1.25vw, 18px)",
                               lineHeight: "100%",
                               color: "#222F30",
                               textTransform: "capitalize",
@@ -478,5 +642,7 @@ export default function KiwanoAmenities({ amenities }) {
         </div>
       </div>
     </section>
+    </div>
+    </>
   );
 }

@@ -147,6 +147,71 @@ function Tab({ label, active, isFirst, isLast, onClick }) {
   );
 }
 
+/* ── Mobile tab button — sized to the iPhone 13/14 (390px) Figma spec ─────────
+   Below 375px there isn't enough room for the spec's padding + active square,
+   so a media query shrinks padding/gap/font and lets the tab go to equal
+   thirds (min-width:0) only at that breakpoint — 390px still renders the
+   exact Figma numbers untouched. */
+function MobileTab({ label, active, isFirst, isLast, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-pressed={active}
+      className="kiwano-gallery-tab"
+      style={{
+        flex:                    1,
+        height:                  "100%",
+        display:                 "flex",
+        alignItems:              "center",
+        justifyContent:          "center",
+        gap:                     "10.59px",
+        paddingTop:              "9.13px",
+        paddingBottom:           "9.13px",
+        paddingLeft:             "26.63px",
+        paddingRight:            "26.63px",
+        background:              active ? "#334454" : "#6B859E",
+        border:                  "none",
+        cursor:                  "pointer",
+        borderTopLeftRadius:     isFirst ? "6.35px" : 0,
+        borderBottomLeftRadius:  isFirst ? "6.35px" : 0,
+        borderTopRightRadius:    isLast  ? "6.35px" : 0,
+        borderBottomRightRadius: isLast  ? "6.35px" : 0,
+        transition:              "background 0.22s ease",
+        whiteSpace:              "nowrap",
+        boxSizing:               "border-box",
+      }}
+    >
+      {active && (
+        <div
+          style={{
+            width:        "7.61px",
+            height:       "7.61px",
+            borderRadius: "2.28px",
+            background:   "#FFFFFF",
+            flexShrink:   0,
+          }}
+        />
+      )}
+      <span
+        className="kiwano-gallery-tab-label"
+        style={{
+          fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+          fontWeight:    400,
+          fontSize:      "13.69px",
+          lineHeight:    "14.83px",
+          letterSpacing: "0",
+          color:         "#FFFFFF",
+          userSelect:    "none",
+          overflow:      "hidden",
+          textOverflow:  "ellipsis",
+        }}
+      >
+        {label}
+      </span>
+    </button>
+  );
+}
+
 function toColumns(urls, tabLabel) {
   if (!urls || urls.length === 0) return null;
   const filtered = urls.filter(Boolean);
@@ -167,14 +232,155 @@ export default function KiwanoGallery({ gallery }) {
     Amenities: toColumns(gallery?.amenitiesImages, 'Amenities'),
   };
   const { col1, col2, col3 } = apiData[activeTab] || GALLERY_DATA[activeTab];
+  // Mobile shows one stacked column — flatten and restore original numeric order.
+  const mobileImages = [...col1, ...col2, ...col3].sort((a, b) => a.id - b.id);
 
   return (
-    /*
+    <>
+    {/* ══════════════════════════════════════════════════════════════════════
+        MOBILE — iPhone 13/14 (390px) baseline, sticky tab bar + single-column
+        stacked masonry (each image keeps its own aspect ratio, full width)
+    ═══════════════════════════════════════════════════════════════════════ */}
+    <section
+      className="flex md:hidden"
+      style={{
+        flexDirection: "column",
+        width:         "100%",
+        background:    "#EDE7DE",
+        boxSizing:     "border-box",
+      }}
+    >
+      {/* Header + sticky tabs — Figma: w:390 h:189.26 pt:30 pr:16 pb:6 pl:16 gap:10 */}
+      <div
+        style={{
+          display:       "flex",
+          flexDirection: "column",
+          alignItems:    "center",
+          width:         "100%",
+          paddingTop:    "30px",
+          paddingRight:  "16px",
+          paddingBottom: "6px",
+          paddingLeft:   "16px",
+          gap:           "10px",
+          background:    "#EDE7DE",
+          boxSizing:     "border-box",
+        }}
+      >
+        <h2
+          style={{
+            width:         "100%",
+            maxWidth:      "306px",
+            fontFamily:    "var(--font-roundo), 'Roundo', system-ui, sans-serif",
+            fontWeight:    500,
+            fontStyle:     "normal",
+            fontSize:      "clamp(24px, 8.2vw, 32px)",
+            lineHeight:    "36.6px",
+            letterSpacing: "-0.73px",
+            textAlign:     "center",
+            textTransform: "capitalize",
+            color:         "#000000",
+            margin:        0,
+            padding:       0,
+          }}
+        >
+          A Visual Journey Through Premium Living
+        </h2>
+
+        {/* Sticky tab bar — Figma: w:360 h:33.26 */}
+        <div
+          style={{
+            position:  "sticky",
+            top:       "12px",
+            zIndex:    50,
+            width:     "100%",
+            maxWidth:  "360px",
+            boxSizing: "border-box",
+          }}
+        >
+          <div
+            style={{
+              width:        "100%",
+              height:       "33.26px",
+              display:      "flex",
+              alignItems:   "stretch",
+              overflow:     "hidden",
+              borderRadius: "6.35px",
+            }}
+          >
+            {TABS.map((tab, i) => (
+              <MobileTab
+                key={tab}
+                label={tab}
+                active={activeTab === tab}
+                isFirst={i === 0}
+                isLast={i === TABS.length - 1}
+                onClick={() => setActiveTab(tab)}
+              />
+            ))}
+          </div>
+        </div>
+
+        <style>{`
+          @media (max-width: 375px) {
+            .kiwano-gallery-tab {
+              min-width: 0 !important;
+              padding-left: 10px !important;
+              padding-right: 10px !important;
+              gap: 4px !important;
+            }
+            .kiwano-gallery-tab-label {
+              font-size: 10.5px !important;
+            }
+          }
+        `}</style>
+      </div>
+
+      {/* Image stack — Figma: w:390 h:2034, first frame w:353.14 h:410 top:15 left:18 */}
+      <div
+        style={{
+          width:         "100%",
+          background:    "#EDE7DE",
+          display:       "flex",
+          flexDirection: "column",
+          gap:           "15px",
+          paddingTop:    "15px",
+          paddingBottom: "30px",
+          paddingLeft:   "18px",
+          paddingRight:  "18px",
+          boxSizing:     "border-box",
+        }}
+      >
+        {mobileImages.map((img) => (
+          <div
+            key={img.id}
+            style={{
+              position:     "relative",
+              width:        "100%",
+              aspectRatio:  `${img.w} / ${img.h}`,
+              overflow:     "hidden",
+              // borderRadius: "6px",
+            }}
+          >
+            <Image
+              src={img.src}
+              alt={img.alt}
+              fill
+              sizes="(max-width: 480px) 100vw, 360px"
+              style={{ objectFit: "cover" }}
+            />
+          </div>
+        ))}
+      </div>
+    </section>
+
+    {/* ── DESKTOP ──────────────────────────────────────────────────────────── */}
+    <div className="hidden md:block">
+    {/*
      * ── ROOT SECTION ────────────────────────────────────────────────────────
      * width:100% — full bleed, NO maxWidth on the section itself.
      * Individual children control their own centering / padding.
      * bg:#EDE7DE matches the rest of the Kiwano page.
-     */
+     */}
     <section
       style={{
         width:         "100%",
@@ -207,7 +413,7 @@ export default function KiwanoGallery({ gallery }) {
             fontWeight:    500,
             fontStyle:     "normal",
             fontSize:      "clamp(28px, 4.167vw, 60px)",
-            lineHeight:    "66.14px",
+            lineHeight:    "1.1",
             letterSpacing: "-3.05px",
             textAlign:     "center",
             color:         "#222F30",
@@ -230,7 +436,7 @@ export default function KiwanoGallery({ gallery }) {
           position:      "sticky",
           top:           "clamp(12px, 1.111vw, 16px)",
           zIndex:        50,
-          width:         "clamp(280px, 35.2vw, 506.92px)",
+          width:         "clamp(400px, 35.2vw, 506.92px)",
           padding:       "10px",
           display:       "flex",
           flexDirection: "column",
@@ -310,7 +516,7 @@ export default function KiwanoGallery({ gallery }) {
                   width:        "100%",
                   aspectRatio:  `${img.w} / ${img.h}`,
                   overflow:     "hidden",
-                  borderRadius: "clamp(4px, 0.42vw, 6px)",
+                  // borderRadius: "clamp(4px, 0.42vw, 6px)",
                 }}
               >
                 <Image
@@ -346,7 +552,7 @@ export default function KiwanoGallery({ gallery }) {
                   width:        "100%",
                   aspectRatio:  `${img.w} / ${img.h}`,
                   overflow:     "hidden",
-                  borderRadius: "clamp(4px, 0.42vw, 6px)",
+                  // borderRadius: "clamp(4px, 0.42vw, 6px)",
                 }}
               >
                 <Image
@@ -382,7 +588,7 @@ export default function KiwanoGallery({ gallery }) {
                   width:        "100%",
                   aspectRatio:  `${img.w} / ${img.h}`,
                   overflow:     "hidden",
-                  borderRadius: "clamp(4px, 0.42vw, 6px)",
+                  // borderRadius: "clamp(4px, 0.42vw, 6px)",
                 }}
               >
                 <Image
@@ -402,5 +608,7 @@ export default function KiwanoGallery({ gallery }) {
         </div>
       </div>
     </section>
+    </div>
+    </>
   );
 }

@@ -287,10 +287,9 @@ export default function KiwanoFeatures({ features }) {
           display:         "flex",
           alignItems:      "flex-start",
           gap:             "18px",
-          width:           "calc(100% + 22px)",
+          width:           "calc(100% + 44px)",
           marginLeft:      "-22px",
           paddingLeft:     "22px",
-          paddingRight:    "22px",
           paddingBottom:   "8px",
           overflowX:       "auto",
           overflowY:       "hidden",
@@ -316,7 +315,6 @@ export default function KiwanoFeatures({ features }) {
         width:           "100%",
         maxWidth:        "clamp(450px, 100vw, 1920px)",
         margin:          "0 auto",
-        minHeight:       "clamp(600px, 57.35vw, 825.8px)",
         paddingTop:      "clamp(32px, 4.167vw, 60px)",
         paddingBottom:   "clamp(32px, 4.167vw, 60px)",
         background:      "#EDE7DE",
@@ -508,7 +506,7 @@ function MobileFeatureCard({ feature }) {
   return (
     <div
       onClick={() => setExpanded((v) => !v)}
-      style={{ position: "relative", width: "260px", flexShrink: 0, cursor: "pointer" }}
+      style={{ position: "relative", width: "clamp(260px, 79vw, 340px)", flexShrink: 0, cursor: "pointer" }}
     >
       {/* Image */}
       <div
@@ -516,7 +514,7 @@ function MobileFeatureCard({ feature }) {
           position:     "relative",
           width:        "100%",
           height:       "340px",
-          borderRadius: "12px",
+          // borderRadius: "12px",
           overflow:     "hidden",
           background:   "#1a1a1a",
         }}
@@ -559,7 +557,7 @@ function MobileFeatureCard({ feature }) {
               lineHeight:    "26px",
               letterSpacing: "-0.44px",
               textTransform: "capitalize",
-              color:         "#000000",
+              color:         "#ffffff",
               marginBottom:  "4px",
             }}
           >
