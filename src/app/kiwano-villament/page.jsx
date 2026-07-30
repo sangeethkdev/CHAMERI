@@ -25,7 +25,7 @@ export default async function KiwanoVillamentPage() {
       <KiwanoFeatures features={kiwanoVillament?.featureSection} />
       <Kiwano360Tour tour360={kiwanoVillament?.tour360Section} />
       <KiwanoGallery gallery={kiwanoVillament?.gallerySection} />
-      <KiwanoBrandStory brandStory={kiwanoVillament?.brandStorySection} />
+      <KiwanoBrandStory brandStory={kiwanoVillament?.highlightsSection} />
       <KiwanoAmenities amenities={kiwanoVillament?.amenitiesSection} />
       <KiwanoOtherProjects otherProjects={kiwanoVillament?.otherProjectSection} />
       <Footer />
