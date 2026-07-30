@@ -26,6 +26,67 @@ export default function ProjectListHero({ hero }) {
     <>
       <NewNavbar />
 
+      {/* ══════════════════════════════════════════════════════════════════════
+          MOBILE — iPhone 13/14 (390px) baseline
+          Figma: w:390 h:725 bg image, heading positioned like desktop (~41% down)
+      ═══════════════════════════════════════════════════════════════════════ */}
+      <section
+        className="flex md:hidden relative w-full overflow-hidden isolate"
+        style={{ height: '725px' }}
+      >
+        {/* ── BACKGROUND IMAGE ───────────────────────────────────────────── */}
+        <Image
+          src={image}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center -z-10"
+        />
+
+        {/* Dark overlay for text legibility */}
+        <div
+          className="absolute inset-0 w-full h-full -z-10"
+          style={{
+            background:
+              'linear-gradient(0deg, rgba(0,0,0,0.1), rgba(0,0,0,0.1)), linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.2) 48.75%, rgba(102,102,102,0) 100%)',
+          }}
+        />
+
+        {/* ── HEADING — Figma: w:298.41 h:168  Roundo 500 38px/42px ls:-2px */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            top: '41.086%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '298.41px',
+            maxWidth: 'calc(100% - 36px)',
+            textAlign: 'center',
+          }}
+        >
+          <h1
+            className="whitespace-pre-wrap font-roundo"
+            style={{
+              fontWeight: 500,
+              fontSize: '38px',
+              lineHeight: '42px',
+              letterSpacing: '-2px',
+              textAlign: 'center',
+              textTransform: 'capitalize',
+              color: '#FFFFFF',
+              margin: 0,
+              padding: 0,
+              textShadow: '0 2px 16px rgba(0,0,0,0.25)',
+            }}
+          >
+            {heading}
+          </h1>
+        </div>
+      </section>
+
+      {/* ── DESKTOP ──────────────────────────────────────────────────────────── */}
+      <div className="hidden md:block">
       <section
         className="relative w-full overflow-hidden isolate"
         style={{ height: 'clamp(390px, 51.806vw, 996px)' }}
@@ -82,6 +143,7 @@ export default function ProjectListHero({ hero }) {
           </h1>
         </div>
       </section>
+      </div>
     </>
   );
 }
