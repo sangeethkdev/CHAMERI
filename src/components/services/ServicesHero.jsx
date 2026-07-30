@@ -24,10 +24,75 @@ export default function ServicesHero({ hero }) {
     "/videos/Save these budget-friendly ways to style your dog birthday that look high-end but stay practical designed to feel inspiring useful and easy to - Pin-655766395787350160_1.mp4";
 
   return (
+    <>
+    {/* ══════════════════════════════════════════════════════════════════════
+        MOBILE — iPhone 13/14 (390px) baseline
+        Figma: w:390 h:725 gap:11 pt:50 pb:50
+    ═══════════════════════════════════════════════════════════════════════ */}
+    <section
+      className="flex md:hidden relative w-full overflow-hidden isolate"
+      style={{
+        flexDirection:  "column",
+        alignItems:     "center",
+        justifyContent: "center",
+        height:         "725px",
+        gap:            "11px",
+        paddingTop:     "50px",
+        paddingBottom:  "50px",
+        boxSizing:      "border-box",
+      }}
+    >
+      {/* ── BACKGROUND VIDEO ───────────────────────────────────────────── */}
+      <div className="absolute inset-0 w-full h-full -z-10">
+        <video
+          key={videoSrc}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src={videoSrc} type="video/mp4" />
+        </video>
+
+        {/* Dark overlay for text legibility */}
+        <div
+          className="absolute inset-0 w-full h-full"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 45%, rgba(0,0,0,0.4) 100%)",
+          }}
+        />
+      </div>
+
+      {/* ── HEADING — Figma: w:298.41 h:168  Roundo 500 38px/42px ls:-2px */}
+      <h1
+        className="whitespace-pre-wrap font-roundo"
+        style={{
+          width:         "278.41px",
+          maxWidth:      "100%",
+          fontWeight:    500,
+          fontSize:      "38px",
+          lineHeight:    "42px",
+          letterSpacing: "-2px",
+          textAlign:     "center",
+          textTransform: "capitalize",
+          color:         "#FFFFFF",
+          margin:        0,
+          padding:       0,
+          textShadow:    "0 2px 16px rgba(0,0,0,0.25)",
+        }}
+      >
+        {heading}
+      </h1>
+    </section>
+
+    {/* ── DESKTOP ──────────────────────────────────────────────────────────── */}
+    <div className="hidden md:block">
     <section
       className="relative w-full overflow-hidden isolate"
       style={{
-        height: "clamp(430px, 57.014vw, 821px)",
+        height: "clamp(430px, 57.014vw, 961px)",
       }}
     >
       {/* ── BACKGROUND VIDEO ───────────────────────────────────────────── */}
@@ -135,5 +200,7 @@ export default function ServicesHero({ hero }) {
         </span>
       </div>
     </section>
+    </div>
+    </>
   );
 }

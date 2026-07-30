@@ -5,53 +5,12 @@ import Image from 'next/image';
 
 /*
  * ─── CLAMP REFERENCE ────────────────────────────────────────────────────────
+ *  Same layout as the home page TestimonialsSection — kept in lockstep so
+ *  both pages share the exact same carousel behaviour (incl. the mobile
+ *  card treatment and clamped arrow positions).
  *
  *  Formula : preferred_vw = (MAX_px - MIN_px) / (1920 - 375) * 100
  *  Viewport range: 375px (mobile) → 1920px (4xl)
- *
- *  HEADER
- *  px                  : clamp(20px,   5.59vw, 106px)
- *  pt                  : clamp(40px,   2.59vw,  80px)
- *  pb                  : clamp(16px,   1.04vw,  32px)
- *  gap                 : clamp(7.1px,  0.4vw,  13.3px)
- *
- *  Badge dot size      : clamp(9.9px,  0.56vw, 18.6px)
- *  Badge dot radius    : clamp(2px,    0.13vw,   4px)
- *  Badge gap           : clamp(5.1px,  0.29vw,   9.6px)
- *  Badge font          : clamp(11.5px, 0.46vw,  18.6px)
- *
- *  Heading font        : clamp(32px,   3.1vw,   80px)
- *  Heading lead        : clamp(32px,   3.1vw,   80px)
- *  Heading tracking    : clamp(-0.6px,-0.039vw, -1.2px)
- *  Heading max-w       : clamp(340px, 30.4vw,  810px)
- *
- *  Para font           : clamp(14px,   0.81vw,  26.6px)
- *  Para lead           : clamp(18.5px, 1.08vw,  35.1px)
- *  Para tracking       : clamp(-0.3px,-0.018vw, -0.58px)
- *  Para max-w          : clamp(320px, 31.7vw,  810px)
- *
- *  CAROUSEL — card dims driven by useCardDimensions (JS/vw, not CSS clamp)
- *  because they also control JS layout math (trackX, arrowTop, etc.)
- *
- *  FOOTER BUTTON (Learn More CTA)
- *  pt                  : clamp(16px,   1.04vw,  32px)
- *  pb                  : clamp(40px,   2.59vw,  80px)
- *
- *  Btn width           : clamp(118.6px,6.7vw,  222.6px)
- *  Btn height          : clamp(36.9px, 2.1vw,   69.3px)
- *  Btn radius          : clamp(8.5px,  0.49vw,  16px)
- *
- *  Text top            : clamp(9.9px,  0.57vw,  18.6px)
- *  Text left           : clamp(8.5px,  0.49vw,  16px)
- *  Text width          : clamp(69px,   3.9vw,  129px)
- *  Text height         : clamp(16.3px, 0.92vw,  30.6px)
- *  Text font           : clamp(10.6px, 0.6vw,   20px)
- *
- *  Arrow right         : clamp(8.5px,  0.49vw,  16px)
- *  Arrow box size      : clamp(21.3px, 1.21vw,  40px)
- *  Arrow box radius    : clamp(5px,    0.28vw,   9.3px)
- *  Arrow svg size      : clamp(10px,   0.56vw,  18.6px)
- *
  * ────────────────────────────────────────────────────────────────────────────
  */
 
@@ -90,33 +49,46 @@ const STATIC_TESTIMONIALS = [
   },
 ];
 
-/* ─── Shared Arrow SVG ───────────────────────────────────────────────── */
-const ArrowRight = ({ size }) => (
-  <svg
-    viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-    className="text-[#6B859E]"
-    style={{ width: size, height: size }}
-  >
-    <path d="M5 12h14M12 5l7 7-7 7" />
-  </svg>
-);
-
 /* ─── Fluid card dimensions via continuous vw formula ───────────────────
  *  Base (1440px / 3xl): cardW=800, cardH=550, sideH=467.5, gap=20
  *  Scaling: linear vw between mobile (375) and 4xl (1920)
+ *  Mobile (< 640px) gets its own branch — Figma reference frame is 390px
+ *  wide with a 310px-wide card, scaled continuously off that peek ratio.
  * ────────────────────────────────────────────────────────────────────── */
 function useCardDimensions() {
-  const [dims, setDims] = useState({ cardW: 800, cardH: 550, sideH: 467.5, gap: 20 });
+  const [dims, setDims] = useState({ cardW: 500, cardH: 550, sideH: 467.5, gap: 20, arrowScale: 1, cardRadius: 12 * (500 / 800), mobileScale: 1, isMobile: false });
 
   useEffect(() => {
     const compute = () => {
       const vw = window.innerWidth;
+      if (vw < 640) {
+        const peekRatio   = 40 / 390;
+        const cardW       = vw * (1 - 2 * peekRatio);
+        const cardH       = cardW * (473.6111145019531 / 310);
+        const mobileScale = cardW / 310;
+        setDims({
+          cardW,
+          cardH,
+          sideH: cardH * (473.61 / 495),
+          gap: 12 * mobileScale,
+          arrowScale: (34.12 / 40) * mobileScale,
+          cardRadius: 10.33 * mobileScale,
+          mobileScale,
+          isMobile: true,
+        });
+        return;
+      }
       const lerp = (min, max) => Math.round(Math.min(max, Math.max(min, min + (max - min) * ((vw - 375) / (1920 - 375)))));
+      const cardW = lerp(320, 1067);
       setDims({
-        cardW: lerp(320, 1067),
+        cardW,
         cardH: lerp(260, 733),
         sideH: lerp(220, 623),
         gap:   lerp(12,  27),
+        arrowScale: cardW / 800,
+        cardRadius: 12 * (cardW / 800),
+        mobileScale: 1,
+        isMobile: false,
       });
     };
     compute();
@@ -131,7 +103,7 @@ const ServicesTestimonials = ({ testimonial }) => {
   const heading = testimonial?.heading || "What Our Clients Says";
   const subheading =
     testimonial?.subheading ||
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor";
+    "Explore crafted villa spaces with modern comfort built beautifully";
 
   const filledCards = testimonial?.cards?.filter((c) => c.quote || c.name) || [];
   const TESTIMONIALS = filledCards.length
@@ -150,7 +122,7 @@ const ServicesTestimonials = ({ testimonial }) => {
   const [containerW, setContainerW]               = useState(1440);
   const [transitionEnabled, setTransitionEnabled] = useState(true);
   const wrapperRef = useRef(null);
-  const { cardW, cardH, sideH, gap } = useCardDimensions();
+  const { cardW, cardH, sideH, gap, arrowScale, cardRadius, mobileScale, isMobile } = useCardDimensions();
 
   const extendedTestimonials = [...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS];
 
@@ -190,7 +162,13 @@ const ServicesTestimonials = ({ testimonial }) => {
   const centerOffset = (containerW - cardW) / 2;
   const trackX       = centerOffset - current * (cardW + gap);
   const scale        = cardW / 800;
-  const arrowTop     = cardH / 2 - 20 * scale;
+  const arrowTop     = cardH / 2 - 20 * arrowScale;
+
+  // Arrows normally straddle the card edge (half outside), but on narrow viewports
+  // there isn't room for that overhang — clamp so they stay fully on-screen instead of clipping.
+  const arrowSize      = 40 * arrowScale;
+  const leftArrowLeft  = Math.max(4, centerOffset - 20 * arrowScale);
+  const rightArrowLeft = Math.min(containerW - arrowSize - 4, centerOffset + cardW - 20 * arrowScale);
 
   return (
     <section
@@ -205,13 +183,13 @@ const ServicesTestimonials = ({ testimonial }) => {
       <div
         className="w-full mx-auto flex flex-col items-center text-center"
         style={{
-          width: 'clamp(600px, 90.28vw, 1300px)',
+          width: 'clamp(390px, 90.28vw, 1300px)',
           gap:   'clamp(10px, 1.11vw, 16px)',
         }}
       >
         <div
           className="flex flex-col items-center justify-center"
-          style={{ width: 'clamp(300px, 42.22vw, 608px)', gap: 'clamp(6px, 0.69vw, 10px)' }}
+          style={{ width: 'clamp(358px, 42.22vw, 608px)', gap: 'clamp(6px, 0.69vw, 10px)' }}
         >
           {/* Badge */}
           <div
@@ -247,11 +225,11 @@ const ServicesTestimonials = ({ testimonial }) => {
           <h2
             className="font-roundo font-medium capitalize text-[#1A1A1A] text-center m-0 flex items-center justify-center"
             style={{
-              fontSize:      'clamp(36px, 4.17vw, 66px)',
-              lineHeight:    'clamp(36px, 4.17vw, 60px)',
-              letterSpacing: 'clamp(-0.64px, -0.06vw, -0.9px)',
-              width:         'clamp(300px, 42.22vw, 648px)',
-              height:        'clamp(40px, 4.17vw, 60px)'
+              fontSize:      'clamp(32px, 4.17vw, 66px)',
+              lineHeight:    'clamp(36.6px, 4.17vw, 60px)',
+              letterSpacing: 'clamp(-0.73px, -0.06vw, -0.9px)',
+              width:         'clamp(358px, 42.22vw, 648px)',
+              height:        'clamp(37px, 4.17vw, 60px)'
             }}
           >
             {heading}
@@ -262,10 +240,10 @@ const ServicesTestimonials = ({ testimonial }) => {
             className="font-sans font-normal text-[#334454]/70 text-center m-0 flex items-center justify-center"
             style={{
               fontSize:      'clamp(14px, 1.39vw, 20px)',
-              lineHeight:    'clamp(18px, 1.83vw, 26.4px)',
-              letterSpacing: 'clamp(-0.28px, -0.03vw, -0.44px)',
-              width:         'clamp(300px, 42.22vw, 608px)',
-              height:        'clamp(40px, 3.68vw, 53px)'
+              lineHeight:    'clamp(21px, 1.83vw, 26.4px)',
+              letterSpacing: 'clamp(0px, -0.03vw, -0.44px)',
+              width:         'clamp(286px, 42.22vw, 608px)',
+              height:        'clamp(42px, 3.68vw, 53px)'
             }}
           >
             {subheading}
@@ -296,7 +274,7 @@ const ServicesTestimonials = ({ testimonial }) => {
             const opacity  = isCenter ? 1 : dist === 1 ? 0.6 : 0;
             // clip top & bottom equally so the card appears shorter without moving in the layout
             const clipPct  = isCenter ? 0 : ((1 - sideH / cardH) / 2) * 100;
-            const r        = (12 * scale).toFixed(1);
+            const r        = cardRadius.toFixed(2);
 
             return (
               <div
@@ -323,87 +301,132 @@ const ServicesTestimonials = ({ testimonial }) => {
                   }}
                 />
 
-                {/* Bottom gradient */}
-                <div
-                  className="absolute left-0 right-0 bottom-0"
-                  style={{
-                    height: `${214.02 * scale}px`,
-                    background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 60%, transparent 100%)',
-                  }}
-                />
-
-                {/* Content overlay */}
-                <div
-                  className="absolute left-0"
-                  style={{
-                    top:    `${335.99 * scale}px`,
-                    height: `${214.02 * scale}px`,
-                    width:  `${cardW}px`,
-                  }}
-                >
-                  {/* Quote */}
-                  <p
-                    className="absolute text-white"
-                    style={{
-                      top:              `${51 * scale}px`,
-                      left:             `${24 * scale}px`,
-                      width:            `${725.76 * scale}px`,
-                      height:           `${70.4 * scale}px`,
-                      fontFamily:       'var(--font-geist-sans), sans-serif',
-                      fontWeight:       500,
-                      fontSize:         `${26.1 * scale}px`,
-                      lineHeight:       `${36.4 * scale}px`,
-                      overflow:         'hidden',
-                      display:          '-webkit-box',
-                      WebkitLineClamp:  2,
-                      WebkitBoxOrient:  'vertical',
-                    }}
-                  >
-                    {item.quote}
-                  </p>
-
-                  {/* Profile */}
+                {isMobile ? (
+                  /* Bottom gradient + text block — sized to fit the full quote, however many lines it wraps to */
                   <div
-                    className="absolute flex items-center"
+                    className="absolute left-0 right-0 bottom-0 flex flex-col"
                     style={{
-                      top:    `${142.81 * scale}px`,
-                      left:   `${24 * scale}px`,
-                      width:  `${752 * scale}px`,
-                      height: `${47.2 * scale}px`,
-                      gap:    `${12 * scale}px`,
+                      padding:    `${20.68 * mobileScale}px ${12.05 * mobileScale}px ${16 * mobileScale}px`,
+                      gap:        `${10 * mobileScale}px`,
+                      background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.75) 55%, transparent 100%)',
                     }}
                   >
-                    <div
-                      className="flex-shrink-0 overflow-hidden"
+                    <p
+                      className="text-white m-0"
                       style={{
-                        width:        `${45 * scale}px`,
-                        height:       `${45 * scale}px`,
-                        borderRadius: `${5 * scale}px`,
+                        fontFamily:    'var(--font-geist-sans), sans-serif',
+                        fontWeight:    500,
+                        fontSize:      `${18.94 * mobileScale}px`,
+                        lineHeight:    `${22.73 * mobileScale}px`,
+                        letterSpacing: '0%',
                       }}
                     >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={item.avatar}
-                        alt={item.name}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                      />
-                    </div>
-                    <div>
-                      <p
-                        className="font-sans font-semibold text-white"
-                        style={{ fontSize: `${16 * scale}px`, lineHeight: '1.3' }}
-                      >
-                        {item.name}
-                      </p>
-                      <p
-                        className="font-sans text-white/70"
-                        style={{ fontSize: `${13 * scale}px` }}
-                      >
-                        {item.role}
-                      </p>
+                      {item.quote}
+                    </p>
+                    <div className="flex items-center" style={{ gap: `${10 * mobileScale}px` }}>
+                      <div className="flex-shrink-0 overflow-hidden" style={{ width: `${34 * mobileScale}px`, height: `${34 * mobileScale}px`, borderRadius: `${4 * mobileScale}px` }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={item.avatar}
+                          alt={item.name}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                      </div>
+                      <div>
+                        <p className="font-sans text-white m-0" style={{ fontWeight: 400, fontSize: `${15.84 * mobileScale}px`, lineHeight: `${24.11 * mobileScale}px`, letterSpacing: '0%' }}>
+                          {item.name}
+                        </p>
+                        <p className="font-sans text-white/70 m-0" style={{ fontWeight: 500, fontSize: `${11.19 * mobileScale}px`, lineHeight: `${16.53 * mobileScale}px`, letterSpacing: '0%' }}>
+                          {item.role}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                ) : (
+                  <>
+                    {/* Bottom gradient */}
+                    <div
+                      className="absolute left-0 right-0 bottom-0"
+                      style={{
+                        height: `${214.02 * scale}px`,
+                        background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 60%, transparent 100%)',
+                      }}
+                    />
+
+                    {/* Content overlay */}
+                    <div
+                      className="absolute left-0"
+                      style={{
+                        top:    `${335.99 * scale}px`,
+                        height: `${214.02 * scale}px`,
+                        width:  `${cardW}px`,
+                      }}
+                    >
+                      {/* Quote */}
+                      <p
+                        className="absolute text-white"
+                        style={{
+                          top:              `${51 * scale}px`,
+                          left:             `${24 * scale}px`,
+                          width:            `${725.76 * scale}px`,
+                          height:           `${70.4 * scale}px`,
+                          fontFamily:       'var(--font-geist-sans), sans-serif',
+                          fontWeight:       500,
+                          fontSize:         `${26.1 * scale}px`,
+                          lineHeight:       `${36.4 * scale}px`,
+                          overflow:         'hidden',
+                          display:          '-webkit-box',
+                          WebkitLineClamp:  2,
+                          WebkitBoxOrient:  'vertical',
+                        }}
+                      >
+                        {item.quote}
+                      </p>
+
+                      {/* Profile */}
+                      <div
+                        className="absolute flex items-center"
+                        style={{
+                          top:    `${142.81 * scale}px`,
+                          left:   `${24 * scale}px`,
+                          width:  `${752 * scale}px`,
+                          height: `${47.2 * scale}px`,
+                          gap:    `${12 * scale}px`,
+                        }}
+                      >
+                        <div
+                          className="flex-shrink-0 overflow-hidden"
+                          style={{
+                            width:        `${45 * scale}px`,
+                            height:       `${45 * scale}px`,
+                            borderRadius: `${5 * scale}px`,
+                          }}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={item.avatar}
+                            alt={item.name}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          />
+                        </div>
+                        <div>
+                          <p
+                            className="font-sans text-white m-0"
+                            style={{ fontWeight: 600, fontSize: `${16 * scale}px`, lineHeight: '1.3' }}
+                          >
+                            {item.name}
+                          </p>
+                          <p
+                            className="font-sans text-white/70 m-0"
+                            style={{ fontSize: `${13 * scale}px` }}
+                          >
+                            {item.role}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             );
           })}
@@ -415,16 +438,16 @@ const ServicesTestimonials = ({ testimonial }) => {
           aria-label="Previous"
           className="absolute z-20 flex items-center justify-center bg-[#334454] hover:bg-[#6B859E] transition-colors duration-300 border-none cursor-pointer"
           style={{
-            width:        `${40 * scale}px`,
-            height:       `${40 * scale}px`,
-            borderRadius: `${7.11 * scale}px`,
+            width:        `${40 * arrowScale}px`,
+            height:       `${40 * arrowScale}px`,
+            borderRadius: `${7.11 * arrowScale}px`,
             top:          `${arrowTop}px`,
-            left:         `${centerOffset - 20 * scale}px`,
+            left:         `${leftArrowLeft}px`,
           }}
         >
           <svg
             viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"
-            style={{ width: `${18 * scale}px`, height: `${18 * scale}px` }}
+            style={{ width: `${18 * arrowScale}px`, height: `${18 * arrowScale}px` }}
           >
             <path d="M19 12H5M12 5l-7 7 7 7" />
           </svg>
@@ -436,78 +459,19 @@ const ServicesTestimonials = ({ testimonial }) => {
           aria-label="Next"
           className="absolute z-20 flex items-center justify-center bg-[#334454] hover:bg-[#6B859E] transition-colors duration-300 border-none cursor-pointer"
           style={{
-            width:        `${40 * scale}px`,
-            height:       `${40 * scale}px`,
-            borderRadius: `${7.11 * scale}px`,
+            width:        `${40 * arrowScale}px`,
+            height:       `${40 * arrowScale}px`,
+            borderRadius: `${7.11 * arrowScale}px`,
             top:          `${arrowTop}px`,
-            left:         `${centerOffset + cardW - 20 * scale}px`,
+            left:         `${rightArrowLeft}px`,
           }}
         >
           <svg
             viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"
-            style={{ width: `${18 * scale}px`, height: `${18 * scale}px` }}
+            style={{ width: `${18 * arrowScale}px`, height: `${18 * arrowScale}px` }}
           >
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>
-        </button>
-      </div>
-
-      {/* ══ 3 — Learn More CTA ════════════════════════════════════════════ */}
-      <div
-        className="w-full flex justify-center items-center"
-        style={{ width: 'clamp(600px, 90.28vw, 1300px)' }}
-      >
-        <button
-          className="group relative flex items-center justify-center bg-[#6B859E] hover:bg-[#4a6074] transition-colors duration-500 overflow-hidden cursor-pointer border-none"
-          style={{
-            width:        'clamp(118.6px, 11.6vw, 167px)',
-            height:       'clamp(36.9px, 3.61vw, 52px)',
-            borderRadius: 'clamp(8.5px, 0.83vw, 12px)',
-          }}
-        >
-          {/* Sliding text */}
-          <div
-            className="absolute overflow-hidden"
-            style={{
-              top:    'clamp(10px, 1.01vw, 14.5px)',
-              left:   'clamp(10px, 0.83vw, 12px)',
-              width:  'clamp(70px, 6.74vw, 97px)',
-              height: 'clamp(18px, 1.6vw, 23px)',
-            }}
-          >
-            <div className="flex flex-col transition-transform duration-500 ease-in-out group-hover:-translate-y-1/2">
-              {['Learn More', 'Learn More'].map((label, i) => (
-                <span
-                  key={i}
-                  className="font-sans font-medium text-white whitespace-nowrap flex items-center"
-                  style={{
-                    height:   'clamp(18px, 1.6vw, 23px)',
-                    fontSize: 'clamp(13px, 1.04vw, 15px)',
-                  }}
-                >
-                  {label}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Arrow box */}
-          <div
-            className="absolute bg-white group-hover:bg-[#EDE7DE] transition-colors duration-500 overflow-hidden"
-            style={{
-              right:        'clamp(8.5px, 0.83vw, 12px)',
-              width:        'clamp(21.3px, 2.08vw, 30px)',
-              height:       'clamp(21.3px, 2.08vw, 30px)',
-              borderRadius: 'clamp(5px, 0.49vw, 7px)',
-            }}
-          >
-            <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out group-hover:translate-x-full">
-              <ArrowRight size="clamp(10px, 0.97vw, 14px)" />
-            </div>
-            <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out -translate-x-full group-hover:translate-x-0">
-              <ArrowRight size="clamp(10px, 0.97vw, 14px)" />
-            </div>
-          </div>
         </button>
       </div>
 

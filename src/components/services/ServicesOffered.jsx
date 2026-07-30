@@ -13,6 +13,9 @@ import Image from "next/image";
  * clamp() formula
  *   vw_value = (DESIGN_PX / 1440) × 100
  *   result   = clamp(MOBILE_FLOOR, vw_value vw, DESKTOP_CEIL)
+ *
+ * MOBILE — iPhone 13/14 (390px) baseline, own fixed-px layout (Figma spec),
+ * reusing the same drag-to-scroll interaction as desktop for the card strip.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -68,6 +71,53 @@ const STATIC_SERVICES = [
   },
 ];
 
+// ── Reusable drag-to-scroll binding — one instance per horizontal track ──────
+function useDragScroll() {
+  const ref = useRef(null);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+  const touchStartX = useRef(0);
+  const touchScrollLeft = useRef(0);
+
+  const onMouseDown = useCallback((e) => {
+    isDragging.current = true;
+    startX.current = e.pageX - ref.current.offsetLeft;
+    scrollLeft.current = ref.current.scrollLeft;
+    ref.current.style.cursor = "grabbing";
+  }, []);
+
+  const onMouseLeave = useCallback(() => {
+    isDragging.current = false;
+    if (ref.current) ref.current.style.cursor = "grab";
+  }, []);
+
+  const onMouseUp = useCallback(() => {
+    isDragging.current = false;
+    if (ref.current) ref.current.style.cursor = "grab";
+  }, []);
+
+  const onMouseMove = useCallback((e) => {
+    if (!isDragging.current) return;
+    e.preventDefault();
+    const x = e.pageX - ref.current.offsetLeft;
+    const walk = (x - startX.current) * 1.2;
+    ref.current.scrollLeft = scrollLeft.current - walk;
+  }, []);
+
+  const onTouchStart = useCallback((e) => {
+    touchStartX.current = e.touches[0].pageX;
+    touchScrollLeft.current = ref.current.scrollLeft;
+  }, []);
+
+  const onTouchMove = useCallback((e) => {
+    const diff = touchStartX.current - e.touches[0].pageX;
+    ref.current.scrollLeft = touchScrollLeft.current + diff;
+  }, []);
+
+  return { ref, onMouseDown, onMouseLeave, onMouseUp, onMouseMove, onTouchStart, onTouchMove };
+}
+
 export default function ServicesOffered({ cardsSection }) {
   const heading = cardsSection?.heading || "Exceptional glazing for who build with vision.";
   const subheading =
@@ -84,202 +134,458 @@ export default function ServicesOffered({ cardsSection }) {
       }))
     : STATIC_SERVICES;
 
-  const trackRef = useRef(null);
-  const isDragging = useRef(false);
-  const startX = useRef(0);
-  const scrollLeft = useRef(0);
+  const {
+    ref:          desktopTrackRef,
+    onMouseDown:  onDesktopMouseDown,
+    onMouseLeave: onDesktopMouseLeave,
+    onMouseUp:    onDesktopMouseUp,
+    onMouseMove:  onDesktopMouseMove,
+    onTouchStart: onDesktopTouchStart,
+    onTouchMove:  onDesktopTouchMove,
+  } = useDragScroll();
 
-  const onMouseDown = useCallback((e) => {
-    isDragging.current = true;
-    startX.current = e.pageX - trackRef.current.offsetLeft;
-    scrollLeft.current = trackRef.current.scrollLeft;
-    trackRef.current.style.cursor = "grabbing";
-  }, []);
-
-  const onMouseLeave = useCallback(() => {
-    isDragging.current = false;
-    if (trackRef.current) trackRef.current.style.cursor = "grab";
-  }, []);
-
-  const onMouseUp = useCallback(() => {
-    isDragging.current = false;
-    if (trackRef.current) trackRef.current.style.cursor = "grab";
-  }, []);
-
-  const onMouseMove = useCallback((e) => {
-    if (!isDragging.current) return;
-    e.preventDefault();
-    const x = e.pageX - trackRef.current.offsetLeft;
-    const walk = (x - startX.current) * 1.2;
-    trackRef.current.scrollLeft = scrollLeft.current - walk;
-  }, []);
-
-  const touchStartX = useRef(0);
-  const touchScrollLeft = useRef(0);
-
-  const onTouchStart = useCallback((e) => {
-    touchStartX.current = e.touches[0].pageX;
-    touchScrollLeft.current = trackRef.current.scrollLeft;
-  }, []);
-
-  const onTouchMove = useCallback((e) => {
-    const diff = touchStartX.current - e.touches[0].pageX;
-    trackRef.current.scrollLeft = touchScrollLeft.current + diff;
-  }, []);
+  const {
+    ref:          mobileTrackRef,
+    onMouseDown:  onMobileMouseDown,
+    onMouseLeave: onMobileMouseLeave,
+    onMouseUp:    onMobileMouseUp,
+    onMouseMove:  onMobileMouseMove,
+    onTouchStart: onMobileTouchStart,
+    onTouchMove:  onMobileTouchMove,
+  } = useDragScroll();
 
   return (
-    <section style={{ width: "100%", background: "#EDE7DE" }}>
+    <>
       {/* ══════════════════════════════════════════════════════════════════════
-          HEADER ROW
-          Figma: w:1440  h:247  pt:18 pr:40 pb:20 pl:47  border-top:1px
+          MOBILE — iPhone 13/14 (390px) baseline
+          Figma: w:390 gap:20 pt:40 pb:40 pl:22 pr:22 bg:#EDE7DE
       ═══════════════════════════════════════════════════════════════════════ */}
-      <div
+      <section
+        className="flex md:hidden"
         style={{
+          flexDirection: "column",
           width: "100%",
-          paddingTop: "clamp(12px, 1.25vw, 18px)",
-          paddingRight: "clamp(24px, 2.778vw, 40px)",
-          paddingBottom: "clamp(14px, 1.389vw, 20px)",
-          paddingLeft: "clamp(28px, 3.264vw, 47px)",
-          borderTop: "1px solid rgba(0,0,0,0.08)",
+          background: "#EDE7DE",
+          gap: "20px",
+          paddingTop: "40px",
+          paddingBottom: "0px",
+          paddingLeft: "22px",
+          paddingRight: "22px",
           boxSizing: "border-box",
         }}
       >
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: "clamp(16px, 2.222vw, 32px)",
-          }}
-        >
-          {/* ── LEFT: tag pill + heading ─────────────────────────────────── */}
+        {/* ── HEADER — Figma: w:346.5 h:173 gap:10 ─────────────────────────── */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px", width: "100%" }}>
+          {/* Tag pill */}
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "clamp(6px, 0.694vw, 10px)",
-              maxWidth: "clamp(280px, 55.66vw, 801.56px)",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "7.2px",
+              height: "20px",
+              paddingLeft: "7.2px",
+              paddingRight: "7.2px",
+              borderRadius: "90px",
+              width: "fit-content",
             }}
           >
-            {/* Tag pill: square + "OUR SERVICES" */}
-            <div
+            <span
               style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "clamp(4px, 1.5vw, 10.6px)",
-                width: "fit-content",
+                width: "10px",
+                height: "10px",
+                borderRadius: "3px",
+                background: "#334454",
+                flexShrink: 0,
+              }}
+            />
+            <span
+              style={{
+                fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                fontWeight: 400,
+                fontSize: "12px",
+                lineHeight: "19.44px",
+                letterSpacing: "-0.32px",
+                textTransform: "uppercase",
+                color: "#000000",
+                whiteSpace: "nowrap",
               }}
             >
-              <div
-                style={{
-                  width: "clamp(10px, 0.972vw, 14px)",
-                  height: "clamp(10px, 0.972vw, 14px)",
-                  background: "#334454",
-                  flexShrink: 0,
-                }}
-              />
-              <span
-                style={{
-                  fontFamily: "var(--font-geist-sans), 'Geist'",
-                  fontWeight: 400,
-                  fontSize: "clamp(11px, 1.125vw, 16.2px)",
-                  lineHeight: "100%",
-                  letterSpacing: "clamp(-0.32px, -0.0222vw, -0.15px)",
-                  textTransform: "uppercase",
-                  color: "#334454",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                Our Services
-              </span>
-            </div>
+              Our Services
+            </span>
+          </div>
 
-            {/* Heading */}
+          {/* Title + subtitle */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px", width: "100%" }}>
             <h2
               style={{
-                fontFamily: "var(--font-roundo), 'Roundo'",
-                fontWeight: 450,
-                fontSize: "clamp(30px, 4.167vw, 60px)",
-                lineHeight: "clamp(36px, 4.593vw, 66.14px)",
-                letterSpacing: "clamp(-3.05px, -0.212vw, -1.2px)",
-                color: "#1A1A1A",
+                width: "100%",
+                fontFamily: "var(--font-roundo), 'Roundo', system-ui, sans-serif",
+                fontWeight: 500,
+                fontSize: "32px",
+                lineHeight: "36.6px",
+                letterSpacing: "-0.73px",
+                color: "#000000",
                 margin: 0,
               }}
             >
               {heading}
             </h2>
+            <p
+              style={{
+                width: "100%",
+                fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                fontWeight: 400,
+                fontSize: "14px",
+                lineHeight: "21px",
+                letterSpacing: "0",
+                color: "#000000CC",
+                margin: 0,
+              }}
+            >
+              {subheading}
+            </p>
           </div>
-
-          {/* ── RIGHT: lorem paragraph ───────────────────────────────────── */}
-          <p
-            style={{
-              fontFamily: "var(--font-geist-sans), 'Geist'",
-              fontWeight: 400,
-              fontSize: "clamp(13px, 1.389vw, 20px)",
-              lineHeight: "clamp(15px, 1.514vw, 21.8px)",
-              letterSpacing: "-0.44px",
-              color: "#222F30CC",
-              margin: 0,
-              maxWidth: "clamp(240px, 32.056vw, 461.61px)",
-            }}
-          >
-            {subheading}
-          </p>
         </div>
-      </div>
 
-      {/* ══════════════════════════════════════════════════════════════════════
-          HORIZONTAL SCROLL CARDS STRIP
-          Figma: w:1440  h:494  |  track: w:3010 h:545  left:61
-      ═══════════════════════════════════════════════════════════════════════ */}
-      <div
-        style={{
-          width: "100%",
-          height: "clamp(380px, 40.569vw, 601px)",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
+        {/* ── CARD STRIP — full-bleed, same drag-to-scroll as desktop ──────── */}
         <div
-          ref={trackRef}
-          onMouseDown={onMouseDown}
-          onMouseLeave={onMouseLeave}
-          onMouseUp={onMouseUp}
-          onMouseMove={onMouseMove}
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            display: "flex",
-            alignItems: "center",
-            paddingLeft: "clamp(30px, 4.236vw, 61px)",
-            paddingRight: "clamp(30px, 4.236vw, 61px)",
-            overflowX: "auto",
-            overflowY: "hidden",
-            cursor: "grab",
-            scrollbarWidth: "none",
-            msOverflowStyle: "none",
-            WebkitOverflowScrolling: "touch",
-            boxSizing: "border-box",
-            userSelect: "none",
+            width: "calc(100% + 44px)",
+            marginLeft: "-22px",
+            marginRight: "-22px",
+            position: "relative",
+            overflow: "hidden",
           }}
         >
-          {services.map((service, i) => (
-            <ServiceCard key={service.number} service={service} isFirst={i === 0} />
-          ))}
+          <div
+            ref={mobileTrackRef}
+            onMouseDown={onMobileMouseDown}
+            onMouseLeave={onMobileMouseLeave}
+            onMouseUp={onMobileMouseUp}
+            onMouseMove={onMobileMouseMove}
+            onTouchStart={onMobileTouchStart}
+            onTouchMove={onMobileTouchMove}
+            style={{
+              display: "flex",
+              overflowX: "auto",
+              overflowY: "hidden",
+              cursor: "grab",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+              WebkitOverflowScrolling: "touch",
+              userSelect: "none",
+            }}
+          >
+            {services.map((service) => (
+              <MobileServiceCard key={service.number} service={service} />
+            ))}
+          </div>
         </div>
+      </section>
+
+      {/* ── DESKTOP ──────────────────────────────────────────────────────────── */}
+      <div className="hidden md:block">
+      <section style={{ width: "100%", background: "#EDE7DE" }}>
+        {/* ══════════════════════════════════════════════════════════════════════
+            HEADER ROW
+            Figma: w:1440  h:247  pt:18 pr:40 pb:20 pl:47  border-top:1px
+        ═══════════════════════════════════════════════════════════════════════ */}
+        <div
+          style={{
+            width: "100%",
+            paddingTop: "clamp(12px, 1.25vw, 18px)",
+            paddingRight: "clamp(24px, 2.778vw, 40px)",
+            paddingBottom: "clamp(14px, 1.389vw, 20px)",
+            paddingLeft: "clamp(28px, 3.264vw, 47px)",
+            borderTop: "1px solid rgba(0,0,0,0.08)",
+            boxSizing: "border-box",
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: "clamp(16px, 2.222vw, 32px)",
+            }}
+          >
+            {/* ── LEFT: tag pill + heading ─────────────────────────────────── */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "clamp(6px, 0.694vw, 10px)",
+                maxWidth: "clamp(280px, 55.66vw, 801.56px)",
+              }}
+            >
+              {/* Tag pill: square + "OUR SERVICES" */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "clamp(4px, 1.5vw, 10.6px)",
+                  width: "fit-content",
+                }}
+              >
+                <div
+                  style={{
+                    width: "clamp(10px, 0.972vw, 14px)",
+                    height: "clamp(10px, 0.972vw, 14px)",
+                    background: "#334454",
+                    flexShrink: 0,
+                  }}
+                />
+                <span
+                  style={{
+                    fontFamily: "var(--font-geist-sans), 'Geist'",
+                    fontWeight: 400,
+                    fontSize: "clamp(11px, 1.125vw, 16.2px)",
+                    lineHeight: "100%",
+                    letterSpacing: "clamp(-0.32px, -0.0222vw, -0.15px)",
+                    textTransform: "uppercase",
+                    color: "#334454",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  Our Services
+                </span>
+              </div>
+
+              {/* Heading */}
+              <h2
+                style={{
+                  fontFamily: "var(--font-roundo), 'Roundo'",
+                  fontWeight: 450,
+                  fontSize: "clamp(30px, 4.167vw, 60px)",
+                  lineHeight: "clamp(36px, 4.593vw, 66.14px)",
+                  letterSpacing: "clamp(-3.05px, -0.212vw, -1.2px)",
+                  color: "#1A1A1A",
+                  margin: 0,
+                }}
+              >
+                {heading}
+              </h2>
+            </div>
+
+            {/* ── RIGHT: lorem paragraph ───────────────────────────────────── */}
+            <p
+              style={{
+                fontFamily: "var(--font-geist-sans), 'Geist'",
+                fontWeight: 400,
+                fontSize: "clamp(13px, 1.389vw, 20px)",
+                lineHeight: "clamp(15px, 1.514vw, 21.8px)",
+                letterSpacing: "-0.44px",
+                color: "#222F30CC",
+                margin: 0,
+                maxWidth: "clamp(240px, 32.056vw, 461.61px)",
+              }}
+            >
+              {subheading}
+            </p>
+          </div>
+        </div>
+
+        {/* ══════════════════════════════════════════════════════════════════════
+            HORIZONTAL SCROLL CARDS STRIP
+            Figma: w:1440  h:494  |  track: w:3010 h:545  left:61
+        ═══════════════════════════════════════════════════════════════════════ */}
+        <div
+          style={{
+            width: "100%",
+            height: "clamp(380px, 40.569vw, 601px)",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            ref={desktopTrackRef}
+            onMouseDown={onDesktopMouseDown}
+            onMouseLeave={onDesktopMouseLeave}
+            onMouseUp={onDesktopMouseUp}
+            onMouseMove={onDesktopMouseMove}
+            onTouchStart={onDesktopTouchStart}
+            onTouchMove={onDesktopTouchMove}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              display: "flex",
+              alignItems: "center",
+              paddingLeft: "clamp(30px, 4.236vw, 61px)",
+              paddingRight: "clamp(30px, 4.236vw, 61px)",
+              overflowX: "auto",
+              overflowY: "hidden",
+              cursor: "grab",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+              WebkitOverflowScrolling: "touch",
+              boxSizing: "border-box",
+              userSelect: "none",
+            }}
+          >
+            {services.map((service, i) => (
+              <ServiceCard key={service.number} service={service} isFirst={i === 0} />
+            ))}
+          </div>
+        </div>
+      </section>
       </div>
-    </section>
+    </>
   );
 }
 
-function ServiceCard({ service, isFirst }) {
+function MobileServiceCard({ service }) {
+  return (
+    <div
+      style={{
+        width: "min(389px, 100vw)",
+        height: "489.44px",
+        flexShrink: 0,
+        display: "flex",
+        flexDirection: "column",
+        gap: "19.9px",
+        paddingTop: "39.8px",
+        paddingRight: "11.76px",
+        paddingBottom: "39.8px",
+        paddingLeft: "21.71px",
+        borderLeft: "0.9px solid #00000047",
+        background: "#EDE7DE",
+        boxSizing: "border-box",
+      }}
+    >
+      {/* Number + title (row) + description + Learn More */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "9.05px" }}>
+        {/* Number + title */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            gap: "12.67px",
+            paddingLeft: "9.05px",
+            paddingRight: "9.05px",
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+              fontWeight: 400,
+              fontSize: "13.57px",
+              lineHeight: "20.35px",
+              color: "#6B859E",
+              flexShrink: 0,
+            }}
+          >
+            {service.number}
+          </span>
+          <h3
+            style={{
+              fontFamily: "var(--font-roundo), 'Roundo', system-ui, sans-serif",
+              fontWeight: 500,
+              fontSize: "29.85px",
+              lineHeight: "34.33px",
+              letterSpacing: "-0.6px",
+              color: "#000000",
+              margin: 0,
+              flex: 1,
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}
+          >
+            {service.title}
+          </h3>
+        </div>
+
+        {/* Description + Learn More */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.9px",
+            paddingLeft: "9.05px",
+            paddingRight: "9.05px",
+          }}
+        >
+          <p
+            style={{
+              fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+              fontWeight: 400,
+              fontSize: "13.57px",
+              lineHeight: "20.35px",
+              color: "#000000CC",
+              margin: 0,
+              display: "-webkit-box",
+              WebkitLineClamp: 5,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}
+          >
+            {service.description}
+          </p>
+
+          <button
+            type="button"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "4.52px",
+              paddingTop: "5.43px",
+              paddingBottom: "5.43px",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              width: "fit-content",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                fontWeight: 400,
+                fontSize: "13.57px",
+                lineHeight: "20.35px",
+                color: "#000000",
+                textDecoration: "underline",
+              }}
+            >
+              Learn More
+            </span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Image */}
+      <div
+        style={{
+          position: "relative",
+          width: "294.92px",
+          height: "183.64px",
+          maxWidth: "100%",
+          borderRadius: "8px",
+          overflow: "hidden",
+          flexShrink: 0,
+        }}
+      >
+        <Image
+          src={service.image}
+          alt={service.title}
+          fill
+          sizes="295px"
+          style={{ objectFit: "cover" }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function ServiceCard({ service }) {
   return (
     <div
       style={{
