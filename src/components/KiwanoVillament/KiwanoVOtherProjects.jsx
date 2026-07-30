@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 
 /**
@@ -10,8 +9,6 @@ import Image from "next/image";
  */
 
 export default function KiwanoOtherProjects({ otherProjects }) {
-  const [isHovered, setIsHovered] = useState(false);
-
   return (
     <>
     {/* ══════════════════════════════════════════════════════════════════════
@@ -366,95 +363,69 @@ export default function KiwanoOtherProjects({ otherProjects }) {
               Discover crafted living spaces where modern design meets timeless comfort for every family with smart layouts bright views and premium details built to inspire daily today always now us
             </p>
 
-            {/* Learn More Button */}
-            <div
-              style={{
-                marginTop: "10px",
-                border: "1px solid rgba(255, 255, 255, 0.2)",
-                borderRadius: "13px",
-                padding: "3px",
-                width: "187px",
-                height: "48px",
-                boxSizing: "border-box",
-                display: "flex",
-              }}
-            >
+            {/* Contact Us button */}
+            <div className="flex items-center justify-center w-full">
               <button
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
+                type="submit"
+                className="group relative flex items-center justify-center bg-[#6B859E] hover:bg-[#4a6074] transition-colors duration-500 overflow-hidden cursor-pointer border-none w-[clamp(118.6px,11.6vw,167px)] h-[clamp(36.9px,3.61vw,52px)]"
                 style={{
-                  position: "relative",
-                  width: "100%",
-                  height: "100%",
-                  padding: 0,
-                  border: "none",
-                  background: isHovered ? "#334454" : "#6B859E",
-                  display: "flex",
-                  alignItems: "center",
-                  cursor: "pointer",
-                  overflow: "hidden",
-                  borderRadius: "10px",
-                  transition: "background 0.4s ease",
+                  borderRadius: 'clamp(8.5px, 0.83vw, 12px)',
                 }}
               >
-                {/* Right panel — fades from white to button color on hover */}
+                {/* Sliding text */}
                 <div
+                  className="absolute overflow-hidden"
                   style={{
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    width: "41px",
-                    background: isHovered ? "#6B859E" : "#FFFFFF",
-                    transition: "background 0.4s ease",
-                    zIndex: 1,
-                  }}
-                />
-
-                {/* Text — slides right on hover */}
-                <span
-                  style={{
-                    position: "relative",
-                    zIndex: 2,
-                    flex: 1,
-                    textAlign: "center",
-                    fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
-                    fontWeight: 500,
-                    fontSize: "12px",
-                    color: "#FFFFFF",
-                    letterSpacing: "0%",
-                    transform: isHovered ? "translateX(-4px)" : "translateX(0)",
-                    transition: "transform 0.4s ease",
+                    top:    'clamp(10px, 1.01vw, 14.5px)',
+                    left:   'clamp(10px, 1.83vw, 22px)',
+                    width:  'clamp(70px, 6.74vw, 97px)',
+                    height: 'clamp(18px, 1.6vw, 23px)',
                   }}
                 >
-                  LEARN MORE
-                </span>
+                  <div className="flex flex-col transition-transform duration-500 ease-in-out group-hover:-translate-y-1/2">
+                    {['Contact Us', 'Contact Us'].map((label, i) => (
+                      <span
+                        key={i}
+                        className="font-sans font-medium text-[#EDE7DE] whitespace-nowrap flex items-center"
+                        style={{
+                          height:   'clamp(18px, 1.6vw, 23px)',
+                          fontSize: 'clamp(13px, 1.04vw, 15px)',
+                        }}
+                      >
+                        {label}
+                      </span>
+                    ))}
+                  </div>
+                </div>
 
-                {/* Arrow — fixed position, color changes on hover */}
+                {/* Arrow box */}
                 <div
+                  className="absolute bg-[#EDE7DE] group-hover:bg-[#EDE7DE] transition-colors duration-500 overflow-hidden"
                   style={{
-                    position: "relative",
-                    zIndex: 2,
-                    width: "41px",
-                    flexShrink: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    right:        'clamp(8.5px, 0.83vw, 12px)',
+                    width:        'clamp(21.3px, 2.08vw, 30px)',
+                    height:       'clamp(21.3px, 2.08vw, 30px)',
+                    borderRadius: 'clamp(5px, 0.49vw, 7px)',
                   }}
                 >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke={isHovered ? "#FFFFFF" : "#334454"}
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    style={{ transition: "stroke 0.4s ease" }}
-                  >
-                    <path d="M9 6l6 6-6 6" />
-                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out group-hover:translate-x-full">
+                    <svg
+                      viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                      className="text-black"
+                      style={{ width: 'clamp(10px, 1.97vw, 22px)', height: 'clamp(10px, 1.97vw, 22px)' }}
+                    >
+                      <path d="M8 12h18M20 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out -translate-x-full group-hover:translate-x-0">
+                    <svg
+                      viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                      className="text-black"
+                      style={{ width: 'clamp(10px, 1.97vw, 22px)', height: 'clamp(10px, 1.97vw,22px)' }}
+                    >
+                      <path d="M8 12h18M20 5l7 7-7 7" />
+                    </svg>
+                  </div>
                 </div>
               </button>
             </div>

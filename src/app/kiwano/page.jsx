@@ -3,6 +3,7 @@ import KiwanoLuxuryVillas from '@/components/kiwano/KiwanoLuxuryVillas';
 import Kiwano360Tour from '@/components/kiwano/Kiwano360Tour';
 import KiwanoFeatures from '@/components/kiwano/KiwanoFeatures';
 import KiwanoGallery from '@/components/kiwano/KiwanoGallery';
+import KiwanoBrandStory from '@/components/kiwano/KiwanoBrandStory';
 import KiwanoAmenities from '@/components/kiwano/KiwanoAmenities';
 import KiwanoOtherProjects from '@/components/kiwano/KiwanoOtherProjects';
 import Footer from '@/components/common/Footer';
@@ -24,6 +25,7 @@ export default async function KiwanoPage() {
       <KiwanoFeatures features={kiwano?.featureSection} />
       <Kiwano360Tour tour360={kiwano?.tour360Section} />
       <KiwanoGallery gallery={kiwano?.gallerySection} />
+      <KiwanoBrandStory brandStory={kiwano?.brandStorySection} />
       <KiwanoAmenities amenities={kiwano?.amenitiesSection} />
       <KiwanoOtherProjects otherProjects={kiwano?.otherProjectSection} />
       <Footer />

@@ -131,13 +131,20 @@ function getAmenityIcon(type) {
 
 const DEFAULT_MAP_SRC = "https://www.google.com/maps?q=Kiwano+Villas,+Mahe,+Kerala&ll=11.755,75.498&z=14&output=embed";
 
+// Chameri Builders & Developers — same origin used in ContactLocations.jsx
+const CHAMERI_ORIGIN = { lat: 11.7485921, lng: 75.5322851, name: "Chameri Builders & Developers" };
+
+function getDirectionsUrl(destination) {
+  return `https://www.google.com/maps/dir/?api=1&origin=${CHAMERI_ORIGIN.lat},${CHAMERI_ORIGIN.lng}&destination=${destination.lat},${destination.lng}&travelmode=driving`;
+}
+
 export default function KiwanoAmenities({ amenities }) {
   const [viewMode, setViewMode] = useState("list"); // 'list' | 'map'
   const [selectedAmenity, setSelectedAmenity] = useState(null);
 
   const handleItemClick = (amenity) => {
     setSelectedAmenity(amenity);
-    setViewMode("map");
+    window.open(getDirectionsUrl(amenity), "_blank", "noopener,noreferrer");
   };
 
   const mapSrc = selectedAmenity

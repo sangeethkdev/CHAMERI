@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback, useLayoutEffect } from "react";
+import { useRef, useState, useCallback } from "react";
 import Image from "next/image";
 
 /**
@@ -484,30 +484,8 @@ export default function KiwanoFeatures({ features }) {
 }
 
 function MobileFeatureCard({ feature }) {
-  // Touch devices have no :hover, so the same reveal animation the desktop
-  // cards use on hover is triggered by tap here instead. The panel's own
-  // height animates (measured from the real title/description heights,
-  // since a wrapping 2-line title must never get clipped) rather than
-  // translating content within a fixed box like the desktop card does.
-  const [expanded, setExpanded] = useState(false);
-  const titleRef = useRef(null);
-  const descRef  = useRef(null);
-  const [collapsedH, setCollapsedH] = useState(60);
-  const [expandedH, setExpandedH]   = useState(200);
-
-  useLayoutEffect(() => {
-    const PAD_V = 28; // 14px top + 14px bottom padding
-    const titleH = titleRef.current?.offsetHeight || 26;
-    const descH  = descRef.current?.offsetHeight || 0;
-    setCollapsedH(titleH + PAD_V);
-    setExpandedH(titleH + 4 + descH + PAD_V); // 4 = title's marginBottom
-  }, []);
-
   return (
-    <div
-      onClick={() => setExpanded((v) => !v)}
-      style={{ position: "relative", width: "clamp(260px, 79vw, 340px)", flexShrink: 0, cursor: "pointer" }}
-    >
+    <div style={{ position: "relative", width: "clamp(260px, 79vw, 340px)", flexShrink: 0 }}>
       {/* Image */}
       <div
         style={{
@@ -528,9 +506,7 @@ function MobileFeatureCard({ feature }) {
         />
       </div>
 
-      {/* White caption panel — overlaps the bottom of the image. Title is the
-          fixed anchor; description is clipped out of view until tapped, then
-          fades/grows in with the same easing/timing as the desktop hover reveal. */}
+      {/* White caption panel — overlaps the bottom of the image, title only */}
       <div
         style={{
           position:     "relative",
@@ -539,12 +515,10 @@ function MobileFeatureCard({ feature }) {
           marginRight:  "12px",
           borderRadius: "8px",
           overflow:     "hidden",
-          transition:   "max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
         <div style={{ padding: "14px 16px" }}>
           <span
-            ref={titleRef}
             style={{
               display:       "block",
               fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
@@ -554,7 +528,6 @@ function MobileFeatureCard({ feature }) {
               letterSpacing: "-0.44px",
               textTransform: "capitalize",
               color:         "#ffffff",
-              marginBottom:  "4px",
             }}
           >
             {feature.title}
@@ -566,18 +539,7 @@ function MobileFeatureCard({ feature }) {
 }
 
 function FeatureCard({ feature }) {
-  const [hovered, setHovered]   = useState(false);
-  const descRef                  = useRef(null);
-  // Large default keeps description below card on first paint; useLayoutEffect
-  // replaces it with the exact measured value before the browser paints.
-  const [descShift, setDescShift] = useState(200);
-
-  useLayoutEffect(() => {
-    if (descRef.current) {
-      // 8px = gap between title and description
-      setDescShift(descRef.current.offsetHeight + 8);
-    }
-  }, []);
+  const [hovered, setHovered] = useState(false);
 
   return (
     <div
@@ -621,13 +583,7 @@ function FeatureCard({ feature }) {
         }}
       />
 
-      {/* ── SINGLE CONTENT DIV ──────────────────────────────────────────── */}
-      {/*
-       * Anchored to bottom:0. Initially shifted DOWN by (descriptionHeight + gap)
-       * so only the title is visible above the card's bottom edge. The card's
-       * overflow:hidden clips everything below. On hover, translateY(0) slides
-       * the whole block up, revealing title + description together.
-       */}
+      {/* ── TITLE — static, always visible, no reveal animation ──────────── */}
       <div
         style={{
           position:      "absolute",
@@ -636,14 +592,8 @@ function FeatureCard({ feature }) {
           right:         "clamp(14px, 1.319vw, 19px)",
           paddingBottom: "clamp(16px, 1.736vw, 25px)",
           zIndex:        2,
-          display:       "flex",
-          flexDirection: "column",
-          gap:           "8px",
-          transform:     hovered ? "translateY(0)" : `translateY(${descShift}px)`,
-          transition:    "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
-        {/* Title — always the anchor; sits at card bottom when not hovered */}
         <span
           style={{
             fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
@@ -656,24 +606,6 @@ function FeatureCard({ feature }) {
         >
           {feature.title}
         </span>
-
-        {/* Description — below the title, starts clipped below card edge */}
-        <p
-          ref={descRef}
-          style={{
-            fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
-            fontWeight:    400,
-            fontSize:      "clamp(10px, 1.042vw, 15px)",
-            lineHeight:    "clamp(13px, 1.264vw, 18.2px)",
-            letterSpacing: "-0.44px",
-            color:         "rgba(255,255,255,0.88)",
-            margin:        0,
-            opacity:       hovered ? 1 : 0,
-            transition:    "opacity 0.3s ease 0.15s",
-          }}
-        >
-          {feature.description}
-        </p>
       </div>
     </div>
   );

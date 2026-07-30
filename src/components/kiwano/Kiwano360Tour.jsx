@@ -350,7 +350,7 @@ export default function Kiwano360Tour({ tour360 }) {
         <div
           style={{
             width:         "100%",
-            maxWidth:      "1440px",
+            maxWidth:      "1920",
             margin:        "0 auto",
             display:       "flex",
             flexDirection: "column",
@@ -479,7 +479,7 @@ export default function Kiwano360Tour({ tour360 }) {
       {/* ════════════════════════════════════════════════════════════════════
           360 VIDEO MODAL — opens when "Drag Around" text is clicked
       ═══════════════════════════════════════════════════════════════════ */}
-      {modalOpen && (
+      {/* {modalOpen && (
         <div
           id="kiwano-360-modal"
           role="dialog"
@@ -503,10 +503,10 @@ export default function Kiwano360Tour({ tour360 }) {
               from { opacity: 0; }
               to   { opacity: 1; }
             }
-          `}</style>
+          `}</style> */}
 
           {/* Inner video box */}
-          <div
+          {/* <div
             style={{
               position:     "relative",
               width:        "min(92vw, 1280px)",
@@ -528,10 +528,10 @@ export default function Kiwano360Tour({ tour360 }) {
                 objectFit: "cover",
                 display:   "block",
               }}
-            />
+            /> */}
 
             {/* ✕ close */}
-            <button
+            {/* <button
               id="kiwano-360-close"
               onClick={closeModal}
               aria-label="Close 360 tour"
@@ -559,10 +559,10 @@ export default function Kiwano360Tour({ tour360 }) {
               onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.15)")}
             >
               ✕
-            </button>
-          </div>
-        </div>
-      )}
+            </button> */}
+          {/* </div> */}
+        {/* </div> */}
+      {/* )} */}
     </>
   );
 }
