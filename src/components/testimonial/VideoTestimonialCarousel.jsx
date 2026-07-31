@@ -127,8 +127,15 @@ function VideoCard({ item }) {
         className="absolute flex flex-col"
         style={{ top: '68.26%', left: '12%', width: '84%', gap: 'clamp(10px, 1.141vw, 16.43px)' }}
       >
-        <div className="flex items-center" style={{ gap: 'clamp(6px, 8.156vw, 180px)'}}>
-          <div style={{ position: 'relative', top: 'clamp(4px, 0.556vw, 8px)',right: 'clamp(4px, 0.756vw, 14px)' }}>
+        {/* `justify-content: space-between` instead of a fixed/clamped gap
+            — the glyph and stars need to sit flush at opposite edges of
+            this row *whatever* its actual rendered width ends up being
+            (it tracks the card's 84%, and the card itself is clamped down
+            on narrow viewports). A vw-driven gap was tuned for one card
+            width and overflowed at others, pushing the stars out past the
+            content box instead of staying pinned to its right edge. */}
+        <div className="flex items-center justify-between">
+          <div style={{ position: 'relative', top: 'clamp(4px, 0.556vw, 8px)' }}>
             <QuoteIcon width="clamp(14px, 1.54vw, 22.18px)" height="clamp(10px, 1.141vw, 16.43px)" />
           </div>
           <div className="flex items-center" style={{ gap: 'clamp(1px, 0.1vw, 2px)' }}>

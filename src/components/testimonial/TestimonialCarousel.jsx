@@ -450,40 +450,79 @@ export default function TestimonialCarousel({ reviews }) {
         </div>
       </div>
 
-      {/* ══════════════════════════════ MOBILE (< md) ═══════════════════════════ */}
-      <div className="flex md:hidden flex-col" style={{ padding: '24px 20px', gap: '16px' }}>
-        {/* Meta row */}
-        <div className="flex items-center justify-between">
-          <div
-            className="flex items-center rounded-[90px]"
-            style={{ gap: '5px', padding: '0 7px', height: '20px' }}
-          >
-            <div className="flex-shrink-0" style={{ width: '10px', height: '10px', background: '#334454' }} />
-            <span className="font-sans uppercase text-[#334454]" style={{ fontSize: '11px' }}>
-              Clients Notes
-            </span>
-          </div>
-          <span
-            className="font-sans uppercase"
-            style={{ color: '#21232599', fontWeight: 600, fontSize: '11px', letterSpacing: '1px' }}
-          >
-            {counter}
-          </span>
-        </div>
+      {/* ══════════════════════════════ MOBILE (< md) ═══════════════════════════
+       * Figma (390.41px baseline):
+       *   Outer  : pt:24 pl/pr:21 gap:10 bg:#EDE7DE
+       *   Card   : pt:15.6 pb:26 border-top:1px solid #21232533
+       *     Meta row   : badge pill (left) + arrow buttons (right) — no counter
+       *     Quote      : pt:52, glyph 28.08×20.8, Roundo 500 34px/36.6px ls:-0.73px
+       *     Photo row  : pt:42, photo 73×75 radius:4.81 + name/designation
+       *   Review row : own border-top, centered Google icon + score, pt:20.8
+       * ═══════════════════════════════════════════════════════════════════════ */}
+      <div className="flex md:hidden flex-col w-full" style={{ paddingTop: '24px', paddingLeft: '21px', paddingRight: '21px', gap: '10px', background: '#EDE7DE' }}>
+        <div className="flex flex-col w-full" style={{ paddingTop: '15.6px', paddingBottom: '26px', borderTop: '1px solid #21232533', background: '#EDE7DE' }}>
 
-        {/*
-         * Fixed-height "text container" slot — height is reserved up front
-         * (photo 132px + gap 16 + quote clamped to 4 lines @ 26px = 104px +
-         * gap 16 + name/designation ~40px) so the swap never resizes the
-         * card or pushes the content below it, no matter how long the
-         * incoming quote is. The photo morphs/crossfades, name/designation
-         * crossfades with no vertical movement, and the quote text reveals
-         * line by line.
-         */}
-        <div className="relative" style={{ height: '312px' }}>
-          {/* Photo + quote glyph — pinned to top:0, morph/crossfade with motion blur */}
-          <div className="absolute flex items-start" style={{ top: 0, left: 0, right: 0, gap: '16px' }}>
-            <div className="relative overflow-hidden flex-shrink-0" style={{ width: '100px', height: '132px', borderRadius: '4px' }}>
+          {/* Meta row — badge + arrow buttons (no counter on mobile) */}
+          <div className="flex items-center justify-between w-full" style={{ height: '20px' }}>
+            <div
+              className="flex items-center rounded-[90px]"
+              style={{ gap: '7.2px', paddingLeft: '2px', paddingRight: '2px', height: '20px' }}
+            >
+              <div className="flex-shrink-0" style={{ width: '10px', height: '10px', borderRadius: '3px', background: '#334454' }} />
+              <span
+                className="font-sans uppercase"
+                style={{ fontWeight: 400, fontSize: '12px', lineHeight: '19.44px', letterSpacing: '-0.32px', color: '#000000' }}
+              >
+                Clients Notes
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between flex-shrink-0" style={{ width: '81px', height: '34.12px' }}>
+              <button
+                onClick={prev}
+                aria-label="Previous"
+                className="flex items-center justify-center border-none cursor-pointer bg-[#334454] hover:bg-[#4a6074] transition-colors duration-300"
+                style={{ width: '34.12px', height: '34.12px', borderRadius: '6.07px' }}
+              >
+                <div style={{ transform: 'rotate(180deg)' }}>
+                  <ArrowIcon size="19px" />
+                </div>
+              </button>
+              <button
+                onClick={next}
+                aria-label="Next"
+                className="flex items-center justify-center border-none cursor-pointer bg-[#334454] hover:bg-[#4a6074] transition-colors duration-300"
+                style={{ width: '34.12px', height: '34.12px', borderRadius: '6.07px' }}
+              >
+                <ArrowIcon size="19px" />
+              </button>
+            </div>
+          </div>
+
+          {/* Quote block — glyph then large Roundo display quote, line-by-line reveal */}
+          <div className="flex flex-col" style={{ paddingTop: '52px', gap: '10.4px' }}>
+            <div className="relative flex-shrink-0" style={{ width: '28.08px', height: '20.8px' }}>
+              <Image src="/icons/Vector (16).svg" alt="" fill />
+            </div>
+
+            <AnimatedQuoteLines
+              text={item.quote}
+              current={current}
+              maxLines={4}
+              textStyle={{
+                fontFamily:    'var(--font-roundo), "Roundo", system-ui, sans-serif',
+                color:         '#000000',
+                fontWeight:    500,
+                fontSize:      '34px',
+                lineHeight:    '36.6px',
+                letterSpacing: '-0.73px',
+              }}
+            />
+          </div>
+
+          {/* Photo + name/designation row */}
+          <div className="flex items-center" style={{ paddingTop: '42px', gap: '10px' }}>
+            <div className="relative overflow-hidden flex-shrink-0" style={{ width: '62px', height: '85px', borderRadius: '4.81px' }}>
               <AnimatePresence>
                 <motion.div
                   key={current}
@@ -498,56 +537,34 @@ export default function TestimonialCarousel({ reviews }) {
                 </motion.div>
               </AnimatePresence>
             </div>
-            <div className="relative flex-shrink-0" style={{ width: '20px', height: '15px' }}>
-              <Image src="/icons/Vector (16).svg" alt="" fill />
-            </div>
-          </div>
 
-          {/* Quote text — pinned to top:148px, line-by-line masked reveal
-              capped to 4 lines (104px) so it can never grow past its
-              reserved slot, however long the source text is */}
-          <div className="absolute" style={{ top: '148px', left: 0, right: 0 }}>
-            <AnimatedQuoteLines
-              text={item.quote}
-              current={current}
-              maxLines={4}
-              textStyle={{
-                color:      '#212325',
-                fontWeight: 500,
-                fontSize:   '18px',
-                lineHeight: '26px',
-              }}
-            />
-          </div>
-
-          {/* Name / designation — pinned to top:268px, pure fade */}
-          <div className="absolute" style={{ top: '268px', left: 0 }}>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={current}
-                variants={fadeVariants}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                className="flex flex-col"
-                style={{ gap: '4px' }}
-              >
-                <p className="font-sans m-0" style={{ color: '#1A1A1A', fontSize: '16px', lineHeight: '20px' }}>
-                  {item.name}
-                </p>
-                <p
-                  className="font-sans uppercase m-0"
-                  style={{ color: '#21232599', fontWeight: 500, fontSize: '10px', letterSpacing: '0.6px' }}
+            <div className="flex-shrink-0" style={{ minWidth: '209.51px' ,marginTop:'18px'}}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={current}
+                  variants={fadeVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  className="flex flex-col"
                 >
-                  {item.role}
-                </p>
-              </motion.div>
-            </AnimatePresence>
+                  <p className="font-sans m-0" style={{ color: '#212325', fontWeight: 400, fontSize: '19.9px', lineHeight: '25.92px' }}>
+                    {item.name}
+                  </p>
+                  <p
+                    className="font-sans uppercase m-0"
+                    style={{ color: '#21232599', fontWeight: 500, fontSize: '14.8px', lineHeight: '14px', letterSpacing: '0.86px', paddingTop: '4.2px' }}
+                  >
+                    {item.role}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
         </div>
 
-        {/* Google score + arrows */}
-        <div className="flex items-center justify-between">
+        {/* Google review row — own divider, centered */}
+        <div className="w-full flex items-center justify-center" style={{ paddingTop: '20.8px', borderTop: '1px solid #21232533' }}>
           <AnimatePresence mode="wait">
             <motion.div
               key={current}
@@ -556,37 +573,17 @@ export default function TestimonialCarousel({ reviews }) {
               animate="animate"
               exit="exit"
               className="flex items-center"
-              style={{ gap: '8px' }}
+              style={{ gap: '10px' }}
             >
-              <GoogleIcon size="14px" />
+              <GoogleIcon size="20.8px" />
               <span
                 className="font-sans uppercase underline"
-                style={{ color: '#21232599', fontWeight: 500, fontSize: '10px', letterSpacing: '0.6px' }}
+                style={{ color: '#212325', fontWeight: 500, fontSize: '12.5px', lineHeight: '16.22px', letterSpacing: '1px' }}
               >
-                Google Review: {googleScore} of 5
+                Google Review Score: {googleScore} of 5
               </span>
             </motion.div>
           </AnimatePresence>
-          <div className="flex items-center" style={{ gap: '10px' }}>
-            <button
-              onClick={prev}
-              aria-label="Previous"
-              className="flex items-center justify-center border-none cursor-pointer bg-[#334454]"
-              style={{ width: '30px', height: '30px', borderRadius: '5px' }}
-            >
-              <div style={{ transform: 'rotate(180deg)' }}>
-                <ArrowIcon size="16px" />
-              </div>
-            </button>
-            <button
-              onClick={next}
-              aria-label="Next"
-              className="flex items-center justify-center border-none cursor-pointer bg-[#334454]"
-              style={{ width: '30px', height: '30px', borderRadius: '5px' }}
-            >
-              <ArrowIcon size="16px" />
-            </button>
-          </div>
         </div>
       </div>
     </section>
