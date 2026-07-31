@@ -60,7 +60,7 @@ export default function ProjectListHero({ hero }) {
             top: '41.086%',
             left: '50%',
             transform: 'translateX(-50%)',
-            width: '298.41px',
+            width: '268.41px',
             maxWidth: 'calc(100% - 36px)',
             textAlign: 'center',
           }}

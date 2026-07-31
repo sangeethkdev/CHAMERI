@@ -179,8 +179,8 @@ const GalleryContactUs = () => {
           <div
             className="order-3 lg:order-none flex flex-col gap-[16px] lg:gap-[clamp(14px,1.53vw,22px)]"
           >
-            {/* Phone — order-2 on mobile (renders after Email, matching the reference) */}
-            <div className="order-2 lg:order-none flex flex-col gap-[8px]">
+            {/* Phone — order-1 on mobile (renders before Email, matching the reference) */}
+            <div className="order-1 lg:order-none flex flex-col gap-[8px]">
               <div className="flex items-center gap-[8px]">
                 <svg
                   viewBox="0 0 24 24" fill="none" stroke="#334454"
@@ -206,15 +206,15 @@ const GalleryContactUs = () => {
                 className="font-sans font-normal text-[#6B859E] hover:underline transition-all"
                 style={{
                   fontSize:    'clamp(13.3px, 1.18vw, 28px)',
-                  paddingLeft: 'clamp(20px, 0.95vw, 34.6px)',
+                  paddingLeft: 'clamp(0px, 0.25vw, 34.6px)',
                 }}
               >
                 +91 987654321
               </a>
             </div>
 
-            {/* Email — order-1 on mobile (renders before Phone, matching the reference) */}
-            <div className="order-1 lg:order-none flex flex-col gap-[8px]">
+            {/* Email — order-2 on mobile (renders after Phone, matching the reference) */}
+            <div className="order-2 lg:order-none flex flex-col gap-[8px]">
               <div className="flex items-center gap-[8px]">
                 <svg
                   viewBox="0 0 24 24" fill="none" stroke="#334454"
@@ -241,7 +241,7 @@ const GalleryContactUs = () => {
                 className="font-sans font-normal text-[#6B859E] hover:underline transition-all"
                 style={{
                   fontSize:    'clamp(14px, 1.14vw, 28.3px)',
-                  paddingLeft: 'clamp(20px, 0.95vw, 34.6px)',
+                  paddingLeft: 'clamp(0px, 0.25vw, 34.6px)',
                 }}
               >
                 Chameri@gmail.com
