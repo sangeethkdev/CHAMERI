@@ -744,20 +744,19 @@ const WhyChooseUs = ({ chooseUs }) => {
           }}
         >
           <div
-            className="bg-[#334454]"
+            className="bg-[#334454] flex-shrink-0"
             style={{
-              width:        'clamp(10px, 1vw, 16px)',
-              height:       'clamp(10px, 1vw, 16px)',
-              borderRadius: 'clamp(2px, 0.21vw, 3px)',
+              width:        'clamp(10px, 0.97vw, 18.6px)',
+              height:       'clamp(10px, 0.97vw, 18.6px)',
+              borderRadius: 'clamp(2px, 0.21vw, 4px)',
             }}
           />
           <span
-            className="font-sans font-normal uppercase text-black flex items-center justify-center whitespace-nowrap"
+            className="font-sans font-normal uppercase text-[#334454] flex items-center justify-center"
             style={{
-              height:        'clamp(16px, 1.39vw, 20px)',
-              fontSize:      'clamp(12px, 0.83vw, 16px)',
+              fontSize:      'clamp(10px, 0.83vw, 16px)',
               letterSpacing: 'clamp(-0.24px, -0.02vw, -0.32px)',
-              lineHeight: 1
+              lineHeight:    1,
             }}
           >
             WHY CHOOSE US
@@ -821,7 +820,7 @@ const WhyChooseUs = ({ chooseUs }) => {
           />
           <span
             className="font-sans font-normal uppercase text-black flex items-center"
-            style={{ fontSize: '11px', letterSpacing: '-0.24px' }}
+            style={{ fontSize: '12px', letterSpacing: '-0.24px' }}
           >
             WHY CHOOSE US
           </span>
@@ -898,7 +897,7 @@ const WhyChooseUs = ({ chooseUs }) => {
                 >
                   {/* Icon box */}
                   <div
-                    className="bg-white flex items-center justify-center shadow-lg flex-shrink-0"
+                    className="bg-[#EDE7DE] flex items-center justify-center shadow-lg flex-shrink-0"
                     style={{
                       width:        'clamp(32px, 3.19vw, 46px)',
                       height:       'clamp(32px, 3.19vw, 46px)',
@@ -990,15 +989,7 @@ const WhyChooseUs = ({ chooseUs }) => {
                 className={`absolute inset-0 transition-colors duration-700 ${isActive ? 'bg-black/50' : 'bg-black/40'}`}
               />
 
-              {/* Icon box */}
-              <div
-                className="relative bg-[#33445333] flex items-center justify-center shadow-lg flex-shrink-0"
-                style={{ width: '36.16px', height: '36.16px', borderRadius: '3.93px', padding: '4.72px',top:'clamp(30px, 32vw, 150px)' }}
-              >
-                <div className="text-[#EDE7DE] flex items-center justify-center w-full h-full" >
-                  {card.icon}
-                </div>
-              </div>
+              
 
               {/* Inner content div — slides up on click to make room for the
                   description (it's clipped by the card's overflow-hidden
@@ -1013,6 +1004,16 @@ const WhyChooseUs = ({ chooseUs }) => {
                   marginTop: isActive ? '20px' : 'clamp(160px, 15vw, 180px)',
                 }}
               >
+                {/* Icon box */}
+              <div
+                className="relative bg-[#32445333] flex items-center justify-center shadow-lg flex-shrink-0"
+                style={{ width: '36.16px', height: '36.16px', borderRadius: '3.93px', padding: '4.72px' }}
+              >
+                <div className="text-[#EDE7DE] flex items-center justify-center w-full h-full" >
+                  {card.icon}
+                </div>
+              </div>
+
                 {/* Title */}
                 <h3
                   className="font-roundo font-medium text-white m-0"

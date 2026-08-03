@@ -192,7 +192,7 @@ const AboutSection = ({ aboutUs }) => {
             />
             <span
               className="font-sans font-normal uppercase text-[#000000] tracking-[-0.32px] flex items-center justify-center"
-              style={{ fontSize: '11px', lineHeight: '1.2' }}
+              style={{ fontSize: '12px', lineHeight: '1.2' }}
             >
               About Us
             </span>
@@ -209,7 +209,7 @@ const AboutSection = ({ aboutUs }) => {
               marginTop: 'clamp(10px, 3.077vw, 14px)',
               width: '100%',
               maxWidth: 'clamp(360px, 100vw, 360px)',
-              fontSize: 'clamp(26px, 8.615vw, 37px)',    /* 33.6/390 */
+              fontSize: 'clamp(24px, 8.415vw, 37px)',    /* 33.6/390 */
               lineHeight: 'clamp(29px, 9.385vw, 40px)',   /* 36.6/390 */
               letterSpacing: '-0.73px',
             }}

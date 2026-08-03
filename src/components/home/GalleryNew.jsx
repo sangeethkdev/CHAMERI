@@ -427,12 +427,19 @@ const clamp = (min, design, max = design) =>
  * so this must stay within 0-4 — it cannot assume the 7-item
  * STATIC_VILLAS fallback, or the last cards silently fail to render.
  */
+/* Original Figma tops packed the cards tighter than the caption row (added
+ * below each image in flow) actually needs, so adjacent cards nearly
+ * touched. Tops below are shifted down by a cumulative gap (~27px at the
+ * 390px design width, i.e. a healthy visible gap after every caption) and
+ * re-normalized against the taller MOBILE_FRAME_HEIGHT below — see the
+ * aspect-ratio wrapper that consumes these two together. */
+const MOBILE_FRAME_HEIGHT = 1584;
 const MOBILE_CARDS = [
-  { key: 'v1', villaIndex: 1, top: 1.638,  left: 29.433, width: 64.778, ratio: 252.636 / 235.019 },
-  { key: 'v2', villaIndex: 0, top: 19.285, left: 4.774,  width: 67.835, ratio: 264.556 / 240.114 },
-  { key: 'v3', villaIndex: 2, top: 37.906, left: 12.108, width: 80.553, ratio: 314.156 / 266.170 },
-  { key: 'v4', villaIndex: 3, top: 58.449, left: 6.595,  width: 53.554, ratio: 208.862 / 194.297 },
-  { key: 'v5', villaIndex: 4, top: 73.758, left: 21.431, width: 72.983, ratio: 284.635 / 258.338 },
+  { key: 'v1', villaIndex: 1, top: 1.560,  left: 29.433, width: 64.778, ratio: 252.636 / 235.019 },
+  { key: 'v2', villaIndex: 0, top: 19.791, left: 4.774,  width: 67.835, ratio: 264.556 / 240.114 },
+  { key: 'v3', villaIndex: 2, top: 38.344, left: 12.108, width: 80.553, ratio: 314.156 / 266.170 },
+  { key: 'v4', villaIndex: 3, top: 58.541, left: 6.595,  width: 53.554, ratio: 208.862 / 194.297 },
+  { key: 'v5', villaIndex: 4, top: 74.199, left: 21.431, width: 72.983, ratio: 284.635 / 258.338 },
 ];
 
 const ViewProjectBtn = ({ position }) => (
@@ -507,11 +514,11 @@ const ViewProjectBtn = ({ position }) => (
 const Caption = ({ villa, gap = 3.31 }) => (
   <div className="flex justify-between items-center" style={{ marginTop: clamp(10, 15) }}>
     <div className="flex items-center" style={{ gap: clamp(2, gap) }}>
-      <span className="font-geist text-[#334454]" style={{ fontSize: clamp(11, 14), lineHeight: '1.42', letterSpacing: '-0.4px' }}>{villa.name}</span>
-      <span className="font-geist text-[#334454]" style={{ fontSize: clamp(11, 14), lineHeight: '1.42', letterSpacing: '-0.4px' }}>—</span>
-      <span className="font-geist text-[#334454]" style={{ fontSize: clamp(11, 14), lineHeight: '1.42', letterSpacing: '-0.4px' }}>{villa.location}</span>
+      <span className="font-geist text-[#000000]" style={{ fontSize: clamp(11, 14), lineHeight: '1.42', letterSpacing: '-0.4px' }}>{villa.name}</span>
+      <span className="font-geist text-[#0A0A0A]" style={{ fontSize: clamp(11, 14), lineHeight: '1.42', letterSpacing: '-0.4px' }}>—</span>
+      <span className="font-geist text-[#737373]" style={{ fontSize: clamp(11, 14), lineHeight: '1.42', letterSpacing: '-0.4px' }}>{villa.location}</span>
     </div>
-    <span className="font-geist text-[#334454]" style={{ fontSize: clamp(11, 14), lineHeight: '1.42', letterSpacing: '-0.4px' }}>{villa.year}</span>
+    <span className="font-geist text-[#000000]" style={{ fontSize: clamp(11, 14), lineHeight: '1.42', letterSpacing: '-0.4px' }}>{villa.year}</span>
   </div>
 );
 
@@ -614,24 +621,23 @@ const GalleryNew = ({ gallery }) => {
               }}
             >
               <div
-                className="bg-[#334454] flex-shrink-0"
-                style={{
-                  width:        clamp(10, 14),
-                  height:       clamp(10, 14),
-                  borderRadius: '3px',
-                  padding:      clamp(2, 3.6),
-                }}
-              />
+            className="bg-[#334454] flex-shrink-0"
+            style={{
+              width:        'clamp(10px, 0.97vw, 18.6px)',
+              height:       'clamp(10px, 0.97vw, 18.6px)',
+              borderRadius: 'clamp(2px, 0.21vw, 4px)',
+            }}
+          />
               <span
-                className="font-geist uppercase text-[#334454]"
-                style={{
-                  fontSize:      clamp(12, 16.2),
-                  lineHeight:    '1.2',
-                  letterSpacing: '-0.32px',
-                }}
-              >
-                GALLERY
-              </span>
+            className="font-sans font-normal uppercase text-[#334454] flex items-center justify-center"
+            style={{
+              fontSize:      'clamp(10px, 0.83vw, 16px)',
+              letterSpacing: 'clamp(-0.24px, -0.02vw, -0.32px)',
+              lineHeight:    1,
+            }}
+          >
+            GALLERY
+          </span>
             </div>
 
             {/* H2 Title — center */}
@@ -736,50 +742,60 @@ const GalleryNew = ({ gallery }) => {
                   borderRadius: clamp(8, 12),
                 }}
               >
-                {/* Sliding label */}
+                {/* Sliding text */}
                 <div
                   className="absolute overflow-hidden"
                   style={{
-                    top:    clamp(10, 14.5),
-                    left:   clamp(10, 22),
-                    width:  clamp(76, 97),
-                    height: clamp(18, 23),
+                    top:    'clamp(10px, 1.01vw, 14.5px)',
+                    left:   'clamp(10px, 1.83vw, 22px)',
+                    width:  'clamp(70px, 6.74vw, 97px)',
+                    height: 'clamp(18px, 1.6vw, 23px)',
                   }}
                 >
                   <div className="flex flex-col transition-transform duration-500 ease-in-out group-hover:-translate-y-1/2">
-                    <span
-                      className="font-sans font-medium text-white whitespace-nowrap flex items-center"
-                      style={{ height: clamp(18, 23), fontSize: clamp(12, 15) }}
-                    >
-                      Learn More
-                    </span>
-                    <span
-                      className="font-sans font-medium text-white whitespace-nowrap flex items-center"
-                      style={{ height: clamp(18, 23), fontSize: clamp(12, 15) }}
-                    >
-                      Learn More
-                    </span>
+                    {['Learn More', 'Learn More'].map((label, i) => (
+                      <span
+                        key={i}
+                        className="font-sans font-medium text-[#EDE7DE] whitespace-nowrap flex items-center"
+                        style={{
+                          height:   'clamp(18px, 1.6vw, 23px)',
+                          fontSize: 'clamp(13px, 1.04vw, 15px)',
+                        }}
+                      >
+                        {label}
+                      </span>
+                    ))}
                   </div>
                 </div>
 
                 {/* Arrow box */}
                 <div
-                  className="absolute bg-white group-hover:bg-[#EDE7DE] transition-colors duration-500 overflow-hidden"
+                  className="absolute bg-[#EDE7DE] group-hover:bg-[#EDE7DE] transition-colors duration-500 overflow-hidden"
                   style={{
-                    right:        clamp(10, 12),
-                    width:        clamp(24, 30),
-                    height:       clamp(24, 30),
-                    borderRadius: clamp(5, 7),
+                    right:        'clamp(8px, 0.83vw, 12px)',
+                    width:        'clamp(22px, 2.08vw, 30px)',
+                    height:       'clamp(22px, 2.08vw, 30px)',
+                    borderRadius: 'clamp(5px, 0.49vw, 7px)',
                   }}
                 >
+                  {/* Arrow slide out */}
                   <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out group-hover:translate-x-full">
-                    <svg viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-black w-[28px] h-[18px]">
-                      <path d="M5 12h20M20 5l7 7-7 7" />
+                    <svg
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                      className="text-[#000000]"
+                      style={{ width: 'clamp(10px, 1.97vw, 24px)', height: 'clamp(10px, 1.97vw, 24px)' }}
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                   </div>
+                  {/* Arrow slide in */}
                   <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out -translate-x-full group-hover:translate-x-0">
-                    <svg viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-black w-[28px] h-[18px]">
-                      <path d="M5 12h20M20 5l7 7-7 7" />
+                    <svg
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                      className="text-[#000000]"
+                      style={{ width: 'clamp(10px, 1.97vw, 24px)', height: 'clamp(10px, 1.97vw, 24px)' }}
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                   </div>
                 </div>
@@ -802,7 +818,7 @@ const GalleryNew = ({ gallery }) => {
       <div className="sm:hidden w-full">
         {/* Header */}
         <div
-          className="w-full border-t border-[#334454]/10"
+          className="w-full "
           style={{ paddingTop: '28px', paddingRight: '4px', paddingLeft: '4px' }}
         >
           <div
@@ -836,7 +852,7 @@ const GalleryNew = ({ gallery }) => {
         </div>
 
         {/* Staggered image gallery — proportionally scaled Figma frame */}
-        <div className="relative w-full" style={{ aspectRatio: '390 / 1509' }}>
+        <div className="relative w-full" style={{ aspectRatio: `390 / ${MOBILE_FRAME_HEIGHT}` }}>
           {MOBILE_CARDS.map((card) => {
             const villa = VILLAS[card.villaIndex];
             if (!villa) return null;
@@ -858,7 +874,7 @@ const GalleryNew = ({ gallery }) => {
           <Link
             href="/gallery"
             className="group absolute flex items-center justify-center bg-[#6B859E] hover:bg-[#4a6074] transition-colors duration-500 overflow-hidden"
-            style={{ top: '93.6%', left: '31.8%', width: '136px', height: '40px', borderRadius: '12px' }}
+            style={{ top: '93.9%', left: '31.8%', width: '136px', height: '40px', borderRadius: '12px' }}
           >
             <span className="font-sans font-medium text-white" style={{ fontSize: '14px', marginLeft: '-20px' }}>Learn More</span>
             <div

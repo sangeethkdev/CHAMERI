@@ -304,7 +304,7 @@ const FAQSection = ({ faqSection }) => {
             <span
               className="font-sans font-normal uppercase text-[#334454] tracking-widest"
               style={{
-                fontSize:   'clamp(10px, 0.97vw, 18.6px)',
+                fontSize:   'clamp(12px, 0.97vw, 18.6px)',
                 lineHeight: '1',
               }}
             >
@@ -378,7 +378,7 @@ const FAQSection = ({ faqSection }) => {
                   <span
                     className="font-sans font-normal text-white"
                     style={{
-                      fontSize:      'clamp(14px, 1.53vw, 29.3px)',
+                      fontSize:      'clamp(18px, 1.53vw, 29.3px)',
                       lineHeight:    'clamp(18px, 1.83vw, 35.1px)',
                       letterSpacing: 'clamp(-0.3px, -0.031vw, -0.58px)',
                     }}
@@ -434,8 +434,8 @@ const FAQSection = ({ faqSection }) => {
                     <p
                       className="font-sans font-normal text-white/85 m-0"
                       style={{
-                        fontSize:      'clamp(12px, 1.25vw, 24px)',
-                        lineHeight:    'clamp(15px, 1.5vw, 28.8px)',
+                        fontSize:      'clamp(16px, 1.25vw, 24px)',
+                        lineHeight:    'clamp(18px, 1.5vw, 28.8px)',
                         letterSpacing: 'clamp(-0.26px, -0.025vw, -0.48px)',
                       }}
                     >

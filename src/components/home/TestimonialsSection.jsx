@@ -702,7 +702,7 @@ const TestimonialsSection = ({ testimonial }) => {
               className="font-sans font-normal uppercase text-[#334454] tracking-wider flex items-center justify-center"
               style={{
                 height:        'clamp(16px, 1.39vw, 20px)',
-                fontSize:      'clamp(10px, 0.83vw, 16px)',
+                fontSize:      'clamp(12px, 0.83vw, 16px)',
                 letterSpacing: 'clamp(-0.24px, -0.02vw, -0.32px)',
                 lineHeight: 1
               }}
@@ -727,7 +727,7 @@ const TestimonialsSection = ({ testimonial }) => {
 
           {/* Sub-heading */}
           <p
-            className="font-sans font-normal text-[#334454]/70 text-center m-0 flex items-center justify-center"
+            className="font-sans font-normal text-[#1C1C1C]/70 text-center m-0 flex items-center justify-center"
             style={{
               fontSize:      'clamp(14px, 1.39vw, 20px)',
               lineHeight:    'clamp(21px, 1.83vw, 26.4px)',
@@ -745,7 +745,11 @@ const TestimonialsSection = ({ testimonial }) => {
       <div
         ref={wrapperRef}
         className="relative overflow-hidden w-full"
-        style={{ height: `${cardH}px` }}
+        style={{
+          height: `${cardH}px`,
+          WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)',
+          maskImage:       'linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)',
+        }}
       >
         {/* Sliding track */}
         <div
@@ -936,7 +940,7 @@ const TestimonialsSection = ({ testimonial }) => {
           }}
         >
           <svg
-            viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"
+            viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5"
             style={{ width: `${18 * arrowScale}px`, height: `${18 * arrowScale}px` }}
           >
             <path d="M19 12H5M12 5l-7 7 7 7" />
@@ -957,7 +961,7 @@ const TestimonialsSection = ({ testimonial }) => {
           }}
         >
           <svg
-            viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"
+            viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5"
             style={{ width: `${18 * arrowScale}px`, height: `${18 * arrowScale}px` }}
           >
             <path d="M5 12h14M12 5l7 7-7 7" />

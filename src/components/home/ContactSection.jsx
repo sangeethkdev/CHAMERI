@@ -870,9 +870,10 @@ const ContactSection = () => {
 
   /* shared input inline style — reused for name, email, phone height, textarea */
   const inputStyle = {
-    fontSize:      'clamp(14px, 1.11vw, 16px)',
+    fontSize:      'clamp(18px, 1.11vw, 18px)',
     height:        'clamp(33.75px, 3.75vw, 54px)',
     paddingBottom: 'clamp(4px, 0.4vw, 6px)',
+    paddingLeft:   'clamp(12px, 0.4vw, 12px)',
   };
 
   return (
@@ -909,7 +910,7 @@ const ContactSection = () => {
           {/* TOP — badge + heading (mobile only) + description — order-1 on mobile */}
           <div
             className="order-1 lg:order-none w-full pt-[28px] pb-[6px] lg:pt-0 lg:pb-0 flex flex-col gap-[7px] lg:gap-[clamp(10px,1.04vw,15px)]"
-            style={{ width: 'clamp(280px, 32vw, 620px)' }}
+            style={{ width: 'clamp(280px, 30vw, 600px)' }}
           >
             {/* Badge */}
             <div
@@ -926,7 +927,7 @@ const ContactSection = () => {
               />
               <span
                 className="font-sans font-normal uppercase text-[#000000] tracking-widest"
-                style={{ fontSize: 'clamp(10px, 1vw, 18px)' }}
+                style={{ fontSize: 'clamp(12px, 1vw, 18px)' }}
               >
                 Contact Us
               </span>
@@ -942,9 +943,9 @@ const ContactSection = () => {
 
             {/* Description */}
             <p
-              className="font-sans font-normal text-[#1C1C1CCC] m-0 leading-[21px] lg:leading-none"
+              className="font-geist font-regular text-[#1C1C1CCC] m-0 leading-[21px] lg:leading-none"
               style={{
-                fontSize:      'clamp(14px, 1.79vw, 40px)',
+                fontSize:      'clamp(14px, 1.739vw, 24px)',
                 letterSpacing: 'clamp(-0.5px, -0.07vw, -2px)',
               }}
             >
@@ -970,7 +971,7 @@ const ContactSection = () => {
                 <span
                   className="font-sans font-normal text-[#000000]"
                   style={{
-                    fontSize:      'clamp(14px, 1.39vw, 22px)',
+                    fontSize:      'clamp(16px, 1.39vw, 22px)',
                     lineHeight:    '1',
                     letterSpacing: 'clamp(-0.5px, -0.07vw, -1px)',
                   }}
@@ -980,7 +981,7 @@ const ContactSection = () => {
               </div>
               <a
                 href="tel:+919876543210"
-                className="font-sans font-normal text-[#6B859E] hover:underline transition-all"
+                className="font-sans font-normal text-[#6B859E]  transition-all"
                 style={{
                   fontSize:    'clamp(13.3px, 1.18vw, 28px)',
                   paddingLeft: 'clamp(20px, 0.95vw, 34.6px)',
@@ -1005,7 +1006,7 @@ const ContactSection = () => {
                 <span
                   className="font-sans font-normal text-[#000000]"
                   style={{
-                    fontSize:      'clamp(14px, 1.39vw, 20px)',
+                    fontSize:      'clamp(16px, 1.39vw, 20px)',
                     lineHeight:    '1',
                     letterSpacing: 'clamp(-0.5px, -0.07vw, -1px)',
                   }}
@@ -1015,7 +1016,7 @@ const ContactSection = () => {
               </div>
               <a
                 href="mailto:Chameri@gmail.com"
-                className="font-sans font-normal text-[#6B859E] hover:underline transition-all"
+                className="font-sans font-normal text-[#6B859E] transition-all"
                 style={{
                   fontSize:    'clamp(14px, 1.14vw, 28.3px)',
                   paddingLeft: 'clamp(20px, 0.95vw, 34.6px)',
@@ -1082,7 +1083,7 @@ const ContactSection = () => {
               {/* Phone */}
               <div
                 className="flex items-center border-b border-[#000000] bg-transparent w-full"
-                style={{ height: 'clamp(33.75px, 3.75vw, 54px)' }}
+                style={{ height: 'clamp(33.75px, 3.75vw, 54px)',paddingBottom: 'clamp(4px, 0.4vw, 6px)',paddingLeft:   'clamp(12px, 0.4vw, 12px)', }}
               >
                 <PhoneInput
                   international defaultCountry="IN"
@@ -1144,28 +1145,30 @@ const ContactSection = () => {
                 <div
                   className="absolute bg-[#EDE7DE] group-hover:bg-[#EDE7DE] transition-colors duration-500 overflow-hidden"
                   style={{
-                    right:        'clamp(8.5px, 0.83vw, 12px)',
-                    width:        'clamp(21.3px, 2.08vw, 30px)',
-                    height:       'clamp(21.3px, 2.08vw, 30px)',
+                    right:        'clamp(8px, 0.83vw, 12px)',
+                    width:        'clamp(22px, 2.08vw, 30px)',
+                    height:       'clamp(22px, 2.08vw, 30px)',
                     borderRadius: 'clamp(5px, 0.49vw, 7px)',
                   }}
                 >
+                  {/* Arrow slide out */}
                   <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out group-hover:translate-x-full">
                     <svg
-                      viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                      className="text-black"
-                      style={{ width: 'clamp(10px, 1.97vw, 22px)', height: 'clamp(10px, 1.97vw, 22px)' }}
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                      className="text-[#000000]"
+                      style={{ width: 'clamp(10px, 1.97vw, 24px)', height: 'clamp(10px, 1.97vw, 24px)' }}
                     >
-                      <path d="M8 12h18M20 5l7 7-7 7" />
+                      <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                   </div>
+                  {/* Arrow slide in */}
                   <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out -translate-x-full group-hover:translate-x-0">
                     <svg
-                      viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                      className="text-black"
-                      style={{ width: 'clamp(10px, 1.97vw, 22px)', height: 'clamp(10px, 1.97vw,22px)' }}
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                      className="text-[#000000]"
+                      style={{ width: 'clamp(10px, 1.97vw, 24px)', height: 'clamp(10px, 1.97vw, 24px)' }}
                     >
-                      <path d="M8 12h18M20 5l7 7-7 7" />
+                      <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                   </div>
                 </div>

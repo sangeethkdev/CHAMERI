@@ -458,7 +458,7 @@ const VillaPlansSection = ({ villaPlan }) => {
           <h2
             className="font-roundo font-medium text-[#000000] text-center m-0"
             style={{
-              fontSize:      'clamp(36px, 4.17vw, 70px)',
+              fontSize:      'clamp(32px, 4.17vw, 70px)',
               lineHeight:    'clamp(40px, 4.59vw, 66.14px)',
               letterSpacing: 'clamp(-1.5px, -0.21vw, -3.05px)',
               width:         'clamp(300px, 31.56vw, 520px)',
@@ -631,7 +631,7 @@ const VillaPlansSection = ({ villaPlan }) => {
                     {['Learn More', 'Learn More'].map((label, i) => (
                       <span
                         key={i}
-                        className="font-sans font-medium text-white whitespace-nowrap flex items-center"
+                        className="font-sans font-medium text-[#EDE7DE] whitespace-nowrap flex items-center"
                         style={{
                           height:   'clamp(18px, 1.6vw, 23px)',
                           fontSize: 'clamp(13px, 1.04vw, 15px)',
@@ -645,7 +645,7 @@ const VillaPlansSection = ({ villaPlan }) => {
 
                 {/* Arrow box */}
                 <div
-                  className="absolute bg-white group-hover:bg-[#EDE7DE] transition-colors duration-500 overflow-hidden"
+                  className="absolute bg-[#EDE7DE] group-hover:bg-[#EDE7DE] transition-colors duration-500 overflow-hidden"
                   style={{
                     right:        'clamp(8px, 0.83vw, 12px)',
                     width:        'clamp(22px, 2.08vw, 30px)',
@@ -656,21 +656,21 @@ const VillaPlansSection = ({ villaPlan }) => {
                   {/* Arrow slide out */}
                   <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out group-hover:translate-x-full">
                     <svg
-                      viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                      className="text-black"
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                      className="text-[#000000]"
                       style={{ width: 'clamp(10px, 1.97vw, 24px)', height: 'clamp(10px, 1.97vw, 24px)' }}
                     >
-                      <path d="M5 12h20M20 5l7 7-7 7" />
+                      <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                   </div>
                   {/* Arrow slide in */}
                   <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out -translate-x-full group-hover:translate-x-0">
                     <svg
-                      viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                      className="text-black"
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                      className="text-[#000000]"
                       style={{ width: 'clamp(10px, 1.97vw, 24px)', height: 'clamp(10px, 1.97vw, 24px)' }}
                     >
-                      <path d="M5 12h20M20 5l7 7-7 7" />
+                      <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                   </div>
                 </div>
