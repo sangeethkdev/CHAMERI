@@ -456,7 +456,7 @@ const VillaPlansSection = ({ villaPlan }) => {
           }}
         >
           <h2
-            className="font-roundo font-medium text-black text-center m-0"
+            className="font-roundo font-medium text-[#000000] text-center m-0"
             style={{
               fontSize:      'clamp(36px, 4.17vw, 70px)',
               lineHeight:    'clamp(40px, 4.59vw, 66.14px)',
@@ -468,7 +468,7 @@ const VillaPlansSection = ({ villaPlan }) => {
           </h2>
 
           <p
-            className="font-sans font-normal text-black/60 text-center m-0"
+            className="font-sans font-normal text-[#333333] text-center m-0"
             style={{
               fontSize:   'clamp(14px, 1.39vw, 20px)',
               lineHeight: 'clamp(20px, 1.83vw, 26.4px)',
@@ -511,7 +511,7 @@ const VillaPlansSection = ({ villaPlan }) => {
                   : 'bg-[#6B859E] text-white/90 hover:bg-[#5b738a]'}
               `}
               style={{
-                width:        'clamp(120px, 12.63vw, 181.9px)',
+                width:        'clamp(120px, 12.33vw, 170.9px)',
                 height:       'clamp(36px, 3.38vw, 48.72px)',
                 paddingTop:   'clamp(8px, 0.87vw, 12.53px)',
                 paddingBottom:'clamp(8px, 0.87vw, 12.53px)',
@@ -547,12 +547,12 @@ const VillaPlansSection = ({ villaPlan }) => {
                   : 'bg-[#6B859E] text-white/90 hover:bg-[#5b738a]'}
               `}
               style={{
-                width:        'clamp(120px, 13.32vw, 191.84px)',
+                width:        'clamp(140px, 14.32vw, 225.84px)',
                 height:       'clamp(36px, 3.38vw, 48.72px)',
                 paddingTop:   'clamp(8px, 0.87vw, 12.53px)',
                 paddingBottom:'clamp(8px, 0.87vw, 12.53px)',
-                paddingLeft:  'clamp(12px, 1.97vw, 20.92px)',
-                paddingRight: 'clamp(12px, 1.97vw, 20.92px)',
+                paddingLeft:  'clamp(14px, 2.27vw, 24.92px)',
+                paddingRight: 'clamp(14px, 2.27vw, 24.92px)',
                 borderRadius: 'clamp(6px, 0.58vw, 8.35px)',
                 gap: activeTab === 'villaments' ? 'clamp(6px, 0.97vw, 13.92px)' : '0',
               }}

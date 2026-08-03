@@ -468,17 +468,18 @@ export default function ContactPageForm() {
        * paddingBottom 51px  → 3.542vw   floor 30px  ceil 51px
        * paddingLeft   74px  → 5.139vw   floor 20px  ceil 74px
        * paddingRight  89px  → 6.181vw   floor 20px  ceil 89px
-       * gap (col↔col) 0px desktop, 40px mobile — handled by Tailwind lg:gap-0
+       * gap (col↔col) 0px desktop, 28px mobile — Tailwind gap-[28px] lg:gap-0;
+       * desktop spacing instead comes from `justify-between` pushing the
+       * two fixed-width columns to opposite ends of the row.
        */}
       <div
-        className="flex flex-col lg:flex-row justify-between w-full mx-auto"
+        className="flex flex-col lg:flex-row justify-between w-full mx-auto gap-[28px] lg:gap-0"
         style={{
           maxWidth:      'clamp(300px, 100vw, 1920px)',
           paddingTop:    'clamp(40px, 4.167vw, 60px)',
           paddingBottom: 'clamp(30px, 3.542vw, 51px)',
           paddingLeft:   'clamp(20px, 5.139vw, 74px)',
           paddingRight:  'clamp(20px, 6.181vw, 89px)',
-          gap:           'clamp(40px, 4.167vw, 60px)',
         }}
       >
 
@@ -488,7 +489,7 @@ export default function ContactPageForm() {
          * minH: 541px → 37.569vw   floor 380px  ceil 541px
          * ══════════════════════════════════════════════════════════════════ */}
         <div
-          className="flex flex-col justify-between"
+          className="contents lg:flex lg:flex-col lg:justify-between flex-shrink-0 w-full"
           style={{
             width:     'clamp(300px, 39.597vw, 827px)',
             minHeight: 'clamp(380px, 37.569vw, 541px)',
@@ -499,9 +500,14 @@ export default function ContactPageForm() {
            * Inner padded container
            * paddingTop/Bottom : 19px → 1.319vw   floor 12px  ceil 19px
            * paddingLeft/Right : 18px → 1.250vw   floor 12px  ceil 18px
+           *
+           * `contents` on mobile — this box (and its padding) disappears so
+           * the TOP/BOTTOM blocks below promote into the outer row's flex
+           * flow and can be reordered around the form via `order-*`. At
+           * lg+ it reverts to a normal padded flex column, unchanged.
            */}
           <div
-            className="flex flex-col justify-between h-full"
+            className="contents lg:flex lg:flex-col lg:justify-between lg:h-full"
             style={{
               paddingTop:    'clamp(12px, 1.319vw, 19px)',
               paddingBottom: 'clamp(8px,  0.833vw, 12px)',
@@ -510,9 +516,9 @@ export default function ContactPageForm() {
             }}
           >
 
-            {/* ── TOP: Badge + Heading ─────────────────────────────────── */}
+            {/* ── TOP: Badge + Heading — order-1 on mobile ─────────────── */}
             <div
-              className="flex flex-col"
+              className="order-1 lg:order-none flex flex-col"
               style={{ gap: 'clamp(12px, 1.111vw, 16px)' }}
             >
 
@@ -593,9 +599,9 @@ export default function ContactPageForm() {
               </div>
             </div>
 
-            {/* ── BOTTOM: Contact details + socials ────────────────────── */}
+            {/* ── BOTTOM: Contact details + socials — order-3 on mobile, so it renders after the form ── */}
             <div
-              className="flex flex-col"
+              className="order-3 lg:order-none flex flex-col"
               style={{
                 gap:          'clamp(12px, 1.250vw, 18px)',
                 marginBottom: 'clamp(0px, 2.083vw, 30px)',
@@ -642,7 +648,7 @@ export default function ContactPageForm() {
                         letterSpacing: '-1px',
                       }}
                     >
-                      Phone number
+                      Phone Number:
                     </span>
                   </div>
                   <a
@@ -683,7 +689,7 @@ export default function ContactPageForm() {
                         letterSpacing: '-1px',
                       }}
                     >
-                      Drop us a Email at
+                      Drop Us A Email At:
                     </span>
                   </div>
                   <a
@@ -733,7 +739,7 @@ export default function ContactPageForm() {
          * paddingTop: 28px → 1.944vw  floor 16px  ceil 28px
          * ══════════════════════════════════════════════════════════════════ */}
         <div
-          className="flex flex-col justify-center"
+          className="contents lg:flex lg:flex-col lg:justify-center flex-shrink-0 w-full"
           style={{
             width:      'clamp(320px, 44.097vw, 735px)',
             minHeight:  'clamp(400px, 39.028vw, 562px)',
@@ -750,12 +756,12 @@ export default function ContactPageForm() {
            */}
           <form
             onSubmit={(e) => e.preventDefault()}
-            className="flex flex-col w-full"
+            className="order-2 lg:order-none flex flex-col w-full"
             style={{
               paddingTop:    'clamp(16px, 1.875vw, 27px)',
               paddingBottom: 'clamp(16px, 1.875vw, 27px)',
-              paddingLeft:   'clamp(20px, 3.819vw, 55px)',
-              paddingRight:  'clamp(20px, 3.819vw, 55px)',
+              paddingLeft:   'clamp(0px, 2.519vw, 55px)',
+              paddingRight:  'clamp(0px, 2.519vw, 55px)',
               gap:           'clamp(20px, 2.778vw, 40px)',
               borderRadius:  'clamp(4px, 0.417vw, 6px)',
             }}
@@ -894,7 +900,7 @@ export default function ContactPageForm() {
                   }}
                 >
                   <div className="flex flex-col transition-transform duration-500 ease-in-out group-hover:-translate-y-1/2">
-                    {['Contact Us', 'Contact Us'].map((label, i) => (
+                    {['Contact us', 'Contact us'].map((label, i) => (
                       <span
                         key={i}
                         className="font-sans font-medium text-[#EDE7DE] whitespace-nowrap flex items-center"

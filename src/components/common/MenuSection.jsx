@@ -41,7 +41,7 @@ const NAV_LINKS = [
   { label: 'Kiwano Villament', href: '/kiwano-villament' },
   { label: 'Our Service',      href: '/services' },
   { label: 'Gallery',          href: '/gallery' },
-  { label: 'Testimonial',      href: '/#testimonial' },
+  { label: 'Testimonial',      href: '/testimonial' },
   { label: 'Contact Us',       href: '/contact' },
 ];
 
@@ -88,6 +88,24 @@ const SOCIALS = [
   },
 ];
 
+const MOBILE_NAV_LINKS = [
+  { label: 'Home',        href: '/' },
+  { label: 'About us',    href: '/about' },
+  { label: 'Projects',    href: '/project-list' },
+  { label: 'Our Service', href: '/services' },
+  { label: 'Gallery',     href: '/gallery' },
+  { label: 'Testimonial', href: '/testimonial' },
+  { label: 'Contact Us',  href: '/contact' },
+];
+
+// Order/sizes per Figma mobile spec: Instagram 22×22, WhatsApp 24×24, Facebook 24×24, YouTube 30×30
+const MOBILE_SOCIALS = [
+  { label: 'Instagram', width: '22px', height: '22px', svg: SOCIALS[0].svg },
+  { label: 'WhatsApp',  width: '24px', height: '24px', svg: SOCIALS[3].svg },
+  { label: 'Facebook',  width: '24px', height: '24px', svg: SOCIALS[1].svg },
+  { label: 'YouTube',   width: '30px', height: '30px', svg: SOCIALS[2].svg },
+];
+
 export default function MenuSection({ open = false, onClose }) {
   const navRef = useRef(null);
 
@@ -103,6 +121,18 @@ export default function MenuSection({ open = false, onClose }) {
     );
 
     return () => tween.kill();
+  }, [open]);
+
+  // Lock background page scroll while the overlay is open.
+  useEffect(() => {
+    if (!open) return;
+
+    const { overflow } = document.body.style;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = overflow;
+    };
   }, [open]);
 
   return (
@@ -157,7 +187,7 @@ export default function MenuSection({ open = false, onClose }) {
         }
       `}</style>
 
-      <div style={{ display: 'flex', width: '100%', height: '100%' }}>
+      <div className="hidden sm:flex" style={{ width: '100%', height: '100%' }}>
 
         {/* ── LEFT: content panel ────────────────────────────────────────── */}
         <div
@@ -352,6 +382,167 @@ export default function MenuSection({ open = false, onClose }) {
             sizes="clamp(50vw, 25.694vw, 370px)"
             style={{ objectFit: 'cover' }}
           />
+        </div>
+      </div>
+
+      {/* ── MOBILE LAYOUT (< sm) ────────────────────────────────────────────
+       * Figma (390×777 frame):
+       *   Page padding : top 20px, left/right 18px, bottom 16px
+       *   Nav pill     : 370×74 — logo centered, close (X) 29.41×29.41 at
+       *                  top 22.29px / right 12.74px (mirrors NewNavbar's
+       *                  hamburger slot)
+       *   Nav rows     : 7 rows, 66px tall, "[0x]" index + Roundo label,
+       *                  bottom border #00000033, 14px gap between the two
+       *   Footer row   : copyright + social icons, pinned to the bottom
+       */}
+      <div
+        className="flex sm:hidden flex-col"
+        style={{
+          width:         '100%',
+          height:        '100%',
+          background:    '#FFFFFF',
+          paddingTop:    '20px',
+          paddingLeft:   '18px',
+          paddingRight:  '18px',
+          paddingBottom: '16px',
+        }}
+      >
+        {/* Top pill — same glass-pill navbar treatment used across the site
+         * (see NewNavbar's mobile pill), with a dark logo/close icon since
+         * this pill sits on a solid white page instead of a photo hero. */}
+        <div
+          style={{
+            position:     'relative',
+            width:        '100%',
+            maxWidth:     '370px',
+            height:       '74px',
+            flexShrink:   0,
+            borderRadius: '8px',
+            border:       '2px solid transparent',
+            background:
+              'linear-gradient(110.72deg, rgba(255, 255, 255, 0.36) 1.21%, rgba(196, 196, 196, 0.06) 100%) padding-box, ' +
+              'linear-gradient(110.21deg, rgba(255, 255, 255, 0.35) 2.78%, rgba(107, 133, 158, 0.455) 38.77%, rgba(107, 133, 158, 0.476) 66.35%, rgba(255, 255, 255, 0.35) 100%) border-box',
+            backdropFilter:       'blur(30px)',
+            WebkitBackdropFilter: 'blur(30px)',
+          }}
+        >
+          <Link
+            href="/"
+            onClick={onClose}
+            style={{
+              position:  'absolute',
+              top:       '50%',
+              left:      '50%',
+              transform: 'translate(-50%, -50%)',
+              width:     '48px',
+              height:    '63.2px',
+            }}
+          >
+            <Image src="/icons/logo (8).svg" alt="Chameri Logo" fill sizes="60px" style={{ objectFit: 'contain' }} />
+          </Link>
+
+          <button
+            onClick={onClose}
+            aria-label="Close menu"
+            style={{
+              position:       'absolute',
+              top:            '22.29px',
+              right:          '12.74px',
+              width:          '29.41px',
+              height:         '29.41px',
+              display:        'flex',
+              alignItems:     'center',
+              justifyContent: 'center',
+              background:     'none',
+              border:         'none',
+              padding:        0,
+              cursor:         'pointer',
+            }}
+          >
+            <svg width="17.16" height="17.16" viewBox="0 0 24 24" fill="none">
+              <line x1="1" y1="1" x2="23" y2="23" stroke="#334454" strokeWidth="2.2" strokeLinecap="round" />
+              <line x1="23" y1="1" x2="1" y2="23" stroke="#334454" strokeWidth="2.2" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Nav rows */}
+        <nav style={{ display: 'flex', flexDirection: 'column', marginTop: '16px' }}>
+          {MOBILE_NAV_LINKS.map((link, i) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              onClick={onClose}
+              style={{
+                display:        'flex',
+                alignItems:     'center',
+                gap:            '14px',
+                height:         '66px',
+                borderBottom:   '1px solid #00000033',
+                textDecoration: 'none',
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: 500,
+                  fontSize:   '10.59px',
+                  lineHeight: '16.81px',
+                  color:      '#646464',
+                  flexShrink: 0,
+                }}
+              >
+                {`[0${i + 1}]`}
+              </span>
+              <span
+                style={{
+                  fontFamily:    'Roundo, sans-serif',
+                  fontWeight:    400,
+                  fontSize:      'clamp(24px, 7.6vw, 29.76px)',
+                  lineHeight:    1,
+                  letterSpacing: '-0.88px',
+                  color:         '#212325',
+                }}
+              >
+                {link.label}
+              </span>
+            </Link>
+          ))}
+        </nav>
+
+        {/* Footer — copyright + socials */}
+        <div
+          style={{
+            display:        'flex',
+            alignItems:     'center',
+            justifyContent: 'space-between',
+            marginTop:      'auto',
+            paddingTop:     '24px',
+          }}
+        >
+          <span
+            style={{
+              fontFamily:    'Instrument Sans, sans-serif',
+              fontWeight:    400,
+              fontSize:      '14px',
+              lineHeight:    '12px',
+              letterSpacing: '-0.14px',
+              color:         '#000000',
+            }}
+          >
+            © Chameri pvt limited
+          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '9px', color: '#141414' }}>
+            {MOBILE_SOCIALS.map((social) => (
+              <span
+                key={social.label}
+                aria-label={social.label}
+                style={{ width: social.width, height: social.height, flexShrink: 0 }}
+              >
+                {social.svg}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </div>

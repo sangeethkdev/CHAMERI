@@ -110,7 +110,7 @@ const AboutSection = ({ aboutUs }) => {
           >
             {/* Dot */}
             <div
-              className="bg-[#1A1A1A] rounded-[3px] flex-shrink-0"
+              className="bg-[#334454] rounded-[3px] flex-shrink-0"
               style={{
                 width:   'clamp(10px, 0.972vw, 18px)', // 14px @ 1440px
                 height:  'clamp(10px, 0.972vw, 18px)',
@@ -119,7 +119,7 @@ const AboutSection = ({ aboutUs }) => {
             />
             {/* Label */}
             <span
-              className="font-sans font-normal uppercase text-[#1A1A1A] tracking-[-0.32px] flex items-center justify-center"
+              className="font-sans font-normal uppercase text-[#000000] tracking-[-0.32px] flex items-center justify-center"
               style={{
                 fontSize:   'clamp(11px, 1.389vw, 20px)', // 16.2px @ 1440px
                 lineHeight: '1.2',
@@ -187,11 +187,11 @@ const AboutSection = ({ aboutUs }) => {
             }}
           >
             <div
-              className="bg-[#1A1A1A] rounded-[3px] flex-shrink-0"
+              className="bg-[#334454] rounded-[3px] flex-shrink-0"
               style={{ width: '10px', height: '10px' }}
             />
             <span
-              className="font-sans font-normal uppercase text-[#1A1A1A] tracking-[-0.32px] flex items-center justify-center"
+              className="font-sans font-normal uppercase text-[#000000] tracking-[-0.32px] flex items-center justify-center"
               style={{ fontSize: '11px', lineHeight: '1.2' }}
             >
               About Us
@@ -245,7 +245,7 @@ const AboutSection = ({ aboutUs }) => {
             <div key={i} className="flex flex-col items-start w-[45%] md:w-auto">
               {/* Stat value */}
               <span
-                className="font-roundo font-medium text-[#1A1A1A]"
+                className="font-roundo font-medium text-[#192026]"
                 style={{
                   fontSize:      'clamp(28px, 3.125vw, 45px)', // 45px @ 1440px
                   lineHeight:    '1',
@@ -256,7 +256,7 @@ const AboutSection = ({ aboutUs }) => {
               </span>
               {/* Stat label */}
               <span
-                className="font-sans font-normal text-black/60 tracking-[-0.32px]"
+                className="font-sans font-normal text-[#333333] tracking-[-0.32px]"
                 style={{
                   fontSize:   'clamp(12px, 1.111vw, 16px)', // 16px @ 1440px
                   lineHeight: 'clamp(16px, 1.35vw, 19.44px)',

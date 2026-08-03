@@ -564,7 +564,7 @@ import Link from 'next/link';
 const QUICK_LINKS = [
   { label: 'Home',       href: '/'         },
   { label: 'About Us',  href: '/about'    },
-  { label: 'Project',   href: '/kiwano'   },
+  { label: 'Project',   href: '/project-list'   },
   { label: 'Service',   href: '/services' },
   { label: 'Gallery',   href: '/gallery'  },
   { label: 'Contact Us',href: '/contact'  },
@@ -700,7 +700,9 @@ const Footer = () => {
                   Address
                 </h3>
                 <a
-                  href="#"
+                  href="https://www.google.com/maps?q=Chameri+Builders+%26+Developers,+27%2F205+Madapeedika,+Paral+(PO),+Thalassery,+Kannur,+Kerala+670601&ll=11.7485921,75.5322851&z=17"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="font-sans font-normal text-[#FFFFFF] hover:text-[#EDE7DE]/80 transition-colors"
                   style={{
                     fontSize:   'clamp(14px, 1.04vw, 20px)',
