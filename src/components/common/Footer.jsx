@@ -601,21 +601,49 @@ const Footer = () => {
               On mobile it renders AFTER the links panel (order-2), with a
               top divider instead of the desktop's right-side border. */}
           <div
-            className="relative flex-shrink-0 order-2 md:order-none border-t border-white/10 md:border-t-0 md:border-r w-full md:w-[30.6%]"
-            style={{ height: 'clamp(200px, 26.1vw, 501px)' }}
+            className="footer-logo-panel relative flex-shrink-0 order-2 md:order-none w-full md:w-[30.6%]"
+            style={{
+              // Mobile (Figma 375 frame): 358×255 band with 0.75px #DADADA
+              // rules top and bottom. 358/375 = 95.47%, centred.
+              width:        '95.47%',
+              marginInline: 'auto',
+              height:       'clamp(255px, 68vw, 340px)',
+              borderTop:    '0.75px solid #DADADA',
+              borderBottom: '0.75px solid #DADADA',
+            }}
           >
-            {/* Logo wrapper — centered on mobile, absolutely placed on md+ */}
+            {/* Logo wrapper — centred both axes on mobile (the Figma offsets
+                36.09/35.91 top/bottom and 109.5/110.5 left/right are dead
+                centre), absolutely placed on md+. */}
             <div
-              className="absolute left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0"
+              className="footer-logo-wrap absolute"
               style={{
-                width:  'clamp(78px, 9.57vw, 184px)',
-                height: 'clamp(104px, 12.7vw, 244px)',
-                top:    'clamp(34px, 6.68vw, 128.6px)',
+                width:     'clamp(138px, 36.8vw, 200px)',
+                height:    'clamp(183px, 48.8vw, 265px)',
+                top:       '50%',
+                left:      '50%',
+                transform: 'translate(-50%, -50%)',
               }}
             >
-              {/* md+ left position injected via <style> to avoid SSR mismatch */}
+              {/* Desktop geometry injected via <style> so the inline values
+                  above can carry the mobile spec without an SSR mismatch. */}
               <style>{`
                 @media (min-width: 768px) {
+                  .footer-logo-panel {
+                    width: 30.6% !important;
+                    margin-inline: 0 !important;
+                    height: clamp(180px, 23.5vw, 450px) !important;
+                    border-top: 0 !important;
+                    border-bottom: 0 !important;
+                    border-right: 1px solid rgba(255,255,255,0.1) !important;
+                  }
+                  .footer-logo-wrap {
+                    width:  clamp(78px, 9.57vw, 184px) !important;
+                    height: clamp(104px, 12.7vw, 244px) !important;
+                    top:    clamp(34px, 5.24vw, 118.6px) !important;
+                    left:   auto !important;
+                    transform: none !important;
+                  }
                   .footer-logo { left: clamp(102px, 9.96vw, 191.5px) !important; transform: none !important; }
                 }
               `}</style>
@@ -630,26 +658,29 @@ const Footer = () => {
               desktop-only treatment. */}
           <div
             className="relative flex-1 order-1 md:order-none md:border md:border-white/10"
-            style={{ minHeight: 'clamp(100px, 28.1vw, 533px)' }}
+            style={{ minHeight: 'clamp(100px, 22vw, 380px)' }}
           >
 
             {/* md+ absolute positioning for links grid */}
             <style>{`
               @media (min-width: 768px) {
                 .footer-links-grid {
-                  position: absolute;
-                  padding-top: 0 !important;
-                  padding-left: 0 !important;
-                  top:  clamp(1.9px, 3.01vw, 61.7px);
-                  left: clamp(51.9px, 5.05vw, 97.3px);
-                  gap:  clamp(45px, 4.79vw, 118.7px) !important;
+                  /* Kept in normal flow (not absolute) so the panel's height
+                     follows its content. While it was absolute, the panel height
+                     came solely from a magic minHeight that had no relation to the
+                     content, and the bottom-anchored socials overlapped the links
+                     around 768-1000px. padding-bottom reserves the socials' band. */
+                  padding-top:    clamp(16px, 2.3vw, 48px) !important;
+                  padding-left:   clamp(51.9px, 5.05vw, 97.3px) !important;
+                  padding-bottom: clamp(58px, 4.9vw, 92px) !important;
+                  gap:            clamp(45px, 4.79vw, 118.7px) !important;
                 }
               }
               @media (min-width: 768px) {
                 .footer-socials {
                   position: absolute;
                   margin: 0 !important;
-                  bottom: clamp(23.1px, 2.25vw, 43.3px);
+                  bottom: clamp(16px, 2vw, 38px);
                   right:  clamp(47.1px, 4.59vw, 88.3px);
                 }
               }
@@ -774,7 +805,7 @@ const Footer = () => {
         `}</style>
         <div
           className="flex justify-center md:justify-end items-center border-t border-white/10"
-          style={{ padding: 'clamp(14px, 1.37vw, 25px) 0' }}
+          style={{ padding: 'clamp(12px, 1.15vw, 21px) 0' }}
         >
           <a
             href="#"

@@ -189,28 +189,45 @@ export default function MenuSection({ open = false, onClose }) {
 
       <div className="hidden sm:flex" style={{ width: '100%', height: '100%' }}>
 
-        {/* ── LEFT: content panel ────────────────────────────────────────── */}
+        {/* ── LEFT: content panel ──────────────────────────────────────────
+         * Vertical rhythm is driven by dvh, not vw: the panel is 100dvh tall,
+         * so sizing it off viewport *width* left a large dead gap at the bottom
+         * on any aspect ratio away from the 1440×900 baseline (e.g. 1024×690).
+         * Per the Figma spec the nav block sits ~centred (183px above / 192px
+         * below at 900px tall). The close button stays in normal flow so the
+         * nav's auto margins centre it in the space *below* the button — an
+         * absolutely positioned button is out of flow, so centring ignored it
+         * and the first link rode up underneath it on wide, short windows.
+         */}
         <div
           style={{
-            position:   'relative',
-            flex:       '0 0 clamp(495px, 50.548vw, 727.89px)',
-            height:     '100%',
-            background: '#EDE7DE',
+            position:      'relative',
+            flex:          '0 0 clamp(495px, 50.548vw, 727.89px)',
+            height:        '100%',
+            background:    '#EDE7DE',
+            display:       'flex',
+            flexDirection: 'column',
+            paddingLeft:   'clamp(87px, 5.764vw, 108px)',
+            paddingRight:  'clamp(24px, 2.5vw, 48px)',
+            paddingTop:    'clamp(30px, 5.556vw, 50px)',
+            paddingBottom: 'clamp(32px, 6dvh, 80px)',
+            boxSizing:     'border-box',
+            overflowY:     'auto',
           }}
         >
           {/* ── CLOSE BUTTON ──────────────────────────────────────────────
            * Dark box (38.9×38, bg #334454, borderRadius 8px) wraps ONLY the
            * X icon. The "CLOSE" label overflows outside the box, to the
            * right, sitting on the cream background — matching the design.
-           * top: 80px → clamp(55px, 5.556vw, 80px)
-           * left: 97px → clamp(67px, 6.736vw, 97px)
+           * Sits in normal flow (the panel's padding supplies its top/left
+           * offset) so the nav below can centre in the space that remains,
+           * instead of sliding underneath an out-of-flow button.
+           * marginLeft nudges the dark box a few px right of the nav text.
            */}
           <button
             onClick={onClose}
             style={{
-              position:       'absolute',
-              top:            'clamp(30px, 5.556vw, 50px)',
-              left:           'clamp(67px, 6.736vw, 110px)',
+              marginLeft:     'clamp(6px, 0.97vw, 14px)',
               height:         'clamp(26px, 2.639vw, 38px)',
               width:          'clamp(27px, 2.701vw, 38.9px)',
               display:        'flex',
@@ -270,31 +287,33 @@ export default function MenuSection({ open = false, onClose }) {
           </button>
 
           {/* ── NAV + SOCIAL ROW ──────────────────────────────────────────
-           * top: 183px → clamp(126px, 12.708vw, 183px)
-           * left: 83px → clamp(57px, 5.764vw, 83px)
-           * height: 525px → clamp(362px, 36.458vw, 525px)
+           * Auto margins centre the block in the leftover space below the
+           * (absolutely positioned) close button, matching the Figma balance
+           * without pinning it to a vw-derived offset.
            * gap: 39px → clamp(27px, 2.708vw, 39px)
            */}
           <div
             style={{
-              position:   'absolute',
-              top:        'clamp(106px, 12.708vw, 123px)',
-              left:       'clamp(87px, 5.764vw, 108px)',
-              height:     'clamp(202px, 36.458vw, 935px)',
-              display:    'flex',
-              alignItems: 'flex-end',
-              gap:        'clamp(27px, 2.708vw, 39px)',
+              marginTop:    'auto',
+              marginBottom: 'auto',
+              display:      'flex',
+              alignItems:   'flex-end',
+              gap:          'clamp(27px, 2.708vw, 39px)',
+              flexShrink:   0,
             }}
           >
-            {/* NAV COLUMN — width: 370px → clamp(255px, 25.694vw, 370px) */}
+            {/* NAV COLUMN — width: 370px → clamp(255px, 25.694vw, 370px)
+             * Height is intrinsic (rows + row-gap) so the column always hugs
+             * its content; the gap scales with viewport height so the block
+             * keeps the design's proportions on short and tall screens alike.
+             */}
             <nav
               ref={navRef}
               style={{
-                width:          'clamp(255px, 25.694vw, 370px)',
-                height:         'clamp(100px, 36.458vw, 935px)',
-                display:        'flex',
-                flexDirection:  'column',
-                justifyContent: 'space-between',
+                width:         'clamp(255px, 25.694vw, 370px)',
+                display:       'flex',
+                flexDirection: 'column',
+                rowGap:        'clamp(4px, 2.1dvh, 19px)',
               }}
             >
               {NAV_LINKS.map((link) => (
@@ -304,7 +323,6 @@ export default function MenuSection({ open = false, onClose }) {
                   onClick={onClose}
                   className="menu-item chameri-menu-link"
                   style={{
-                    height:         'clamp(28px, 3.847vw, 49px)',
                     display:        'flex',
                     alignItems:     'center',
                     gap:            'clamp(10px, 0.972vw, 14px)',
@@ -312,7 +330,7 @@ export default function MenuSection({ open = false, onClose }) {
                     fontFamily:     'Roundo, sans-serif',
                     fontWeight:     400,
                     fontSize:       'clamp(31px, 3.125vw, 55px)',
-                    lineHeight:     'clamp(46px, 4.593vw, 66.14px)',
+                    lineHeight:     1.2,
                     textDecoration: 'none',
                     whiteSpace:     'nowrap',
                     width:          'fit-content',

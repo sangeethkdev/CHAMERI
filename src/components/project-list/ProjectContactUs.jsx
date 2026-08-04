@@ -96,6 +96,7 @@ const ProjectContactUs = () => {
     fontSize:      'clamp(14px, 1.11vw, 16px)',
     height:        'clamp(33.75px, 3.75vw, 54px)',
     paddingBottom: 'clamp(4px, 0.4vw, 6px)',
+    paddingLeft: 'clamp(8px, 2.56vw, 15px)',
   };
 
   return (
@@ -132,7 +133,7 @@ const ProjectContactUs = () => {
           {/* TOP — badge + heading (mobile only) + description — order-1 on mobile */}
           <div
             className="order-1 lg:order-none w-full pt-[28px] pb-[6px] lg:pt-0 lg:pb-0 flex flex-col gap-[7px] lg:gap-[clamp(10px,1.04vw,15px)]"
-            style={{ width: 'clamp(280px, 32vw, 620px)' }}
+            style={{ width: 'clamp(200px, 32vw, 650px)' }}
           >
             {/* Badge */}
             <div
@@ -167,7 +168,7 @@ const ProjectContactUs = () => {
             <p
               className="font-sans font-normal text-[#1C1C1CCC] m-0 leading-[21px] lg:leading-none"
               style={{
-                fontSize:      'clamp(14px, 1.79vw, 40px)',
+                fontSize:      'clamp(14px, 1.79vw, 35px)',
                 letterSpacing: 'clamp(-0.5px, -0.07vw, -2px)',
               }}
             >
@@ -313,7 +314,7 @@ const ProjectContactUs = () => {
                   onChange={(val) => setForm({ ...form, phone: val })}
                   placeholder="Phone number"
                   className="contact-phone-input"
-                  style={{ width: '100%', outline: 'none' }}
+                  style={{ width: '100%', outline: 'none',paddingLeft:"clamp(8px, 2.56vw, 15px)" }}
                 />
               </div>
 
@@ -367,28 +368,30 @@ const ProjectContactUs = () => {
                 <div
                   className="absolute bg-[#EDE7DE] group-hover:bg-[#EDE7DE] transition-colors duration-500 overflow-hidden"
                   style={{
-                    right:        'clamp(8.5px, 0.83vw, 12px)',
-                    width:        'clamp(21.3px, 2.08vw, 30px)',
-                    height:       'clamp(21.3px, 2.08vw, 30px)',
+                    right:        'clamp(8px, 0.83vw, 12px)',
+                    width:        'clamp(22px, 2.08vw, 30px)',
+                    height:       'clamp(22px, 2.08vw, 30px)',
                     borderRadius: 'clamp(5px, 0.49vw, 7px)',
                   }}
                 >
+                  {/* Arrow slide out */}
                   <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out group-hover:translate-x-full">
                     <svg
-                      viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                      className="text-black"
-                      style={{ width: 'clamp(10px, 1.97vw, 22px)', height: 'clamp(10px, 1.97vw, 22px)' }}
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                      className="text-[#000000]"
+                      style={{ width: 'clamp(15px, 1.97vw, 20px)', height: 'clamp(15px, 1.97vw, 20px)' }}
                     >
-                      <path d="M8 12h18M20 5l7 7-7 7" />
+                      <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                   </div>
+                  {/* Arrow slide in */}
                   <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out -translate-x-full group-hover:translate-x-0">
                     <svg
-                      viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                      className="text-black"
-                      style={{ width: 'clamp(10px, 1.97vw, 22px)', height: 'clamp(10px, 1.97vw,22px)' }}
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                      className="text-[#000000]"
+                      style={{ width: 'clamp(15px, 1.97vw, 20px)', height: 'clamp(15px, 1.97vw, 20px)' }}
                     >
-                      <path d="M8 12h18M20 5l7 7-7 7" />
+                      <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                   </div>
                 </div>

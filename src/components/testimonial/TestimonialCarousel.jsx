@@ -578,7 +578,16 @@ export default function TestimonialCarousel({ reviews }) {
               <GoogleIcon size="20.8px" />
               <span
                 className="font-sans uppercase underline"
-                style={{ color: '#212325', fontWeight: 500, fontSize: '12.5px', lineHeight: '16.22px', letterSpacing: '1px' }}
+                style={{
+                  color: '#212325',
+                  fontWeight: 500,
+                  fontSize: '10.8px',
+                  lineHeight: '14px',
+                  letterSpacing: '0.86px',
+                  textAlign: 'center',
+                  verticalAlign: 'middle',
+                  textDecorationStyle: 'solid',
+                }}
               >
                 Google Review Score: {googleScore} of 5
               </span>

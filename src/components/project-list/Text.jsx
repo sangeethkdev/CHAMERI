@@ -45,12 +45,12 @@ export default function Text({ project }) {
         style={{
           zIndex: 10,
           top: 'clamp(56px, 6.794vw, 97.84px)',
-          left: 'clamp(30px, 24.779vw, 356.81px)',
-          width: 'clamp(240px, 69vw, 1175px)',
+          left: 'clamp(30px, 22.779vw, 396.81px)',
+          width: 'clamp(240px, 69vw, 1135px)',
           gap: 'clamp(10px, 1.181vw, 17px)',
         }}
       >
-        <div style={{ width: '100%', height: '1px', background: '#00000099' }} />
+        <div style={{ width: '103%', height: '1px', background: '#00000099' }} />
 
         <div className="ptext-row flex items-start" style={{ gap: 'clamp(20px, 8.611vw, 124px)' }}>
           {/* Tag pill — fixed width (Figma: 142.6px) so a longer project tag
@@ -105,7 +105,6 @@ export default function Text({ project }) {
               </p>
 
               <div className="flex flex-col" style={{ gap: '4px', width: 'clamp(64px, 6.389vw, 92px)' }}>
-                <div style={{ width: '100%', height: '1px', background: '#31444C' }} />
                 <a
                   href={project.href}
                   className="flex items-center justify-center no-underline"
@@ -130,6 +129,7 @@ export default function Text({ project }) {
                     style={{ width: 'clamp(6px, 0.53vw, 7.63px)', height: 'auto' }}
                   />
                 </a>
+                <div style={{ width: '95%', height: '1px', background: '#31444C' }} />
               </div>
             </div>
 

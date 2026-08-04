@@ -35,10 +35,10 @@ export default function Section({ project }) {
       <div
         className="absolute inset-0"
         style={{
-          paddingTop: 'clamp(16px, 2.083vw, 30px)',
-          paddingBottom: 'clamp(16px, 2.083vw, 30px)',
-          paddingLeft: 'clamp(6px, 0.694vw, 10px)',
-          paddingRight: 'clamp(6px, 0.694vw, 10px)',
+          paddingTop: 'clamp(5px, 1.083vw, 10px)',
+          paddingBottom: 'clamp(5px, 2.083vw, 30px)',
+          paddingLeft: 'clamp(6px, 2.694vw, 35px)',
+          paddingRight: 'clamp(6px, 2.394vw, 35px)',
           boxSizing: 'border-box',
         }}
       >
@@ -78,14 +78,6 @@ export default function Section({ project }) {
               />
             </motion.div>
           </div>
-
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              zIndex: 1,
-              background: 'linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.55) 100%)',
-            }}
-          />
         </div>
       </div>
     </div>

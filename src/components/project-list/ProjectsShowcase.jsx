@@ -76,8 +76,8 @@ function MobileProjectCard({ project }) {
       ref={scrollTarget}
       className="w-full flex justify-center"
       style={{
-        paddingTop: 'clamp(20px, 6.923vw, 27px)',
-        paddingBottom: 'clamp(16px, 6.154vw, 24px)',
+        paddingTop: 'clamp(10px, 2.923vw, 27px)',
+        paddingBottom: 'clamp(16px, 4.154vw, 24px)',
         paddingLeft: 'clamp(10px, 3.846vw, 15px)',
         paddingRight: 'clamp(10px, 3.846vw, 15px)',
         boxSizing: 'border-box',
@@ -196,7 +196,7 @@ export default function ProjectsShowcase({ cardsSection, projects }) {
         className="w-full flex items-center justify-center"
         style={{
           background: '#EDE7DE',
-          paddingTop: 'clamp(4px, 0.347vw, 5px)',
+          paddingTop: 'clamp(6px, 1.047vw, 5px)',
           paddingBottom: 'clamp(4px, 0.347vw, 5px)',
         }}
       >
@@ -205,8 +205,8 @@ export default function ProjectsShowcase({ cardsSection, projects }) {
           style={{
             gap: 'clamp(5px, 0.5vw, 7.2px)',
             borderRadius: '90px',
-            paddingTop: 'clamp(4px, 0.375vw, 5.4px)',
-            paddingBottom: 'clamp(4px, 0.375vw, 5.4px)',
+            paddingTop: 'clamp(10px, 1.375vw, 15.4px)',
+            paddingBottom: 'clamp(0px, 0.375vw, 2.4px)',
           }}
         >
           <span
