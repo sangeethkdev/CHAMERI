@@ -780,7 +780,7 @@ export default function HeroSection({ hero }) {
               style={{
                 position: "absolute",
                 top: "clamp(-80px, -1vh, 30.54px)",   /* 64.54/1024 */
-                left: "clamp(14px, 5.88vw, 84.69px)",   /* 84.69/1440 */
+                left: "clamp(14px, 6.28vw, 96.69px)",   /* 84.69/1440 */
                 width: "clamp(160px, 42.43vw, 611px)",   /* 611/1440   */
                 height: "clamp(40px, 6.35vh, 65px)",
                 fontFamily: "var(--font-roundo), 'Roundo'",

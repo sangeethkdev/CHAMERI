@@ -254,8 +254,8 @@ export default function NewNavbar({ opacity = 1, showLogo = true }) {
                   width:        'clamp(98px, 10.208vw, 147px)',
                   height:       'clamp(30px, 3.194vw, 46px)',
                   justifyContent: 'space-between',
-                  paddingLeft:  'clamp(8px, 0.863vw, 12.43px)',
-                  paddingRight: 'clamp(6px, 0.595vw, 8.57px)',
+                  paddingLeft:  'clamp(8px, 0.863vw, 16.43px)',
+                  paddingRight: 'clamp(6px, 0.595vw, 10.57px)',
                   borderRadius: 'clamp(7px, 0.833vw, 12px)',
                   // marginTop:"clamp(20px,1vw,10px)"
                 }}
@@ -301,31 +301,33 @@ export default function NewNavbar({ opacity = 1, showLogo = true }) {
 
                 {/* Arrow box — Figma: w:36 h:36 radius:8px */}
                 <div
-                  className="relative flex items-center justify-center shrink-0"
+                  className="absolute  transition-colors duration-500 overflow-hidden"
                   style={{
-                    width:        'clamp(24px, 2.5vw, 36px)',
-                    height:       'clamp(24px, 2.5vw, 36px)',
-                    borderRadius: 'clamp(6px, 0.556vw, 8px)',
+                    right:        'clamp(8px, 0.83vw, 12px)',
+                    width:        'clamp(22px, 2.08vw, 30px)',
+                    height:       'clamp(22px, 2.08vw, 30px)',
+                    borderRadius: 'clamp(5px, 0.49vw, 7px)',
                   }}
                 >
-                  {/* Icon frame — Figma: w:21 h:20 */}
-                  <div
-                    className="relative overflow-hidden"
-                    style={{ width: 'clamp(15px, 1.458vw, 21px)', height: 'clamp(14px, 1.389vw, 20px)' }}
-                  >
-                    {/* Original Arrow - Flies out to the right */}
-                    <div className="absolute inset-0 flex items-center justify-center transition-transform duration-[600ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:translate-x-full">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black" style={{ width: '100%', height: '100%' }}>
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                      </svg>
-                    </div>
-
-                    {/* New Arrow - Comes in from the left */}
-                    <div className="absolute inset-0 flex items-center justify-center transition-transform duration-[600ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] -translate-x-full group-hover:translate-x-0">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white" style={{ width: '100%', height: '100%' }}>
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                      </svg>
-                    </div>
+                  {/* Arrow slide out */}
+                  <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out group-hover:translate-x-full">
+                    <svg
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                      className="text-[#000000]"
+                      style={{ width: 'clamp(10px, 1.97vw, 24px)', height: 'clamp(10px, 1.97vw, 24px)' }}
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                  {/* Arrow slide in */}
+                  <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out -translate-x-full group-hover:translate-x-0">
+                    <svg
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                      className="text-[#FFFFFF]"
+                      style={{ width: 'clamp(10px, 1.97vw, 24px)', height: 'clamp(10px, 1.97vw, 24px)' }}
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
                   </div>
                 </div>
               </button>

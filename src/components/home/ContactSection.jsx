@@ -971,7 +971,7 @@ const ContactSection = () => {
                 <span
                   className="font-sans font-normal text-[#000000]"
                   style={{
-                    fontSize:      'clamp(16px, 1.39vw, 22px)',
+                    fontSize:      'clamp(18px, 1.39vw, 22px)',
                     lineHeight:    '1',
                     letterSpacing: 'clamp(-0.5px, -0.07vw, -1px)',
                   }}
@@ -983,8 +983,8 @@ const ContactSection = () => {
                 href="tel:+919876543210"
                 className="font-sans font-normal text-[#6B859E]  transition-all"
                 style={{
-                  fontSize:    'clamp(13.3px, 1.18vw, 28px)',
-                  paddingLeft: 'clamp(20px, 0.95vw, 34.6px)',
+                  fontSize:    'clamp(16px, 1.18vw, 28px)',
+                  paddingLeft: 'clamp(6px, 0.55vw, 34.6px)',
                 }}
               >
                 +91 987654321
@@ -1006,7 +1006,7 @@ const ContactSection = () => {
                 <span
                   className="font-sans font-normal text-[#000000]"
                   style={{
-                    fontSize:      'clamp(16px, 1.39vw, 20px)',
+                    fontSize:      'clamp(18px, 1.39vw, 20px)',
                     lineHeight:    '1',
                     letterSpacing: 'clamp(-0.5px, -0.07vw, -1px)',
                   }}
@@ -1018,8 +1018,8 @@ const ContactSection = () => {
                 href="mailto:Chameri@gmail.com"
                 className="font-sans font-normal text-[#6B859E] transition-all"
                 style={{
-                  fontSize:    'clamp(14px, 1.14vw, 28.3px)',
-                  paddingLeft: 'clamp(20px, 0.95vw, 34.6px)',
+                  fontSize:    'clamp(16px, 1.14vw, 28.3px)',
+                  paddingLeft: 'clamp(6px, 0.55vw, 34.6px)',
                 }}
               >
                 Chameri@gmail.com
@@ -1156,7 +1156,7 @@ const ContactSection = () => {
                     <svg
                       viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
                       className="text-[#000000]"
-                      style={{ width: 'clamp(10px, 1.97vw, 24px)', height: 'clamp(10px, 1.97vw, 24px)' }}
+                      style={{ width: 'clamp(10px, 1.97vw, 20px)', height: 'clamp(10px, 1.97vw, 20px)' }}
                     >
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
@@ -1166,7 +1166,7 @@ const ContactSection = () => {
                     <svg
                       viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
                       className="text-[#000000]"
-                      style={{ width: 'clamp(10px, 1.97vw, 24px)', height: 'clamp(10px, 1.97vw, 24px)' }}
+                      style={{ width: 'clamp(10px, 1.97vw, 20px)', height: 'clamp(10px, 1.97vw, 20px)' }}
                     >
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>

@@ -209,8 +209,8 @@ export default function MenuSection({ open = false, onClose }) {
             onClick={onClose}
             style={{
               position:       'absolute',
-              top:            'clamp(55px, 5.556vw, 80px)',
-              left:           'clamp(67px, 6.736vw, 97px)',
+              top:            'clamp(30px, 5.556vw, 50px)',
+              left:           'clamp(67px, 6.736vw, 110px)',
               height:         'clamp(26px, 2.639vw, 38px)',
               width:          'clamp(27px, 2.701vw, 38.9px)',
               display:        'flex',
@@ -278,9 +278,9 @@ export default function MenuSection({ open = false, onClose }) {
           <div
             style={{
               position:   'absolute',
-              top:        'clamp(126px, 12.708vw, 183px)',
-              left:       'clamp(57px, 5.764vw, 83px)',
-              height:     'clamp(202px, 34.458vw, 575px)',
+              top:        'clamp(106px, 12.708vw, 123px)',
+              left:       'clamp(87px, 5.764vw, 108px)',
+              height:     'clamp(202px, 36.458vw, 935px)',
               display:    'flex',
               alignItems: 'flex-end',
               gap:        'clamp(27px, 2.708vw, 39px)',
@@ -291,7 +291,7 @@ export default function MenuSection({ open = false, onClose }) {
               ref={navRef}
               style={{
                 width:          'clamp(255px, 25.694vw, 370px)',
-                height:         '100%',
+                height:         'clamp(100px, 36.458vw, 935px)',
                 display:        'flex',
                 flexDirection:  'column',
                 justifyContent: 'space-between',
@@ -304,14 +304,14 @@ export default function MenuSection({ open = false, onClose }) {
                   onClick={onClose}
                   className="menu-item chameri-menu-link"
                   style={{
-                    height:         'clamp(28px, 2.847vw, 41px)',
+                    height:         'clamp(28px, 3.847vw, 49px)',
                     display:        'flex',
                     alignItems:     'center',
                     gap:            'clamp(10px, 0.972vw, 14px)',
                     verticalAlign:  'middle',
                     fontFamily:     'Roundo, sans-serif',
-                    fontWeight:     500,
-                    fontSize:       'clamp(31px, 3.125vw, 45px)',
+                    fontWeight:     400,
+                    fontSize:       'clamp(31px, 3.125vw, 55px)',
                     lineHeight:     'clamp(46px, 4.593vw, 66.14px)',
                     textDecoration: 'none',
                     whiteSpace:     'nowrap',
@@ -322,7 +322,7 @@ export default function MenuSection({ open = false, onClose }) {
                     {link.label}
                     <span className="chameri-menu-underline" />
                   </span>
-                  <svg
+                  {/* <svg
                     className="chameri-menu-arrow"
                     width="clamp(18px, 1.667vw, 24px)"
                     height="clamp(18px, 1.667vw, 24px)"
@@ -334,7 +334,7 @@ export default function MenuSection({ open = false, onClose }) {
                     strokeLinejoin="round"
                   >
                     <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
+                  </svg> */}
                 </Link>
               ))}
             </nav>

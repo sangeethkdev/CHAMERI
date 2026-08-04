@@ -722,7 +722,7 @@ const TestimonialsSection = ({ testimonial }) => {
               height:        'clamp(37px, 4.17vw, 60px)'
             }}
           >
-            What Our Clients Says
+            What Our Clients Say
           </h2>
 
           {/* Sub-heading */}
@@ -769,6 +769,9 @@ const TestimonialsSection = ({ testimonial }) => {
             // clip top & bottom equally so the card appears shorter without moving in the layout
             const clipPct  = isCenter ? 0 : ((1 - sideH / cardH) / 2) * 100;
             const r        = cardRadius.toFixed(2);
+            // the gradient/quote/profile overlay is anchored to the card's true (unclipped) bottom edge,
+            // so it has to shift up by the same amount trimmed off the bottom or it gets clipped away
+            const bottomTrimPx = (clipPct / 100) * cardH;
 
             return (
               <div
@@ -803,6 +806,8 @@ const TestimonialsSection = ({ testimonial }) => {
                       padding:    `${20.68 * mobileScale}px ${12.05 * mobileScale}px ${16 * mobileScale}px`,
                       gap:        `${10 * mobileScale}px`,
                       background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.75) 55%, transparent 100%)',
+                      transform:  `translateY(-${bottomTrimPx}px)`,
+                      transition: transitionEnabled ? 'transform 900ms cubic-bezier(0.4,0,0.2,1)' : 'none',
                     }}
                   >
                     <p
@@ -844,6 +849,8 @@ const TestimonialsSection = ({ testimonial }) => {
                       style={{
                         height: `${214.02 * scale}px`,
                         background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 60%, transparent 100%)',
+                        transform: `translateY(-${bottomTrimPx}px)`,
+                        transition: transitionEnabled ? 'transform 900ms cubic-bezier(0.4,0,0.2,1)' : 'none',
                       }}
                     />
 
@@ -854,6 +861,8 @@ const TestimonialsSection = ({ testimonial }) => {
                         top:    `${335.99 * scale}px`,
                         height: `${214.02 * scale}px`,
                         width:  `${cardW}px`,
+                        transform: `translateY(-${bottomTrimPx}px)`,
+                        transition: transitionEnabled ? 'transform 900ms cubic-bezier(0.4,0,0.2,1)' : 'none',
                       }}
                     >
                       {/* Quote */}
