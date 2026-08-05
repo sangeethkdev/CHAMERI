@@ -31,7 +31,7 @@ export default function ProjectListHero({ hero }) {
           Figma: w:390 h:725 bg image, heading positioned like desktop (~41% down)
       ═══════════════════════════════════════════════════════════════════════ */}
       <section
-        className="flex md:hidden relative w-full overflow-hidden isolate"
+        className="flex md:hidden relative w-full overflow-hidden z-50"
         style={{ height: '725px' }}
       >
         {/* ── BACKGROUND IMAGE ───────────────────────────────────────────── */}
@@ -88,7 +88,7 @@ export default function ProjectListHero({ hero }) {
       {/* ── DESKTOP ──────────────────────────────────────────────────────────── */}
       <div className="hidden md:block">
       <section
-        className="relative w-full overflow-hidden isolate"
+        className="relative w-full overflow-hidden z-50"
         style={{ height: 'clamp(390px, 51.806vw, 996px)' }}
       >
         {/* ── BACKGROUND IMAGE ───────────────────────────────────────────── */}

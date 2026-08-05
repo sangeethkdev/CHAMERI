@@ -437,14 +437,17 @@ export default function ServicesOffered({ cardsSection }) {
 }
 
 function MobileServiceCard({ service }) {
-  /* Same gutter scheme as the desktop ServiceCard, in this card's fixed-px
-     Figma units: the number gets a fixed width so the title always starts at
-     the same x, and description + image are pushed in by that identical amount
-     so all three left edges line up. */
-  const INNER_PAD    = "6.05px";
-  const NUM_W        = "6px";
-  const NUM_GAP      = "6px";
-  const TITLE_INDENT = `calc(${INNER_PAD} + ${NUM_W} + ${NUM_GAP})`;
+  /* The number HANGS in the card's left padding instead of occupying a gutter,
+     so title / description / image all start on the card's 22px content edge —
+     the same edge as the section header above, with an equal 22px on the right.
+
+     It hangs via a negative margin equal to its own width plus the gap. That
+     total has to stay within the card's 22px padding or the number runs off
+     screen, because the strip is full-bleed and card #1 starts at viewport x=0.
+     "01." renders ~19px at 13.57px, which leaves only 3px for the gap. */
+  const NUM_W      = "19px";
+  const NUM_GAP    = "3px";
+  const NUM_OFFSET = `calc(-1 * (${NUM_W} + ${NUM_GAP}))`;
 
   return (
     <div
@@ -456,9 +459,12 @@ function MobileServiceCard({ service }) {
         flexDirection: "column",
         gap: "19.9px",
         paddingTop: "39.8px",
-        paddingRight: "11.76px",
+        /* Symmetric 22px, matching the section's own paddingLeft/Right, so the
+           card's content column is centred and shares the header's edges. It
+           was 21.71 / 11.76, which pushed everything ~5px right of centre. */
+        paddingRight: "40px",
         paddingBottom: "39.8px",
-        paddingLeft: "21.71px",
+        paddingLeft: "40px",
         borderLeft: "0.9px solid #00000047",
         background: "#EDE7DE",
         boxSizing: "border-box",
@@ -472,8 +478,8 @@ function MobileServiceCard({ service }) {
             display: "flex",
             alignItems: "flex-start",
             gap: NUM_GAP,
-            paddingLeft: INNER_PAD,
-            paddingRight: INNER_PAD,
+            paddingLeft: 0,
+            paddingRight: 0,
           }}
         >
           <span
@@ -483,8 +489,9 @@ function MobileServiceCard({ service }) {
               fontSize: "13.57px",
               lineHeight: "20.35px",
               color: "#6B859E",
-              // paddingLeft: "10px",
-              paddingRight: "-10px",
+              /* Pulled out into the card's left padding so the title beside it
+                 lands on the 22px content edge rather than after a gutter. */
+              marginLeft: NUM_OFFSET,
               width: NUM_W,
               flexShrink: 0,
             }}
@@ -511,14 +518,16 @@ function MobileServiceCard({ service }) {
           </h3>
         </div>
 
-        {/* Description + Learn More — indented to the title's left edge */}
+        {/* Description + Learn More — no padding of its own, so it spans the
+            card's full content box: the same 22px→353px column as the title
+            above and the image below. */}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
             gap: "0.9px",
-            paddingLeft: TITLE_INDENT,
-            paddingRight: INNER_PAD,
+            paddingLeft: 0,
+            paddingRight: 0,
           }}
         >
           <p
@@ -571,16 +580,14 @@ function MobileServiceCard({ service }) {
         </div>
       </div>
 
-      {/* Image — same left edge as the title and description. maxWidth accounts
-         for the indent so the fixed width can't push past the card's padding. */}
+      {/* Image — fills the card's content box, matching the title and
+         description column exactly on both edges. */}
       <div
         style={{
           position: "relative",
-          width: "294.92px",
-          maxWidth: `calc(100% - ${TITLE_INDENT})`,
-          marginLeft: TITLE_INDENT,
+          width: "100%",
           height: "183.64px",
-          borderRadius: "8px",
+          // borderRadius: "8px",
           overflow: "hidden",
           flexShrink: 0,
         }}

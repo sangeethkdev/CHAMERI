@@ -34,7 +34,7 @@ export default function TestimonialHero({ hero }) {
           Figma: w:390 h:725 pt/pb:50 gap:11, heading w:298.41 Roundo 500 38px/42px ls:-2px
       ═══════════════════════════════════════════════════════════════════════ */}
       <section
-        className="flex md:hidden relative w-full overflow-hidden isolate"
+        className="flex md:hidden relative w-full overflow-hidden z-50"
         style={{ height: "725px" }}
       >
         <NewNavbar />
@@ -88,7 +88,7 @@ export default function TestimonialHero({ hero }) {
       {/* ── DESKTOP ──────────────────────────────────────────────────────────── */}
       <div className="hidden md:block">
         <section
-          className="relative w-full overflow-hidden isolate"
+          className="relative w-full overflow-hidden z-50"
           style={{ height: "clamp(400px, 51.806vw, 966px)" }}
         >
           <NewNavbar />

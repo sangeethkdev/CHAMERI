@@ -2,8 +2,15 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useSyncExternalStore } from 'react';
+import { createPortal } from 'react-dom';
 import gsap from 'gsap';
+
+/* "Have we hydrated yet?" — the portal target (document.body) does not exist
+   during SSR. useSyncExternalStore gives false on the server and true on the
+   client without a setState-in-effect. Subscribe is a stable no-op because the
+   answer never changes again after hydration. */
+const noopSubscribe = () => () => {};
 
 /**
  * ─────────────────────────────────────────────────────────────────────────────
@@ -109,6 +116,10 @@ const MOBILE_SOCIALS = [
 export default function MenuSection({ open = false, onClose }) {
   const navRef = useRef(null);
 
+  // The overlay is portalled to <body> (see the return below); hold it back
+  // until the client has hydrated, since document.body has no SSR equivalent.
+  const mounted = useSyncExternalStore(noopSubscribe, () => true, () => false);
+
   // Panel slides down from the top; nav links stagger in shortly after.
   useEffect(() => {
     if (!open || !navRef.current) return;
@@ -135,7 +146,15 @@ export default function MenuSection({ open = false, onClose }) {
     };
   }, [open]);
 
-  return (
+  if (!mounted) return null;
+
+  /* Portalled to <body>. z-index only ranks siblings inside the same stacking
+     context, and this overlay is rendered from NewNavbar, which several heroes
+     embed inside a section carrying `isolate` (isolation: isolate). That makes
+     a new stacking context, trapping zIndex:100 inside the hero — so any later
+     section on the page painted straight over the open menu. Rendering into
+     <body> puts it back in the root stacking context, above everything. */
+  return createPortal(
     <div
       style={{
         position:      'fixed',
@@ -563,6 +582,7 @@ export default function MenuSection({ open = false, onClose }) {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
