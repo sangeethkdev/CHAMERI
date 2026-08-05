@@ -241,7 +241,7 @@ export default function Kiwano360Tour({ tour360 }) {
             flexDirection: "column",
             alignItems:    "center",
             width:         "100%",
-            paddingTop:    "24px",
+            paddingTop:    "12px",
             paddingRight:  "16px",
             paddingBottom: "6px",
             paddingLeft:   "16px",

@@ -195,7 +195,7 @@ export default function KiwanoFeatures({ features }) {
         width:         "100%",
         background:    "#EDE7DE",
         paddingTop:    "24px",
-        paddingBottom: "24px",
+        paddingBottom: "8px",
         paddingLeft:   "22px",
         paddingRight:  "22px",
         gap:           "20px",

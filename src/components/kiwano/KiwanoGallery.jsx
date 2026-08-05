@@ -134,7 +134,7 @@ function Tab({ label, active, isFirst, isLast, onClick }) {
         style={{
           fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
           fontWeight:    400,
-          fontSize:      "clamp(13px, 1.25vw, 18px)",
+          fontSize:      "clamp(17px, 1.25vw, 18px)",
           lineHeight:    "19.49px",
           letterSpacing: "0",
           color:         "#FFFFFF",
@@ -160,15 +160,15 @@ function MobileTab({ label, active, isFirst, isLast, onClick }) {
       className="kiwano-gallery-tab"
       style={{
         flex:                    1,
-        height:                  "100%",
+        height:                  "120%",
         display:                 "flex",
         alignItems:              "center",
         justifyContent:          "center",
         gap:                     "10.59px",
-        paddingTop:              "9.13px",
-        paddingBottom:           "9.13px",
-        paddingLeft:             "26.63px",
-        paddingRight:            "26.63px",
+        paddingTop:              "3.13px",
+        paddingBottom:           "8.13px",
+        paddingLeft:             "16.63px",
+        paddingRight:            "16.63px",
         background:              active ? "#334454" : "#6B859E",
         border:                  "none",
         cursor:                  "pointer",
@@ -197,7 +197,7 @@ function MobileTab({ label, active, isFirst, isLast, onClick }) {
         style={{
           fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
           fontWeight:    400,
-          fontSize:      "13.69px",
+          fontSize:      "14.69px",
           lineHeight:    "14.83px",
           letterSpacing: "0",
           color:         "#FFFFFF",

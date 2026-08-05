@@ -310,7 +310,7 @@ function ZoomableSitePlan() {
             left: "50%",
             width: `${wW}px`,
             height: `${wH}px`,
-            transform: `translate(-50%, -50%) translate(${pan.x}px, ${pan.y}px) scale(${scale}) rotate(90deg)`,
+            transform: `translate(-50%, -50%) translate(${pan.x}px, ${pan.y}px) scale(${scale}) rotate(110deg)`,
             transformOrigin: "center",
             willChange: "transform",
           }}

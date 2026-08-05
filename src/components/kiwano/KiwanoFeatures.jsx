@@ -195,7 +195,7 @@ export default function KiwanoFeatures({ features }) {
         width:         "100%",
         background:    "#EDE7DE",
         paddingTop:    "24px",
-        paddingBottom: "24px",
+        paddingBottom: "8px",
         paddingLeft:   "22px",
         paddingRight:  "22px",
         gap:           "20px",
@@ -510,8 +510,8 @@ function MobileFeatureCard({ feature }) {
       <div
         style={{
           position:     "relative",
-          marginTop:    "-44px",
-          marginLeft:   "12px",
+          marginTop:    "-50px",
+          marginLeft:   "2px",
           marginRight:  "12px",
           borderRadius: "8px",
           overflow:     "hidden",
@@ -588,9 +588,9 @@ function FeatureCard({ feature }) {
         style={{
           position:      "absolute",
           bottom:        0,
-          left:          "clamp(14px, 1.319vw, 19px)",
+          left:          "clamp(8px, 1.219vw, 19px)",
           right:         "clamp(14px, 1.319vw, 19px)",
-          paddingBottom: "clamp(16px, 1.736vw, 25px)",
+          paddingBottom: "clamp(16px, 1.136vw, 25px)",
           zIndex:        2,
         }}
       >

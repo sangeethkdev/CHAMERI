@@ -189,7 +189,7 @@ export default function KiwanoOtherProjects({ otherProjects }) {
                   whiteSpace: "nowrap",
                 }}
               >
-                Learn More
+                Learn more
               </span>
               <div
                 style={{
@@ -204,10 +204,10 @@ export default function KiwanoOtherProjects({ otherProjects }) {
                 }}
               >
                 <svg
-                  viewBox="0 0 32 24" fill="none" stroke="#000000" strokeWidth="2.5"
-                  style={{ width: "18px", height: "18px" }}
+                  viewBox="0 0 32 24" fill="none" stroke="#000000" strokeWidth="1.5"
+                  style={{ width: "15px", height: "15px" }}
                 >
-                  <path d="M8 12h18M20 5l7 7-7 7" />
+                  <path d="M8 12h16M18 5l7 7-7 7" />
                 </svg>
               </div>
             </button>
@@ -386,7 +386,7 @@ export default function KiwanoOtherProjects({ otherProjects }) {
                   }}
                 >
                   <div className="flex flex-col transition-transform duration-500 ease-in-out group-hover:-translate-y-1/2">
-                    {['Contact Us', 'Contact Us'].map((label, i) => (
+                    {['Learn more', 'Learn more'].map((label, i) => (
                       <span
                         key={i}
                         className="font-sans font-medium text-[#EDE7DE] whitespace-nowrap flex items-center"
