@@ -194,7 +194,7 @@ export default function AboutTestimonialSection({ testimonialSection }) {
 
           {/* Sub-heading */}
           <p
-            className="font-sans font-normal text-[#334454]/70 text-center m-0 flex items-center justify-center"
+            className="font-sans font-normal text-[#1C1C1C] text-center m-0 flex items-center justify-center"
             style={{
               fontSize:      'clamp(14px, 1.39vw, 20px)',
               lineHeight:    'clamp(21px, 1.83vw, 26.4px)',
@@ -230,6 +230,9 @@ export default function AboutTestimonialSection({ testimonialSection }) {
             const opacity  = isCenter ? 1 : dist === 1 ? 0.6 : 0;
             const clipPct  = isCenter ? 0 : ((1 - sideH / cardH) / 2) * 100;
             const r        = cardRadius.toFixed(2);
+            // the gradient/quote/profile overlay is anchored to the card's true (unclipped) bottom edge,
+            // so it has to shift up by the same amount trimmed off the bottom or it gets clipped away
+            const bottomTrimPx = (clipPct / 100) * cardH;
 
             return (
               <div
@@ -266,6 +269,8 @@ export default function AboutTestimonialSection({ testimonialSection }) {
                       padding:    `${20.68 * mobileScale}px ${12.05 * mobileScale}px ${16 * mobileScale}px`,
                       gap:        `${10 * mobileScale}px`,
                       background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.75) 55%, transparent 100%)',
+                      transform:  `translateY(-${bottomTrimPx}px)`,
+                      transition: transitionEnabled ? 'transform 900ms cubic-bezier(0.4,0,0.2,1)' : 'none',
                     }}
                   >
                     <p
@@ -306,6 +311,8 @@ export default function AboutTestimonialSection({ testimonialSection }) {
                         background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 60%, transparent 100%)',
                         zIndex:     1,
                         pointerEvents: 'none',
+                        transform:  `translateY(-${bottomTrimPx}px)`,
+                        transition: transitionEnabled ? 'transform 900ms cubic-bezier(0.4,0,0.2,1)' : 'none',
                       }}
                     />
 
@@ -320,6 +327,8 @@ export default function AboutTestimonialSection({ testimonialSection }) {
                         flexDirection: 'column',
                         gap:           'clamp(16px, 1.67vw, 24px)',
                         zIndex:        2,
+                        transform:     `translateY(-${bottomTrimPx}px)`,
+                        transition:    transitionEnabled ? 'transform 900ms cubic-bezier(0.4,0,0.2,1)' : 'none',
                       }}
                     >
                       <p
