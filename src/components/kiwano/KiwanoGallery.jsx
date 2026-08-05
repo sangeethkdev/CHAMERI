@@ -283,7 +283,7 @@ export default function KiwanoGallery({ gallery }) {
             padding:       0,
           }}
         >
-          A Visual Journey Through Premium Living
+          {gallery?.heading || 'A Visual Journey Through Premium Living'}
         </h2>
 
         {/* Sticky tab bar — Figma: w:360 h:33.26 */}
@@ -421,7 +421,7 @@ export default function KiwanoGallery({ gallery }) {
             padding:       0,
           }}
         >
-          A Visual Journey Through Premium Living
+          {gallery?.heading || 'A Visual Journey Through Premium Living'}
         </h2>
       </div>
 

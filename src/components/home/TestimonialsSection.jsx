@@ -722,10 +722,11 @@ const TestimonialsSection = ({ testimonial }) => {
               lineHeight:    'clamp(36.6px, 4.17vw, 60px)',
               letterSpacing: 'clamp(-0.73px, -0.06vw, -0.9px)',
               width:         'clamp(358px, 42.22vw, 648px)',
-              height:        'clamp(37px, 4.17vw, 60px)'
+              minHeight:     'clamp(37px, 4.17vw, 60px)',
+              whiteSpace:    'pre-line'
             }}
           >
-            What Our Clients Say
+            {testimonial?.heading || 'What Our Clients Say'}
           </h2>
 
           {/* Sub-heading */}
@@ -736,10 +737,12 @@ const TestimonialsSection = ({ testimonial }) => {
               lineHeight:    'clamp(21px, 1.83vw, 26.4px)',
               letterSpacing: 'clamp(0px, -0.03vw, -0.44px)',
               width:         'clamp(286px, 42.22vw, 608px)',
-              height:        'clamp(42px, 3.68vw, 53px)'
+              minHeight:     'clamp(42px, 3.68vw, 53px)',
+              whiteSpace:    'pre-line'
             }}
           >
-            Explore crafted villa spaces with modern comfort built beautifully
+            {testimonial?.subheading ||
+              'Explore crafted villa spaces with modern comfort built beautifully'}
           </p>
         </div>
       </div>

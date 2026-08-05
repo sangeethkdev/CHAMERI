@@ -10,10 +10,14 @@ const FETCH_OPTIONS =
 async function fetchAPI(path) {
   try {
     const res = await fetch(`${API_URL}${path}`, FETCH_OPTIONS);
-    if (!res.ok) return null;
+    if (!res.ok) {
+      console.error(`[api] ${path} -> HTTP ${res.status}`);
+      return null;
+    }
     const json = await res.json();
     return json.success ? json.data : null;
-  } catch {
+  } catch (err) {
+    console.error(`[api] ${path} failed:`, err?.message || err);
     return null;
   }
 }

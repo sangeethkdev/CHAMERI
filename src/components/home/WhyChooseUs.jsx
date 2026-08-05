@@ -680,6 +680,11 @@ const ICONS = [
   <Image key="2" src="/icons/healthicons_people-outline.svg" alt="People icon" width={25} height={25} />,
 ];
 
+// Shown only until the admin fills in Home → Choose Us.
+const DEFAULT_HEADING = 'Proven Trust Value Modern Homes Leader';
+const DEFAULT_SUBHEADING =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim.';
+
 const WhyChooseUs = ({ chooseUs }) => {
   const [activeCard, setActiveCard] = useState(1);
   const mobileCardRefs = useRef([]);
@@ -711,6 +716,9 @@ const WhyChooseUs = ({ chooseUs }) => {
         desc: c?.subheading || STATIC_CARDS[i].desc,
       }))
     : STATIC_CARDS;
+
+  const heading = chooseUs?.heading || DEFAULT_HEADING;
+  const subheading = chooseUs?.subheading || DEFAULT_SUBHEADING;
 
   return (
     <section
@@ -768,7 +776,7 @@ const WhyChooseUs = ({ chooseUs }) => {
         {/* Heading row */}
         <div
           className="flex flex-col md:flex-row justify-between items-start md:items-end w-full"
-          style={{ height: 'clamp(60px, 6.25vw, 90px)' }}
+          style={{ minHeight: 'clamp(60px, 6.25vw, 90px)' }}
         >
           <h2
             className="font-roundo font-medium text-[#1A1A1A] capitalize m-0 flex items-center"
@@ -777,10 +785,10 @@ const WhyChooseUs = ({ chooseUs }) => {
               lineHeight:    'clamp(28px, 3.13vw, 45px)',
               letterSpacing: 'clamp(-0.5px, -0.06vw, -0.9px)',
               width:         'clamp(280px, 35.56vw, 592.08px)',
-              height:        'clamp(40px, 6.25vw, 90px)'
+              minHeight:     'clamp(40px, 6.25vw, 90px)'
             }}
           >
-            Proven Trust Value Modern Homes Leader
+            {heading}
           </h2>
 
           <p
@@ -790,10 +798,11 @@ const WhyChooseUs = ({ chooseUs }) => {
               lineHeight:    'clamp(18px, 1.51vw, 21.8px)',
               letterSpacing: 'clamp(-0.28px, -0.03vw, -0.44px)',
               width:         'clamp(300px, 38.75vw, 558px)',
-              height:        'clamp(40px, 4.58vw, 66px)'
+              minHeight:     'clamp(40px, 4.58vw, 66px)',
+              whiteSpace:    'pre-line'
             }}
           >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim.
+            {subheading}
           </p>
         </div>
       </div>
@@ -838,13 +847,13 @@ const WhyChooseUs = ({ chooseUs }) => {
               letterSpacing: '-0.73px',
             }}
           >
-            Proven Trust Value Modern Homes Leader
+            {heading}
           </h2>
           <p
             className="font-sans font-normal text-black/60 m-0"
-            style={{ fontSize: '14px', lineHeight: '21px' }}
+            style={{ fontSize: '14px', lineHeight: '21px', whiteSpace: 'pre-line' }}
           >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim.
+            {subheading}
           </p>
         </div>
       </div>

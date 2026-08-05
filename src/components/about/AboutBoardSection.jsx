@@ -241,6 +241,8 @@ export default function AboutBoardSection({ boardSection }) {
       }))
     : STATIC_BOARD;
 
+  const title = boardSection?.title;
+
   return (
     <>
       <style>{`
@@ -251,7 +253,7 @@ export default function AboutBoardSection({ boardSection }) {
         }
       `}</style>
 
-      <MobileBoardSection boardMembers={boardMembers} />
+      <MobileBoardSection boardMembers={boardMembers} title={title} />
 
     <section
       className="w-full flex flex-col board-desktop"
@@ -338,7 +340,7 @@ export default function AboutBoardSection({ boardSection }) {
             margin: 0,
           }}
         >
-          Elegant Spaces For Built Views Photo Frame
+          {title || 'Elegant Spaces For Built Views Photo Frame'}
         </h2>
 
         {/* ── Pill Label ─────────────────────────────────────────────────── */}
@@ -618,7 +620,7 @@ export default function AboutBoardSection({ boardSection }) {
    Header: pill (icon + "BOARD OF DIRECTORS") above the heading, gap 10.
    Grid: 2 × 2 cards, row-gap 11.95, column-gap 10.57, full-bleed
    (breaks out of the section's 16px side padding). */
-function MobileBoardSection({ boardMembers }) {
+function MobileBoardSection({ boardMembers, title }) {
   return (
     <section
       className="board-mobile"
@@ -687,7 +689,7 @@ function MobileBoardSection({ boardMembers }) {
             margin: 0,
           }}
         >
-          Elegant Spaces For Built Views Photo Frame
+          {title || 'Elegant Spaces For Built Views Photo Frame'}
         </h2>
       </div>
 

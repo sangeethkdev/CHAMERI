@@ -5,6 +5,11 @@ import ServicesTestimonials from "@/components/services/ServicesTestimonials";
 import Footer from "@/components/common/Footer";
 import { getServiceMainData } from "@/lib/api";
 
+// Re-render this page at most once a minute so admin edits go live
+// without a redeploy. Declared here (not inferred from fetch options) so the
+// route always gets an ISR window.
+export const revalidate = 60;
+
 export const metadata = {
   title: "Services — Chameri Premium Villa Residences",
   description:

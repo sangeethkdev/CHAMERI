@@ -186,10 +186,11 @@ export default function AboutTestimonialSection({ testimonialSection }) {
               lineHeight:    'clamp(36.6px, 4.17vw, 60px)',
               letterSpacing: 'clamp(-0.73px, -0.06vw, -0.9px)',
               width:         'clamp(358px, 42.22vw, 648px)',
-              height:        'clamp(37px, 4.17vw, 60px)',
+              minHeight:     'clamp(37px, 4.17vw, 60px)',
+              whiteSpace:    'pre-line',
             }}
           >
-            What Our Clients Says
+            {testimonialSection?.heading || 'What Our Clients Says'}
           </h2>
 
           {/* Sub-heading */}
@@ -200,9 +201,11 @@ export default function AboutTestimonialSection({ testimonialSection }) {
               lineHeight:    'clamp(21px, 1.83vw, 26.4px)',
               letterSpacing: 'clamp(0px, -0.03vw, -0.44px)',
               width:         'clamp(286px, 42.22vw, 608px)',
+              whiteSpace:    'pre-line',
             }}
           >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            {testimonialSection?.subheading ||
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor'}
           </p>
         </div>
       </div>

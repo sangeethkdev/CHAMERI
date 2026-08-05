@@ -2,16 +2,15 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 
-const HEADING_WORDS = [
-  "We're", "create", "luxury", "trusted", "modern", "builders",
-  "creating", "timeless", "spaces", "for", "future", "through", "smart",
-  "we", "build", "modern", "luxury", "homes", "with", "trusted", "the",
-  "design", "craft", "every", "detail", "matters", "day", "move", "choice.",
-];
+// Shown only until the admin fills in Home → About Us.
+const DEFAULT_HEADING =
+  "We're create luxury trusted modern builders creating timeless spaces for future through smart we build modern luxury homes with trusted the design craft every detail matters day move choice.";
 
-const MOBILE_HEADING_TEXT =
+const DEFAULT_MOBILE_HEADING =
   "Since 1985, we have built residential and commercial work with founder leadership and in house execution. Over 40 years one principle guides us: A home where life can take root, and become entirely and truly yours. That is our promise";
-const MOBILE_HEADING_WORDS = MOBILE_HEADING_TEXT.split(' ');
+
+/** The heading animates word by word as the section scrolls into view. */
+const toWords = (text) => text.trim().split(/\s+/).filter(Boolean);
 
 const DEFAULT_STATS = [
   { val: '30%', label: 'Lorem ipsum dolor' },
@@ -21,6 +20,10 @@ const DEFAULT_STATS = [
 ];
 
 const AboutSection = ({ aboutUs }) => {
+  // Same admin field drives both breakpoints; each falls back to its own copy.
+  const HEADING_WORDS = toWords(aboutUs?.heading || DEFAULT_HEADING);
+  const MOBILE_HEADING_WORDS = toWords(aboutUs?.heading || DEFAULT_MOBILE_HEADING);
+
   const STATS = aboutUs
     ? [
         { val: aboutUs.count1, label: aboutUs.count1Text },

@@ -461,7 +461,7 @@ const TeamCard = ({ member }) => (
 );
 
 /* ─── Contact CTA Card ───────────────────────────────────────────────── */
-const ContactCard = () => (
+const ContactCard = ({ heading }) => (
   <div
     className="relative overflow-hidden flex-shrink-0 bg-[#334454] w-full aspect-[379/498]"
     style={{ borderRadius: 'clamp(8px, 0.79vw, 15.2px)' }}
@@ -486,9 +486,10 @@ const ContactCard = () => (
           fontSize:      'clamp(35.5px, 3.47vw, 66.6px)', // 50px @ 1440 → 66.6px @ 1920
           lineHeight:    'clamp(42.6px, 4.17vw, 80px)',
           letterSpacing: 'clamp(-0.64px, -0.036vw, -1.2px)',
+          whiteSpace:    'pre-line',
         }}
       >
-        Lorum Ipsum?<br />Dolor Sit<br />Amet.
+        {heading || 'Lorum Ipsum?\nDolor Sit\nAmet.'}
       </h3>
     </div>
 
@@ -661,9 +662,10 @@ const TeamSection = ({ ourTeam }) => {
               fontSize:      'clamp(36px, 4.17vw, 80px)',  // 60px @ 1440 → 80px @ 1920
               lineHeight:    'clamp(36px, 4.17vw, 80px)',
               letterSpacing: 'clamp(-0.64px, -0.078vw, -1.2px)',
+              whiteSpace:    'pre-line',
             }}
           >
-            Peoples Builds<br/>This Firm
+            {ourTeam?.heading || 'Peoples Builds\nThis Firm'}
           </h2>
 
           {/* Sub-heading */}
@@ -674,10 +676,11 @@ const TeamSection = ({ ourTeam }) => {
               lineHeight:    'clamp(18.4px, 1.72vw, 32.9px)',
               letterSpacing: 'clamp(-0.27px, -0.03vw, -0.5px)',
               maxWidth:      'clamp(262px, 26.88vw, 493px)',   // 370px @ 1440 → 493px @ 1920
+              whiteSpace:    'pre-line',
             }}
           >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim.
+            {ourTeam?.subheading ||
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim.'}
           </p>
         </div>
       </aside>
@@ -701,7 +704,7 @@ const TeamSection = ({ ourTeam }) => {
           {TEAM.map((member) => (
             <TeamCard key={member.id} member={member} />
           ))}
-          <ContactCard />
+          <ContactCard heading={ourTeam?.separateCard?.heading} />
         </div>
       </aside>
 

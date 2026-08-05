@@ -649,7 +649,11 @@ const GalleryNew = ({ gallery }) => {
                   letterSpacing: clamp(-1, -3.05),
                 }}
               >
-                Elegant Spaces For Built<br/>Views Photo Frame
+                {gallery?.heading ? (
+                  <span style={{ whiteSpace: 'pre-line' }}>{gallery.heading}</span>
+                ) : (
+                  <>Elegant Spaces For Built<br />Views Photo Frame</>
+                )}
               </h2>
             </div>
 
@@ -661,9 +665,11 @@ const GalleryNew = ({ gallery }) => {
                   fontSize:      clamp(10, 22),
                   lineHeight:    '1.09',
                   letterSpacing: '-0.44px',
+                  whiteSpace:    'pre-line',
                 }}
               >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                {gallery?.subheading ||
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore'}
               </p>
             </div>
           </div>
@@ -835,17 +841,18 @@ const GalleryNew = ({ gallery }) => {
             {/* Title */}
             <h2
               className="font-roundo font-medium text-black m-0"
-              style={{ width: '348px', maxWidth: '100%', fontSize: '32px', lineHeight: '36.6px', letterSpacing: '-0.73px' }}
+              style={{ width: '348px', maxWidth: '100%', fontSize: '32px', lineHeight: '36.6px', letterSpacing: '-0.73px', whiteSpace: 'pre-line' }}
             >
-              Elegant Spaces For Built Views Photo Frame
+              {gallery?.heading || 'Elegant Spaces For Built Views Photo Frame'}
             </h2>
 
             {/* Description */}
             <p
               className="font-geist text-[#334454] m-0"
-              style={{ width: '322px', maxWidth: '100%', fontSize: '14px', lineHeight: '21px' }}
+              style={{ width: '322px', maxWidth: '100%', fontSize: '14px', lineHeight: '21px', whiteSpace: 'pre-line' }}
             >
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+              {gallery?.subheading ||
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore'}
             </p>
           </div>
         </div>
