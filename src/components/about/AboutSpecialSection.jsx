@@ -392,29 +392,26 @@ export default function AboutSpecialSection({ specialSection }) {
                 paddingTop: 'clamp(4px, 0.4vw, 8px)',
               }}
             >
-              <div
-                style={{
-                  width: 'clamp(8px, 0.97vw, 18px)',
-                  height: 'clamp(8px, 0.97vw, 18px)',
-                  backgroundColor: '#334454',
-                  borderRadius: '3px',
-                  flexShrink: 0,
-                }}
-              />
-              <span
-                style={{
-                  fontFamily: "var(--font-geist,'Geist'),system-ui,sans-serif",
-                  fontWeight: 400,
-                  fontSize: 'clamp(9px, 0.9vw, 17px)',
-                  lineHeight: 1.2,
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  color: '#1A1A1A',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                What Makes Us Special
-              </span>
+          <div
+            className="bg-[#334454] flex-shrink-0"
+            style={{
+              width:        'clamp(10px, 0.97vw, 18.6px)',
+              height:       'clamp(10px, 0.97vw, 18.6px)',
+              borderRadius: 'clamp(2px, 0.21vw, 4px)',
+            }}
+          />
+          {/* Figma @1440: Geist 400, 16.2px / 19.44px, ls -0.32px, uppercase.
+              vw = DESIGN_PX / 1440 × 100 → 1.125vw / 1.35vw. */}
+          <span
+            className="font-sans font-normal uppercase text-[#000000] flex items-center justify-center"
+            style={{
+              fontSize:      'clamp(12px, 1.125vw, 16.2px)',
+              lineHeight:    'clamp(14px, 1.35vw, 19.44px)',
+              letterSpacing: '-0.32px',
+            }}
+          >
+            What Makes Us Special
+          </span>
             </div>
 
             {/* Heading */}
@@ -423,7 +420,7 @@ export default function AboutSpecialSection({ specialSection }) {
                 style={{
                   fontFamily: "var(--font-roundo,'Roundo'),system-ui,sans-serif",
                   fontWeight: 500,
-                  fontSize: 'clamp(24px, 4vw, 70px)',
+                  fontSize: 'clamp(24px, 4vw, 53px)',
                   lineHeight: 1.08,
                   letterSpacing: 'clamp(-2px, -0.18vw, -0.5px)',
                   color: '#1A1A1A',

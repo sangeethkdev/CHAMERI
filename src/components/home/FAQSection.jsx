@@ -293,30 +293,33 @@ const FAQSection = ({ faqSection }) => {
             className="flex items-center"
             style={{ gap: 'clamp(5px, 0.5vw, 9.6px)' }}
           >
-            <div
-              className="bg-[#334454] flex-shrink-0"
-              style={{
-                width:        'clamp(10px, 0.97vw, 18.6px)',
-                height:       'clamp(10px, 0.97vw, 18.6px)',
-                borderRadius: 'clamp(2px, 0.19vw, 4px)',
-              }}
-            />
-            <span
-              className="font-sans font-normal uppercase text-[#334454] tracking-widest"
-              style={{
-                fontSize:   'clamp(12px, 0.97vw, 18.6px)',
-                lineHeight: '1',
-              }}
-            >
-              FAQ
-            </span>
+          <div
+            className="bg-[#334454] flex-shrink-0"
+            style={{
+              width:        'clamp(10px, 0.97vw, 18.6px)',
+              height:       'clamp(10px, 0.97vw, 18.6px)',
+              borderRadius: 'clamp(2px, 0.21vw, 4px)',
+            }}
+          />
+          {/* Figma @1440: Geist 400, 16.2px / 19.44px, ls -0.32px, uppercase.
+              vw = DESIGN_PX / 1440 × 100 → 1.125vw / 1.35vw. */}
+          <span
+            className="font-sans font-normal uppercase text-[#000000] flex items-center justify-center"
+            style={{
+              fontSize:      'clamp(12px, 1.125vw, 16.2px)',
+              lineHeight:    'clamp(14px, 1.35vw, 19.44px)',
+              letterSpacing: '-0.32px',
+            }}
+          >
+            FAQ
+          </span>
           </div>
 
           {/* Heading */}
           <h2
             className="font-roundo font-medium text-[#1A1A1A] m-0 text-center"
             style={{
-              fontSize:      'clamp(28px, 4.17vw, 80px)',
+              fontSize:      'clamp(28px, 4.17vw, 74px)',
               lineHeight:    '1.05',
               letterSpacing: 'clamp(-0.5px, -0.063vw, -1.2px)',
               maxWidth:      'clamp(280px, 51.04vw, 980px)',

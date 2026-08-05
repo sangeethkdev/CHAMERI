@@ -658,7 +658,7 @@ const VillaPlansSection = ({ villaPlan }) => {
                     <svg
                       viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
                       className="text-[#000000]"
-                      style={{ width: 'clamp(10px, 1.97vw, 20px)', height: 'clamp(10px, 1.97vw, 20px)' }}
+                      style={{ width: 'clamp(15px, 1.97vw, 20px)', height: 'clamp(15px, 1.97vw, 20px)' }}
                     >
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
@@ -668,7 +668,7 @@ const VillaPlansSection = ({ villaPlan }) => {
                     <svg
                       viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
                       className="text-[#000000]"
-                      style={{ width: 'clamp(10px, 1.97vw, 20px)', height: 'clamp(10px, 1.97vw, 20px)' }}
+                      style={{ width: 'clamp(15px, 1.97vw, 20px)', height: 'clamp(15px, 1.97vw, 20px)' }}
                     >
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>

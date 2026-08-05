@@ -116,6 +116,91 @@ body {
   border-color: #334454;
 }
 
+/* ── Admin-authored rich text (RichText.jsx) ───────────────────────────────
+   Font, size, colour and paragraph spacing come from the section's own inline
+   styles. These rules only restore what the global reset removes, so what the
+   admin composes in the editor is what renders here. */
+.rich-text {
+  display: flex;
+  flex-direction: column;
+  /* inherits the gap the section sets on this element */
+  gap: inherit;
+}
+
+.rich-text > * {
+  margin: 0;
+}
+
+.rich-text strong,
+.rich-text b {
+  font-weight: 600;
+}
+
+.rich-text em,
+.rich-text i {
+  font-style: italic;
+}
+
+.rich-text u {
+  text-decoration: underline;
+}
+
+.rich-text s,
+.rich-text strike {
+  text-decoration: line-through;
+}
+
+.rich-text h1,
+.rich-text h2,
+.rich-text h3,
+.rich-text h4,
+.rich-text h5,
+.rich-text h6 {
+  font-family: var(--font-roundo), system-ui, sans-serif;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.rich-text h1 { font-size: 1.6em; }
+.rich-text h2 { font-size: 1.4em; }
+.rich-text h3 { font-size: 1.2em; }
+.rich-text h4 { font-size: 1.08em; }
+.rich-text h5,
+.rich-text h6 { font-size: 1em; }
+
+.rich-text ul,
+.rich-text ol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  padding-left: 1.4em;
+}
+
+.rich-text ul { list-style: disc; }
+.rich-text ol { list-style: decimal; }
+.rich-text li { margin: 0; }
+
+.rich-text blockquote {
+  padding-left: 0.9em;
+  border-left: 2px solid currentColor;
+  opacity: 0.85;
+  font-style: italic;
+}
+
+.rich-text a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.rich-text a:hover {
+  opacity: 0.7;
+}
+
+.rich-text sub { vertical-align: sub; font-size: 0.75em; }
+.rich-text sup { vertical-align: super; font-size: 0.75em; }
+
 /* ── Hide scrollbar on horizontal scroll tracks ────────────────────────── */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;

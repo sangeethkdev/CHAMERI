@@ -596,7 +596,7 @@ export default function AboutBoardSection({ boardSection }) {
 
                   lineHeight: 1.2,
                   letterSpacing: '0px',
-                  color: 'rgba(255,255,255,0.75)',
+                  color: '#FFFFFF',
                   margin: 0,
                   textAlign: 'center',
                 }}

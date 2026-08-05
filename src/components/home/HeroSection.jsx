@@ -849,7 +849,7 @@ export default function HeroSection({ hero }) {
                 whiteSpace: "nowrap",
               }}
             >
-              Your Villa Partner
+              WHERE LIFE SETTLES
             </span>
           </div>
 

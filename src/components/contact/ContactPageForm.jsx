@@ -408,8 +408,8 @@ const SOCIALS = [
   },
   {
     label: 'Facebook',
-    width:  'clamp(17px, 1.528vw, 25px)',
-    height: 'clamp(17px, 1.528vw, 26px)',
+    width:  'clamp(18px, 1.597vw, 26px)',
+    height: 'clamp(17px, 1.528vw, 24px)',
     svg: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
@@ -418,8 +418,8 @@ const SOCIALS = [
   },
   {
     label: 'YouTube',
-    width:  'clamp(24px, 2.083vw, 30px)',
-    height: 'clamp(24px, 2.083vw, 32px)',
+    width:  'clamp(18px, 1.597vw, 26px)',
+    height: 'clamp(17px, 3.628vw, 48px)',
     svg: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
         <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
@@ -428,8 +428,8 @@ const SOCIALS = [
   },
   {
     label: 'Pinterest',
-    width:  'clamp(23px, 2.014vw, 29px)',
-    height: 'clamp(22px, 1.944vw, 26px)',
+    width:  'clamp(18px, 1.597vw, 26px)',
+    height: 'clamp(17px, 1.528vw, 24px)',
     svg: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
         <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.951-7.252 4.168 0 7.41 2.967 7.41 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.367 18.624 0 12.017 0z" />
@@ -438,8 +438,8 @@ const SOCIALS = [
   },
   {
     label: 'WhatsApp',
-    width:  'clamp(22px, 1.944vw, 26px)',
-    height: 'clamp(22px, 1.944vw, 26px)',
+    width:  'clamp(18px, 1.597vw, 26px)',
+    height: 'clamp(17px, 1.528vw, 24px)',
     svg: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
@@ -454,6 +454,17 @@ export default function ContactPageForm() {
 
   const inputBase =
     'font-geist font-regular text-[#333333CC] bg-transparent border-0 border-b border-[#000000] outline-none w-full placeholder-[#000000]/40 focus:border-[#000000] transition-colors';
+
+  /* Shared input inline style — mirrors the home ContactSection form exactly,
+     so both contact forms share one field metric. paddingLeft is what insets
+     the placeholder from the underline's left edge; it was missing here, so
+     the placeholders sat flush against the border. */
+  const inputStyle = {
+    fontSize:      'clamp(16px, 1.11vw, 18px)',
+    height:        'clamp(33.75px, 3.75vw, 54px)',
+    paddingBottom: 'clamp(4px, 0.4vw, 6px)',
+    paddingLeft:   'clamp(12px, 0.4vw, 12px)',
+  };
 
   return (
     /*
@@ -473,7 +484,7 @@ export default function ContactPageForm() {
        * two fixed-width columns to opposite ends of the row.
        */}
       <div
-        className="flex flex-col lg:flex-row justify-between w-full mx-auto gap-[28px] lg:gap-0"
+        className="flex flex-col lg:flex-row justify-between w-full mx-auto gap-[14px] lg:gap-0"
         style={{
           maxWidth:      'clamp(300px, 100vw, 1920px)',
           paddingTop:    'clamp(40px, 4.167vw, 60px)',
@@ -509,8 +520,8 @@ export default function ContactPageForm() {
           <div
             className="contents lg:flex lg:flex-col lg:justify-between lg:h-full"
             style={{
-              paddingTop:    'clamp(12px, 1.319vw, 19px)',
-              paddingBottom: 'clamp(8px,  0.833vw, 12px)',
+              paddingTop:    'clamp(2px, 0.319vw, 6px)',
+              paddingBottom: 'clamp(4px,  0.833vw, 8px)',
               paddingLeft:   'clamp(12px, 1.250vw, 18px)',
               paddingRight:  'clamp(12px, 1.250vw, 18px)',
             }}
@@ -533,7 +544,7 @@ export default function ContactPageForm() {
               <div
                 className="flex items-center"
                 style={{
-                  width:         'clamp(90px, 8.139vw, 117.2px)',
+                  width:         'clamp(90px, 8.139vw, 120.2px)',
                   height:        'clamp(24px, 2.139vw, 30.8px)',
                   gap:           'clamp(4px, 0.500vw, 7.2px)',
                   paddingTop:    'clamp(3px, 0.375vw, 5.4px)',
@@ -547,32 +558,26 @@ export default function ContactPageForm() {
                  * padding: 3.6px → 0.250vw  floor 2px  ceil 3.6px
                  * borderRadius: 3px → 0.208vw  floor 2px  ceil 3px
                  */}
-                <div
-                  className="bg-[#334454] flex-shrink-0"
-                  style={{
-                    width:        'clamp(10px, 0.972vw, 18px)',
-                    height:       'clamp(10px, 0.972vw, 18px)',
-                    padding:      'clamp(2px, 0.250vw, 3.6px)',
-                    borderRadius: 'clamp(2px, 0.208vw, 3px)',
-                  }}
-                />
-
-                {/*
-                 * Badge text
-                 * fontSize:   16.2px → 1.125vw   floor 11px  ceil 16.2px
-                 * lineHeight: 19.44px → 1.350vw  floor 14px  ceil 19.44px
-                 * letterSpacing: -0.32px (fixed sub-pixel)
-                 */}
-                <span
-                  className="font-geist font-normal text-[#000000] uppercase whitespace-nowrap"
-                  style={{
-                    fontSize:      'clamp(11px, 1.125vw, 26.2px)',
-                    lineHeight:    'clamp(14px, 1.550vw, 24.44px)',
-                    letterSpacing: '-0.32px',
-                  }}
-                >
-                  Contact us
-                </span>
+          <div
+            className="bg-[#334454] flex-shrink-0"
+            style={{
+              width:        'clamp(10px, 0.97vw, 18.6px)',
+              height:       'clamp(10px, 0.97vw, 18.6px)',
+              borderRadius: 'clamp(2px, 0.21vw, 4px)',
+            }}
+          />
+          {/* Figma @1440: Geist 400, 16.2px / 19.44px, ls -0.32px, uppercase.
+              vw = DESIGN_PX / 1440 × 100 → 1.125vw / 1.35vw. */}
+          <span
+            className="font-sans font-normal uppercase text-[#000000] flex items-center justify-center"
+            style={{
+              fontSize:      'clamp(12px, 1.125vw, 16.2px)',
+              lineHeight:    'clamp(14px, 1.35vw, 19.44px)',
+              letterSpacing: '-0.32px',
+            }}
+          >
+            CONTACT US
+          </span>
               </div>
 
               {/*
@@ -582,7 +587,7 @@ export default function ContactPageForm() {
                * letterSpacing: -3.05px → -0.212vw (negative clamp)
                */}
               <div className="flex flex-col">
-                {['Connect with us', 'To build with vision.'].map((text, i) => (
+                {['Connect with us', 'To build the dream.'].map((text, i) => (
                   <h2
                     key={i}
                     className="font-roundo font-medium text-[#1A1A1A] text-left"
@@ -758,8 +763,11 @@ export default function ContactPageForm() {
             onSubmit={(e) => e.preventDefault()}
             className="order-2 lg:order-none flex flex-col w-full"
             style={{
-              paddingTop:    'clamp(16px, 1.875vw, 27px)',
-              paddingBottom: 'clamp(16px, 1.875vw, 27px)',
+              /* Floor dropped 16px → 4px: on mobile the 16px floor stacked on
+                 top of the row gap and read as dead space above the first
+                 field. At lg+ this still resolves to the same 27px. */
+              paddingTop:    'clamp(4px, 1.875vw, 27px)',
+              paddingBottom: 'clamp(4px, 1.875vw, 27px)',
               paddingLeft:   'clamp(0px, 2.519vw, 55px)',
               paddingRight:  'clamp(0px, 2.519vw, 55px)',
               gap:           'clamp(20px, 2.778vw, 40px)',
@@ -774,10 +782,7 @@ export default function ContactPageForm() {
              * input fontSize: 16px → 1.111vw   floor 13px  ceil 16px
              * paddingBottom:   6px → 0.417vw   floor  4px  ceil  6px
              */}
-            <div
-              className="flex flex-col"
-              style={{ height: 'clamp(40px, 3.750vw, 94px)' }}
-            >
+            <div>
               <input
                 type="text"
                 name="name"
@@ -785,19 +790,12 @@ export default function ContactPageForm() {
                 value={form.name}
                 onChange={handleChange}
                 className={inputBase}
-                style={{
-                  fontSize:      'clamp(13px, 1.111vw, 18px)',
-                  height:        'clamp(40px, 3.750vw, 54px)',
-                  paddingBottom: 'clamp(4px, 0.417vw, 6px)',
-                }}
+                style={inputStyle}
               />
             </div>
 
             {/* ── EMAIL FIELD ──────────────────────────────────────────── */}
-            <div
-              className="flex flex-col"
-              style={{ height: 'clamp(40px, 3.750vw, 54px)' }}
-            >
+            <div>
               <input
                 type="email"
                 name="email"
@@ -805,11 +803,7 @@ export default function ContactPageForm() {
                 value={form.email}
                 onChange={handleChange}
                 className={inputBase}
-                style={{
-                  fontSize:      'clamp(13px, 1.111vw, 18px)',
-                  height:        'clamp(40px, 3.750vw, 54px)',
-                  paddingBottom: 'clamp(4px, 0.417vw, 6px)',
-                }}
+                style={inputStyle}
               />
             </div>
 
@@ -821,8 +815,9 @@ export default function ContactPageForm() {
             <div
               className="flex items-center border-b border-[#000000] bg-transparent w-full"
               style={{
-                gap:    'clamp(6px, 0.556vw, 8px)',
-                height: 'clamp(40px, 3.750vw, 56px)',
+                height:        'clamp(33.75px, 3.75vw, 54px)',
+                paddingBottom: 'clamp(4px, 0.4vw, 6px)',
+                paddingLeft:   'clamp(12px, 0.4vw, 12px)',
               }}
             >
               <PhoneInput
@@ -841,7 +836,7 @@ export default function ContactPageForm() {
              * textarea height: 110px → 7.639vw   floor 80px  ceil 110px
              * paddingTop:        8px → 0.556vw   floor  6px  ceil   8px
              */}
-            <div className="flex flex-col">
+            <div>
               <textarea
                 name="message"
                 placeholder="Type your message here..."
@@ -849,10 +844,9 @@ export default function ContactPageForm() {
                 onChange={handleChange}
                 className={`${inputBase} resize-none`}
                 style={{
-                  fontSize:      'clamp(13px, 1.111vw, 18px)',
-                  height:        'clamp(80px, 7.639vw, 110px)',
-                  paddingBottom: 'clamp(4px, 0.417vw, 6px)',
-                  paddingTop:    'clamp(6px, 0.556vw, 8px)',
+                  ...inputStyle,
+                  height:     'clamp(68.75px, 7.64vw, 110px)',
+                  paddingTop: 'clamp(5px, 0.56vw, 8px)',
                 }}
               />
             </div>
@@ -919,28 +913,30 @@ export default function ContactPageForm() {
                 <div
                   className="absolute bg-[#EDE7DE] group-hover:bg-[#EDE7DE] transition-colors duration-500 overflow-hidden"
                   style={{
-                    right:        'clamp(8.5px, 0.83vw, 12px)',
-                    width:        'clamp(21.3px, 2.08vw, 30px)',
-                    height:       'clamp(21.3px, 2.08vw, 30px)',
+                    right:        'clamp(8px, 0.83vw, 12px)',
+                    width:        'clamp(22px, 2.08vw, 30px)',
+                    height:       'clamp(22px, 2.08vw, 30px)',
                     borderRadius: 'clamp(5px, 0.49vw, 7px)',
                   }}
                 >
+                  {/* Arrow slide out */}
                   <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out group-hover:translate-x-full">
                     <svg
-                      viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                      className="text-black"
-                      style={{ width: 'clamp(10px, 1.97vw, 22px)', height: 'clamp(10px, 1.97vw, 22px)' }}
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                      className="text-[#000000]"
+                      style={{ width: 'clamp(15px, 1.97vw, 20px)', height: 'clamp(15px, 1.97vw, 20px)' }}
                     >
-                      <path d="M8 12h18M20 5l7 7-7 7" />
+                      <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                   </div>
+                  {/* Arrow slide in */}
                   <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out -translate-x-full group-hover:translate-x-0">
                     <svg
-                      viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                      className="text-black"
-                      style={{ width: 'clamp(10px, 1.97vw, 22px)', height: 'clamp(10px, 1.97vw,22px)' }}
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                      className="text-[#000000]"
+                      style={{ width: 'clamp(15px, 1.97vw, 20px)', height: 'clamp(15px, 1.97vw, 20px)' }}
                     >
-                      <path d="M8 12h18M20 5l7 7-7 7" />
+                      <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                   </div>
                 </div>

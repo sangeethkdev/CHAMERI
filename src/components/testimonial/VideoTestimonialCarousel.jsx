@@ -81,20 +81,20 @@ function VideoCard({ item }) {
         scrollSnapAlign: 'start',
       }}
     >
-      {/* Background — a real <video> so a real source can be dropped in per
-          testimonial later; with no `item.video` it just shows the poster,
-          which keeps this working today with only static photos. */}
+      {/* Background — the video itself, no poster: the card shows the video's
+          own first frame and plays in place on click. `item.video` always
+          resolves (backend value or the shared local fallback), so there is
+          no case where dropping the poster leaves the card blank. */}
       <video
         ref={videoRef}
         className="absolute inset-0 h-full w-full object-cover"
-        poster={item.img}
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="auto"
         onEnded={() => setPlaying(false)}
       >
-        {item.video && <source src={item.video} type="video/mp4" />}
+        <source src={item.video} type="video/mp4" />
       </video>
 
       <div
@@ -202,19 +202,23 @@ function VideoCard({ item }) {
   );
 }
 
+// Shared placeholder until a per-testimonial clip is uploaded — same local
+// asset the Kiwano brand-story / 360-tour sections fall back to.
+const FALLBACK_VIDEO = '/videos/kiwano-hero.mp4';
+
 export default function VideoTestimonialCarousel({ reviews }) {
   const DATA = reviews?.cards?.length
     ? reviews.cards.map((c, i) => ({
         id: i + 1,
         img: c.image || DEFAULT_TESTIMONIALS[i % DEFAULT_TESTIMONIALS.length]?.img,
-        video: c.video || '',
+        video: c.video || FALLBACK_VIDEO,
         avatar: c.image || DEFAULT_TESTIMONIALS[i % DEFAULT_TESTIMONIALS.length]?.avatar,
         name: c.name,
         quote: c.quote,
         role: c.role,
         rating: c.rating || 5,
       }))
-    : DEFAULT_TESTIMONIALS;
+    : DEFAULT_TESTIMONIALS.map((t) => ({ ...t, video: t.video || FALLBACK_VIDEO }));
 
   return (
     <section

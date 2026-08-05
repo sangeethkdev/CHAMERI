@@ -751,12 +751,14 @@ const WhyChooseUs = ({ chooseUs }) => {
               borderRadius: 'clamp(2px, 0.21vw, 4px)',
             }}
           />
+          {/* Figma @1440: Geist 400, 16.2px / 19.44px, ls -0.32px, uppercase.
+              vw = DESIGN_PX / 1440 × 100 → 1.125vw / 1.35vw. */}
           <span
-            className="font-sans font-normal uppercase text-[#334454] flex items-center justify-center"
+            className="font-sans font-normal uppercase text-[#000000] flex items-center justify-center"
             style={{
-              fontSize:      'clamp(10px, 0.83vw, 16px)',
-              letterSpacing: 'clamp(-0.24px, -0.02vw, -0.32px)',
-              lineHeight:    1,
+              fontSize:      'clamp(12px, 1.125vw, 16.2px)',
+              lineHeight:    'clamp(14px, 1.35vw, 19.44px)',
+              letterSpacing: '-0.32px',
             }}
           >
             WHY CHOOSE US

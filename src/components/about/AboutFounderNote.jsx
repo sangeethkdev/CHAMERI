@@ -292,6 +292,7 @@ export default function AboutFounderNote({ founder }) {
               {/* Founder image */}
               <div
                 style={{
+                  position: 'relative',
                   width: '100%',
                   maxWidth: 'clamp(385px, 42vw, 800px)',
                   height: 'clamp(394px, 42vw, 800px)',
@@ -312,6 +313,16 @@ export default function AboutFounderNote({ founder }) {
                   }}
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
+                  }}
+                />
+
+                {/* Bottom fade — same treatment the other sections use */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    pointerEvents: 'none',
+                    background: 'linear-gradient(0deg, #000000 0%, rgba(0, 0, 0, 0) 39%)',
                   }}
                 />
               </div>
@@ -487,6 +498,7 @@ export default function AboutFounderNote({ founder }) {
           {/* ── Founder image ───────────────────────────────────────── */}
           <div
             style={{
+              position: 'relative',
               flexShrink: 0,
 
               /* Width: 251px @ 1440 → 17.43vw              | min 66px | max 334px */
@@ -510,6 +522,16 @@ export default function AboutFounderNote({ founder }) {
               }}
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
+              }}
+            />
+
+            {/* Bottom fade — same treatment the other sections use */}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                pointerEvents: 'none',
+                background: 'linear-gradient(0deg, #000000 0%, rgba(0, 0, 0, 0) 39%)',
               }}
             />
           </div>

@@ -2,6 +2,30 @@
 'use client';
 
 import React from 'react';
+import RichText from '@/components/common/RichText';
+
+/** Shown when the admin has not written a story description yet. */
+const DEFAULT_DESCRIPTION = (
+  <>
+    <p style={{ margin: 0 }}>
+      <strong style={{ fontWeight: 600 }}>Since 1985</strong>, Chameri has been
+      dedicated to creating thoughtfully designed spaces that blend functionality,
+      craftsmanship, and timeless aesthetics. With decades of experience, the company
+      has built a reputation for delivering high-quality residential and commercial
+      projects tailored to the unique aspirations of every client. From concept
+      development to final execution, Chameri focuses on innovation, attention to
+      detail, and lasting value innovation, attention to detail, and lasting value
+    </p>
+    <p style={{ margin: 0 }}>
+      The <strong style={{ fontWeight: 600 }}>founder</strong> of Chameri established
+      the company with a clear vision of combining creativity, integrity, and
+      professional expertise to shape meaningful architectural experiences. Guided by
+      a passion for design and a commitment to quality, the founder has played a key
+      role in building strong client relationships dedication, and continuous
+      innovation, the founder
+    </p>
+  </>
+);
 
 /**
  * AboutOriginStory
@@ -89,7 +113,10 @@ export default function AboutOriginStory({ story }) {
               style={{ width: '149.87px', height: '198.72px', objectFit: 'contain' }}
             />
 
-            <div
+            {/* Rich text from the admin (About → Story Section) */}
+            <RichText
+              html={story?.description}
+              fallback={DEFAULT_DESCRIPTION}
               style={{
                 width: '100%',
                 display: 'flex',
@@ -102,30 +129,7 @@ export default function AboutOriginStory({ story }) {
                 letterSpacing: '-0.44px',
                 color: '#222F30CC',
               }}
-            >
-              {story?.description
-                ? <p style={{ margin: 0 }}>{story.description}</p>
-                : <>
-                    <p style={{ margin: 0 }}>
-                      <strong style={{ fontWeight: 600 }}>Since 1985</strong>, Chameri has been
-                      dedicated to creating thoughtfully designed spaces that blend functionality,
-                      craftsmanship, and timeless aesthetics. With decades of experience, the company
-                      has built a reputation for delivering high-quality residential and commercial
-                      projects tailored to the unique aspirations of every client. From concept
-                      development to final execution, Chameri focuses on innovation, attention to
-                      detail, and lasting value innovation, attention to detail, and lasting value
-                    </p>
-                    <p style={{ margin: 0 }}>
-                      The <strong style={{ fontWeight: 600 }}>founder</strong> of Chameri established
-                      the company with a clear vision of combining creativity, integrity, and
-                      professional expertise to shape meaningful architectural experiences. Guided by
-                      a passion for design and a commitment to quality, the founder has played a key
-                      role in building strong client relationships dedication, and continuous
-                      innovation, the founder
-                    </p>
-                  </>
-              }
-            </div>
+            />
           </div>
         </div>
       </section>
@@ -264,7 +268,10 @@ export default function AboutOriginStory({ story }) {
             paragraph gap 24px @ 1440 → 24/1440*100 = 1.67vw → 32px @ 1920
             letter-spacing -0.44px @ 1440 → -0.44/1440*100 = -0.031vw → -0.58px @ 1920
           */}
-          <div
+          {/* Rich text from the admin (About → Story Section) */}
+          <RichText
+            html={story?.description}
+            fallback={DEFAULT_DESCRIPTION}
             style={{
               flex:          '1 1 min(100%, 280px)',
               maxWidth:      'clamp(280px, 58.06vw, 1115px)',
@@ -278,30 +285,7 @@ export default function AboutOriginStory({ story }) {
               letterSpacing: 'clamp(-0.44px, -0.031vw, -0.58px)',
               color:         '#1A1A1A',
             }}
-          >
-            {story?.description
-              ? <p style={{ margin: 0 }}>{story.description}</p>
-              : <>
-                  <p style={{ margin: 0 }}>
-                    <strong style={{ fontWeight: 600 }}>Since 1985</strong>, Chameri has been
-                    dedicated to creating thoughtfully designed spaces that blend functionality,
-                    craftsmanship, and timeless aesthetics. With decades of experience, the company
-                    has built a reputation for delivering high-quality residential and commercial
-                    projects tailored to the unique aspirations of every client. From concept
-                    development to final execution, Chameri focuses on innovation, attention to
-                    detail, and lasting value innovation, attention to detail, and lasting value
-                  </p>
-                  <p style={{ margin: 0 }}>
-                    The <strong style={{ fontWeight: 600 }}>founder</strong> of Chameri established
-                    the company with a clear vision of combining creativity, integrity, and
-                    professional expertise to shape meaningful architectural experiences. Guided by
-                    a passion for design and a commitment to quality, the founder has played a key
-                    role in building strong client relationships dedication, and continuous
-                    innovation, the founder
-                  </p>
-                </>
-            }
-          </div>
+          />
         </div>
 
       </div>

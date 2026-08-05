@@ -160,7 +160,7 @@ const GalleryContactUs = () => {
               className="lg:hidden font-roundo font-medium text-[#000000] m-0"
               style={{ fontSize: '32px', lineHeight: '36.6px', letterSpacing: '-0.73px' }}
             >
-              Contact us
+              Let's Talk 
             </h2>
 
             {/* Description */}
@@ -171,7 +171,7 @@ const GalleryContactUs = () => {
                 letterSpacing: 'clamp(-0.5px, -0.07vw, -2px)',
               }}
             >
-              Lorem ipsum dolor sit amet, consectetur ipsum dolor sit amet, consecteturLorem ipsum dolor
+              Schedule a site visit or request detailed project information. We are here to help you every step of the way.
             </p>
           </div>
 
@@ -203,7 +203,7 @@ const GalleryContactUs = () => {
               </div>
               <a
                 href="tel:+919876543210"
-                className="font-sans font-normal text-[#6B859E] hover:underline transition-all"
+                className="font-sans font-normal text-[#6B859E] underline hover:text-[#000000] transition-all"
                 style={{
                   fontSize:    'clamp(13.3px, 1.18vw, 28px)',
                   paddingLeft: 'clamp(0px, 0.25vw, 34.6px)',
@@ -238,7 +238,7 @@ const GalleryContactUs = () => {
               </div>
               <a
                 href="mailto:Chameri@gmail.com"
-                className="font-sans font-normal text-[#6B859E] hover:underline transition-all"
+                className="font-sans font-normal text-[#6B859E] underline hover:text-[#000000] transition-all"
                 style={{
                   fontSize:    'clamp(14px, 1.14vw, 28.3px)',
                   paddingLeft: 'clamp(0px, 0.25vw, 34.6px)',

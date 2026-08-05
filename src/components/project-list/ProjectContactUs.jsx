@@ -204,7 +204,7 @@ const ProjectContactUs = () => {
               </div>
               <a
                 href="tel:+919876543210"
-                className="font-sans font-normal text-[#6B859E] hover:underline transition-all"
+                className="font-sans font-normal text-[#6B859E] underline hover:text-[#000000] transition-all"
                 style={{
                   fontSize:    'clamp(13.3px, 1.18vw, 28px)',
                   paddingLeft: 'clamp(0px, 0.25vw, 34.6px)',
@@ -239,7 +239,7 @@ const ProjectContactUs = () => {
               </div>
               <a
                 href="mailto:Chameri@gmail.com"
-                className="font-sans font-normal text-[#6B859E] hover:underline transition-all"
+                className="font-sans font-normal text-[#6B859E] underline hover:text-[#000000] transition-all"
                 style={{
                   fontSize:    'clamp(14px, 1.14vw, 28.3px)',
                   paddingLeft: 'clamp(0px, 0.25vw, 34.6px)',

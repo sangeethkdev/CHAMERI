@@ -227,7 +227,7 @@ export default function MenuSection({ open = false, onClose }) {
           <button
             onClick={onClose}
             style={{
-              marginLeft:     'clamp(6px, 0.97vw, 14px)',
+              marginLeft:     'clamp(4px, 0.57vw, 6px)',
               height:         'clamp(26px, 2.639vw, 38px)',
               width:          'clamp(27px, 2.701vw, 38.9px)',
               display:        'flex',

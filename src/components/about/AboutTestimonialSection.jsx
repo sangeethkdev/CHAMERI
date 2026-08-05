@@ -155,25 +155,26 @@ export default function AboutTestimonialSection({ testimonialSection }) {
               gap:    'clamp(5px, 0.5vw, 7.2px)',
             }}
           >
-            <div
-              className="bg-[#334454] flex-shrink-0"
-              style={{
-                width:        'clamp(10px, 0.97vw, 14px)',
-                height:       'clamp(10px, 0.97vw, 14px)',
-                borderRadius: 'clamp(2px, 0.21vw, 3px)',
-              }}
-            />
-            <span
-              className="font-sans font-normal uppercase text-[#334454] tracking-wider flex items-center justify-center"
-              style={{
-                height:        'clamp(16px, 1.39vw, 20px)',
-                fontSize:      'clamp(10px, 0.83vw, 16px)',
-                letterSpacing: 'clamp(-0.24px, -0.02vw, -0.32px)',
-                lineHeight:    1,
-              }}
-            >
-              Testimonials
-            </span>
+          <div
+            className="bg-[#334454] flex-shrink-0"
+            style={{
+              width:        'clamp(10px, 0.97vw, 18.6px)',
+              height:       'clamp(10px, 0.97vw, 18.6px)',
+              borderRadius: 'clamp(2px, 0.21vw, 4px)',
+            }}
+          />
+          {/* Figma @1440: Geist 400, 16.2px / 19.44px, ls -0.32px, uppercase.
+              vw = DESIGN_PX / 1440 × 100 → 1.125vw / 1.35vw. */}
+          <span
+            className="font-sans font-normal uppercase text-[#000000] flex items-center justify-center"
+            style={{
+              fontSize:      'clamp(12px, 1.125vw, 16.2px)',
+              lineHeight:    'clamp(14px, 1.35vw, 19.44px)',
+              letterSpacing: '-0.32px',
+            }}
+          >
+            TESTIMONIAL
+          </span>
           </div>
 
           {/* Heading */}

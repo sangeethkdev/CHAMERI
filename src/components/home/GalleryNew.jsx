@@ -607,20 +607,17 @@ const GalleryNew = ({ gallery }) => {
           <div className="flex flex-col md:flex-row md:items-start md:justify-between w-full gap-6 md:gap-0">
 
             {/* Gallery Badge — left */}
-            <div
-              className="flex items-center flex-shrink-0"
-              style={{
-                width:         clamp(80, 102.6),
-                height:        clamp(24, 30.8),
-                paddingTop:    clamp(4, 5.4),
-                paddingRight:  clamp(5, 7.2),
-                paddingBottom: clamp(4, 5.4),
-                paddingLeft:   clamp(5, 7.2),
-                gap:           clamp(5, 7.2),
-                borderRadius:  '90px',
-              }}
-            >
-              <div
+        <div
+          className="flex items-center rounded-[90px] self-start"
+          style={{
+            paddingLeft:   'clamp(5px, 0.5vw, 7.2px)',
+            paddingRight:  'clamp(5px, 0.5vw, 7.2px)',
+            paddingTop:    'clamp(3.5px, 0.38vw, 5.4px)',
+            paddingBottom: 'clamp(3.5px, 0.38vw, 5.4px)',
+            gap:           'clamp(5px, 0.5vw, 7.2px)',
+          }}
+        >
+          <div
             className="bg-[#334454] flex-shrink-0"
             style={{
               width:        'clamp(10px, 0.97vw, 18.6px)',
@@ -628,17 +625,19 @@ const GalleryNew = ({ gallery }) => {
               borderRadius: 'clamp(2px, 0.21vw, 4px)',
             }}
           />
-              <span
-            className="font-sans font-normal uppercase text-[#334454] flex items-center justify-center"
+          {/* Figma @1440: Geist 400, 16.2px / 19.44px, ls -0.32px, uppercase.
+              vw = DESIGN_PX / 1440 × 100 → 1.125vw / 1.35vw. */}
+          <span
+            className="font-sans font-normal uppercase text-[#000000] flex items-center justify-center"
             style={{
-              fontSize:      'clamp(10px, 0.83vw, 16px)',
-              letterSpacing: 'clamp(-0.24px, -0.02vw, -0.32px)',
-              lineHeight:    1,
+              fontSize:      'clamp(12px, 1.125vw, 16.2px)',
+              lineHeight:    'clamp(14px, 1.35vw, 19.44px)',
+              letterSpacing: '-0.32px',
             }}
           >
             GALLERY
           </span>
-            </div>
+        </div>
 
             {/* H2 Title — center */}
             <div style={{ maxWidth: clamp(380, 878) }}>
@@ -783,7 +782,7 @@ const GalleryNew = ({ gallery }) => {
                     <svg
                       viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
                       className="text-[#000000]"
-                      style={{ width: 'clamp(10px, 1.97vw, 20px)', height: 'clamp(10px, 1.97vw, 20px)' }}
+                      style={{ width: 'clamp(15px, 1.97vw, 20px)', height: 'clamp(15px, 1.97vw, 20px)' }}
                     >
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
@@ -793,7 +792,7 @@ const GalleryNew = ({ gallery }) => {
                     <svg
                       viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
                       className="text-[#000000]"
-                      style={{ width: 'clamp(10px, 1.97vw, 20px)', height: 'clamp(10px, 1.97vw, 20px)' }}
+                      style={{ width: 'clamp(15px, 1.97vw, 20px)', height: 'clamp(15px, 1.97vw, 20px)' }}
                     >
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>

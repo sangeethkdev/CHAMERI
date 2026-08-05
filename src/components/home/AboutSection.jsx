@@ -178,25 +178,37 @@ const AboutSection = ({ aboutUs }) => {
           }}
         >
           {/* Badge */}
+        <div
+          className="flex items-center rounded-[90px] self-start"
+          style={{
+            paddingLeft:   'clamp(5px, 0.5vw, 7.2px)',
+            paddingRight:  'clamp(5px, 0.5vw, 7.2px)',
+            paddingTop:    'clamp(3.5px, 0.38vw, 5.4px)',
+            paddingBottom: 'clamp(3.5px, 0.38vw, 5.4px)',
+            gap:           'clamp(5px, 0.5vw, 7.2px)',
+          }}
+        >
           <div
-            className="flex items-center flex-shrink-0 rounded-[90px]"
+            className="bg-[#334454] flex-shrink-0"
             style={{
-              width:  'clamp(82px, 22.718vw, 97px)',  /* 88.6/390 */
-              height: 'clamp(18px, 5.128vw, 22px)',    /* 20/390   */
-              gap:    'clamp(4px, 1.026vw, 8px)',
+              width:        'clamp(10px, 0.97vw, 18.6px)',
+              height:       'clamp(10px, 0.97vw, 18.6px)',
+              borderRadius: 'clamp(2px, 0.21vw, 4px)',
+            }}
+          />
+          {/* Figma @1440: Geist 400, 16.2px / 19.44px, ls -0.32px, uppercase.
+              vw = DESIGN_PX / 1440 × 100 → 1.125vw / 1.35vw. */}
+          <span
+            className="font-sans font-normal uppercase text-[#000000] flex items-center justify-center"
+            style={{
+              fontSize:      'clamp(12px, 1.125vw, 16.2px)',
+              lineHeight:    'clamp(14px, 1.35vw, 19.44px)',
+              letterSpacing: '-0.32px',
             }}
           >
-            <div
-              className="bg-[#334454] rounded-[3px] flex-shrink-0"
-              style={{ width: '10px', height: '10px' }}
-            />
-            <span
-              className="font-sans font-normal uppercase text-[#000000] tracking-[-0.32px] flex items-center justify-center"
-              style={{ fontSize: '12px', lineHeight: '1.2' }}
-            >
-              About Us
-            </span>
-          </div>
+            About Us
+          </span>
+        </div>
 
           {/* Paragraph — width fills the padded container (never a fixed
               floor wider than the viewport, which was overflowing on

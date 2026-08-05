@@ -171,7 +171,7 @@ export default function ContactHero() {
               textShadow: '0 2px 16px rgba(0,0,0,0.25)',
             }}
           >
-            {"Let's Create\nSomething Exceptional."}
+            {"Let's Build\nThe Perfect Home Together"}
           </h1>
         </div>
       </section>
@@ -273,7 +273,7 @@ export default function ContactHero() {
                 padding:       0,
               }}
             >
-              {"Let's Create\nSomething Exceptional."}
+              {"Let's Build\nThe Perfect Home Together"}
             </h1>
           </div>
         </section>

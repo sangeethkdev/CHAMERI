@@ -125,27 +125,26 @@ export default function ContactLocations() {
                 }}
               >
                 {/* Square icon */}
-                <div
-                  style={{
-                    width: 'clamp(10px, 0.972vw, 16px)',
-                    height: 'clamp(10px, 0.972vw, 16px)',
-                    borderRadius: '3px',
-                    backgroundColor: '#334454',
-                  }}
-                />
-                <span
-                  className="uppercase"
-                  style={{
-                    fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-                    fontWeight: 400,
-                    fontSize: 'clamp(12px, 1.125vw, 20px)',
-                    lineHeight: 'clamp(14px, 1.35vw, 22.44px)',
-                    letterSpacing: 'clamp(-0.32px, -0.022vw, 0px)',
-                    color: '#334454',
-                  }}
-                >
-                  locations
-                </span>
+          <div
+            className="bg-[#334454] flex-shrink-0"
+            style={{
+              width:        'clamp(10px, 0.97vw, 18.6px)',
+              height:       'clamp(10px, 0.97vw, 18.6px)',
+              borderRadius: 'clamp(2px, 0.21vw, 4px)',
+            }}
+          />
+          {/* Figma @1440: Geist 400, 16.2px / 19.44px, ls -0.32px, uppercase.
+              vw = DESIGN_PX / 1440 × 100 → 1.125vw / 1.35vw. */}
+          <span
+            className="font-sans font-normal uppercase text-[#000000] flex items-center justify-center"
+            style={{
+              fontSize:      'clamp(12px, 1.125vw, 16.2px)',
+              lineHeight:    'clamp(14px, 1.35vw, 19.44px)',
+              letterSpacing: '-0.32px',
+            }}
+          >
+            LOCATIONS
+          </span>
               </div>
 
               {/* Heading Text */}
@@ -161,7 +160,7 @@ export default function ContactLocations() {
                   margin: 0,
                 }}
               >
-                Elegant Spaces For Built Views Photo Frame
+                Come Find Us in the Heart of Thalassery
               </h2>
             </div>
 
