@@ -65,8 +65,8 @@ export default function AboutOriginStory({ story }) {
             >
               <div
                 style={{
-                  width: 8,
-                  height: 8,
+                  width: 10,
+                  height: 10,
                   borderRadius: '2px',
                   backgroundColor: '#334454',
                   flexShrink: 0,
@@ -76,7 +76,7 @@ export default function AboutOriginStory({ story }) {
                 style={{
                   fontFamily: "var(--font-geist, 'Geist'), system-ui, sans-serif",
                   fontWeight: 400,
-                  fontSize: '10px',
+                  fontSize: '12px',
                   lineHeight: '12px',
                   letterSpacing: '0.04em',
                   textTransform: 'uppercase',
@@ -202,33 +202,26 @@ export default function AboutOriginStory({ story }) {
             }}
           >
             {/* square icon: 13px @ 1440 → 13/1440*100 = 0.9vw */}
-            <div
-              style={{
-                width:           'clamp(10px, 0.9vw, 17px)',
-                height:          'clamp(10px, 0.9vw, 17px)',
-                borderRadius:    '2px',
-                backgroundColor: '#334454',
-                flexShrink:      0,
-              }}
-            />
-            {/*
-              pill text: 16px @ 1440 → 16/1440*100 = 1.11vw → 21px @ 1920
-              letter-spacing 0.04em scales with font automatically
-            */}
-            <span
-              style={{
-                fontFamily:    "var(--font-geist, 'Geist'), system-ui, sans-serif",
-                fontWeight:    400,
-                fontSize:      'clamp(11px, 1.11vw, 21px)',
-                lineHeight:    'clamp(13px, 1.33vw, 25px)',
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-                color:         '#1A1A1A',
-                whiteSpace:    'nowrap',
-              }}
-            >
-              origin story
-            </span>
+          <div
+            className="bg-[#334454] flex-shrink-0"
+            style={{
+              width:        'clamp(10px, 0.97vw, 18.6px)',
+              height:       'clamp(10px, 0.97vw, 18.6px)',
+              borderRadius: 'clamp(2px, 0.21vw, 4px)',
+            }}
+          />
+          {/* Figma @1440: Geist 400, 16.2px / 19.44px, ls -0.32px, uppercase.
+              vw = DESIGN_PX / 1440 × 100 → 1.125vw / 1.35vw. */}
+          <span
+            className="font-sans font-normal uppercase text-[#000000] flex items-center justify-center"
+            style={{
+              fontSize:      'clamp(12px, 1.125vw, 16.2px)',
+              lineHeight:    'clamp(14px, 1.35vw, 19.44px)',
+              letterSpacing: '-0.32px',
+            }}
+          >
+            origin story
+          </span>
           </div>
         </div>
 

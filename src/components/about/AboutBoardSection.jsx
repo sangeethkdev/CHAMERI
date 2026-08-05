@@ -377,49 +377,22 @@ export default function AboutBoardSection({ boardSection }) {
           }}
         >
           {/* Square icon */}
-          <div
+                   <div
+            className="bg-[#334454] flex-shrink-0"
             style={{
-              /*
-               * Design : 14px @ 1440 → 0.972vw
-               * Floor  : 10px
-               */
-              width:           'clamp(10px, 0.97vw, 14px)',
-              height:          'clamp(10px, 0.97vw, 14px)',
-              backgroundColor: '#334454',
-
-              /*
-               * borderRadius on icon
-               * Design : 3px @ 1440 → 0.208vw
-               */
-              borderRadius: 'clamp(2px, 0.21vw, 3px)',
-              flexShrink: 0,
+              width:        'clamp(10px, 0.97vw, 18.6px)',
+              height:       'clamp(10px, 0.97vw, 18.6px)',
+              borderRadius: 'clamp(2px, 0.21vw, 4px)',
             }}
           />
-
-          {/* Label */}
+          {/* Figma @1440: Geist 400, 16.2px / 19.44px, ls -0.32px, uppercase.
+              vw = DESIGN_PX / 1440 × 100 → 1.125vw / 1.35vw. */}
           <span
+            className="font-sans font-normal uppercase text-[#000000] flex items-center justify-center"
             style={{
-              fontFamily: "var(--font-geist, 'Geist'), system-ui, sans-serif",
-              fontWeight: 400,
-
-              /*
-               * fontSize
-               * Design : 16.2px @ 1440 → 1.125vw
-               * Floor  : 11px
-               */
-              fontSize: 'clamp(11px, 1.125vw, 18px)',
-
-              lineHeight: 1.2,
-
-              /*
-               * letterSpacing
-               * Design : -0.32px — kept fixed; negligible at small sizes
-               */
+              fontSize:      'clamp(12px, 1.125vw, 16.2px)',
+              lineHeight:    'clamp(14px, 1.35vw, 19.44px)',
               letterSpacing: '-0.32px',
-
-              textTransform: 'uppercase',
-              color: '#1A1A1A',
-              whiteSpace: 'nowrap',
             }}
           >
             Board of Directors

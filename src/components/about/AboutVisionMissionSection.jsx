@@ -521,7 +521,7 @@ export default function AboutVisionMissionSection({ vision, mission }) {
           <div
             style={{
               position: 'absolute',
-              top: 'clamp(12px, 1.39vw, 24px)',
+              top: 'clamp(6px, 0.59vw, 10px)',
               left: 'clamp(16px, 6.54vw, 130px)',
               display: 'inline-flex',
               alignItems: 'center',
@@ -531,31 +531,26 @@ export default function AboutVisionMissionSection({ vision, mission }) {
             }}
           >
             {/* Square icon */}
-            <div
-              style={{
-                width: 'clamp(10px, 0.97vw, 14px)',
-                height: 'clamp(10px, 0.97vw, 14px)',
-                // fontSize: 'clamp(12px, 2.125vw, 30.2px)',
-                backgroundColor: '#334454',
-                borderRadius: '3px',
-                flexShrink: 0,
-              }}
-            />
-            {/* Label */}
-            <span
-              style={{
-                fontFamily: "var(--font-geist,'Geist'),system-ui,sans-serif",
-                fontWeight: 400,
-                fontSize: 'clamp(11px, 1.225vw, 20.2px)',
-                lineHeight: 1.2,
-                letterSpacing: '-0.32px',
-                textTransform: 'uppercase',
-                color: '#1A1A1A',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              Vision &amp; Mission
-            </span>
+          <div
+            className="bg-[#334454] flex-shrink-0"
+            style={{
+              width:        'clamp(10px, 0.97vw, 18.6px)',
+              height:       'clamp(10px, 0.97vw, 18.6px)',
+              borderRadius: 'clamp(2px, 0.21vw, 4px)',
+            }}
+          />
+          {/* Figma @1440: Geist 400, 16.2px / 19.44px, ls -0.32px, uppercase.
+              vw = DESIGN_PX / 1440 × 100 → 1.125vw / 1.35vw. */}
+          <span
+            className="font-sans font-normal uppercase text-[#000000] flex items-center justify-center"
+            style={{
+              fontSize:      'clamp(12px, 1.125vw, 16.2px)',
+              lineHeight:    'clamp(14px, 1.35vw, 19.44px)',
+              letterSpacing: '-0.32px',
+            }}
+          >
+            Vision &amp; Mission
+          </span>
           </div>
         </div>
       </div>
@@ -1055,7 +1050,7 @@ function CardTexts({ card, showTexts }) {
         <div
           style={{
             position: 'absolute',
-            top: '61%',
+            top: '58%',
             left: '6%',
             width: 'clamp(180px, 40.97vw, 600px)',
             zIndex: 2,
@@ -1085,6 +1080,8 @@ function CardTexts({ card, showTexts }) {
               fontSize: 'clamp(12px, 1.281vw, 21.46px)',
               lineHeight: 1.35,
               letterSpacing: '-0.4px',
+              // marginBottom:'clamp(10px, 40vw, 520px)',
+              marginTop:'clamp(-40px, -2vw, -30px)',
               color: '#FFFFFF',
               margin: 0,
             }}

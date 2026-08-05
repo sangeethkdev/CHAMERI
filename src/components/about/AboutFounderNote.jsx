@@ -265,8 +265,8 @@ export default function AboutFounderNote({ founder }) {
             >
               <div
                 style={{
-                  width: 12,
-                  height: 12,
+                  width: 10,
+                  height: 10,
                   borderRadius: '2px',
                   backgroundColor: '#334454',
                   flexShrink: 0,
@@ -276,7 +276,7 @@ export default function AboutFounderNote({ founder }) {
                 style={{
                   fontFamily: "var(--font-geist, 'Geist'), system-ui, sans-serif",
                   fontWeight: 400,
-                  fontSize: '14px',
+                  fontSize: '12px',
                   lineHeight: '12px',
                   letterSpacing: '0.04em',
                   textTransform: 'uppercase',
@@ -329,19 +329,18 @@ export default function AboutFounderNote({ founder }) {
 
               {/* Quote + author */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <svg
-                  width="clamp(18px, 1.68vw, 32px)"
-                  height="clamp(14px, 1.30vw, 24px)"
-                  viewBox="0 0 25 18"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  style={{ flexShrink: 0 }}
-                >
-                  <path
-                    d="M10.8242 0H6.01221C2.7041 0 0.5 2.50391 0.5 6.46875C0.5 12.3789 3.86182 17.0703 10.373 17.9297V13.8047C6.88379 13.0625 5.23438 10.5977 5.23438 7.375H10.8242V0ZM24.6211 0H19.8091C16.501 0 14.2969 2.50391 14.2969 6.46875C14.2969 12.3789 17.6587 17.0703 24.1699 17.9297V13.8047C20.6807 13.0625 19.0312 10.5977 19.0312 7.375H24.6211V0Z"
-                    fill="#1A1A1A"
-                  />
-                </svg>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/icons/Vector (6).png"
+                  alt=""
+                  aria-hidden="true"
+                  style={{
+                    width: '24.3px',
+                    height: 'auto',
+                    flexShrink: 0,
+                    userSelect: 'none',
+                  }}
+                />
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 25 }}>
                   <p
@@ -453,33 +452,26 @@ export default function AboutFounderNote({ founder }) {
           {/* Icon square
               14px @ 1440 → 0.97vw                          | min 4px  | max 19px */}
           <div
+            className="bg-[#334454] flex-shrink-0"
             style={{
-              width:  'clamp(4px, 0.97vw, 19px)',
-              height: 'clamp(4px, 0.97vw, 19px)',
+              width:        'clamp(10px, 0.97vw, 18.6px)',
+              height:       'clamp(10px, 0.97vw, 18.6px)',
               borderRadius: 'clamp(2px, 0.21vw, 4px)',
-              backgroundColor: '#334454',
-              flexShrink: 0,
             }}
           />
-
-          {/* "founder note" label
-              16.2px @ 1440 → 1.125vw                       | min 11px | max 22px */}
+          {/* Figma @1440: Geist 400, 16.2px / 19.44px, ls -0.32px, uppercase.
+              vw = DESIGN_PX / 1440 × 100 → 1.125vw / 1.35vw. */}
           <span
+            className="font-sans font-normal uppercase text-[#000000] flex items-center justify-center"
             style={{
-              fontFamily: "var(--font-geist, 'Geist'), system-ui, sans-serif",
-              fontWeight: 400,
-              fontSize:      'clamp(11px, 1.125vw, 22px)',
-              lineHeight:    1.2,
+              fontSize:      'clamp(12px, 1.125vw, 16.2px)',
+              lineHeight:    'clamp(14px, 1.35vw, 19.44px)',
               letterSpacing: '-0.32px',
-              textTransform: 'uppercase',
-              color: '#1A1A1A',
-              whiteSpace: 'nowrap',
             }}
           >
             founder note
           </span>
         </div>
-
         {/* ── Content row ───────────────────────────────────────────── */}
         <div
           style={{
@@ -546,33 +538,7 @@ export default function AboutFounderNote({ founder }) {
             }}
           >
 
-             {/* Quote SVG placed inline with text */}
-              <svg
-                viewBox="0 0 25 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{
-                  width:  'clamp(14px, 1.74vw, 33px)',
-                  height: 'auto',
-                  marginLeft: '-40px',
-                  flexShrink: 0,
-                  display: 'inline-block',
-                  // marginLeft: 'clamp(-2px, -0.5vw, 2px)',
-                  /* 12px right margin @ 1440 → 0.83vw */
-                  // marginRight: 'clamp(6px, 0.83vw, 20px)',
-                  /* Slight vertical adjustment to align with text cap height */
-                  verticalAlign: 'baseline',
-                  position: 'relative',
-                  // top: 'clamp(-2px, -0.2vw, -4px)',
-                  marginBottom: 'clamp(-30px, 2.375vw, -25px)',
-                }}
-              >
-                <path
-                  d="M10.8242 0H6.01221C2.7041 0 0.5 2.50391 0.5 6.46875C0.5 12.3789 3.86182 17.0703 10.373 17.9297V13.8047C6.88379 13.0625 5.23438 10.5977 5.23438 7.375H10.8242V0ZM24.6211 0H19.8091C16.501 0 14.2969 2.50391 14.2969 6.46875C14.2969 12.3789 17.6587 17.0703 24.1699 17.9297V13.8047C20.6807 13.0625 19.0312 10.5977 19.0312 7.375H24.6211V0Z"
-                  fill="#1A1A1A"
-                />
-              </svg>
-            {/* Quote text + SVG
+            {/* Quote text — the mark hangs in the left margin of the first line
                 40px @ 1440 → 2.78vw                        | min 20px | max 53px */}
             <p
               style={{
@@ -585,6 +551,10 @@ export default function AboutFounderNote({ founder }) {
                 color: '#1A1A1A',
                 margin: 0,
 
+                /* Hanging indent = mark width + its right gap
+                   24.3px + 12.5px = 36.8px @ 1440 → 2.56vw | min 20px | max 49px */
+                textIndent: 'clamp(-49px, -2.56vw, -20px)',
+
                 /* Bottom margin: 63px @ 1440 → 4.375vw     | min 24px | max 84px */
                 marginBottom: 'clamp(24px, 4.375vw, 70px)',
 
@@ -592,6 +562,25 @@ export default function AboutFounderNote({ founder }) {
                 maxWidth: 'clamp(240px, 64.8vw, 1158px)',
               }}
             >
+              {/* Quote mark
+                  24.3 × 18 @ 1440 → 1.69vw                 | min 14px | max 32.4px
+                  Sits on the first line's baseline via vertical-align. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/icons/Vector (6).png"
+                alt=""
+                aria-hidden="true"
+                style={{
+                  display: 'inline-block',
+                  width:  'clamp(14px, 1.69vw, 32.4px)',
+                  height: 'auto',
+                  /* 12.5px @ 1440 → 0.87vw                 | min 6px  | max 17px */
+                  marginRight: 'clamp(6px, 0.87vw, 17px)',
+                  marginBottom: 'clamp(6px, 1.17vw, 20px)',
+                  verticalAlign: 'baseline',
+                  userSelect: 'none',
+                }}
+              />
               {founder?.quote || "Unrivaled customer service, cutting edge design and quality. Fluid Glass is firmly lodged in our list of prefer suppliers of glazing products."}
             </p>
 

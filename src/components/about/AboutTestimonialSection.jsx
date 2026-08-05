@@ -173,7 +173,7 @@ export default function AboutTestimonialSection({ testimonialSection }) {
               letterSpacing: '-0.32px',
             }}
           >
-            TESTIMONIAL
+            testimonial
           </span>
           </div>
 
@@ -433,7 +433,7 @@ export default function AboutTestimonialSection({ testimonialSection }) {
           <div
             style={{
               position:  'absolute',
-              left:      'clamp(8.5px, 0.83vw, 16px)',
+              left:      'clamp(8.5px, 1.43vw, 26px)',
               top:       '50%',
               transform: 'translateY(-50%)',
               height:    'clamp(16.3px, 1.6vw, 30.6px)',
@@ -462,28 +462,36 @@ export default function AboutTestimonialSection({ testimonialSection }) {
           </div>
 
           {/* Arrow box */}
-          <div
-            className="absolute transition-colors duration-500 overflow-hidden bg-white group-hover:bg-[#EDE7DE]"
-            style={{
-              right:        'clamp(8.5px, 0.83vw, 16px)',
-              width:        'clamp(21.3px, 2.08vw, 40px)',
-              height:       'clamp(21.3px, 2.08vw, 40px)',
-              borderRadius: 'clamp(5px, 0.49vw, 9.3px)',
-              top:          '50%',
-              transform:    'translateY(-50%)',
-            }}
-          >
-            <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out group-hover:translate-x-full">
-              <svg width="clamp(10px, 0.97vw, 18.6px)" height="clamp(10px, 0.97vw, 18.6px)" viewBox="0 0 24 24" fill="none" stroke="#6B859E" strokeWidth="2.5">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </div>
-            <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out -translate-x-full group-hover:translate-x-0">
-              <svg width="clamp(10px, 0.97vw, 18.6px)" height="clamp(10px, 0.97vw, 18.6px)" viewBox="0 0 24 24" fill="none" stroke="#6B859E" strokeWidth="2.5">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </div>
-          </div>
+                <div
+                  className="absolute bg-[#EDE7DE] group-hover:bg-[#EDE7DE] transition-colors duration-500 overflow-hidden"
+                  style={{
+                    right:        'clamp(8px, 1.03vw, 30px)',
+                    width:        'clamp(22px, 2.08vw, 40px)',
+                    height:       'clamp(22px, 2.08vw, 40px)',
+                    borderRadius: 'clamp(5px, 0.49vw, 7px)',
+                  }}
+                >
+                  {/* Arrow slide out */}
+                  <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out group-hover:translate-x-full">
+                    <svg
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                      className="text-[#000000]"
+                      style={{ width: 'clamp(15px, 1.97vw, 20px)', height: 'clamp(15px, 1.97vw, 20px)' }}
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                  {/* Arrow slide in */}
+                  <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out -translate-x-full group-hover:translate-x-0">
+                    <svg
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                      className="text-[#000000]"
+                      style={{ width: 'clamp(15px, 1.97vw, 20px)', height: 'clamp(15px, 1.97vw, 20px)' }}
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
         </button>
       </div>
     </section>

@@ -112,8 +112,8 @@ function MobileSpecialSection({ features, title }) {
             >
               <div
                 style={{
-                  width: 9,
-                  height: 9,
+                  width: 10,
+                  height: 10,
                   backgroundColor: '#334454',
                   borderRadius: 2,
                   flexShrink: 0,
@@ -123,7 +123,7 @@ function MobileSpecialSection({ features, title }) {
                 style={{
                   fontFamily: "var(--font-geist,'Geist'),system-ui,sans-serif",
                   fontWeight: 400,
-                  fontSize: 10,
+                  fontSize: 12,
                   lineHeight: 1.2,
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
