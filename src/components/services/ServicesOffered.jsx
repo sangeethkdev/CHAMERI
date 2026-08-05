@@ -293,7 +293,7 @@ export default function ServicesOffered({ cardsSection }) {
         <div
           style={{
             width: "100%",
-            paddingTop: "clamp(12px, 1.25vw, 18px)",
+            paddingTop: "clamp(12px, 3.95vw, 57px)",
             paddingRight: "clamp(24px, 2.778vw, 40px)",
             paddingBottom: "clamp(14px, 1.389vw, 20px)",
             paddingLeft: "clamp(28px, 3.264vw, 47px)",
@@ -329,28 +329,26 @@ export default function ServicesOffered({ cardsSection }) {
                   width: "fit-content",
                 }}
               >
-                <div
-                  style={{
-                    width: "clamp(10px, 0.972vw, 14px)",
-                    height: "clamp(10px, 0.972vw, 14px)",
-                    background: "#334454",
-                    flexShrink: 0,
-                  }}
-                />
-                <span
-                  style={{
-                    fontFamily: "var(--font-geist-sans), 'Geist'",
-                    fontWeight: 400,
-                    fontSize: "clamp(11px, 1.125vw, 16.2px)",
-                    lineHeight: "100%",
-                    letterSpacing: "clamp(-0.32px, -0.0222vw, -0.15px)",
-                    textTransform: "uppercase",
-                    color: "#334454",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  Our Services
-                </span>
+          <div
+            className="bg-[#334454] flex-shrink-0"
+            style={{
+              width:        'clamp(10px, 0.97vw, 18.6px)',
+              height:       'clamp(10px, 0.97vw, 18.6px)',
+              borderRadius: 'clamp(2px, 0.21vw, 4px)',
+            }}
+          />
+          {/* Figma @1440: Geist 400, 16.2px / 19.44px, ls -0.32px, uppercase.
+              vw = DESIGN_PX / 1440 × 100 → 1.125vw / 1.35vw. */}
+          <span
+            className="font-sans font-normal uppercase text-[#000000] flex items-center justify-center"
+            style={{
+              fontSize:      'clamp(12px, 1.125vw, 16.2px)',
+              lineHeight:    'clamp(14px, 1.35vw, 19.44px)',
+              letterSpacing: '-0.32px',
+            }}
+          >
+            Our Services
+          </span>
               </div>
 
               {/* Heading */}
@@ -439,6 +437,15 @@ export default function ServicesOffered({ cardsSection }) {
 }
 
 function MobileServiceCard({ service }) {
+  /* Same gutter scheme as the desktop ServiceCard, in this card's fixed-px
+     Figma units: the number gets a fixed width so the title always starts at
+     the same x, and description + image are pushed in by that identical amount
+     so all three left edges line up. */
+  const INNER_PAD    = "6.05px";
+  const NUM_W        = "6px";
+  const NUM_GAP      = "6px";
+  const TITLE_INDENT = `calc(${INNER_PAD} + ${NUM_W} + ${NUM_GAP})`;
+
   return (
     <div
       style={{
@@ -464,9 +471,9 @@ function MobileServiceCard({ service }) {
           style={{
             display: "flex",
             alignItems: "flex-start",
-            gap: "12.67px",
-            paddingLeft: "9.05px",
-            paddingRight: "9.05px",
+            gap: NUM_GAP,
+            paddingLeft: INNER_PAD,
+            paddingRight: INNER_PAD,
           }}
         >
           <span
@@ -476,6 +483,9 @@ function MobileServiceCard({ service }) {
               fontSize: "13.57px",
               lineHeight: "20.35px",
               color: "#6B859E",
+              // paddingLeft: "10px",
+              paddingRight: "-10px",
+              width: NUM_W,
               flexShrink: 0,
             }}
           >
@@ -501,14 +511,14 @@ function MobileServiceCard({ service }) {
           </h3>
         </div>
 
-        {/* Description + Learn More */}
+        {/* Description + Learn More — indented to the title's left edge */}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
             gap: "0.9px",
-            paddingLeft: "9.05px",
-            paddingRight: "9.05px",
+            paddingLeft: TITLE_INDENT,
+            paddingRight: INNER_PAD,
           }}
         >
           <p
@@ -561,13 +571,15 @@ function MobileServiceCard({ service }) {
         </div>
       </div>
 
-      {/* Image */}
+      {/* Image — same left edge as the title and description. maxWidth accounts
+         for the indent so the fixed width can't push past the card's padding. */}
       <div
         style={{
           position: "relative",
           width: "294.92px",
+          maxWidth: `calc(100% - ${TITLE_INDENT})`,
+          marginLeft: TITLE_INDENT,
           height: "183.64px",
-          maxWidth: "100%",
           borderRadius: "8px",
           overflow: "hidden",
           flexShrink: 0,
@@ -586,6 +598,15 @@ function MobileServiceCard({ service }) {
 }
 
 function ServiceCard({ service }) {
+  /* The number occupies a fixed-width gutter, so the title starts at the same x
+     on every card regardless of the digits. Description and image are pushed in
+     by that identical amount (INNER_PAD + gutter + gap), which is what lines all
+     three left edges up under the title. */
+  const INNER_PAD    = "clamp(6px, 0.694vw, 10px)";
+  const NUM_W        = "clamp(18px, 1.736vw, 25px)";
+  const NUM_GAP      = "clamp(8px, 0.833vw, 12px)";
+  const TITLE_INDENT = `calc(${INNER_PAD} + ${NUM_W} + ${NUM_GAP})`;
+
   return (
     <div
       style={{
@@ -604,26 +625,32 @@ function ServiceCard({ service }) {
         boxSizing: "border-box",
       }}
     >
-      {/* Number + Title — fixed height (number line + 2-line title) so short
-         headings never let the card content below shift upward */}
+      {/* Number + Title — number sits in a left gutter alongside the title, the
+         same arrangement the mobile card uses. `flex-start` keeps the number on
+         the title's first line; its smaller line box lifts it to cap height.
+         Height is pinned to two title lines so short headings never let the
+         card content below shift upward. */}
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
-          gap: "clamp(8px, 0.972vw, 14px)",
-          paddingLeft: "clamp(6px, 0.694vw, 10px)",
-          paddingRight: "clamp(6px, 0.694vw, 10px)",
-          height: "clamp(72px, 7.806vw, 112.4px)",
+          alignItems: "flex-start",
+          gap: NUM_GAP,
+          paddingLeft: INNER_PAD,
+          paddingRight: INNER_PAD,
+          height: "clamp(48px, 5.27vw, 75.9px)",
           flexShrink: 0,
         }}
       >
         <span
           style={{
             fontFamily: "var(--font-geist-sans), 'Geist'",
+            paddingTop: "clamp(5px, 1.016vw, 5px)",
             fontWeight: 400,
             fontSize: "clamp(11px, 1.042vw, 15px)",
             lineHeight: "clamp(16px, 1.5625vw, 22.5px)",
             color: "#6B859E",
+            width: NUM_W,
+            flexShrink: 0,
           }}
         >
           {service.number}
@@ -637,6 +664,8 @@ function ServiceCard({ service }) {
             letterSpacing: "clamp(-0.66px, -0.0458vw, -0.3px)",
             color: "#1A1A1A",
             margin: 0,
+            flex: 1,
+            minWidth: 0,
             display: "-webkit-box",
             WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical",
@@ -647,15 +676,16 @@ function ServiceCard({ service }) {
         </h3>
       </div>
 
-      {/* Description + Learn More — fixed height (4-line description) so
-         short or long descriptions never move the image below */}
+      {/* Description + Learn More — indented to the title's left edge. Fixed
+         height (4-line description) so short or long descriptions never move
+         the image below */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           gap: "1px",
-          paddingLeft: "clamp(6px, 0.694vw, 10px)",
-          paddingRight: "clamp(6px, 0.694vw, 10px)",
+          paddingLeft: TITLE_INDENT,
+          paddingRight: INNER_PAD,
           height: "clamp(89px, 8.438vw, 121.5px)",
           flexShrink: 0,
         }}
@@ -709,13 +739,16 @@ function ServiceCard({ service }) {
         </button>
       </div>
 
-      {/* Image */}
+      {/* Image — same left edge as the title and description. maxWidth accounts
+         for the indent so the fixed width can't push past the card's padding. */}
       <div
         style={{
           position: "relative",
           width: "clamp(200px, 22.639vw, 326px)",
+          maxWidth: `calc(100% - ${TITLE_INDENT})`,
+          marginLeft: TITLE_INDENT,
           height: "clamp(120px, 14.097vw, 203px)",
-          borderRadius: "clamp(6px, 0.556vw, 8px)",
+          // borderRadius: "clamp(6px, 0.556vw, 8px)",
           overflow: "hidden",
           flexShrink: 0,
         }}

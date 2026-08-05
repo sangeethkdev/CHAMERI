@@ -100,7 +100,7 @@ function useCardDimensions() {
 }
 
 const ServicesTestimonials = ({ testimonial }) => {
-  const heading = testimonial?.heading || "What Our Clients Says";
+  const heading = testimonial?.heading || "What Our Clients Say";
   const subheading =
     testimonial?.subheading ||
     "Explore crafted villa spaces with modern comfort built beautifully";
@@ -174,7 +174,11 @@ const ServicesTestimonials = ({ testimonial }) => {
     <section
       className="w-full bg-[#EDE7DE] overflow-hidden flex flex-col mx-auto items-center"
       style={{
-        paddingTop:    'clamp(40px, 4.17vw, 60px)',
+        /* min 0 (not 40) because the section above it already ends with the
+           service card's own 39.8px bottom padding — 40px here stacked on top
+           of that and read as a dead band on mobile. Above ~960px the vw term
+           takes over, so desktop spacing is unchanged. */
+        paddingTop:    'clamp(0px, 4.17vw, 60px)',
         paddingBottom: 'clamp(40px, 4.17vw, 60px)',
         gap:           'clamp(16px, 1.67vw, 24px)',
       }}
@@ -189,36 +193,39 @@ const ServicesTestimonials = ({ testimonial }) => {
       >
         <div
           className="flex flex-col items-center justify-center"
-          style={{ width: 'clamp(358px, 42.22vw, 608px)', gap: 'clamp(6px, 0.69vw, 10px)' }}
+          style={{ width: 'clamp(108px, 11.11vw, 158px)', gap: 'clamp(6px, 0.69vw, 10px)' }}
         >
           {/* Badge */}
           <div
-            className="flex items-center justify-center rounded-[90px] self-center"
+            className="flex items-center rounded-[90px] self-start"
             style={{
-              width:         'clamp(90px, 9.04vw, 130.2px)',
-              height:        'clamp(22px, 2.14vw, 30.8px)',
+              paddingLeft:   'clamp(5px, 0.5vw, 7.2px)',
+              paddingRight:  'clamp(5px, 0.5vw, 7.2px)',
+              paddingTop:    'clamp(3.5px, 0.38vw, 5.4px)',
+              paddingBottom: 'clamp(3.5px, 0.38vw, 5.4px)',
               gap:           'clamp(5px, 0.5vw, 7.2px)',
             }}
           >
-            <div
-              className="bg-[#334454] flex-shrink-0"
-              style={{
-                width:        'clamp(10px, 0.97vw, 14px)',
-                height:       'clamp(10px, 0.97vw, 14px)',
-                borderRadius: 'clamp(2px, 0.21vw, 3px)',
-              }}
-            />
-            <span
-              className="font-sans font-normal uppercase text-[#334454] tracking-wider flex items-center justify-center"
-              style={{
-                height:        'clamp(16px, 1.39vw, 20px)',
-                fontSize:      'clamp(10px, 0.83vw, 16px)',
-                letterSpacing: 'clamp(-0.24px, -0.02vw, -0.32px)',
-                lineHeight: 1
-              }}
-            >
-              TESTIMONIALS
-            </span>
+          <div
+            className="bg-[#334454] flex-shrink-0"
+            style={{
+              width:        'clamp(10px, 0.97vw, 18.6px)',
+              height:       'clamp(10px, 0.97vw, 18.6px)',
+              borderRadius: 'clamp(2px, 0.21vw, 4px)',
+            }}
+          />
+          {/* Figma @1440: Geist 400, 16.2px / 19.44px, ls -0.32px, uppercase.
+              vw = DESIGN_PX / 1440 × 100 → 1.125vw / 1.35vw. */}
+          <span
+            className="font-sans font-normal uppercase text-[#000000] flex items-center justify-center"
+            style={{
+              fontSize:      'clamp(12px, 1.125vw, 16.2px)',
+              lineHeight:    'clamp(14px, 1.35vw, 19.44px)',
+              letterSpacing: '-0.32px',
+            }}
+          >
+            TESTIMONIALS
+          </span>
           </div>
 
           {/* Heading */}
@@ -229,7 +236,8 @@ const ServicesTestimonials = ({ testimonial }) => {
               lineHeight:    'clamp(36.6px, 4.17vw, 60px)',
               letterSpacing: 'clamp(-0.73px, -0.06vw, -0.9px)',
               width:         'clamp(358px, 42.22vw, 648px)',
-              height:        'clamp(37px, 4.17vw, 60px)'
+              minHeight:     'clamp(37px, 4.17vw, 60px)',
+              whiteSpace:    'pre-line'
             }}
           >
             {heading}
@@ -237,13 +245,14 @@ const ServicesTestimonials = ({ testimonial }) => {
 
           {/* Sub-heading */}
           <p
-            className="font-sans font-normal text-[#334454]/70 text-center m-0 flex items-center justify-center"
+            className="font-sans font-normal text-[#1C1C1C]/70 text-center m-0 flex items-center justify-center"
             style={{
               fontSize:      'clamp(14px, 1.39vw, 20px)',
               lineHeight:    'clamp(21px, 1.83vw, 26.4px)',
               letterSpacing: 'clamp(0px, -0.03vw, -0.44px)',
               width:         'clamp(286px, 42.22vw, 608px)',
-              height:        'clamp(42px, 3.68vw, 53px)'
+              minHeight:     'clamp(42px, 3.68vw, 53px)',
+              whiteSpace:    'pre-line'
             }}
           >
             {subheading}
@@ -255,7 +264,11 @@ const ServicesTestimonials = ({ testimonial }) => {
       <div
         ref={wrapperRef}
         className="relative overflow-hidden w-full"
-        style={{ height: `${cardH}px` }}
+        style={{
+          height: `${cardH}px`,
+          WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)',
+          maskImage:       'linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)',
+        }}
       >
         {/* Sliding track */}
         <div
@@ -275,6 +288,9 @@ const ServicesTestimonials = ({ testimonial }) => {
             // clip top & bottom equally so the card appears shorter without moving in the layout
             const clipPct  = isCenter ? 0 : ((1 - sideH / cardH) / 2) * 100;
             const r        = cardRadius.toFixed(2);
+            // the gradient/quote/profile overlay is anchored to the card's true (unclipped) bottom edge,
+            // so it has to shift up by the same amount trimmed off the bottom or it gets clipped away
+            const bottomTrimPx = (clipPct / 100) * cardH;
 
             return (
               <div
@@ -309,6 +325,8 @@ const ServicesTestimonials = ({ testimonial }) => {
                       padding:    `${20.68 * mobileScale}px ${12.05 * mobileScale}px ${16 * mobileScale}px`,
                       gap:        `${10 * mobileScale}px`,
                       background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.75) 55%, transparent 100%)',
+                      transform:  `translateY(-${bottomTrimPx}px)`,
+                      transition: transitionEnabled ? 'transform 900ms cubic-bezier(0.4,0,0.2,1)' : 'none',
                     }}
                   >
                     <p
@@ -350,6 +368,8 @@ const ServicesTestimonials = ({ testimonial }) => {
                       style={{
                         height: `${214.02 * scale}px`,
                         background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 60%, transparent 100%)',
+                        transform: `translateY(-${bottomTrimPx}px)`,
+                        transition: transitionEnabled ? 'transform 900ms cubic-bezier(0.4,0,0.2,1)' : 'none',
                       }}
                     />
 
@@ -357,9 +377,11 @@ const ServicesTestimonials = ({ testimonial }) => {
                     <div
                       className="absolute left-0"
                       style={{
-                        top:    `${335.99 * scale}px`,
+                        top:    `${343.99 * scale}px`,
                         height: `${214.02 * scale}px`,
                         width:  `${cardW}px`,
+                        transform: `translateY(-${bottomTrimPx}px)`,
+                        transition: transitionEnabled ? 'transform 900ms cubic-bezier(0.4,0,0.2,1)' : 'none',
                       }}
                     >
                       {/* Quote */}
@@ -446,7 +468,7 @@ const ServicesTestimonials = ({ testimonial }) => {
           }}
         >
           <svg
-            viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"
+            viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5"
             style={{ width: `${18 * arrowScale}px`, height: `${18 * arrowScale}px` }}
           >
             <path d="M19 12H5M12 5l-7 7 7 7" />
@@ -467,13 +489,96 @@ const ServicesTestimonials = ({ testimonial }) => {
           }}
         >
           <svg
-            viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"
+            viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5"
             style={{ width: `${18 * arrowScale}px`, height: `${18 * arrowScale}px` }}
           >
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>
         </button>
       </div>
+
+      {/* ══ 3 — Learn More ════════════════════════════════════════════════
+          Same button as home's TestimonialsSection / AboutTestimonialSection.
+          At the 1440 baseline the clamps resolve to the Figma spec exactly:
+          11.6vw → 167px wide, 3.61vw → 52px tall, 0.83vw → 12px radius.
+          The row is the header's 1300px width (90.28vw @1440); its height is
+          intrinsic so the button can keep growing past 52px on wider screens
+          (3.61vw → 69.3px at 1920) without being clipped. */}
+      {/* <div
+        className="flex justify-center items-center"
+        style={{ width: 'clamp(390px, 90.28vw, 1300px)' }}
+      >
+        <button
+          className="group relative flex items-center border-none cursor-pointer overflow-hidden transition-colors duration-500 bg-[#6B859E] hover:bg-[#4a6074]"
+          style={{
+            width:        'clamp(118.6px, 11.6vw, 222.6px)',
+            height:       'clamp(36.9px, 3.61vw, 69.3px)',
+            borderRadius: 'clamp(8.5px, 0.83vw, 16px)',
+          }}
+        > */}
+          {/* Sliding text — centred via top:50% rather than a fixed top
+              offset: the offset only centred at the ~52px height and left
+              the label riding high once the button grew at 1920. */}
+          {/* <div
+            className="absolute overflow-hidden"
+            style={{
+              top:       '50%',
+              transform: 'translateY(-50%)',
+              left:      'clamp(10px, 1.83vw, 22px)',
+              height:    'clamp(16.3px, 1.6vw, 30.6px)',
+            }}
+          >
+            <div className="flex flex-col transition-transform duration-500 ease-in-out group-hover:-translate-y-1/2">
+              {['Learn More', 'Learn More'].map((label, i) => (
+                <span
+                  key={i}
+                  className="font-sans font-medium text-[#EDE7DE] whitespace-nowrap flex items-center"
+                  style={{
+                    height:   'clamp(16.3px, 1.6vw, 30.6px)',
+                    fontSize: 'clamp(13px, 1.04vw, 20px)',
+                  }}
+                >
+                  {label}
+                </span>
+              ))}
+            </div>
+          </div> */}
+
+          {/* Arrow box */}
+          {/* <div
+            className="absolute bg-[#EDE7DE] group-hover:bg-[#EDE7DE] transition-colors duration-500 overflow-hidden"
+            style={{
+              right:        'clamp(8px, 0.83vw, 16px)',
+              width:        'clamp(22px, 2.08vw, 40px)',
+              height:       'clamp(22px, 2.08vw, 40px)',
+              borderRadius: 'clamp(5px, 0.49vw, 9.3px)',
+              top:          '50%',
+              transform:    'translateY(-50%)',
+            }}
+          > */}
+            {/* Arrow slide out */}
+            {/* <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out group-hover:translate-x-full">
+              <svg
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                className="text-[#000000]"
+                style={{ width: 'clamp(15px, 1.39vw, 26.6px)', height: 'clamp(15px, 1.39vw, 26.6px)' }}
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </div> */}
+            {/* Arrow slide in */}
+            {/* <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out -translate-x-full group-hover:translate-x-0">
+              <svg
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                className="text-[#000000]"
+                style={{ width: 'clamp(15px, 1.39vw, 26.6px)', height: 'clamp(15px, 1.39vw, 26.6px)' }}
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+        </button>
+      </div> */}
 
     </section>
   );
