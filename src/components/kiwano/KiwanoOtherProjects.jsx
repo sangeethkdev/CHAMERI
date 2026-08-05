@@ -68,7 +68,7 @@ export default function KiwanoOtherProjects({ otherProjects }) {
             lineHeight:    "21px",
             letterSpacing: "0",
             textAlign:     "center",
-            color:         "#000000CC",
+            color:         "#333333",
             margin:        0,
           }}
         >
@@ -261,7 +261,7 @@ export default function KiwanoOtherProjects({ otherProjects }) {
               fontSize: "clamp(32px, 4.167vw, 60px)",
               lineHeight: "clamp(36px, 4.59vw, 66.14px)",
               letterSpacing: "-2.05px",
-              color: "#222F30",
+              color: "#000000",
               margin: 0,
               textTransform: "capitalize",
             }}
@@ -275,7 +275,7 @@ export default function KiwanoOtherProjects({ otherProjects }) {
               fontSize: "clamp(16px, 1.389vw, 20px)",
               lineHeight: "clamp(22px, 1.833vw, 26.4px)",
               letterSpacing: "-0.44px",
-              color: "#222F30CC",
+              color: "#333333",
               margin: 0,
               maxWidth: "clamp(375px, 89.2vw, 693px)",
             }}
@@ -405,28 +405,30 @@ export default function KiwanoOtherProjects({ otherProjects }) {
                 <div
                   className="absolute bg-[#EDE7DE] group-hover:bg-[#EDE7DE] transition-colors duration-500 overflow-hidden"
                   style={{
-                    right:        'clamp(8.5px, 0.83vw, 12px)',
-                    width:        'clamp(21.3px, 2.08vw, 30px)',
-                    height:       'clamp(21.3px, 2.08vw, 30px)',
+                    right:        'clamp(8px, 0.83vw, 12px)',
+                    width:        'clamp(22px, 2.08vw, 30px)',
+                    height:       'clamp(22px, 2.08vw, 30px)',
                     borderRadius: 'clamp(5px, 0.49vw, 7px)',
                   }}
                 >
+                  {/* Arrow slide out */}
                   <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out group-hover:translate-x-full">
                     <svg
-                      viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                      className="text-black"
-                      style={{ width: 'clamp(10px, 1.97vw, 22px)', height: 'clamp(10px, 1.97vw, 22px)' }}
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                      className="text-[#000000]"
+                      style={{ width: 'clamp(15px, 1.97vw, 20px)', height: 'clamp(15px, 1.97vw, 20px)' }}
                     >
-                      <path d="M8 12h18M20 5l7 7-7 7" />
+                      <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                   </div>
+                  {/* Arrow slide in */}
                   <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out -translate-x-full group-hover:translate-x-0">
                     <svg
-                      viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                      className="text-black"
-                      style={{ width: 'clamp(10px, 1.97vw, 22px)', height: 'clamp(10px, 1.97vw,22px)' }}
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                      className="text-[#000000]"
+                      style={{ width: 'clamp(15px, 1.97vw, 20px)', height: 'clamp(15px, 1.97vw, 20px)' }}
                     >
-                      <path d="M8 12h18M20 5l7 7-7 7" />
+                      <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                   </div>
                 </div>

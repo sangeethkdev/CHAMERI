@@ -1016,14 +1016,25 @@ const WhyChooseUs = ({ chooseUs }) => {
                 }}
               >
                 {/* Icon box */}
-              <div
-                className="relative bg-[#32445333] flex items-center justify-center shadow-lg flex-shrink-0"
-                style={{ width: '36.16px', height: '36.16px', borderRadius: '3.93px', padding: '4.72px' }}
-              >
-                <div className="text-[#EDE7DE] flex items-center justify-center w-full h-full" >
-                  {card.icon}
-                </div>
-              </div>
+<div
+  className="relative flex items-center justify-center flex-shrink-0
+             bg-[#32445333]
+             backdrop-blur-md
+             border border-white/10"
+  style={{
+    width: "36.16px",
+    height: "36.16px",
+    borderRadius: "3.93px",
+    padding: "4.72px",
+    boxShadow: "0px 4px 12px rgba(0,0,0,0.15)",
+    WebkitBackdropFilter: "blur(12px)",
+    backdropFilter: "blur(12px)",
+  }}
+>
+  <div className="text-[#EDE7DE] flex items-center justify-center w-full h-full">
+    {card.icon}
+  </div>
+</div>
 
                 {/* Title */}
                 <h3

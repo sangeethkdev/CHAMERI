@@ -76,27 +76,24 @@ export default function GalleryGrid({ galleryImages }) {
           }}
         >
           <div
+            className="bg-[#334454] flex-shrink-0"
             style={{
-              width: 'clamp(10px, 1.12vw, 19px)',
-              height: 'clamp(10px, 1.12vw, 19px)',
-              borderRadius: '3px',
-              backgroundColor: '#334454',
-              flexShrink: 0,
+              width:        'clamp(10px, 0.97vw, 18.6px)',
+              height:       'clamp(10px, 0.97vw, 18.6px)',
+              borderRadius: 'clamp(2px, 0.21vw, 4px)',
             }}
           />
+          {/* Figma @1440: Geist 400, 16.2px / 19.44px, ls -0.32px, uppercase.
+              vw = DESIGN_PX / 1440 × 100 → 1.125vw / 1.35vw. */}
           <span
+            className="font-sans font-normal uppercase text-[#000000] flex items-center justify-center"
             style={{
-              fontFamily: "var(--font-geist), 'Geist', sans-serif",
-              fontWeight: 400,
-              fontSize: 'clamp(11px, 1.12vw, 22px)',
-              lineHeight: 1.2,
+              fontSize:      'clamp(12px, 1.125vw, 16.2px)',
+              lineHeight:    'clamp(14px, 1.35vw, 19.44px)',
               letterSpacing: '-0.32px',
-              textTransform: 'uppercase',
-              color: '#334454',
-              whiteSpace: 'nowrap',
             }}
           >
-            Gallery
+            GALLERY
           </span>
         </div>
 

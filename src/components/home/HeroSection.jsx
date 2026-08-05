@@ -427,7 +427,7 @@
 
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import NewNavbar from "../common/NewNavbar";
 
@@ -463,35 +463,18 @@ export default function HeroSection({ hero }) {
     return () => window.removeEventListener("resize", updateViewport);
   }, []);
 
-  // 1. Intro Animation (0 → 60%) on mount
-  useEffect(() => {
-    if ("scrollRestoration" in window.history) {
-      window.history.scrollRestoration = "manual";
-    }
-    window.scrollTo(0, 0);
-    document.body.style.overflow = "hidden";
+  // The reveal is user-driven. These are refs, not state, because the gesture
+  // listeners below have to read the current values synchronously — a burst of
+  // wheel events all fires before React can re-render, so a state-based guard
+  // would let the outro start several times over.
+  const introDoneRef = useRef(false);
+  const revealStartedRef = useRef(false);
+  const pendingRevealRef = useRef(false);
 
-    let start;
-    const duration = 2500;
-
-    const step = (timestamp) => {
-      if (!start) start = timestamp;
-      const elapsed = timestamp - start;
-      const t = clampVal(elapsed / duration, 0, 1);
-      const easedT = easeInOutCubic(t);
-      setProgress(easedT * 0.6);
-
-      if (t < 1.0) requestAnimationFrame(step);
-      else setAnimState("waiting");
-    };
-
-    requestAnimationFrame(step);
-    return () => { document.body.style.overflow = ""; };
-  }, []);
-
-  // 2. Outro Animation (60 → 100%) on click
-  const handleClick = () => {
-    if (animState !== "waiting") return;
+  // 1. Outro Animation (60 → 100%) — plays once, then unlocks the page
+  const startReveal = useCallback(() => {
+    if (revealStartedRef.current) return;
+    revealStartedRef.current = true;
     setAnimState("outro");
 
     let start;
@@ -513,17 +496,95 @@ export default function HeroSection({ hero }) {
     };
 
     requestAnimationFrame(step);
-  };
+  }, []);
 
-  // 3. Auto-reveal fallback — if the user hasn't clicked within 2s of
-  // reaching "waiting", trigger the outro automatically. Re-runs only when
-  // animState changes, so a manual click (which flips animState to "outro")
-  // cancels this timer via the cleanup below before it can double-fire.
+  // A gesture that lands mid-intro is remembered rather than dropped, so an
+  // impatient first scroll still counts — it fires the moment the intro settles.
+  const requestReveal = useCallback(() => {
+    if (revealStartedRef.current) return;
+    if (!introDoneRef.current) {
+      pendingRevealRef.current = true;
+      return;
+    }
+    startReveal();
+  }, [startReveal]);
+
+  // 2. Intro Animation (0 → 60%) on mount
   useEffect(() => {
-    if (animState !== "waiting") return;
-    const timer = setTimeout(handleClick, 100);
-    return () => clearTimeout(timer);
-  }, [animState]);
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+    window.scrollTo(0, 0);
+    document.body.style.overflow = "hidden";
+
+    let start;
+    let rafId;
+    const duration = 2500;
+
+    const step = (timestamp) => {
+      if (!start) start = timestamp;
+      const elapsed = timestamp - start;
+      const t = clampVal(elapsed / duration, 0, 1);
+      const easedT = easeInOutCubic(t);
+      setProgress(easedT * 0.6);
+
+      if (t < 1.0) {
+        rafId = requestAnimationFrame(step);
+      } else {
+        introDoneRef.current = true;
+        setAnimState("waiting");
+        if (pendingRevealRef.current) startReveal();
+      }
+    };
+
+    rafId = requestAnimationFrame(step);
+    return () => {
+      cancelAnimationFrame(rafId);
+      document.body.style.overflow = "";
+    };
+  }, [startReveal]);
+
+  // 3. A single scroll gesture triggers the reveal. Native scrolling is locked
+  // (body overflow is hidden until the outro finishes) so the `scroll` event
+  // never fires here — wheel, touch and keys are the only signals available.
+  useEffect(() => {
+    if (animState === "outro" || animState === "done") return;
+
+    let touchStartY = null;
+
+    const onWheel = (e) => {
+      if (e.deltaY > 0) requestReveal();
+    };
+
+    const onTouchStart = (e) => {
+      touchStartY = e.touches[0]?.clientY ?? null;
+    };
+
+    const onTouchMove = (e) => {
+      if (touchStartY === null) return;
+      // Swiping the finger up is a downward scroll. 8px of travel filters out
+      // the jitter of a stationary touch.
+      if (touchStartY - (e.touches[0]?.clientY ?? touchStartY) > 8) requestReveal();
+    };
+
+    const onKeyDown = (e) => {
+      if (["ArrowDown", "PageDown", "End", " ", "Spacebar"].includes(e.key)) {
+        requestReveal();
+      }
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: true });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [animState, requestReveal]);
 
   // ── Derived values ─────────────────────────────────────────────────────────
   const pct = Math.round(progress * 100);
@@ -700,7 +761,7 @@ export default function HeroSection({ hero }) {
         ref={sectionRef}
         className={`relative w-full z-20 pointer-events-auto ${animState === "waiting" ? "cursor-pointer" : ""}`}
         style={{ marginTop: "-60vh", height: "100vh" }}
-        onClick={handleClick}
+        onClick={requestReveal}
       >
 
         {/* Bottom gradient for text readability */}
@@ -865,7 +926,7 @@ export default function HeroSection({ hero }) {
               position: "absolute",
               top: "clamp(170px, 27.59vh, 282.55px)",  /* 282.55/1024 */
               left: "clamp(240px, 53.66vw, 772.75px)",  /* 772.75/1440 */
-              width: "clamp(140px, 22.80vw, 660.75px)",  /* 270.75/1440 */
+              width: "clamp(140px, 21.80vw, 650.75px)",  /* 270.75/1440 */
               height: "clamp(80px, 12.55vh, 250px)",      /* 105/1024    */
               opacity: sub2T,
               transform: `translateY(${20 * (1 - sub2T)}px)`,
@@ -873,7 +934,7 @@ export default function HeroSection({ hero }) {
           >
             <p
               style={{
-                width: "clamp(50px, 22.78vw, 660px)",  /* 256/1440 */
+                width: "clamp(50px, 21.78vw, 660px)",  /* 256/1440 */
                 height: "clamp(80px, 12.55vh, 250px)",
                 fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
                 fontWeight: 300,

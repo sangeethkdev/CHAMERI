@@ -9,19 +9,30 @@ import Image from "next/image";
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
+// `query` is the string handed to Google Maps — a searchable place name, not a
+// coordinate. Pinning by raw lat/lng dropped the marker on open ground with no
+// place record behind it, which is what produced "Place info couldn't load".
+// Letting Google geocode the name lands on the real place and its info card.
+//
+// Generic names ("Railway Station", "Downtown Mall") carry a locality so they
+// do not resolve to a same-named place elsewhere in Kerala. "NH 66" is a
+// 1600km highway with no single pin, so it targets the Thalassery bypass.
 const AMENITIES = [
-  { id: 1, name: "Kannur international airport", time: "45 Minutes Away", icon: "airport", lat: 11.9161, lng: 75.5616 },
-  { id: 2, name: "Aster MIMS Kannur", time: "25 Minutes Away", icon: "hospital", lat: 11.8906, lng: 75.3854 },
-  { id: 3, name: "Chinmaya Vidyalaya", time: "25 Minutes Away", icon: "school", lat: 11.8950, lng: 75.3900 },
-  { id: 4, name: "Ammayum Kunjum Hospital", time: "18 Minutes Away", icon: "hospital", lat: 11.8500, lng: 75.4000 },
-  { id: 5, name: "Railway Station", time: "10 Minutes Away", icon: "train", lat: 11.8745, lng: 75.3704 },
-  { id: 6, name: "Indira Gandhi Cooperative Hospital", time: "7 Minutes Away", icon: "hospital", lat: 11.8600, lng: 75.3800 },
-  { id: 7, name: "Downtown Mall", time: "12 Minutes Away", icon: "cart", lat: 11.8700, lng: 75.3850 },
-  { id: 8, name: "Amrita Vidyalayam", time: "15 Minutes Away", icon: "school", lat: 11.8800, lng: 75.3900 },
-  { id: 9, name: "Mahe Dental College", time: "10 Minutes Away", icon: "tooth", lat: 11.7000, lng: 75.5300 },
-  { id: 10, name: "Malabar Cancer Centre", time: "5 Minutes Away", icon: "hospital", lat: 11.7500, lng: 75.4900 },
-  { id: 11, name: "Genesis International School", time: "4 Minutes Away", icon: "school", lat: 11.7600, lng: 75.5000 },
-  { id: 12, name: "NH 66", time: "4 Minutes Away", icon: "road", lat: 11.7700, lng: 75.5100 },
+  { id: 1,  name: "Kannur international airport",       time: "45 Minutes Away", icon: "airport",  query: "Kannur International Airport, Mattannur, Kerala" },
+  { id: 2,  name: "Aster MIMS Kannur",                  time: "25 Minutes Away", icon: "hospital", query: "Aster MIMS Kannur, Kerala" },
+  { id: 3,  name: "Chinmaya Vidyalaya",                 time: "25 Minutes Away", icon: "school",   query: "Chinmaya Vidyalaya, Thalassery, Kerala" },
+  { id: 4,  name: "Ammayum Kunjum Hospital",            time: "18 Minutes Away", icon: "hospital", query: "Ammayum Kunjum Hospital Thalassery" },
+  { id: 5,  name: "Railway Station",                    time: "10 Minutes Away", icon: "train",    query: "TLY Thalassery Railway Station" },
+  { id: 6,  name: "Indira Gandhi Cooperative Hospital", time: "7 Minutes Away",  icon: "hospital", query: "Indira Gandhi Co-operative Hospital, Thalassery, Kerala" },
+  { id: 7,  name: "Downtown Mall",                      time: "12 Minutes Away", icon: "cart",     query: "Downtown Mall, Thalassery, Kerala" },
+  { id: 8,  name: "Amrita Vidyalayam",                  time: "15 Minutes Away", icon: "school",   query: "Amrita Vidyalayam, Kannur, Kerala" },
+  { id: 9,  name: "Mahe Dental College",                time: "10 Minutes Away", icon: "tooth",    query: "Mahe Institute of Dental Sciences and Hospital, Mahe" },
+  { id: 10, name: "Malabar Cancer Centre",              time: "5 Minutes Away",  icon: "hospital", query: "Malabar Cancer Centre, Thalassery, Kerala" },
+  // NOTE: Google has no place record for this school under any name tried —
+  // the embed will show the Thalassery area rather than a pinned building.
+  // Correct the name here, or the map stays approximate for this one entry.
+  { id: 11, name: "Genesis International School",       time: "4 Minutes Away",  icon: "school",   query: "Genesis International School, Thalassery, Kerala" },
+  { id: 12, name: "NH 66",                              time: "4 Minutes Away",  icon: "road",     query: "Thalassery Bypass, Kerala" },
 ];
 
 // Mobile shows a 2-column grid — chunk the flat list into pairs.
@@ -134,21 +145,32 @@ const DEFAULT_MAP_SRC = "https://www.google.com/maps?q=Kiwano+Villas,+Mahe,+Kera
 // Chameri Builders & Developers — same origin used in ContactLocations.jsx
 const CHAMERI_ORIGIN = { lat: 11.7485921, lng: 75.5322851, name: "Chameri Builders & Developers" };
 
+// Destination goes by name too — the old lat/lng routed to the wrong spot.
 function getDirectionsUrl(destination) {
-  return `https://www.google.com/maps/dir/?api=1&origin=${CHAMERI_ORIGIN.lat},${CHAMERI_ORIGIN.lng}&destination=${destination.lat},${destination.lng}&travelmode=driving`;
+  return `https://www.google.com/maps/dir/?api=1&origin=${CHAMERI_ORIGIN.lat},${CHAMERI_ORIGIN.lng}&destination=${encodeURIComponent(destination.query)}&travelmode=driving`;
 }
 
 export default function KiwanoAmenities({ amenities }) {
   const [viewMode, setViewMode] = useState("list"); // 'list' | 'map'
   const [selectedAmenity, setSelectedAmenity] = useState(null);
 
-  const handleItemClick = (amenity) => {
+  // Desktop: the card highlight and the map pin both read from `selectedAmenity`,
+  // so the two can never drift apart — selecting drives both at once.
+  const handleAmenitySelect = (amenity) => {
     setSelectedAmenity(amenity);
+    setViewMode("map");
+  };
+
+  // Mobile renders the list only — there is no map view to open there, so a tap
+  // still hands off to Google Maps directions the way it did before.
+  const openDirections = (amenity) => {
     window.open(getDirectionsUrl(amenity), "_blank", "noopener,noreferrer");
   };
 
+  // Same `q=<place name>&output=embed` form the default map already uses, so the
+  // embed resolves a real place and renders its info card.
   const mapSrc = selectedAmenity
-    ? `https://www.google.com/maps?q=${selectedAmenity.lat},${selectedAmenity.lng}(${encodeURIComponent(selectedAmenity.name)})&z=15&output=embed`
+    ? `https://www.google.com/maps?q=${encodeURIComponent(selectedAmenity.query)}&z=16&output=embed`
     : DEFAULT_MAP_SRC;
 
   return (
@@ -259,7 +281,7 @@ export default function KiwanoAmenities({ amenities }) {
             {row.map((amenity) => (
               <div
                 key={amenity.id}
-                onClick={() => handleItemClick(amenity)}
+                onClick={() => openDirections(amenity)}
                 style={{
                   flex:          1,
                   minWidth:      0,
@@ -478,10 +500,9 @@ export default function KiwanoAmenities({ amenities }) {
               </button>
 
               <button
-                onClick={() => {
-                  setSelectedAmenity(null);
-                  setViewMode("map");
-                }}
+                /* Keeps the current selection — clearing it here would show the
+                   default pin while a card still reads as active. */
+                onClick={() => setViewMode("map")}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -553,7 +574,8 @@ export default function KiwanoAmenities({ amenities }) {
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
-                      borderBottom: "1px solid rgba(107, 133, 158, 0.2)",
+                      /* No row rule — each card draws its own underline beneath
+                         its distance text, so a full-width one doubled up. */
                       paddingTop: "21.6px",
                       paddingBottom: "21.6px",
                     }}
@@ -561,7 +583,7 @@ export default function KiwanoAmenities({ amenities }) {
                     {AMENITIES.slice(rowIndex * 4, rowIndex * 4 + 4).map((amenity) => (
                       <div
                         key={amenity.id}
-                        onClick={() => handleItemClick(amenity)}
+                        onClick={() => handleAmenitySelect(amenity)}
                         style={{
                           width: "clamp(260px, 36.111vw, 520px)",
                           display: "flex",
@@ -571,7 +593,7 @@ export default function KiwanoAmenities({ amenities }) {
                           padding: "10px",
                           cursor: "pointer",
                           borderRadius: "8px",
-                          background: selectedAmenity?.id === amenity.id ? "rgba(107, 133, 158, 0.12)" : "transparent",
+                          background: selectedAmenity?.id === amenity.id ? "rgba(107, 133, 158, 0.18)" : "transparent",
                           transition: "transform 0.2s ease, background 0.2s ease",
                         }}
                         onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
@@ -610,7 +632,16 @@ export default function KiwanoAmenities({ amenities }) {
                           >
                             {amenity.time}
                           </span>
-                          <div style={{ width: "100%", height: "1px", background: "rgba(34, 47, 48, 0.2)" }} />
+                          {/* Underline picks up the accent on the active card —
+                              height stays 1px so nothing shifts on selection. */}
+                          <div
+                            style={{
+                              width: "100%",
+                              height: "1px",
+                              background:
+                                selectedAmenity?.id === amenity.id ? "#6B859E" : "rgba(34, 47, 48, 0.2)",
+                            }}
+                          />
                         </div>
                       </div>
                     ))}

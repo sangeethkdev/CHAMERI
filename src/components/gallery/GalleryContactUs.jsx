@@ -93,9 +93,10 @@ const GalleryContactUs = () => {
 
   /* shared input inline style — reused for name, email, phone height, textarea */
   const inputStyle = {
-    fontSize:      'clamp(14px, 1.11vw, 16px)',
+    fontSize:      'clamp(14px, 1.11vw, 18px)',
     height:        'clamp(33.75px, 3.75vw, 54px)',
     paddingBottom: 'clamp(4px, 0.4vw, 6px)',
+    paddingLeft:   'clamp(12px, 0.4vw, 12px)',
   };
 
   return (
@@ -132,7 +133,7 @@ const GalleryContactUs = () => {
           {/* TOP — badge + heading (mobile only) + description — order-1 on mobile */}
           <div
             className="order-1 lg:order-none w-full pt-[28px] pb-[6px] lg:pt-0 lg:pb-0 flex flex-col gap-[7px] lg:gap-[clamp(10px,1.04vw,15px)]"
-            style={{ width: 'clamp(280px, 32vw, 620px)' }}
+            style={{ width: 'clamp(280px, 30vw, 600px)' }}
           >
             {/* Badge */}
             <div
@@ -142,16 +143,22 @@ const GalleryContactUs = () => {
               <div
                 className="bg-[#334454] flex-shrink-0"
                 style={{
-                  width:        'clamp(10px, 0.97vw, 16px)',
-                  height:       'clamp(10px, 0.97vw, 16px)',
-                  borderRadius: 'clamp(2px, 0.21vw, 3px)',
+                  width:        'clamp(10px, 0.97vw, 18.6px)',
+                  height:       'clamp(10px, 0.97vw, 18.6px)',
+                  borderRadius: 'clamp(2px, 0.21vw, 4px)',
                 }}
               />
+              {/* Figma @1440: Geist 400, 16.2px / 19.44px, ls -0.32px, uppercase.
+                  vw = DESIGN_PX / 1440 × 100 → 1.125vw / 1.35vw. */}
               <span
-                className="font-sans font-normal uppercase text-[#000000] tracking-widest"
-                style={{ fontSize: 'clamp(10px, 1vw, 18px)' }}
+                className="font-sans font-normal uppercase text-[#000000] flex items-center justify-center"
+                style={{
+                  fontSize:      'clamp(12px, 1.125vw, 16.2px)',
+                  lineHeight:    'clamp(14px, 1.35vw, 19.44px)',
+                  letterSpacing: '-0.32px',
+                }}
               >
-                Gallery
+                contact us
               </span>
             </div>
 
@@ -160,14 +167,14 @@ const GalleryContactUs = () => {
               className="lg:hidden font-roundo font-medium text-[#000000] m-0"
               style={{ fontSize: '32px', lineHeight: '36.6px', letterSpacing: '-0.73px' }}
             >
-              Let's Talk 
+              Let&apos;s Talk
             </h2>
 
             {/* Description */}
             <p
-              className="font-sans font-normal text-[#1C1C1CCC] m-0 leading-[21px] lg:leading-none"
+              className="font-geist font-regular text-[#1C1C1CCC] m-0 leading-[21px] lg:leading-none"
               style={{
-                fontSize:      'clamp(14px, 1.79vw, 40px)',
+                fontSize:      'clamp(14px, 1.739vw, 24px)',
                 letterSpacing: 'clamp(-0.5px, -0.07vw, -2px)',
               }}
             >
@@ -179,8 +186,8 @@ const GalleryContactUs = () => {
           <div
             className="order-3 lg:order-none flex flex-col gap-[16px] lg:gap-[clamp(14px,1.53vw,22px)]"
           >
-            {/* Phone — order-1 on mobile (renders before Email, matching the reference) */}
-            <div className="order-1 lg:order-none flex flex-col gap-[8px]">
+            {/* Phone — order-2 on mobile (renders after Email, matching the reference) */}
+            <div className="order-2 lg:order-none flex flex-col gap-[8px]">
               <div className="flex items-center gap-[8px]">
                 <svg
                   viewBox="0 0 24 24" fill="none" stroke="#334454"
@@ -193,7 +200,7 @@ const GalleryContactUs = () => {
                 <span
                   className="font-sans font-normal text-[#000000]"
                   style={{
-                    fontSize:      'clamp(14px, 1.39vw, 22px)',
+                    fontSize:      'clamp(15px, 1.39vw, 22px)',
                     lineHeight:    '1',
                     letterSpacing: 'clamp(-0.5px, -0.07vw, -1px)',
                   }}
@@ -205,16 +212,16 @@ const GalleryContactUs = () => {
                 href="tel:+919876543210"
                 className="font-sans font-normal text-[#6B859E] underline hover:text-[#000000] transition-all"
                 style={{
-                  fontSize:    'clamp(13.3px, 1.18vw, 28px)',
-                  paddingLeft: 'clamp(0px, 0.25vw, 34.6px)',
+                  fontSize:    'clamp(14px, 1.18vw, 28px)',
+                  paddingLeft: 'clamp(6px, 0.55vw, 34.6px)',
                 }}
               >
                 +91 987654321
               </a>
             </div>
 
-            {/* Email — order-2 on mobile (renders after Phone, matching the reference) */}
-            <div className="order-2 lg:order-none flex flex-col gap-[8px]">
+            {/* Email — order-1 on mobile (renders before Phone, matching the reference) */}
+            <div className="order-1 lg:order-none flex flex-col gap-[8px]">
               <div className="flex items-center gap-[8px]">
                 <svg
                   viewBox="0 0 24 24" fill="none" stroke="#334454"
@@ -228,7 +235,7 @@ const GalleryContactUs = () => {
                 <span
                   className="font-sans font-normal text-[#000000]"
                   style={{
-                    fontSize:      'clamp(14px, 1.39vw, 20px)',
+                    fontSize:      'clamp(15px, 1.39vw, 20px)',
                     lineHeight:    '1',
                     letterSpacing: 'clamp(-0.5px, -0.07vw, -1px)',
                   }}
@@ -241,7 +248,7 @@ const GalleryContactUs = () => {
                 className="font-sans font-normal text-[#6B859E] underline hover:text-[#000000] transition-all"
                 style={{
                   fontSize:    'clamp(14px, 1.14vw, 28.3px)',
-                  paddingLeft: 'clamp(0px, 0.25vw, 34.6px)',
+                  paddingLeft: 'clamp(6px, 0.55vw, 34.6px)',
                 }}
               >
                 Chameri@gmail.com
@@ -304,7 +311,7 @@ const GalleryContactUs = () => {
               {/* Phone */}
               <div
                 className="flex items-center border-b border-[#000000] bg-transparent w-full"
-                style={{ height: 'clamp(33.75px, 3.75vw, 54px)' }}
+                style={{ height: 'clamp(33.75px, 3.75vw, 54px)', paddingBottom: 'clamp(4px, 0.4vw, 6px)', paddingLeft: 'clamp(12px, 0.4vw, 12px)' }}
               >
                 <PhoneInput
                   international defaultCountry="IN"
@@ -366,28 +373,30 @@ const GalleryContactUs = () => {
                 <div
                   className="absolute bg-[#EDE7DE] group-hover:bg-[#EDE7DE] transition-colors duration-500 overflow-hidden"
                   style={{
-                    right:        'clamp(8.5px, 0.83vw, 12px)',
-                    width:        'clamp(21.3px, 2.08vw, 30px)',
-                    height:       'clamp(21.3px, 2.08vw, 30px)',
+                    right:        'clamp(8px, 0.83vw, 12px)',
+                    width:        'clamp(22px, 2.08vw, 30px)',
+                    height:       'clamp(22px, 2.08vw, 30px)',
                     borderRadius: 'clamp(5px, 0.49vw, 7px)',
                   }}
                 >
+                  {/* Arrow slide out */}
                   <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out group-hover:translate-x-full">
                     <svg
-                      viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                      className="text-black"
-                      style={{ width: 'clamp(10px, 1.97vw, 22px)', height: 'clamp(10px, 1.97vw, 22px)' }}
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                      className="text-[#000000]"
+                      style={{ width: 'clamp(15px, 1.97vw, 20px)', height: 'clamp(15px, 1.97vw, 20px)' }}
                     >
-                      <path d="M8 12h18M20 5l7 7-7 7" />
+                      <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                   </div>
+                  {/* Arrow slide in */}
                   <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out -translate-x-full group-hover:translate-x-0">
                     <svg
-                      viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                      className="text-black"
-                      style={{ width: 'clamp(10px, 1.97vw, 22px)', height: 'clamp(10px, 1.97vw,22px)' }}
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                      className="text-[#000000]"
+                      style={{ width: 'clamp(15px, 1.97vw, 20px)', height: 'clamp(15px, 1.97vw, 20px)' }}
                     >
-                      <path d="M8 12h18M20 5l7 7-7 7" />
+                      <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                   </div>
                 </div>

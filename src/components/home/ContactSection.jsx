@@ -870,7 +870,7 @@ const ContactSection = () => {
 
   /* shared input inline style — reused for name, email, phone height, textarea */
   const inputStyle = {
-    fontSize:      'clamp(16px, 1.11vw, 18px)',
+    fontSize:      'clamp(14px, 1.11vw, 18px)',
     height:        'clamp(33.75px, 3.75vw, 54px)',
     paddingBottom: 'clamp(4px, 0.4vw, 6px)',
     paddingLeft:   'clamp(12px, 0.4vw, 12px)',
@@ -979,7 +979,7 @@ every step of the way.
                 <span
                   className="font-sans font-normal text-[#000000]"
                   style={{
-                    fontSize:      'clamp(18px, 1.39vw, 22px)',
+                    fontSize:      'clamp(15px, 1.39vw, 22px)',
                     lineHeight:    '1',
                     letterSpacing: 'clamp(-0.5px, -0.07vw, -1px)',
                   }}
@@ -991,7 +991,7 @@ every step of the way.
                 href="tel:+919876543210"
                 className="font-sans font-normal text-[#6B859E] underline hover:text-[#000000] transition-all"
                 style={{
-                  fontSize:    'clamp(16px, 1.18vw, 28px)',
+                  fontSize:    'clamp(14px, 1.18vw, 28px)',
                   paddingLeft: 'clamp(6px, 0.55vw, 34.6px)',
                 }}
               >
@@ -1014,7 +1014,7 @@ every step of the way.
                 <span
                   className="font-sans font-normal text-[#000000]"
                   style={{
-                    fontSize:      'clamp(18px, 1.39vw, 20px)',
+                    fontSize:      'clamp(15px, 1.39vw, 20px)',
                     lineHeight:    '1',
                     letterSpacing: 'clamp(-0.5px, -0.07vw, -1px)',
                   }}
@@ -1026,7 +1026,7 @@ every step of the way.
                 href="mailto:Chameri@gmail.com"
                 className="font-sans font-normal text-[#6B859E] underline hover:text-[#000000] transition-all"
                 style={{
-                  fontSize:    'clamp(16px, 1.14vw, 28.3px)',
+                  fontSize:    'clamp(14px, 1.14vw, 28.3px)',
                   paddingLeft: 'clamp(6px, 0.55vw, 34.6px)',
                 }}
               >

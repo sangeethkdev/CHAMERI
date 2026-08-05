@@ -274,7 +274,7 @@ function ZoomableSitePlan() {
   const zoomIn  = () => setScale((s) => Math.min(MAX_SCALE, s * ZOOM_STEP));
   const zoomOut = () => setScale((s) => Math.max(MIN_SCALE, s / ZOOM_STEP));
 
-  // wrapper is H×W so after rotate(-90deg) it fills W×H exactly
+  // wrapper is H×W so after rotate(90deg) it fills W×H exactly
   const wW = cSize.h;
   const wH = cSize.w;
 
@@ -308,7 +308,7 @@ function ZoomableSitePlan() {
             left: "50%",
             width: `${wW}px`,
             height: `${wH}px`,
-            transform: `translate(-50%, -50%) translate(${pan.x}px, ${pan.y}px) scale(${scale}) rotate(-90deg)`,
+            transform: `translate(-50%, -50%) translate(${pan.x}px, ${pan.y}px) scale(${scale}) rotate(90deg)`,
             transformOrigin: "center",
             willChange: "transform",
           }}
@@ -473,13 +473,13 @@ export default function KiwanoVLuxuryVillas({ luxuryVillas }) {
             display: "flex",
             flexDirection: "column",
             gap: "10px",
-            padding: "0 22px 40px",
+            padding: "0 22px 24px",
             boxSizing: "border-box",
           }}
         >
           {/* Spec rows */}
           <div style={{ display: "flex", flexDirection: "column", gap: "5px", paddingBottom: "8px" }}>
-            {SPECS.map((spec) => (
+            {SPECS.map((spec, i) => (
               <div
                 key={spec.label}
                 style={{
@@ -490,7 +490,8 @@ export default function KiwanoVLuxuryVillas({ luxuryVillas }) {
                   width: "100%",
                   paddingTop: "10px",
                   paddingBottom: "14px",
-                  borderBottom: "1px solid rgba(0,0,0,0.2)",
+                  /* last row has no rule — the list ends, it isn't separated from anything */
+                  borderBottom: i === SPECS.length - 1 ? "none" : "1px solid rgba(0,0,0,0.2)",
                   boxSizing: "border-box",
                 }}
               >
@@ -779,7 +780,7 @@ export default function KiwanoVLuxuryVillas({ luxuryVillas }) {
             paddingBottom: "8px",
           }}
         >
-          {SPECS.map((spec) => (
+          {SPECS.map((spec, i) => (
             <div
               key={spec.label}
               style={{
@@ -791,7 +792,8 @@ export default function KiwanoVLuxuryVillas({ luxuryVillas }) {
                 paddingRight: "10px",
                 paddingBottom: "20px",
                 paddingLeft: "10px",
-                borderBottom: "1px solid rgba(0,0,0,0.2)",
+                /* last row has no rule — the list ends, it isn't separated from anything */
+                borderBottom: i === SPECS.length - 1 ? "none" : "1px solid rgba(0,0,0,0.2)",
               }}
             >
               <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "10px" }}>

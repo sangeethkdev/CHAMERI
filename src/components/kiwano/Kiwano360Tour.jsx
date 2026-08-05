@@ -241,7 +241,7 @@ export default function Kiwano360Tour({ tour360 }) {
             flexDirection: "column",
             alignItems:    "center",
             width:         "100%",
-            paddingTop:    "30px",
+            paddingTop:    "24px",
             paddingRight:  "16px",
             paddingBottom: "6px",
             paddingLeft:   "16px",
@@ -281,7 +281,7 @@ export default function Kiwano360Tour({ tour360 }) {
               lineHeight:    "21px",
               letterSpacing: "0",
               textAlign:     "center",
-              color:         "#000000CC",
+              color:         "#333333",
               margin:        0,
             }}
           >
@@ -297,7 +297,7 @@ export default function Kiwano360Tour({ tour360 }) {
             display:        "flex",
             justifyContent: "center",
             paddingTop:     "12.5px",
-            paddingBottom:  "30px",
+            paddingBottom:  "24px",
             paddingLeft:    "16px",
             paddingRight:   "16px",
             boxSizing:      "border-box",
@@ -420,7 +420,7 @@ export default function Kiwano360Tour({ tour360 }) {
                   lineHeight:    "26.4px",
                   letterSpacing: "-0.44px",
                   textAlign:     "center",
-                  color:         "#334454CC",
+                  color:         "#333333",
                   margin:        0,
                 }}
               >

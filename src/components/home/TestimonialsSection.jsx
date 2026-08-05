@@ -864,7 +864,7 @@ const TestimonialsSection = ({ testimonial }) => {
                     <div
                       className="absolute left-0"
                       style={{
-                        top:    `${335.99 * scale}px`,
+                        top:    `${343.99 * scale}px`,
                         height: `${214.02 * scale}px`,
                         width:  `${cardW}px`,
                         transform: `translateY(-${bottomTrimPx}px)`,

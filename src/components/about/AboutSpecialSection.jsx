@@ -470,7 +470,7 @@ export default function AboutSpecialSection({ specialSection }) {
                   width: `clamp(60px, 100%, 267px)`,
                   height: `clamp(120px, 100%, 354px)`,
                   overflow: 'hidden',
-                  borderRadius: 'clamp(4px, 0.55vw, 10px)',
+                  // borderRadius: 'clamp(4px, 0.55vw, 10px)',
                   zIndex: index === activeIndex ? 10 : 0,
                   pointerEvents: 'none',
                   // boxShadow: '0 8px 40px rgba(0,0,0,0.12)',

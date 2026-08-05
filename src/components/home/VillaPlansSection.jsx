@@ -547,11 +547,11 @@ const VillaPlansSection = ({ villaPlan }) => {
                   : 'bg-[#6B859E] text-white/90 hover:bg-[#5b738a]'}
               `}
               style={{
-                width:        'clamp(140px, 14.32vw, 225.84px)',
+                width:        'clamp(140px, 14.32vw, 230.84px)',
                 height:       'clamp(36px, 3.38vw, 48.72px)',
                 paddingTop:   'clamp(8px, 0.87vw, 12.53px)',
                 paddingBottom:'clamp(8px, 0.87vw, 12.53px)',
-                paddingLeft:  'clamp(14px, 2.27vw, 24.92px)',
+                paddingLeft:  'clamp(17px, 2.27vw, 24.92px)',
                 paddingRight: 'clamp(14px, 2.27vw, 24.92px)',
                 borderRadius: 'clamp(6px, 0.58vw, 8.35px)',
                 gap: activeTab === 'villaments' ? 'clamp(6px, 0.97vw, 13.92px)' : '0',
@@ -593,7 +593,7 @@ const VillaPlansSection = ({ villaPlan }) => {
               {/* Description text */}
               <div 
                 className="flex items-center justify-center"
-                style={{ height: 'clamp(60px, 5.49vw, 79px)' }}
+                style={{ height: 'clamp(79px, 5.49vw, 79px)' }}
               >
                 <p
                   className="text-center text-white font-sans font-normal m-0 flex items-center"
