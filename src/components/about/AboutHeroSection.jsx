@@ -89,7 +89,7 @@ export default function AboutHeroSection({ hero }) {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            paddingTop: 106,
+            paddingTop: 126,
             paddingBottom: 24,
             gap: 8,
           }}

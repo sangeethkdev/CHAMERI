@@ -294,7 +294,7 @@ export default function AboutTestimonialSection({ testimonialSection }) {
                         <p className="m-0" style={{ fontFamily: "var(--font-geist, 'Geist'), system-ui, sans-serif", fontWeight: 400, fontSize: `${15.84 * mobileScale}px`, lineHeight: `${24.11 * mobileScale}px`, color: '#FFFFFF', letterSpacing: '0%' }}>
                           {item.name}
                         </p>
-                        <p className="m-0" style={{ fontFamily: "var(--font-geist, 'Geist'), system-ui, sans-serif", fontWeight: 500, fontSize: `${11.19 * mobileScale}px`, lineHeight: `${16.53 * mobileScale}px`, color: 'rgba(255,255,255,0.7)', letterSpacing: '0%' }}>
+                        <p className="m-0" style={{ fontFamily: "var(--font-geist, 'Geist'), system-ui, sans-serif", fontWeight: 500, fontSize: `${11.19 * mobileScale}px`, lineHeight: `${16.53 * mobileScale}px`, color: '#FFFFFF', letterSpacing: '0%' }}>
                           {item.role}
                         </p>
                       </div>
