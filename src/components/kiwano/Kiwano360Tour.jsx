@@ -16,7 +16,8 @@ import Image from "next/image";
  *
  *   • Left  arrow (←) held → pans continuously, revealing the right side
  *   • Right arrow (→) held → pans continuously, revealing the left side
- *   • "Drag Around" dragged → pans 1:1 with the pointer (mouse + touch)
+ *   • "Drag Around" dragged → the badge slides under the pointer and the photo
+ *     pans with it 1:1 (mouse + touch); the badge eases back to centre on release
  *   • "Drag Around" clicked without moving → opens the full 360 video modal
  *   • Photo pans with CSS objectPosition; eased for the arrows, un-eased
  *     mid-drag so it tracks the pointer exactly
@@ -82,7 +83,7 @@ function ArrowSquare({ direction, onClick, pressed }) {
 function Viewer360Inner({
   src, imgPosX, borderRadius,
   pressedL, pressedR, onPressLeft, onPressRight,
-  dragging, onDragPointerDown, onDragPointerMove, onDragPointerUp, onDragPointerCancel,
+  dragging, badgeX, onDragPointerDown, onDragPointerMove, onDragPointerUp, onDragPointerCancel,
 }) {
   return (
     <div
@@ -128,13 +129,17 @@ function Viewer360Inner({
         }}
       />
 
-      {/* ── DRAG AROUND BADGE ─────────────────────────────────────── */}
+      {/* ── DRAG AROUND BADGE ───────────────────────────────────────
+          Slides with the pointer while dragging (badgeX), then eases back to
+          centre on release. No transition mid-drag so it tracks 1:1. */}
       <div
+        data-drag-badge
         style={{
           position:       "absolute",
           top:            "50%",
           left:           "50%",
-          transform:      "translate(-50%, -50%)",
+          transform:      `translate(-50%, -50%) translateX(${badgeX}px)`,
+          transition:     dragging ? "none" : "transform 420ms cubic-bezier(0.22, 1, 0.36, 1)",
           zIndex:         2,
           display:        "flex",
           alignItems:     "center",
@@ -190,14 +195,26 @@ export default function Kiwano360Tour({ tour360 }) {
   const [pressedR, setPressedR] = useState(false);
   const panIntervalRef = useRef(null);
 
+  /* Mirror of panX kept in a ref so the drag handler can read the current pan
+     synchronously. It needs to know how much of a pointer move the pan actually
+     absorbed (nothing, once it is clamped at ±40) in order to move the badge by
+     the same amount — a functional setState updater cannot report that back. */
+  const panXRef = useRef(0);
+  const applyPan = useCallback((next) => {
+    const v = Math.min(40, Math.max(-40, next));
+    panXRef.current = v;
+    setPanX(v);
+    return v;
+  }, []);
+
   /* Continuous pan while arrow is held ─────────────────────────────────────── */
   const startPan = useCallback((dir) => {
     if (panIntervalRef.current) return;
     const step = dir === "left" ? -1.5 : 1.5;
     panIntervalRef.current = setInterval(() => {
-      setPanX((prev) => Math.min(40, Math.max(-40, prev + step)));
+      applyPan(panXRef.current + step);
     }, 30);
-  }, []);
+  }, [applyPan]);
 
   const stopPan = useCallback(() => {
     clearInterval(panIntervalRef.current);
@@ -240,13 +257,24 @@ export default function Kiwano360Tour({ tour360 }) {
 
   const dragRef = useRef(null);
   const [dragging, setDragging] = useState(false);
+  /* Horizontal offset of the badge itself, in px from its centred position.
+     It follows the pointer during a drag and springs back to 0 on release. */
+  const [badgeX, setBadgeX] = useState(0);
 
   const onDragPointerDown = useCallback((e) => {
     const viewer = e.currentTarget.closest("[data-viewer360]");
+    const badge  = e.currentTarget.closest("[data-drag-badge]");
+    const viewerW = viewer?.offsetWidth || 600;
+    const badgeW  = badge?.offsetWidth  || 160;
     dragRef.current = {
-      lastX:     e.clientX,
       travelled: 0,
-      pctPerPx:  80 / (viewer?.offsetWidth || 600),
+      badge:     0,
+      pctPerPx:  80 / viewerW,
+      /* Keep the badge inside the frame with a 12px margin. Because one full
+         viewer width of drag covers the whole pan range, this cap lands at
+         roughly the same moment the pan clamps — they run out together. */
+      maxTravel: Math.max(0, viewerW / 2 - badgeW / 2 - 12),
+      lastX:     e.clientX,
     };
     e.currentTarget.setPointerCapture?.(e.pointerId);
     setDragging(true);
@@ -259,14 +287,23 @@ export default function Kiwano360Tour({ tour360 }) {
     if (dx === 0) return;
     d.lastX = e.clientX;
     d.travelled += Math.abs(dx);
-    setPanX((prev) => Math.min(40, Math.max(-40, prev + dx * d.pctPerPx)));
-  }, []);
+
+    const before   = panXRef.current;
+    const after    = applyPan(before + dx * d.pctPerPx);
+    // Only the travel the pan actually took — 0 once it is clamped, so the
+    // badge stops dead at the same instant the photo does.
+    const acceptedPx = (after - before) / d.pctPerPx;
+
+    d.badge = Math.max(-d.maxTravel, Math.min(d.maxTravel, d.badge + acceptedPx));
+    setBadgeX(d.badge);
+  }, [applyPan]);
 
   const endDrag = useCallback((e, wasCancelled) => {
     const d = dragRef.current;
     if (!d) return;
     dragRef.current = null;
     setDragging(false);
+    setBadgeX(0);                       // springs home via the CSS transition
     e.currentTarget.releasePointerCapture?.(e.pointerId);
     if (!wasCancelled && d.travelled <= DRAG_THRESHOLD) openModal();
   }, [openModal]);
@@ -388,6 +425,7 @@ export default function Kiwano360Tour({ tour360 }) {
               onPressLeft={() => { setPressedL(true); startPan("left"); }}
               onPressRight={() => { setPressedR(true); startPan("right"); }}
               dragging={dragging}
+              badgeX={badgeX}
               onDragPointerDown={onDragPointerDown}
               onDragPointerMove={onDragPointerMove}
               onDragPointerUp={onDragPointerUp}
@@ -522,6 +560,7 @@ export default function Kiwano360Tour({ tour360 }) {
                 onPressLeft={() => { setPressedL(true); startPan("left"); }}
                 onPressRight={() => { setPressedR(true); startPan("right"); }}
                 dragging={dragging}
+                badgeX={badgeX}
                 onDragPointerDown={onDragPointerDown}
                 onDragPointerMove={onDragPointerMove}
                 onDragPointerUp={onDragPointerUp}

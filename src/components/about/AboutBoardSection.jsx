@@ -746,7 +746,7 @@ function MobileBoardSection({ boardMembers, title }) {
                   style={{
                     fontFamily: "var(--font-inter,'Inter'),system-ui,sans-serif",
                     fontWeight: 400,
-                    fontSize: 5.5,
+                    fontSize: 6.5,
                     lineHeight: '6.11px',
                     letterSpacing: '0px',
                     color: '#FFFFFF',

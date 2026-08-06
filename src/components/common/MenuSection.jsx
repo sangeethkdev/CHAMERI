@@ -44,8 +44,8 @@ const noopSubscribe = () => () => {};
 const NAV_LINKS = [
   { label: 'Home',             href: '/' },
   { label: 'About us',         href: '/about' },
-  { label: 'Kiwano Villa',     href: '/kiwano' },
-  { label: 'Kiwano Villament', href: '/kiwano-villament' },
+  // { label: 'Kiwano Villa',     href: '/kiwano' },
+  { label: 'Project-List', href: '/project-list' },
   { label: 'Our Service',      href: '/services' },
   { label: 'Gallery',          href: '/gallery' },
   { label: 'Testimonial',      href: '/testimonial' },

@@ -640,11 +640,11 @@ const GalleryNew = ({ gallery }) => {
         </div>
 
             {/* H2 Title — center */}
-            <div style={{ maxWidth: clamp(380, 878) }}>
+            <div style={{ maxWidth: clamp(380, 808) }}>
               <h2
                 className="font-roundo font-medium text-[#000000]"
                 style={{
-                  fontSize: "clamp(20px, 4vw, 70px)",
+                  fontSize: "clamp(20px, 4vw, 60px)",
                   lineHeight:    '1.1',
                   letterSpacing: clamp(-1, -3.05),
                 }}

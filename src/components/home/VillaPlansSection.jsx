@@ -458,7 +458,7 @@ const VillaPlansSection = ({ villaPlan }) => {
           <h2
             className="font-roundo font-medium text-[#000000] text-center m-0"
             style={{
-              fontSize:      'clamp(32px, 4.17vw, 70px)',
+              fontSize:      'clamp(32px, 4.17vw, 60px)',
               lineHeight:    'clamp(40px, 4.59vw, 66.14px)',
               letterSpacing: 'clamp(-1.5px, -0.21vw, -3.05px)',
               width:         'clamp(300px, 31.56vw, 520px)',

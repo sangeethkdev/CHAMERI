@@ -446,7 +446,7 @@ function MobileServiceCard({ service }) {
      screen, because the strip is full-bleed and card #1 starts at viewport x=0.
      "01." renders ~19px at 13.57px, which leaves only 3px for the gap. */
   const NUM_W      = "19px";
-  const NUM_GAP    = "3px";
+  const NUM_GAP    = "9px";
   const NUM_OFFSET = `calc(-1 * (${NUM_W} + ${NUM_GAP}))`;
 
   return (

@@ -718,7 +718,7 @@ const TestimonialsSection = ({ testimonial }) => {
           <h2
             className="font-roundo font-medium capitalize text-[#1A1A1A] text-center m-0 flex items-center justify-center"
             style={{
-              fontSize:      'clamp(32px, 4.17vw, 66px)',
+              fontSize:      'clamp(32px, 4.17vw, 60px)',
               lineHeight:    'clamp(36.6px, 4.17vw, 60px)',
               letterSpacing: 'clamp(-0.73px, -0.06vw, -0.9px)',
               width:         'clamp(358px, 42.22vw, 648px)',
@@ -731,7 +731,7 @@ const TestimonialsSection = ({ testimonial }) => {
 
           {/* Sub-heading */}
           <p
-            className="font-sans font-normal text-[#1C1C1C]/70 text-center m-0 flex items-center justify-center"
+            className="font-sans font-normal text-[#1C1C1C] text-center m-0 flex items-center justify-center"
             style={{
               fontSize:      'clamp(14px, 1.39vw, 20px)',
               lineHeight:    'clamp(21px, 1.83vw, 26.4px)',

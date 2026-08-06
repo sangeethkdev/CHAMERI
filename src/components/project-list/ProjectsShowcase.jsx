@@ -54,7 +54,7 @@ const resolveHref = (tag = '') =>
  * Figma (390px baseline): card w:360 h:723 top:66 left:14 radius:3.82,
  * content block top:19 left:24.14 w:269, divider, tag pill (10×10 square +
  * 12px uppercase label), 32px/36.6 heading, 14px/21 description, then a
- * 92px-wide divider + "Learn more" link. Unlike the desktop Section, this
+ * "Learn more" link underlined by a 92px divider. Unlike the desktop Section, this
  * is a static (non-fixed, non-parallax) stacked card.
  */
 function MobileProjectCard({ project }) {
@@ -121,7 +121,7 @@ function MobileProjectCard({ project }) {
               <span className="inline-block flex-shrink-0" style={{ width: '10px', height: '10px', background: '#334454' }} />
               <span
                 className="font-sans uppercase whitespace-nowrap"
-                style={{ fontWeight: 400, fontSize: '10px', lineHeight: '19.44px', letterSpacing: '-0.32px', color: '#000000' }}
+                style={{ fontWeight: 400, fontSize: '12px', lineHeight: '19.44px', letterSpacing: '-0.32px', color: '#000000' }}
               >
                 {project.tag}
               </span>
@@ -144,8 +144,9 @@ function MobileProjectCard({ project }) {
                   {project.description}
                 </p>
 
+                {/* Label first, divider under it — same order as the desktop
+                    card in Text.jsx, where the rule underlines the link. */}
                 <a href={project.href} className="flex flex-col no-underline" style={{ gap: '4px', width: '92px' }}>
-                  <div style={{ width: '100%', height: '1px', background: '#31444C' }} />
                   <span
                     className="font-sans uppercase whitespace-nowrap flex items-center"
                     style={{ gap: '6px', fontWeight: 600, fontSize: '10.5px', lineHeight: '11.45px', color: '#31444C' }}
@@ -153,6 +154,7 @@ function MobileProjectCard({ project }) {
                     Learn more
                     <Image src="/icons/SVG.svg" alt="" width={8} height={8} style={{ width: '7.63px', height: 'auto' }} />
                   </span>
+                  <div style={{ width: '100%', height: '1px', background: '#31444C' }} />
                 </a>
               </div>
             </div>

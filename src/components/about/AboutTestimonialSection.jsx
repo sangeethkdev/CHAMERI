@@ -182,7 +182,7 @@ export default function AboutTestimonialSection({ testimonialSection }) {
             className="font-medium capitalize text-[#1A1A1A] text-center m-0 flex items-center justify-center"
             style={{
               fontFamily:    "var(--font-roundo, 'Roundo'), system-ui, sans-serif",
-              fontSize:      'clamp(32px, 4.17vw, 66px)',
+              fontSize:      'clamp(32px, 4.17vw, 60px)',
               lineHeight:    'clamp(36.6px, 4.17vw, 60px)',
               letterSpacing: 'clamp(-0.73px, -0.06vw, -0.9px)',
               width:         'clamp(358px, 42.22vw, 648px)',
@@ -429,11 +429,11 @@ export default function AboutTestimonialSection({ testimonialSection }) {
             borderRadius: 'clamp(8.5px, 0.83vw, 16px)',
           }}
         >
-          {/* Sliding text */}
+          {/* Sliding text — left inset matches home's TestimonialsSection */}
           <div
             style={{
               position:  'absolute',
-              left:      'clamp(8.5px, 1.43vw, 26px)',
+              left:      'clamp(10px, 1.83vw, 22px)',
               top:       '50%',
               transform: 'translateY(-50%)',
               height:    'clamp(16.3px, 1.6vw, 30.6px)',
@@ -447,8 +447,8 @@ export default function AboutTestimonialSection({ testimonialSection }) {
                   style={{
                     fontFamily:  "var(--font-geist, 'Geist'), system-ui, sans-serif",
                     fontWeight:  500,
-                    fontSize:    'clamp(10.6px, 1.04vw, 20px)',
-                    color:       '#FFFFFF',
+                    fontSize:    'clamp(13px, 1.04vw, 20px)',
+                    color:       '#EDE7DE',
                     height:      'clamp(16.3px, 1.6vw, 30.6px)',
                     display:     'flex',
                     alignItems:  'center',
@@ -461,14 +461,18 @@ export default function AboutTestimonialSection({ testimonialSection }) {
             </div>
           </div>
 
-          {/* Arrow box */}
+          {/* Arrow box — right inset matches home's TestimonialsSection. `top`
+              is set explicitly rather than relying on the flex parent's static
+              position for an absolutely-positioned child. */}
                 <div
                   className="absolute bg-[#EDE7DE] group-hover:bg-[#EDE7DE] transition-colors duration-500 overflow-hidden"
                   style={{
-                    right:        'clamp(8px, 1.03vw, 30px)',
+                    right:        'clamp(8px, 0.83vw, 16px)',
                     width:        'clamp(22px, 2.08vw, 40px)',
                     height:       'clamp(22px, 2.08vw, 40px)',
-                    borderRadius: 'clamp(5px, 0.49vw, 7px)',
+                    borderRadius: 'clamp(5px, 0.49vw, 9.3px)',
+                    top:          '50%',
+                    transform:    'translateY(-50%)',
                   }}
                 >
                   {/* Arrow slide out */}

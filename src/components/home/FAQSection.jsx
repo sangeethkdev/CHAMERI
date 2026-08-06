@@ -330,7 +330,7 @@ const FAQSection = ({ faqSection }) => {
 
           {/* Sub-heading */}
           <p
-            className="font-sans font-normal text-[#334454]/70 text-center m-0"
+            className="font-sans font-normal text-[#1C1C1CCC] text-center m-0"
             style={{
               fontSize:      'clamp(14px, 1.39vw, 26.6px)',
               lineHeight:    'clamp(18.5px, 1.83vw, 35.1px)',
