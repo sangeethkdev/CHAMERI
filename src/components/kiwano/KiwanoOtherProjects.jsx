@@ -146,7 +146,7 @@ export default function KiwanoOtherProjects({ otherProjects }) {
                 margin:        0,
               }}
             >
-              kiwano Villa
+              {otherProjects?.imageHeading || 'kiwano Villa'}
             </h3>
             <p
               style={{
@@ -161,7 +161,7 @@ export default function KiwanoOtherProjects({ otherProjects }) {
                 margin:        0,
               }}
             >
-              Discover crafted living spaces where modern design meets timeless comfort for every family with smart layouts bright views and premium details built to inspire daily today always now us
+              {otherProjects?.imageSubheading || 'Discover crafted living spaces where modern design meets timeless comfort for every family with smart layouts bright views and premium details built to inspire daily today always now us'}
             </p>
 
             <button
@@ -348,7 +348,7 @@ export default function KiwanoOtherProjects({ otherProjects }) {
                 margin: 0,
               }}
             >
-              kiwano Villaments
+              {otherProjects?.imageHeading || 'kiwano Villaments'}
             </h3>
 
             <p
@@ -363,7 +363,7 @@ export default function KiwanoOtherProjects({ otherProjects }) {
                 margin: 0,
               }}
             >
-              Discover crafted living spaces where modern design meets timeless comfort for every family with smart layouts bright views and premium details built to inspire daily today always now us
+              {otherProjects?.imageSubheading || 'Discover crafted living spaces where modern design meets timeless comfort for every family with smart layouts bright views and premium details built to inspire daily today always now us'}
             </p>
 
             {/* Submit button */}
