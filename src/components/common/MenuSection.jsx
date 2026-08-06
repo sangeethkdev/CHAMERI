@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import gsap from 'gsap';
+import { socialHref } from '@/lib/socialLinks';
 
 /* "Have we hydrated yet?" — the portal target (document.body) does not exist
    during SSR. useSyncExternalStore gives false on the server and true on the
@@ -391,13 +392,17 @@ export default function MenuSection({ open = false, onClose }) {
               }}
             >
               {SOCIALS.map((social) => (
-                <span
+                <a
                   key={social.label}
-                  aria-label={social.label}
+                  href={socialHref(social.label)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Chameri on ${social.label}`}
+                  className="transition-transform hover:scale-110"
                   style={{ width: social.width, height: social.height, flexShrink: 0 }}
                 >
                   {social.svg}
-                </span>
+                </a>
               ))}
             </div>
           </div>
@@ -571,13 +576,17 @@ export default function MenuSection({ open = false, onClose }) {
           </span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '9px', color: '#141414' }}>
             {MOBILE_SOCIALS.map((social) => (
-              <span
+              <a
                 key={social.label}
-                aria-label={social.label}
+                href={socialHref(social.label)}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Chameri on ${social.label}`}
+                className="transition-transform hover:scale-110"
                 style={{ width: social.width, height: social.height, flexShrink: 0 }}
               >
                 {social.svg}
-              </span>
+              </a>
             ))}
           </div>
         </div>

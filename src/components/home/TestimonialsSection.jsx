@@ -445,6 +445,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 /*
  * ─── CLAMP REFERENCE ────────────────────────────────────────────────────────
@@ -995,8 +996,10 @@ const TestimonialsSection = ({ testimonial }) => {
         className="flex justify-center items-center"
         style={{ width: 'clamp(390px, 90.28vw, 1300px)' }}
       >
-        <button
-          className="group relative flex items-center border-none cursor-pointer overflow-hidden transition-colors duration-500 bg-[#6B859E] hover:bg-[#4a6074]"
+        <Link
+          href="/testimonial"
+          aria-label="Read more client testimonials"
+          className="group no-underline relative flex items-center border-none cursor-pointer overflow-hidden transition-colors duration-500 bg-[#6B859E] hover:bg-[#4a6074]"
           style={{
             width:        'clamp(118.6px, 11.6vw, 222.6px)',
             height:       'clamp(36.9px, 3.61vw, 69.3px)',
@@ -1064,7 +1067,7 @@ const TestimonialsSection = ({ testimonial }) => {
                     </svg>
                   </div>
                 </div>
-        </button>
+        </Link>
       </div>
 
     </section>

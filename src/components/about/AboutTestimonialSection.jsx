@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const STATIC_TESTIMONIALS = [
   { id: 1, quote: '"Lorem amet dolo elit nisi urna erat odio enim duis cras nunc orci ante quis arcu vero pede just urna."', name: 'Richard', role: 'Entrepreneur', img: '/dummyimages/d18115bcf5e039e1b2d60bfa8c4e93e2c4b1ea1f.png', avatar: 'https://i.pravatar.cc/80?img=11' },
@@ -421,8 +422,10 @@ export default function AboutTestimonialSection({ testimonialSection }) {
 
       {/* ── 3 — Learn More ──────────────────────────────────────────────── */}
       <div className="w-full flex justify-center" style={{ marginTop: 'clamp(10px, 1.39vw, 20px)' }}>
-        <button
-          className="group relative flex items-center border-none cursor-pointer overflow-hidden transition-colors duration-500 bg-[#6B859E] hover:bg-[#4a6074]"
+        <Link
+          href="/testimonial"
+          aria-label="Read more client testimonials"
+          className="group no-underline relative flex items-center border-none cursor-pointer overflow-hidden transition-colors duration-500 bg-[#6B859E] hover:bg-[#4a6074]"
           style={{
             width:        'clamp(118.6px, 11.6vw, 222.6px)',
             height:       'clamp(36.9px, 3.61vw, 69.3px)',
@@ -496,7 +499,7 @@ export default function AboutTestimonialSection({ testimonialSection }) {
                     </svg>
                   </div>
                 </div>
-        </button>
+        </Link>
       </div>
     </section>
   );

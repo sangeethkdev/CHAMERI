@@ -546,6 +546,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { socialHref } from '@/lib/socialLinks';
 
 /*
   CLAMP FORMULA:
@@ -781,8 +782,12 @@ const Footer = () => {
               {SOCIALS.map(({ label, svg }) => (
                 <a
                   key={label}
-                  href="#"
-                  aria-label={label}
+                  /* undefined for any profile without a URL (Pinterest), which
+                     renders the icon unlinked instead of pointing at "#". */
+                  href={socialHref(label)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Chameri on ${label}`}
                   className="text-[#EDE7DE] hover:text-white hover:scale-110 transition-all flex items-center justify-center flex-shrink-0"
                   style={{
                     width:  'clamp(15.6px, 1.53vw, 29.3px)',

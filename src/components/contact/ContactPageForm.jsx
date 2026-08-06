@@ -348,6 +348,7 @@ import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import useContactForm from '@/hooks/useContactForm';
 import FieldError, { FIELD_ERROR_COLOR } from '../common/FieldError';
+import { socialHref } from '@/lib/socialLinks';
 
 /**
  * ─────────────────────────────────────────────────────────────────────────────
@@ -728,8 +729,12 @@ export default function ContactPageForm() {
                 {SOCIALS.map(({ label, width, height, svg }) => (
                   <a
                     key={label}
-                    href="#"
-                    aria-label={label}
+                    /* undefined for any profile without a URL (Pinterest), which
+                       renders the icon unlinked instead of pointing at "#". */
+                    href={socialHref(label)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Chameri on ${label}`}
                     className="text-[#000000] hover:text-[#6B859E] hover:scale-110 transition-all flex items-center justify-center flex-shrink-0"
                     style={{ width, height }}
                   >
