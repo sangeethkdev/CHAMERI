@@ -11,10 +11,16 @@ import Image from "next/image";
  * BADGE (centred over photo):
  *   ← [left arrow square]  "Drag Around"  [right arrow square] →
  *
- *   • Left  arrow (←) pans the photo RIGHT (reveals left side)
- *   • Right arrow (→) pans the photo LEFT  (reveals right side)
- *   • Clicking "Drag Around" text opens the full 360 video modal
- *   • Photo pans with CSS objectPosition, animated with ease-out
+ *   All three controls share one "grab" model — the scene follows the input,
+ *   so moving left brings the RIGHT-hand side of the photo into view.
+ *
+ *   • Left  arrow (←) held → pans continuously, revealing the right side
+ *   • Right arrow (→) held → pans continuously, revealing the left side
+ *   • "Drag Around" dragged → the badge slides under the pointer and the photo
+ *     pans with it 1:1 (mouse + touch); the badge eases back to centre on release
+ *   • "Drag Around" clicked without moving → opens the full 360 video modal
+ *   • Photo pans with CSS objectPosition; eased for the arrows, un-eased
+ *     mid-drag so it tracks the pointer exactly
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -76,10 +82,13 @@ function ArrowSquare({ direction, onClick, pressed }) {
    badge markup stay in one place. */
 function Viewer360Inner({
   src, imgPosX, borderRadius,
-  pressedL, pressedR, onPressLeft, onPressRight, openModal,
+  pressedL, pressedR, onPressLeft, onPressRight,
+  dragging, badgeX, onDragPointerDown, onDragPointerMove, onDragPointerUp, onDragPointerCancel,
 }) {
   return (
     <div
+      /* Marker the drag handler reads to size its sensitivity to this viewer */
+      data-viewer360
       style={{
         width:        "100%",
         height:       "100%",
@@ -99,7 +108,10 @@ function Viewer360Inner({
         style={{
           objectFit:      "cover",
           objectPosition: `${imgPosX}% 50%`,
-          transition:     "object-position 0.25s ease-out",
+          /* No easing mid-drag — the 0.25s ease would lag behind the pointer
+             and break the sense of grabbing the scene. It stays on for the
+             arrow buttons, whose stepped panning benefits from smoothing. */
+          transition:     dragging ? "none" : "object-position 0.25s ease-out",
           userSelect:     "none",
           pointerEvents:  "none",
         }}
@@ -117,13 +129,17 @@ function Viewer360Inner({
         }}
       />
 
-      {/* ── DRAG AROUND BADGE ─────────────────────────────────────── */}
+      {/* ── DRAG AROUND BADGE ───────────────────────────────────────
+          Slides with the pointer while dragging (badgeX), then eases back to
+          centre on release. No transition mid-drag so it tracks 1:1. */}
       <div
+        data-drag-badge
         style={{
           position:       "absolute",
           top:            "50%",
           left:           "50%",
-          transform:      "translate(-50%, -50%)",
+          transform:      `translate(-50%, -50%) translateX(${badgeX}px)`,
+          transition:     dragging ? "none" : "transform 420ms cubic-bezier(0.22, 1, 0.36, 1)",
           zIndex:         2,
           display:        "flex",
           alignItems:     "center",
@@ -140,13 +156,19 @@ function Viewer360Inner({
         <ArrowSquare direction="left" pressed={pressedL} onClick={onPressLeft} />
 
         <button
-          onClick={openModal}
-          aria-label="Watch 360° villa tour"
-          title="Click to watch full 360° tour video"
+          onPointerDown={onDragPointerDown}
+          onPointerMove={onDragPointerMove}
+          onPointerUp={onDragPointerUp}
+          onPointerCancel={onDragPointerCancel}
+          aria-label="Drag to look around, or click to watch the 360° villa tour"
+          title="Drag to look around · click to watch the full 360° tour"
           style={{
             background:    "transparent",
             border:        "none",
-            cursor:        "pointer",
+            cursor:        dragging ? "grabbing" : "grab",
+            /* Claim horizontal gestures so a sideways drag pans the scene
+               instead of the browser treating it as a page scroll. */
+            touchAction:   "none",
             padding:       "0 2px",
             fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
             fontWeight:    500,
@@ -173,14 +195,26 @@ export default function Kiwano360Tour({ tour360 }) {
   const [pressedR, setPressedR] = useState(false);
   const panIntervalRef = useRef(null);
 
+  /* Mirror of panX kept in a ref so the drag handler can read the current pan
+     synchronously. It needs to know how much of a pointer move the pan actually
+     absorbed (nothing, once it is clamped at ±40) in order to move the badge by
+     the same amount — a functional setState updater cannot report that back. */
+  const panXRef = useRef(0);
+  const applyPan = useCallback((next) => {
+    const v = Math.min(40, Math.max(-40, next));
+    panXRef.current = v;
+    setPanX(v);
+    return v;
+  }, []);
+
   /* Continuous pan while arrow is held ─────────────────────────────────────── */
   const startPan = useCallback((dir) => {
     if (panIntervalRef.current) return;
     const step = dir === "left" ? -1.5 : 1.5;
     panIntervalRef.current = setInterval(() => {
-      setPanX((prev) => Math.min(40, Math.max(-40, prev + step)));
+      applyPan(panXRef.current + step);
     }, 30);
-  }, []);
+  }, [applyPan]);
 
   const stopPan = useCallback(() => {
     clearInterval(panIntervalRef.current);
@@ -208,6 +242,74 @@ export default function Kiwano360Tour({ tour360 }) {
       modalVideoRef.current.currentTime = 0;
     }
   }, []);
+
+  /* ── Drag-to-pan on the badge ─────────────────────────────────────────────
+     Grab semantics, matching the arrow buttons: the scene follows the pointer,
+     so dragging LEFT pulls the photo left and brings the right-hand side into
+     view (and vice versa). To invert, negate `dx` in the move handler.
+
+     Sensitivity is container-relative — one full container width of drag sweeps
+     the whole -40…+40 pan range — so it feels the same on mobile and desktop.
+
+     A press that never travels more than DRAG_THRESHOLD is treated as a click
+     and opens the 360 video instead, so the badge keeps both behaviours. */
+  const DRAG_THRESHOLD = 4; // px
+
+  const dragRef = useRef(null);
+  const [dragging, setDragging] = useState(false);
+  /* Horizontal offset of the badge itself, in px from its centred position.
+     It follows the pointer during a drag and springs back to 0 on release. */
+  const [badgeX, setBadgeX] = useState(0);
+
+  const onDragPointerDown = useCallback((e) => {
+    const viewer = e.currentTarget.closest("[data-viewer360]");
+    const badge  = e.currentTarget.closest("[data-drag-badge]");
+    const viewerW = viewer?.offsetWidth || 600;
+    const badgeW  = badge?.offsetWidth  || 160;
+    dragRef.current = {
+      travelled: 0,
+      badge:     0,
+      pctPerPx:  80 / viewerW,
+      /* Keep the badge inside the frame with a 12px margin. Because one full
+         viewer width of drag covers the whole pan range, this cap lands at
+         roughly the same moment the pan clamps — they run out together. */
+      maxTravel: Math.max(0, viewerW / 2 - badgeW / 2 - 12),
+      lastX:     e.clientX,
+    };
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    setDragging(true);
+  }, []);
+
+  const onDragPointerMove = useCallback((e) => {
+    const d = dragRef.current;
+    if (!d) return;
+    const dx = e.clientX - d.lastX;
+    if (dx === 0) return;
+    d.lastX = e.clientX;
+    d.travelled += Math.abs(dx);
+
+    const before   = panXRef.current;
+    const after    = applyPan(before + dx * d.pctPerPx);
+    // Only the travel the pan actually took — 0 once it is clamped, so the
+    // badge stops dead at the same instant the photo does.
+    const acceptedPx = (after - before) / d.pctPerPx;
+
+    d.badge = Math.max(-d.maxTravel, Math.min(d.maxTravel, d.badge + acceptedPx));
+    setBadgeX(d.badge);
+  }, [applyPan]);
+
+  const endDrag = useCallback((e, wasCancelled) => {
+    const d = dragRef.current;
+    if (!d) return;
+    dragRef.current = null;
+    setDragging(false);
+    setBadgeX(0);                       // springs home via the CSS transition
+    e.currentTarget.releasePointerCapture?.(e.pointerId);
+    if (!wasCancelled && d.travelled <= DRAG_THRESHOLD) openModal();
+  }, [openModal]);
+
+  const onDragPointerUp     = useCallback((e) => endDrag(e, false), [endDrag]);
+  const onDragPointerCancel = useCallback((e) => endDrag(e, true),  [endDrag]);
 
   useEffect(() => {
     if (modalOpen && modalVideoRef.current)
@@ -281,7 +383,7 @@ export default function Kiwano360Tour({ tour360 }) {
               lineHeight:    "21px",
               letterSpacing: "0",
               textAlign:     "center",
-              color:         "#000000CC",
+              color:         "#333333",
               margin:        0,
             }}
           >
@@ -322,7 +424,12 @@ export default function Kiwano360Tour({ tour360 }) {
               pressedR={pressedR}
               onPressLeft={() => { setPressedL(true); startPan("left"); }}
               onPressRight={() => { setPressedR(true); startPan("right"); }}
-              openModal={openModal}
+              dragging={dragging}
+              badgeX={badgeX}
+              onDragPointerDown={onDragPointerDown}
+              onDragPointerMove={onDragPointerMove}
+              onDragPointerUp={onDragPointerUp}
+              onDragPointerCancel={onDragPointerCancel}
             />
           </div>
         </div>
@@ -350,7 +457,7 @@ export default function Kiwano360Tour({ tour360 }) {
         <div
           style={{
             width:         "100%",
-            maxWidth:      "clamp(80%, 100%, 1920px)",
+            maxWidth:      "1920",
             margin:        "0 auto",
             display:       "flex",
             flexDirection: "column",
@@ -420,7 +527,7 @@ export default function Kiwano360Tour({ tour360 }) {
                   lineHeight:    "26.4px",
                   letterSpacing: "-0.44px",
                   textAlign:     "center",
-                  color:         "#334454CC",
+                  color:         "#333333",
                   margin:        0,
                 }}
               >
@@ -452,7 +559,12 @@ export default function Kiwano360Tour({ tour360 }) {
                 pressedR={pressedR}
                 onPressLeft={() => { setPressedL(true); startPan("left"); }}
                 onPressRight={() => { setPressedR(true); startPan("right"); }}
-                openModal={openModal}
+                dragging={dragging}
+                badgeX={badgeX}
+                onDragPointerDown={onDragPointerDown}
+                onDragPointerMove={onDragPointerMove}
+                onDragPointerUp={onDragPointerUp}
+                onDragPointerCancel={onDragPointerCancel}
               />
             </div>
           </div>
@@ -560,9 +672,9 @@ export default function Kiwano360Tour({ tour360 }) {
             >
               ✕
             </button> */}
-          {/* </div>
-        </div>
-      )} */}
+          {/* </div> */}
+        {/* </div> */}
+      {/* )} */}
     </>
   );
 }

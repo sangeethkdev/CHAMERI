@@ -314,6 +314,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 /*
  * ─── CLAMP REFERENCE ────────────────────────────────────────────────────────
@@ -501,8 +502,13 @@ const ContactCard = ({ heading }) => (
         left: 'clamp(22.9px, 2.24vw, 43px)',
       }}
     >
-      <button
-        className="group relative flex items-center justify-center bg-[#6B859E] hover:bg-[#334454] transition-colors duration-500 overflow-hidden cursor-pointer border-none"
+      {/* A link rather than a button — it navigates to the contact page, so it
+          gains middle-click / open-in-new-tab and is announced as a link.
+          Styling is unchanged. */}
+      <Link
+        href="/contact"
+        aria-label="Get in touch with the Chameri team"
+        className="group relative flex items-center justify-center no-underline bg-[#6B859E] hover:bg-[#334454] transition-colors duration-500 overflow-hidden cursor-pointer border-none"
         style={{
           width:        'clamp(118.6px, 11.6vw, 222.6px)', // 167px @ 1440 → 222.6px @ 1920
           height:       'clamp(36.9px, 3.61vw, 69.3px)',
@@ -570,7 +576,7 @@ const ContactCard = ({ heading }) => (
                     </svg>
                   </div>
                 </div>
-      </button>
+      </Link>
     </div>
   </div>
 );

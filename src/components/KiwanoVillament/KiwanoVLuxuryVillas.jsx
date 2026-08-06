@@ -7,7 +7,7 @@ import { useState, useRef, useEffect, useCallback, cloneElement } from "react";
 // 1. Configuration → classic house outline with peaked roof + door gap
 function IconHome() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#333333" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#334454" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       {/* Outer house silhouette */}
       <path d="M3 10.5L12 3L21 10.5V21H15V14.5H9V21H3V10.5Z" />
     </svg>
@@ -17,7 +17,7 @@ function IconHome() {
 // 2. Built-up Area → architectural floor-plan: outer rectangle divided into 3 rooms
 function IconArea() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#333333" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#334454" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       {/* Outer border */}
       <rect x="2" y="4" width="20" height="16" rx="1" />
       {/* Vertical wall — splits left room from right column */}
@@ -31,7 +31,7 @@ function IconArea() {
 // 3. Plot Range → horizontal measurement: ← [box] →
 function IconPlot() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#333333" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#334454" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       {/* Centre rectangle */}
       <rect x="7.5" y="9" width="9" height="6" rx="0.5" />
       {/* Left shaft + arrowhead */}
@@ -47,7 +47,7 @@ function IconPlot() {
 // 4. Number of Units → house silhouette + 3 outward signal arcs on the right
 function IconUnits() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#333333" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#334454" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       {/* Left wing of house (peaked roof + body) */}
       <path d="M2 11.5L7 5.5V21H2V11.5Z" />
       {/* Right wing / second wall */}
@@ -65,7 +65,7 @@ function IconUnits() {
 // 5. Design Style → crossed pencil ✕ ruler (pencil: ↗ to ↙ / ruler: ↖ to ↘)
 function IconDesign() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#333333" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#334454" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       {/* Pencil — top-right → bottom-left, pointed tip at bottom-left */}
       <path d="M16.5 3.5L20.5 7.5L8 20L4 21.5L5.5 17.5L18 5L16.5 3.5Z" />
       {/* Ruler — top-left → bottom-right, rectangular body */}
@@ -81,7 +81,7 @@ function IconDesign() {
 // 6. Expected Completion → calendar: outer rect + ring tabs + divider + filled date cells
 function IconCalendar() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#333333" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#334454" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       {/* Body */}
       <rect x="2" y="4" width="20" height="18" rx="2" />
       {/* Header divider */}
@@ -90,9 +90,9 @@ function IconCalendar() {
       <line x1="7"  y1="2" x2="7"  y2="6" />
       <line x1="17" y1="2" x2="17" y2="6" />
       {/* Filled date cells */}
-      <rect x="5"    y="13"   width="3.5" height="2.5" rx="0.4" fill="#333333" stroke="none" />
-      <rect x="10.5" y="13"   width="3.5" height="2.5" rx="0.4" fill="#333333" stroke="none" />
-      <rect x="10.5" y="17.5" width="3.5" height="2.5" rx="0.4" fill="#333333" stroke="none" />
+      <rect x="5"    y="13"   width="3.5" height="2.5" rx="0.4" fill="#334454" stroke="none" />
+      <rect x="10.5" y="13"   width="3.5" height="2.5" rx="0.4" fill="#334454" stroke="none" />
+      <rect x="10.5" y="17.5" width="3.5" height="2.5" rx="0.4" fill="#334454" stroke="none" />
     </svg>
   );
 }
@@ -100,7 +100,7 @@ function IconCalendar() {
 // 7. Parking → car side-view: body + roof-line + two wheel circles
 function IconCar() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#333333" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#334454" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       {/* Car body outline */}
       <path d="M4 17H2V12.5L5.5 7H18.5L22 12.5V17H20" />
       {/* Chassis line */}
@@ -136,11 +136,13 @@ const SPECS = [
 
 // ─── Zoomable / pannable site-plan image ──────────────────────────────────────
 //
-// The source PNG is in portrait orientation. Figma shows it rotated -90deg so
-// it reads as a landscape site plan inside the card.
+// The source PNG (1901×2110) is portrait, with the dark access road running
+// along its BOTTOM edge. Figma shows it rotated +90deg (clockwise) so the road
+// ends up vertical along the LEFT edge and the plan reads as landscape.
+// Rotating the other way (-90deg) mirrors the layout — road on the right.
 //
 // Key geometry trick:
-//   Container is W × H. After rotating the inner wrapper -90deg its visual
+//   Container is W × H. After rotating the inner wrapper 90deg its visual
 //   width = wrapper's HEIGHT and visual height = wrapper's WIDTH.
 //   So set wrapper to (H × W) and it will fill the container exactly at scale=1.
 //   We measure the live container size via ResizeObserver so this stays correct
@@ -708,7 +710,7 @@ export default function KiwanoVLuxuryVillas({ luxuryVillas }) {
           </div>
 
           {/* Brochure */}
-          <div style={{ opacity: 0.8, display: "flex", flexDirection: "column", gap: "2px" }}>
+          <div style={{ opacity: 0.8, display: "flex", flexDirection: "column", gap: "2px" , maxWidth: "clamp(260px, 38.82vw, 590px)" }}>
             <p
               style={{
                 fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
@@ -741,7 +743,7 @@ export default function KiwanoVLuxuryVillas({ luxuryVillas }) {
                   fontWeight: 600,
                   fontSize: "clamp(14px, 1.25vw, 18px)",
                   lineHeight: "100%",
-                  color: "#000000",
+                  color: "#041D35",
                 }}
               >
                 Download Brochure
@@ -773,7 +775,7 @@ export default function KiwanoVLuxuryVillas({ luxuryVillas }) {
             minWidth: 0,
             display: "flex",
             flexDirection: "column",
-            paddingBottom: "8px",
+            paddingBottom: "72px",
           }}
         >
           {SPECS.map((spec, i) => (
@@ -784,9 +786,9 @@ export default function KiwanoVLuxuryVillas({ luxuryVillas }) {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "center",
-                paddingTop: "10px",
+                paddingTop: "clamp(6px, 1.04vw, 30px)",
                 paddingRight: "10px",
-                paddingBottom: "20px",
+                paddingBottom: "clamp(8px, 1.56vw, 30px)",
                 paddingLeft: "10px",
                 /* last row has no rule — the list ends, it isn't separated from anything */
                 borderBottom: i === SPECS.length - 1 ? "none" : "1px solid rgba(0,0,0,0.2)",

@@ -56,7 +56,16 @@ import MenuSection from './MenuSection';
  *    positioned at left: 553px from inner edge → absolute center
  * ─────────────────────────────────────────────────────────────────────────────
  */
-export default function NewNavbar({ opacity = 1, showLogo = true }) {
+/**
+ * @param {boolean} darkLogo  Use the dark (#334454) logo instead of the white
+ *   one. The default white logo is built for the photo-backed heroes; pages
+ *   whose hero is a light flat colour (about, services) would otherwise show
+ *   white-on-cream and the logo would be invisible.
+ */
+export default function NewNavbar({ opacity = 1, showLogo = true, darkLogo = false }) {
+  const logoMark     = darkLogo ? '/icons/logo-mark-dark.svg'     : '/icons/logo (6).svg';
+  const logoWordmark = darkLogo ? '/icons/logo-wordmark-dark.svg' : '/icons/logo (7).svg';
+
   const [visible, setVisible] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
@@ -247,9 +256,14 @@ export default function NewNavbar({ opacity = 1, showLogo = true }) {
                 gap:    'clamp(6px, 0.694vw, 10px)',
               }}
             >
-              {/* Button — Figma: w:147 h:46 radius:12px */}
-              <button
-                className="group flex items-center bg-white hover:bg-[#334454] transition-colors duration-300 overflow-hidden cursor-pointer border-none z-50"
+              {/* Button — Figma: w:147 h:46 radius:12px
+                  Rendered as a link rather than a button: it navigates rather
+                  than acting, so it gains middle-click / open-in-new-tab and is
+                  announced as a link. Styling is unchanged. */}
+              <Link
+                href="/contact"
+                aria-label="Go to the contact page"
+                className="group flex items-center no-underline bg-white hover:bg-[#334454] transition-colors duration-300 overflow-hidden cursor-pointer border-none z-50"
                 style={{
                   width:        'clamp(98px, 10.208vw, 147px)',
                   height:       'clamp(30px, 3.194vw, 46px)',
@@ -330,7 +344,7 @@ export default function NewNavbar({ opacity = 1, showLogo = true }) {
                     </svg>
                   </div>
                 </div>
-              </button>
+              </Link>
             </div>
           </div>
 
@@ -376,7 +390,7 @@ export default function NewNavbar({ opacity = 1, showLogo = true }) {
                   }}
                 >
                   <Image
-                    src="/icons/logo (6).svg"
+                    src={logoMark}
                     alt="Chameri mark"
                     fill
                     sizes="40px"
@@ -393,7 +407,7 @@ export default function NewNavbar({ opacity = 1, showLogo = true }) {
                   }}
                 >
                   <Image
-                    src="/icons/logo (7).svg"
+                    src={logoWordmark}
                     alt="CHAMERI"
                     fill
                     sizes="120px"
@@ -470,10 +484,10 @@ export default function NewNavbar({ opacity = 1, showLogo = true }) {
             }}
           >
             <div style={{ position: 'relative', width: '29.5px', height: '33.2px' }}>
-              <Image src="/icons/logo (6).svg" alt="Chameri mark" fill sizes="40px" style={{ objectFit: 'contain' }} priority />
+              <Image src={logoMark} alt="Chameri mark" fill sizes="40px" style={{ objectFit: 'contain' }} priority />
             </div>
             <div style={{ position: 'relative', width: '85.93px', height: '11.08px' }}>
-              <Image src="/icons/logo (7).svg" alt="CHAMERI" fill sizes="100px" style={{ objectFit: 'contain' }} priority />
+              <Image src={logoWordmark} alt="CHAMERI" fill sizes="100px" style={{ objectFit: 'contain' }} priority />
             </div>
           </Link>
         )}

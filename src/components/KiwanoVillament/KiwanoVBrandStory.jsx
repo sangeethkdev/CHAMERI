@@ -168,7 +168,7 @@ export default function KiwanoVBrandStory({ brandStory }) {
                     width: "100%",
                     height: "73.81%",
                     overflow: "hidden",
-                    // background: "#000",
+                    background: "#000",
                   }}
                 >
                   <video

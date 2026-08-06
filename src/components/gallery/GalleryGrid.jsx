@@ -50,9 +50,11 @@ export default function GalleryGrid({ galleryImages }) {
   return (
     <section className="w-full flex flex-col items-center" style={{ backgroundColor: '#EDE7DE' }}>
       
-      {/* Header Container */}
-      <div 
-        className="w-full flex justify-between items-start"
+      {/* Header Container — `justify-center` so the pill sits on the section's
+          centre line. (If the filter tabs below are ever re-enabled, this wants
+          to go back to `justify-between` so they split left/right.) */}
+      <div
+        className="w-full flex justify-center items-start"
         style={{
           maxWidth: 'clamp(375px, 100vw, 1920px)',
           paddingTop: 'clamp(19px, 1.3vw, 19px)',
@@ -65,7 +67,7 @@ export default function GalleryGrid({ galleryImages }) {
         <div
           className="flex items-center"
           style={{
-            paddingTop: 'clamp(0px, 0.5vw, 7.2px)',
+            paddingTop: 'clamp(0px, 3.5vw, 30.2px)',
             paddingBottom: 'clamp(0px, 0.5vw, 7.2px)',
             paddingLeft: 'clamp(2px, 1vw, 14px)',
             paddingRight: 'clamp(2px, 1vw, 14px)',
@@ -134,14 +136,14 @@ export default function GalleryGrid({ galleryImages }) {
         <div className="hidden md:flex w-full" style={{ gap: 'clamp(15px, 2.08vw, 30px)' }}>
 
           {/* Column 1 */}
-          <div className="flex flex-col flex-1" style={{ gap: 'clamp(15px, 2.08vw, 30px)', flexBasis: '30.625%' }}>
+          <div className="flex flex-col flex-1" style={{ gap: 'clamp(15px, 2.08vw, 30px)' }}>
             {col1.map((img) => (
               <div key={img.id} className="relative w-full overflow-hidden" style={{ aspectRatio: `${img.w} / ${img.h}` }}>
                 <Image 
                   src={img.src} 
                   alt={img.alt} 
                   fill 
-                  sizes="(max-width: 768px) 100vw, 30vw"
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover hover:scale-105 transition-transform duration-700 ease-out" 
                 />
               </div>
@@ -149,14 +151,14 @@ export default function GalleryGrid({ galleryImages }) {
           </div>
 
           {/* Column 2 */}
-          <div className="flex flex-col flex-1" style={{ gap: 'clamp(15px, 2.08vw, 30px)', flexBasis: '24.236%' }}>
+          <div className="flex flex-col flex-1" style={{ gap: 'clamp(15px, 2.08vw, 30px)' }}>
             {col2.map((img) => (
               <div key={img.id} className="relative w-full overflow-hidden" style={{ aspectRatio: `${img.w} / ${img.h}` }}>
                 <Image 
                   src={img.src} 
                   alt={img.alt} 
                   fill 
-                  sizes="(max-width: 768px) 100vw, 24vw"
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover hover:scale-105 transition-transform duration-700 ease-out" 
                 />
               </div>
@@ -164,14 +166,14 @@ export default function GalleryGrid({ galleryImages }) {
           </div>
 
           {/* Column 3 */}
-          <div className="flex flex-col flex-1" style={{ gap: 'clamp(15px, 2.08vw, 30px)', flexBasis: '30.625%' }}>
+          <div className="flex flex-col flex-1" style={{ gap: 'clamp(15px, 2.08vw, 30px)' }}>
             {col3.map((img) => (
               <div key={img.id} className="relative w-full overflow-hidden" style={{ aspectRatio: `${img.w} / ${img.h}` }}>
                 <Image 
                   src={img.src} 
                   alt={img.alt} 
                   fill 
-                  sizes="(max-width: 768px) 100vw, 30vw"
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover hover:scale-105 transition-transform duration-700 ease-out" 
                 />
               </div>

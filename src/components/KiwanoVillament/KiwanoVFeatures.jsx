@@ -229,7 +229,7 @@ export default function KiwanoFeatures({ features }) {
             style={{
               fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
               fontWeight:    400,
-              fontSize:      "11px",
+              fontSize:      "12px",
               letterSpacing: "-0.32px",
               textTransform: "uppercase",
               color:         "#334454",
@@ -368,7 +368,7 @@ export default function KiwanoFeatures({ features }) {
             style={{
               fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
               fontWeight:    400,
-              fontSize:      "clamp(11px, 1.125vw, 16.2px)",
+              fontSize:      "clamp(12px, 1.125vw, 16.2px)",
               lineHeight:    "clamp(14px, 1.35vw, 19.44px)",
               letterSpacing: "-0.32px",
               textTransform: "uppercase",
@@ -509,10 +509,9 @@ function MobileFeatureCard({ feature }) {
       <div
         style={{
           position:     "relative",
-          marginTop:    "-44px",
-          marginLeft:   "12px",
+          marginTop:    "-50px",
+          marginLeft:   "2px",
           marginRight:  "12px",
-          borderRadius: "8px",
           overflow:     "hidden",
         }}
       >
@@ -549,7 +548,6 @@ function FeatureCard({ feature }) {
         width:        "clamp(220px, 26.367vw, 379.68px)",
         height:       "clamp(320px, 34.597vw, 498.16px)",
         flexShrink:   0,
-        borderRadius: "clamp(8px, 0.833vw, 12px)",
         overflow:     "hidden",
         background:   "#1a1a1a",
         cursor:       "pointer",
@@ -587,9 +585,9 @@ function FeatureCard({ feature }) {
         style={{
           position:      "absolute",
           bottom:        0,
-          left:          "clamp(14px, 1.319vw, 19px)",
+          left:          "clamp(8px, 1.219vw, 19px)",
           right:         "clamp(14px, 1.319vw, 19px)",
-          paddingBottom: "clamp(16px, 1.736vw, 25px)",
+          paddingBottom: "clamp(16px, 1.136vw, 25px)",
           zIndex:        2,
         }}
       >

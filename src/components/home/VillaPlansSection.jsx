@@ -345,6 +345,14 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+
+/* The CTA follows whichever tab is showing, so "Learn More" always lands on the
+   project the visitor is actually looking at. */
+const TAB_ROUTES = {
+  villas:     '/kiwano',
+  villaments: '/kiwano-villament',
+};
 
 /*
  * ─── CLAMP REFERENCE ────────────────────────────────────────────────────────
@@ -608,9 +616,13 @@ const VillaPlansSection = ({ villaPlan }) => {
                 </p>
               </div>
 
-              {/* CTA Button */}
-              <button
-                className="group relative flex items-center justify-center bg-[#6B859E] hover:bg-[#334454] transition-colors duration-500 overflow-hidden cursor-pointer border-none flex-none"
+              {/* CTA — a link, not a button: its destination tracks the active
+                  tab, so Villas goes to /kiwano and Villaments to
+                  /kiwano-villament. Styling is unchanged. */}
+              <Link
+                href={TAB_ROUTES[activeTab]}
+                aria-label={`Learn more about ${activeTab === 'villas' ? tab1Label : tab2Label}`}
+                className="group relative flex items-center justify-center no-underline bg-[#6B859E] hover:bg-[#334454] transition-colors duration-500 overflow-hidden cursor-pointer border-none flex-none"
                 style={{
                   borderRadius: 'clamp(8px, 0.83vw, 12px)',
                   width:        'clamp(130px, 11.6vw, 167px)',
@@ -674,7 +686,7 @@ const VillaPlansSection = ({ villaPlan }) => {
                     </svg>
                   </div>
                 </div>
-              </button>
+              </Link>
             </div>
           </div>
         </div>

@@ -777,9 +777,11 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
+import useContactForm from '@/hooks/useContactForm';
+import FieldError, { FIELD_ERROR_COLOR } from '../common/FieldError';
 
 /*
  * ─── CLAMP REFERENCE ────────────────────────────────────────────────────────
@@ -861,8 +863,10 @@ const ArrowSVG = () => (
 );
 
 const ContactSection = () => {
-  const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const {
+    form, errors, status, statusMessage,
+    handleChange, handlePhoneChange, handleSubmit,
+  } = useContactForm('Home page');
 
   /* shared input className — only non-sizing utilities */
   const inputBase =
@@ -1057,7 +1061,8 @@ every step of the way.
 
           {/* Form */}
           <form
-            onSubmit={(e) => e.preventDefault()}
+            noValidate
+            onSubmit={handleSubmit}
             className="order-2 lg:order-none flex flex-col bg-[#EDE7DE] w-full lg:w-[clamp(400px,48.097vw,1240px)] lg:max-w-[clamp(300px,50.097vw,1140px)] gap-[20px] lg:gap-[clamp(25px,2.78vw,40px)] px-0 lg:px-[clamp(34px,3.82vw,55px)]"
             style={{
               paddingTop:    'clamp(17px, 1.88vw, 27px)',
@@ -1073,51 +1078,70 @@ every step of the way.
               {/* Name */}
               <div>
                 <input
-                  type="text" name="name" placeholder="Enter Your Name"
+                  type="text" name="name" placeholder="Enter Your Name *"
                   value={form.name} onChange={handleChange}
-                  className={inputBase} style={inputStyle}
+                  className={inputBase} style={errors.name ? { ...inputStyle, borderBottomColor: FIELD_ERROR_COLOR } : inputStyle}
+                  required
+                  aria-required="true"
+                  aria-invalid={errors.name ? 'true' : 'false'}
+                  aria-describedby={errors.name ? 'home-name-error' : undefined}
                 />
+                <FieldError id="home-name-error">{errors.name}</FieldError>
               </div>
 
               {/* Email */}
               <div>
                 <input
-                  type="email" name="email" placeholder="Enter Email"
+                  type="email" name="email" placeholder="Enter Email *"
                   value={form.email} onChange={handleChange}
-                  className={inputBase} style={inputStyle}
+                  className={inputBase} style={errors.email ? { ...inputStyle, borderBottomColor: FIELD_ERROR_COLOR } : inputStyle}
+                  required
+                  aria-required="true"
+                  aria-invalid={errors.email ? 'true' : 'false'}
+                  aria-describedby={errors.email ? 'home-email-error' : undefined}
                 />
+                <FieldError id="home-email-error">{errors.email}</FieldError>
               </div>
 
               {/* Phone */}
-              <div
-                className="flex items-center border-b border-[#000000] bg-transparent w-full"
-                style={{ height: 'clamp(33.75px, 3.75vw, 54px)',paddingBottom: 'clamp(4px, 0.4vw, 6px)',paddingLeft:   'clamp(12px, 0.4vw, 12px)', }}
-              >
-                <PhoneInput
-                  international defaultCountry="IN"
-                  value={form.phone}
-                  onChange={(val) => setForm({ ...form, phone: val })}
-                  placeholder="Phone number"
-                  className="contact-phone-input"
-                  style={{ width: '100%', outline: 'none' }}
-                />
+              <div>
+                <div
+                  className="flex items-center border-b bg-transparent w-full"
+                  style={{ borderBottomColor: errors.phone ? FIELD_ERROR_COLOR : '#000000', height: 'clamp(33.75px, 3.75vw, 54px)',paddingBottom: 'clamp(4px, 0.4vw, 6px)',paddingLeft:   'clamp(12px, 0.4vw, 12px)', }}
+                >
+                  <PhoneInput
+                    international defaultCountry="IN"
+                    value={form.phone}
+                    onChange={handlePhoneChange}
+                    placeholder="Phone number"
+                    className="contact-phone-input"
+                    style={{ width: '100%', outline: 'none' }}
+                  />
+                </div>
+                <FieldError id="home-phone-error">{errors.phone}</FieldError>
               </div>
 
               {/* Message */}
               <div>
                 <textarea
-                  name="message" placeholder="Type your message here..."
+                  name="message" placeholder="Type your message here... *"
                   value={form.message} onChange={handleChange}
                   className={`${inputBase} resize-none`}
-                  style={{ ...inputStyle, height: 'clamp(68.75px, 7.64vw, 110px)', paddingTop: 'clamp(5px, 0.56vw, 8px)' }}
+                  style={{ ...inputStyle, ...(errors.message ? { borderBottomColor: FIELD_ERROR_COLOR } : null), height: 'clamp(68.75px, 7.64vw, 110px)', paddingTop: 'clamp(5px, 0.56vw, 8px)' }}
+                  required
+                  aria-required="true"
+                  aria-invalid={errors.message ? 'true' : 'false'}
+                  aria-describedby={errors.message ? 'home-message-error' : undefined}
                 />
+                <FieldError id="home-message-error">{errors.message}</FieldError>
               </div>
             </div>
 
             {/* Submit button */}
-            <div className="flex items-center w-full">
+            <div className="flex flex-col items-start w-full" style={{ gap: '10px' }}>
               <button
                 type="submit"
+                disabled={status === 'sending'}
                 className="group relative flex items-center justify-center bg-[#6B859E] hover:bg-[#4a6074] transition-colors duration-500 overflow-hidden cursor-pointer border-none w-[clamp(118.6px,11.6vw,167px)] h-[clamp(36.9px,3.61vw,52px)]"
                 style={{
                   borderRadius: 'clamp(8.5px, 0.83vw, 12px)',
@@ -1181,6 +1205,21 @@ every step of the way.
                   </div>
                 </div>
               </button>
+              {statusMessage && (
+                <p
+                  role="status"
+                  aria-live="polite"
+                  className="font-sans font-normal"
+                  style={{
+                    margin:     0,
+                    fontSize:   'clamp(12px, 0.9vw, 14px)',
+                    lineHeight: 1.4,
+                    color:      status === 'error' ? FIELD_ERROR_COLOR : '#2E6B4F',
+                  }}
+                >
+                  {statusMessage}
+                </p>
+              )}
             </div>
           </form>
         </div>

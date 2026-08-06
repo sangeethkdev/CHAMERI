@@ -737,10 +737,15 @@ const GalleryNew = ({ gallery }) => {
               </div>
             </div>
 
-            {/* ─── ROW 4: "Learn More" button ─── */}
+            {/* ─── ROW 4: "Learn More" button ───
+                A link, matching the mobile CTA and the per-villa hover buttons,
+                which already point at /gallery. This one was a bare button
+                element with no handler, so it did nothing when clicked. */}
             <div className="flex justify-center w-full">
-              <button
-                className="group relative flex items-center justify-center bg-[#6B859E] hover:bg-[#4a6074] transition-colors duration-500 overflow-hidden cursor-pointer border-none"
+              <Link
+                href="/gallery"
+                aria-label="View the full gallery"
+                className="group relative flex items-center justify-center no-underline bg-[#6B859E] hover:bg-[#4a6074] transition-colors duration-500 overflow-hidden cursor-pointer border-none"
                 style={{
                   width:        clamp(130, 167),
                   height:       clamp(42, 52),
@@ -804,7 +809,7 @@ const GalleryNew = ({ gallery }) => {
                     </svg>
                   </div>
                 </div>
-              </button>
+              </Link>
             </div>
 
           </div>{/* /PROJECT GRID */}
