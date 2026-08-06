@@ -157,7 +157,6 @@ export default function KiwanoFeatures({ features }) {
     ? features.features.map((f, i) => ({
         id: i + 1,
         title: f.name || STATIC_FEATURES[i % STATIC_FEATURES.length]?.title,
-        description: f.description || STATIC_FEATURES[i % STATIC_FEATURES.length]?.description,
         image: f.image || STATIC_FEATURES[i % STATIC_FEATURES.length]?.image,
       }))
     : STATIC_FEATURES;

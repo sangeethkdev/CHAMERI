@@ -157,7 +157,6 @@ export default function KiwanoFeatures({ features }) {
     ? features.features.map((f, i) => ({
         id: i + 1,
         title: f.name || STATIC_FEATURES[i % STATIC_FEATURES.length]?.title,
-        description: f.description || STATIC_FEATURES[i % STATIC_FEATURES.length]?.description,
         image: f.image || STATIC_FEATURES[i % STATIC_FEATURES.length]?.image,
       }))
     : STATIC_FEATURES;
@@ -230,7 +229,7 @@ export default function KiwanoFeatures({ features }) {
             style={{
               fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
               fontWeight:    400,
-              fontSize:      "11px",
+              fontSize:      "12px",
               letterSpacing: "-0.32px",
               textTransform: "uppercase",
               color:         "#334454",
@@ -369,7 +368,7 @@ export default function KiwanoFeatures({ features }) {
             style={{
               fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
               fontWeight:    400,
-              fontSize:      "clamp(11px, 1.125vw, 16.2px)",
+              fontSize:      "clamp(12px, 1.125vw, 16.2px)",
               lineHeight:    "clamp(14px, 1.35vw, 19.44px)",
               letterSpacing: "-0.32px",
               textTransform: "uppercase",
@@ -513,7 +512,6 @@ function MobileFeatureCard({ feature }) {
           marginTop:    "-50px",
           marginLeft:   "2px",
           marginRight:  "12px",
-          borderRadius: "8px",
           overflow:     "hidden",
         }}
       >
@@ -550,7 +548,6 @@ function FeatureCard({ feature }) {
         width:        "clamp(220px, 26.367vw, 379.68px)",
         height:       "clamp(320px, 34.597vw, 498.16px)",
         flexShrink:   0,
-        borderRadius: "clamp(8px, 0.833vw, 12px)",
         overflow:     "hidden",
         background:   "#1a1a1a",
         cursor:       "pointer",

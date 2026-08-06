@@ -11,10 +11,15 @@ import Image from "next/image";
  * BADGE (centred over photo):
  *   ← [left arrow square]  "Drag Around"  [right arrow square] →
  *
- *   • Left  arrow (←) pans the photo RIGHT (reveals left side)
- *   • Right arrow (→) pans the photo LEFT  (reveals right side)
- *   • Clicking "Drag Around" text opens the full 360 video modal
- *   • Photo pans with CSS objectPosition, animated with ease-out
+ *   All three controls share one "grab" model — the scene follows the input,
+ *   so moving left brings the RIGHT-hand side of the photo into view.
+ *
+ *   • Left  arrow (←) held → pans continuously, revealing the right side
+ *   • Right arrow (→) held → pans continuously, revealing the left side
+ *   • "Drag Around" dragged → pans 1:1 with the pointer (mouse + touch)
+ *   • "Drag Around" clicked without moving → opens the full 360 video modal
+ *   • Photo pans with CSS objectPosition; eased for the arrows, un-eased
+ *     mid-drag so it tracks the pointer exactly
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -76,10 +81,13 @@ function ArrowSquare({ direction, onClick, pressed }) {
    badge markup stay in one place. */
 function Viewer360Inner({
   src, imgPosX, borderRadius,
-  pressedL, pressedR, onPressLeft, onPressRight, openModal,
+  pressedL, pressedR, onPressLeft, onPressRight,
+  dragging, onDragPointerDown, onDragPointerMove, onDragPointerUp, onDragPointerCancel,
 }) {
   return (
     <div
+      /* Marker the drag handler reads to size its sensitivity to this viewer */
+      data-viewer360
       style={{
         width:        "100%",
         height:       "100%",
@@ -99,7 +107,10 @@ function Viewer360Inner({
         style={{
           objectFit:      "cover",
           objectPosition: `${imgPosX}% 50%`,
-          transition:     "object-position 0.25s ease-out",
+          /* No easing mid-drag — the 0.25s ease would lag behind the pointer
+             and break the sense of grabbing the scene. It stays on for the
+             arrow buttons, whose stepped panning benefits from smoothing. */
+          transition:     dragging ? "none" : "object-position 0.25s ease-out",
           userSelect:     "none",
           pointerEvents:  "none",
         }}
@@ -140,13 +151,19 @@ function Viewer360Inner({
         <ArrowSquare direction="left" pressed={pressedL} onClick={onPressLeft} />
 
         <button
-          onClick={openModal}
-          aria-label="Watch 360° villa tour"
-          title="Click to watch full 360° tour video"
+          onPointerDown={onDragPointerDown}
+          onPointerMove={onDragPointerMove}
+          onPointerUp={onDragPointerUp}
+          onPointerCancel={onDragPointerCancel}
+          aria-label="Drag to look around, or click to watch the 360° villa tour"
+          title="Drag to look around · click to watch the full 360° tour"
           style={{
             background:    "transparent",
             border:        "none",
-            cursor:        "pointer",
+            cursor:        dragging ? "grabbing" : "grab",
+            /* Claim horizontal gestures so a sideways drag pans the scene
+               instead of the browser treating it as a page scroll. */
+            touchAction:   "none",
             padding:       "0 2px",
             fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
             fontWeight:    500,
@@ -208,6 +225,54 @@ export default function Kiwano360Tour({ tour360 }) {
       modalVideoRef.current.currentTime = 0;
     }
   }, []);
+
+  /* ── Drag-to-pan on the badge ─────────────────────────────────────────────
+     Grab semantics, matching the arrow buttons: the scene follows the pointer,
+     so dragging LEFT pulls the photo left and brings the right-hand side into
+     view (and vice versa). To invert, negate `dx` in the move handler.
+
+     Sensitivity is container-relative — one full container width of drag sweeps
+     the whole -40…+40 pan range — so it feels the same on mobile and desktop.
+
+     A press that never travels more than DRAG_THRESHOLD is treated as a click
+     and opens the 360 video instead, so the badge keeps both behaviours. */
+  const DRAG_THRESHOLD = 4; // px
+
+  const dragRef = useRef(null);
+  const [dragging, setDragging] = useState(false);
+
+  const onDragPointerDown = useCallback((e) => {
+    const viewer = e.currentTarget.closest("[data-viewer360]");
+    dragRef.current = {
+      lastX:     e.clientX,
+      travelled: 0,
+      pctPerPx:  80 / (viewer?.offsetWidth || 600),
+    };
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    setDragging(true);
+  }, []);
+
+  const onDragPointerMove = useCallback((e) => {
+    const d = dragRef.current;
+    if (!d) return;
+    const dx = e.clientX - d.lastX;
+    if (dx === 0) return;
+    d.lastX = e.clientX;
+    d.travelled += Math.abs(dx);
+    setPanX((prev) => Math.min(40, Math.max(-40, prev + dx * d.pctPerPx)));
+  }, []);
+
+  const endDrag = useCallback((e, wasCancelled) => {
+    const d = dragRef.current;
+    if (!d) return;
+    dragRef.current = null;
+    setDragging(false);
+    e.currentTarget.releasePointerCapture?.(e.pointerId);
+    if (!wasCancelled && d.travelled <= DRAG_THRESHOLD) openModal();
+  }, [openModal]);
+
+  const onDragPointerUp     = useCallback((e) => endDrag(e, false), [endDrag]);
+  const onDragPointerCancel = useCallback((e) => endDrag(e, true),  [endDrag]);
 
   useEffect(() => {
     if (modalOpen && modalVideoRef.current)
@@ -322,7 +387,11 @@ export default function Kiwano360Tour({ tour360 }) {
               pressedR={pressedR}
               onPressLeft={() => { setPressedL(true); startPan("left"); }}
               onPressRight={() => { setPressedR(true); startPan("right"); }}
-              openModal={openModal}
+              dragging={dragging}
+              onDragPointerDown={onDragPointerDown}
+              onDragPointerMove={onDragPointerMove}
+              onDragPointerUp={onDragPointerUp}
+              onDragPointerCancel={onDragPointerCancel}
             />
           </div>
         </div>
@@ -452,7 +521,11 @@ export default function Kiwano360Tour({ tour360 }) {
                 pressedR={pressedR}
                 onPressLeft={() => { setPressedL(true); startPan("left"); }}
                 onPressRight={() => { setPressedR(true); startPan("right"); }}
-                openModal={openModal}
+                dragging={dragging}
+                onDragPointerDown={onDragPointerDown}
+                onDragPointerMove={onDragPointerMove}
+                onDragPointerUp={onDragPointerUp}
+                onDragPointerCancel={onDragPointerCancel}
               />
             </div>
           </div>

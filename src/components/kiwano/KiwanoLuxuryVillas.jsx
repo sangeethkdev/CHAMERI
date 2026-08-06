@@ -459,10 +459,8 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
               margin: 0,
             }}
           >
-            A modern residential concept that combines the privacy of a villa
-            with the convenience of apartment living. Kiwano Villaments are
-            designed for families seeking spacious homes, shared amenities,
-            and a well-connected community environment.
+            {luxuryVillas?.heading ||
+              "Set amidst the serene and pristine orchard lands of Thalassery, Kannur District, Kerala, Kiwano Luxury Villas stands as a testament to elegance and sophistication. Our first venture into luxury development brings you a unique blend of high-end living and natural beauty."}
           </p>
         </div>
 
@@ -671,10 +669,8 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
                 margin: 0,
               }}
             >
-              Set amidst the serene and pristine orchard lands of Thalassery, Kannur
-              District, Kerala, Kiwano Luxury Villas stands as a testament to elegance and
-              sophistication. Our first venture into luxury development brings you a
-              unique blend of high-end living and natural beauty.
+              {luxuryVillas?.heading ||
+                "Set amidst the serene and pristine orchard lands of Thalassery, Kannur District, Kerala, Kiwano Luxury Villas stands as a testament to elegance and sophistication. Our first venture into luxury development brings you a unique blend of high-end living and natural beauty."}
             </p>
           </div>
         </div>

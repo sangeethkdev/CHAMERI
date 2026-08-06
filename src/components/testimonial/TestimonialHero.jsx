@@ -29,16 +29,20 @@ export default function TestimonialHero({ hero }) {
 
   return (
     <>
+      {/* Rendered once, outside both hero sections. Those sections carry
+          `isolate` for their -z-10 background layers, which creates a stacking
+          context — a fixed navbar placed inside one would be trapped in it and
+          painted over by every later section on the page. */}
+      <NewNavbar />
+
       {/* ══════════════════════════════════════════════════════════════════════
           MOBILE — iPhone 13/14 (390px) baseline
           Figma: w:390 h:725 pt/pb:50 gap:11, heading w:298.41 Roundo 500 38px/42px ls:-2px
       ═══════════════════════════════════════════════════════════════════════ */}
       <section
-        className="flex md:hidden relative w-full overflow-hidden z-50"
+        className="flex md:hidden relative w-full overflow-hidden isolate"
         style={{ height: "725px" }}
       >
-        <NewNavbar />
-
         {/* ── BACKGROUND IMAGE ───────────────────────────────────────────── */}
         <Image
           src={image}
@@ -88,11 +92,9 @@ export default function TestimonialHero({ hero }) {
       {/* ── DESKTOP ──────────────────────────────────────────────────────────── */}
       <div className="hidden md:block">
         <section
-          className="relative w-full overflow-hidden z-50"
+          className="relative w-full overflow-hidden isolate"
           style={{ height: "clamp(400px, 51.806vw, 966px)" }}
         >
-          <NewNavbar />
-
           {/* ── BACKGROUND IMAGE ───────────────────────────────────────────── */}
           <div className="absolute inset-0 w-full h-full -z-10">
             <Image
