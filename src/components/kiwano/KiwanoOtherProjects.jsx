@@ -2,10 +2,14 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 /**
  * ─────────────────────────────────────────────────────────────────────────────
  * KiwanoOtherProjects — "Explore Our Other Projects" section
+ *
+ * This lives on /kiwano, so the "other project" it points at is the
+ * Villaments — the CTA navigates to /kiwano-villament.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -103,7 +107,7 @@ export default function KiwanoOtherProjects({ otherProjects }) {
         >
           <Image
             src={otherProjects?.image || "/dummyimages/e273958d502607f06d62edd61792f48b69b84f3e.jpg"}
-            alt="Kiwano Villa"
+            alt="Kiwano Villaments"
             fill
             sizes="349px"
             style={{ objectFit: "cover" }}
@@ -146,7 +150,7 @@ export default function KiwanoOtherProjects({ otherProjects }) {
                 margin:        0,
               }}
             >
-              {otherProjects?.imageHeading || 'kiwano Villa'}
+              {otherProjects?.imageHeading || 'kiwano Villaments'}
             </h3>
             <p
               style={{
@@ -164,8 +168,9 @@ export default function KiwanoOtherProjects({ otherProjects }) {
               {otherProjects?.imageSubheading || 'Discover crafted living spaces where modern design meets timeless comfort for every family with smart layouts bright views and premium details built to inspire daily today always now us'}
             </p>
 
-            <button
-              type="button"
+            <Link
+              href="/kiwano-villament"
+              aria-label="Learn more about Kiwano Villaments"
               style={{
                 display:        "flex",
                 alignItems:     "center",
@@ -178,6 +183,7 @@ export default function KiwanoOtherProjects({ otherProjects }) {
                 border:         "none",
                 cursor:         "pointer",
                 marginTop:      "6px",
+                textDecoration: "none",
               }}
             >
               <span
@@ -210,7 +216,7 @@ export default function KiwanoOtherProjects({ otherProjects }) {
                   <path d="M8 12h16M18 5l7 7-7 7" />
                 </svg>
               </div>
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -366,11 +372,12 @@ export default function KiwanoOtherProjects({ otherProjects }) {
               {otherProjects?.imageSubheading || 'Discover crafted living spaces where modern design meets timeless comfort for every family with smart layouts bright views and premium details built to inspire daily today always now us'}
             </p>
 
-            {/* Submit button */}
+            {/* CTA — links across to the Villaments project */}
             <div className="flex items-center justify-center w-full">
-              <button
-                type="submit"
-                className="group relative flex items-center justify-center bg-[#6B859E] hover:bg-[#4a6074] transition-colors duration-500 overflow-hidden cursor-pointer border-none w-[clamp(118.6px,11.6vw,167px)] h-[clamp(36.9px,3.61vw,52px)]"
+              <Link
+                href="/kiwano-villament"
+                aria-label="Learn more about Kiwano Villaments"
+                className="group relative flex items-center justify-center no-underline bg-[#6B859E] hover:bg-[#4a6074] transition-colors duration-500 overflow-hidden cursor-pointer border-none w-[clamp(118.6px,11.6vw,167px)] h-[clamp(36.9px,3.61vw,52px)]"
                 style={{
                   borderRadius: 'clamp(8.5px, 0.83vw, 12px)',
                 }}
@@ -432,7 +439,7 @@ export default function KiwanoOtherProjects({ otherProjects }) {
                     </svg>
                   </div>
                 </div>
-              </button>
+              </Link>
             </div>
           </div>
         </div>
