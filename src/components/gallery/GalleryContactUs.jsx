@@ -273,7 +273,7 @@ const GalleryContactUs = () => {
             className="hidden lg:block font-roundo font-medium text-[#000000]"
             style={{
               fontSize:      'clamp(40px, 4.51vw, 65px)',
-              lineHeight:    'clamp(37.5px, 4.17vw, 60px)',
+              lineHeight:    'clamp(37.5px, 6.17vw, 80px)',
               letterSpacing: 'clamp(-0.5px, -0.06vw, -0.9px)',
             }}
           >

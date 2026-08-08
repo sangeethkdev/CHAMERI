@@ -910,7 +910,7 @@ export default function HeroSection({ hero }) {
                 whiteSpace: "nowrap",
               }}
             >
-              WHERE LIFE SETTLES
+              {hero?.tagline || "WHERE LIFE SETTLES"}
             </span>
           </div>
 
@@ -1029,7 +1029,7 @@ export default function HeroSection({ hero }) {
                     whiteSpace: "nowrap",
                   }}
                 >
-                  Your Villa Partner
+                  {hero?.tagline || "Your Villa Partner"}
                 </span>
               </div>
 

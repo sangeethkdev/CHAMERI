@@ -11,13 +11,21 @@ import emailjs from '@emailjs/browser';
  * All four forms carry the same four fields, so this lives here once rather
  * than being copy-pasted per section.
  *
- * DELIVERY — EmailJS, straight from the browser, no backend.
- *   Set these in .env.local (see the block there for where to find each):
- *     NEXT_PUBLIC_EMAILJS_SERVICE_ID
- *     NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
- *     NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
- *   The destination address is set on the EmailJS template itself
- *   ("To Email"), not here — so changing the recipient needs no code change.
+ * DELIVERY — two independent sends on submit:
+ *   1. EmailJS, straight from the browser — this is what actually notifies
+ *      the team, and its success/failure drives the UI status message.
+ *      Set these in .env.local (see the block there for where to find each):
+ *        NEXT_PUBLIC_EMAILJS_SERVICE_ID
+ *        NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
+ *        NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+ *      The destination address is set on the EmailJS template itself
+ *      ("To Email"), not here — so changing the recipient needs no code change.
+ *   2. POST /api/contacts on the admin backend — persists the enquiry so it
+ *      shows up in the admin dashboard (Recent Inquiries, New Inquiries
+ *      count). Best-effort: a failure here is logged but never blocks the
+ *      visitor's success message, since EmailJS already delivered the
+ *      enquiry to the team's inbox regardless of database state.
+ *      Uses NEXT_PUBLIC_API_URL (see src/lib/api.js for the same pattern).
  *
  * Validation behaviour:
  *   • Nothing is validated until the first submit attempt, so a user typing
@@ -37,6 +45,32 @@ const EMPTY = { name: '', email: '', phone: '', message: '' };
 const SERVICE_ID  = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
 const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
 const PUBLIC_KEY  = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+
+/* Best-effort save to the admin backend so the enquiry shows up in the
+   dashboard. Never throws — a dead backend must not stop the visitor's
+   message from sending via EmailJS. */
+async function saveContactToBackend(form, source) {
+  try {
+    const res = await fetch(`${API_URL}/contacts`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        subject: source,
+        message: form.message,
+      }),
+    });
+    if (!res.ok) {
+      console.error(`[contact] backend save failed: HTTP ${res.status}`);
+    }
+  } catch (err) {
+    console.error('[contact] backend save failed:', err?.message || err);
+  }
+}
 
 /* Deliberately permissive — enough to catch "not an address at all" without
    rejecting valid but unusual mailboxes. */
@@ -126,6 +160,10 @@ export default function useContactForm(source = 'Website') {
         ?.focus?.();
       return false;
     }
+
+    // Fired independently of EmailJS below — an enquiry should still reach
+    // the admin dashboard even if email delivery is misconfigured or down.
+    saveContactToBackend(form, source);
 
     if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
       // Fail loudly in the console rather than showing the visitor a success

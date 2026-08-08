@@ -38,7 +38,8 @@ const noopSubscribe = () => () => {};
  *                             flex row, align-items: flex-end, gap 39px
  *     NAV COLUMN            : width 370px, 8 links, each frame height 41px
  *     SOCIAL ICON ROW       : width 145px, height 30px, gap 14px
- *       Instagram 23×22 · Facebook 22×22 · YouTube 30×30 · WhatsApp 28×28
+ *       Instagram 23×22 · Facebook 22×22 · YouTube 30×30 · LinkedIn 24×24 ·
+ *       WhatsApp 28×28
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -85,6 +86,16 @@ const SOCIALS = [
     ),
   },
   {
+    label:  'LinkedIn',
+    width:  'clamp(19px, 1.944vw, 24px)',
+    height: 'clamp(19px, 1.944vw, 24px)',
+    svg: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.062 2.062 0 0 1 0 4.125zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z" />
+      </svg>
+    ),
+  },
+  {
     label:  'WhatsApp',
     width:  'clamp(19px, 1.944vw, 24px)',
     height: 'clamp(19px, 1.944vw, 24px)',
@@ -106,12 +117,18 @@ const MOBILE_NAV_LINKS = [
   { label: 'Contact Us',  href: '/contact' },
 ];
 
+/* Looked up by label rather than by index into SOCIALS: the mobile row uses a
+   different order from the desktop one, so positional refs silently point at
+   the wrong icon whenever SOCIALS gains an entry. */
+const iconFor = (label) => SOCIALS.find((s) => s.label === label).svg;
+
 // Order/sizes per Figma mobile spec: Instagram 22×22, WhatsApp 24×24, Facebook 24×24, YouTube 30×30
 const MOBILE_SOCIALS = [
-  { label: 'Instagram', width: '22px', height: '22px', svg: SOCIALS[0].svg },
-  { label: 'WhatsApp',  width: '24px', height: '24px', svg: SOCIALS[3].svg },
-  { label: 'Facebook',  width: '24px', height: '24px', svg: SOCIALS[1].svg },
-  { label: 'YouTube',   width: '30px', height: '30px', svg: SOCIALS[2].svg },
+  { label: 'Instagram', width: '22px', height: '22px', svg: iconFor('Instagram') },
+  { label: 'WhatsApp',  width: '24px', height: '24px', svg: iconFor('WhatsApp')  },
+  { label: 'Facebook',  width: '24px', height: '24px', svg: iconFor('Facebook')  },
+  { label: 'YouTube',   width: '30px', height: '30px', svg: iconFor('YouTube')   },
+  { label: 'LinkedIn',  width: '24px', height: '24px', svg: iconFor('LinkedIn')  },
 ];
 
 export default function MenuSection({ open = false, onClose }) {

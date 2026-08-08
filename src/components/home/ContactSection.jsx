@@ -939,7 +939,7 @@ const ContactSection = () => {
               letterSpacing: '-0.32px',
             }}
           >
-            Let's Talk 
+            Contact Us
           </span>
             </div>
 
@@ -948,7 +948,7 @@ const ContactSection = () => {
               className="lg:hidden font-roundo font-medium text-[#000000] m-0"
               style={{ fontSize: '32px', lineHeight: '36.6px', letterSpacing: '-0.73px' }}
             >
-              Let's Talk 
+              Contact Us 
             </h2>
 
             {/* Description */}
@@ -1056,7 +1056,7 @@ every step of the way.
               letterSpacing: 'clamp(-0.5px, -0.06vw, -0.9px)',
             }}
           >
-            Contact Us
+            Let's Talk 
           </h2>
 
           {/* Form */}
