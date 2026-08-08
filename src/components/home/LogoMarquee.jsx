@@ -68,7 +68,7 @@ const LogoMarquee = ({ logos: apiLogos }) => {
           {scrollLogos.map((logo, index) => (
             <div
               key={index}
-              className="flex-shrink-0 relative w-[clamp(80px,12.73vw,450px)] h-[clamp(15px,3.08vw,150px)]"
+              className="flex-shrink-0 relative w-[clamp(80px,12.73vw,400px)] h-[clamp(15px,3.08vw,150px)]"
             >
               <Image
                 src={logo}

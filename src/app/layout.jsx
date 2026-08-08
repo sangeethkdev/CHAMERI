@@ -1,4 +1,5 @@
 import { Geist, Outfit, Instrument_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -16,6 +17,19 @@ const instrumentSans = Instrument_Sans({
   subsets: ["latin"],
 });
 
+const roundo = localFont({
+  src: [
+    { path: "../../public/Font/roundo/Roundo-ExtraLight.otf", weight: "200", style: "normal" },
+    { path: "../../public/Font/roundo/Roundo-Light.otf", weight: "300", style: "normal" },
+    { path: "../../public/Font/roundo/Roundo-Regular.otf", weight: "400", style: "normal" },
+    { path: "../../public/Font/roundo/Roundo-Medium.otf", weight: "500", style: "normal" },
+    { path: "../../public/Font/roundo/Roundo-SemiBold.otf", weight: "600", style: "normal" },
+    { path: "../../public/Font/roundo/Roundo-Bold.otf", weight: "700", style: "normal" },
+  ],
+  variable: "--font-roundo",
+  display: "swap",
+});
+
 export const metadata = {
   title: "Chameri — Premium Villa Residences",
   description:
@@ -24,7 +38,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${outfit.variable} ${instrumentSans.variable} h-full antialiased`}>
+    <html lang="en" className={`${geistSans.variable} ${outfit.variable} ${instrumentSans.variable} ${roundo.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

@@ -816,7 +816,7 @@ export default function HeroSection({ hero }) {
                 width: "clamp(200px, 54.17vw, 780px)",   /* 780/1440 */
                 height: "clamp(40px, 6.35vh, 65px)",      /* 65/1024  */
                 fontFamily: "var(--font-roundo), 'Roundo', var(--font-outfit), system-ui, sans-serif",
-                fontWeight: 400,
+                fontWeight: 500,
                 fontSize: "clamp(26px, 4.595vw, 75.41px)",
                 lineHeight: "clamp(10px, 2.06vh, 29.08px)",   /* 64.08/1024 */
                 letterSpacing: "clamp(-0.8px, -0.133vw, -1.92px)",
@@ -845,7 +845,7 @@ export default function HeroSection({ hero }) {
                 width: "clamp(160px, 42.43vw, 611px)",   /* 611/1440   */
                 height: "clamp(40px, 6.35vh, 65px)",
                 fontFamily: "var(--font-roundo), 'Roundo'",
-                fontWeight: 400,
+                fontWeight: 500,
                 fontSize: "clamp(26px, 4.157vw, 75.41px)",
                 lineHeight: "clamp(30px, 12.26vh, 104.08px)",
                 letterSpacing: "clamp(-0.8px, -0.133vw, -1.92px)",
