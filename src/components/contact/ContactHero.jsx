@@ -14,7 +14,7 @@
 //       {/* Background Image & Gradient */}
 //       <div className="absolute inset-0 w-full h-full -z-10">
 //         <Image
-//           src="/dummyimages/ChatGPT Image Jun 12, 2026, 11_00_29 AM 1.svg"
+//           src={image}
 //           alt="Contact Hero Background"
 //           fill
 //           sizes="100vw"
@@ -119,7 +119,10 @@ import Link from 'next/link';
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
-export default function ContactHero() {
+export default function ContactHero({ hero }) {
+  const heading = hero?.heading || "Let's Build\nThe Perfect Home Together";
+  const image = hero?.image || "/dummyimages/ChatGPT Image Jun 12, 2026, 11_00_29 AM 1.svg";
+
   return (
     <>
       {/* ══════════════════════════════════════════════════════════════════════
@@ -132,7 +135,7 @@ export default function ContactHero() {
       >
         {/* ── BACKGROUND IMAGE ───────────────────────────────────────────── */}
         <Image
-          src="/dummyimages/ChatGPT Image Jun 12, 2026, 11_00_29 AM 1.svg"
+          src={image}
           alt="Contact Hero Background"
           fill
           priority
@@ -171,7 +174,7 @@ export default function ContactHero() {
               textShadow: '0 2px 16px rgba(0,0,0,0.25)',
             }}
           >
-            {"Let's Build\nThe Perfect Home Together"}
+            {heading}
           </h1>
         </div>
       </section>
@@ -204,7 +207,7 @@ export default function ContactHero() {
            */}
           <div className="absolute inset-0 w-full h-full -z-10">
             <Image
-              src="/dummyimages/ChatGPT Image Jun 12, 2026, 11_00_29 AM 1.svg"
+              src={image}
               alt="Contact Hero Background"
               fill
               sizes="100vw"
@@ -273,7 +276,7 @@ export default function ContactHero() {
                 padding:       0,
               }}
             >
-              {"Let's Build\nThe Perfect Home Together"}
+              {heading}
             </h1>
           </div>
         </section>
