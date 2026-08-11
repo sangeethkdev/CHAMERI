@@ -108,7 +108,7 @@ export default function KiwanoBrandStory({ brandStory }) {
                   width: "clamp(280px, 35.08vw, 515.11px)",
                   fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
                   fontWeight: 400,
-                  fontSize: "clamp(14px, 1.25vw, 22px)",
+                  fontSize: "clamp(12px, 1.25vw, 18px)",
                   lineHeight: "21.8px",
                   letterSpacing: "-0.44px",
                   color: "#222F30CC",

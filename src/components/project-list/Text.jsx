@@ -60,7 +60,7 @@ export default function Text({ project }) {
             style={{
               gap: 'clamp(5px, 0.5vw, 7.2px)',
               borderRadius: '90px',
-              width: 'clamp(100px, 9.903vw, 142.6px)',
+              width: 'clamp(100px, 9.903vw, 136.6px)',
             }}
           >
             <span

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback, cloneElement } from "react";
+import Link from "next/link";
 
 // ─── Spec icons ───────────────────────────────────────────────────────────────
 
@@ -572,7 +573,8 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
               {luxuryVillas?.subheading || 'Lorem ipsum dolor sit amet, consectetur'}
             </p>
 
-            <div
+            <Link
+              href="/contact"
               onMouseEnter={() => setBrochureHovered(true)}
               onMouseLeave={() => setBrochureHovered(false)}
               style={{
@@ -583,6 +585,7 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
                 paddingBottom: "2px",
                 cursor: "pointer",
                 width: "fit-content",
+                textDecoration: "none",
               }}
             >
               <span
@@ -595,7 +598,7 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
                   color: "#041D35",
                 }}
               >
-                Download Brochure
+                Contact Us
               </span>
 
               <svg
@@ -613,7 +616,7 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
                 <line x1="2" y1="10" x2="16" y2="10" stroke="#041D35" strokeWidth="1.8" strokeLinecap="round" />
                 <polyline points="10,4 16,10 10,16" stroke="#041D35" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
               </svg>
-            </div>
+            </Link>
           </div>
         </div>
       </div>
@@ -724,7 +727,8 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
               {luxuryVillas?.subheading || 'Lorem ipsum dolor sit amet, consectetur'}
             </p>
 
-            <div
+            <Link
+              href="/contact"
               onMouseEnter={() => setBrochureHovered(true)}
               onMouseLeave={() => setBrochureHovered(false)}
               style={{
@@ -735,6 +739,7 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
                 paddingBottom: "2px",
                 cursor: "pointer",
                 width: "fit-content",
+                textDecoration: "none",
               }}
             >
               <span
@@ -746,7 +751,7 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
                   color: "#041D35",
                 }}
               >
-                Download Brochure
+                Contact Us
               </span>
 
               <svg
@@ -764,7 +769,7 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
                 <line x1="2" y1="10" x2="16" y2="10" stroke="#000000" strokeWidth="1.8" strokeLinecap="round" />
                 <polyline points="10,4 16,10 10,16" stroke="#000000" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
               </svg>
-            </div>
+            </Link>
           </div>
         </div>
 

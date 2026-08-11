@@ -12,26 +12,11 @@ const DEFAULT_MOBILE_HEADING =
 /** The heading animates word by word as the section scrolls into view. */
 const toWords = (text) => text.trim().split(/\s+/).filter(Boolean);
 
-const DEFAULT_STATS = [
-  { val: '30%', label: 'Lorem ipsum dolor' },
-  { val: '20%', label: 'Lorem ipsum' },
-  { val: '25%', label: 'Lorem ipsum dolor' },
-  { val: '96%', label: 'Lorem ipsum dolor sit' },
-];
-
 const AboutSection = ({ aboutUs }) => {
   // Same admin field drives both breakpoints; each falls back to its own copy.
   const HEADING_WORDS = toWords(aboutUs?.heading || DEFAULT_HEADING);
   const MOBILE_HEADING_WORDS = toWords(aboutUs?.heading || DEFAULT_MOBILE_HEADING);
 
-  const STATS = aboutUs
-    ? [
-        { val: aboutUs.count1, label: aboutUs.count1Text },
-        { val: aboutUs.count2, label: aboutUs.count2Text },
-        { val: aboutUs.count3, label: aboutUs.count3Text },
-        { val: aboutUs.count4, label: aboutUs.count4Text },
-      ].filter((s) => s.val)
-    : DEFAULT_STATS;
   const sectionRef = useRef(null);
   const headingRef = useRef(null);
   const mobileHeadingRef = useRef(null);
@@ -69,7 +54,7 @@ const AboutSection = ({ aboutUs }) => {
       className="w-full bg-[#EDE7DE] flex flex-col items-center overflow-hidden"
       style={{
         paddingTop:    'clamp(28px, 5.556vw, 80px)', // 80px @ 1440px
-        paddingBottom: 'clamp(28px, 5.556vw, 80px)', // 80px @ 1440px
+        paddingBottom: 'clamp(12px, 1.667vw, 24px)', // reduced now that the stats row (which used to fill this space) is gone
       }}
     >
       {/* <div className="
@@ -241,97 +226,6 @@ const AboutSection = ({ aboutUs }) => {
               </span>
             ))}
           </p>
-        </div>
-
-        {/* ══════════════════════════════════════════════════════════════════
-            STATS ROW — desktop/tablet (>= sm)
-        ══════════════════════════════════════════════════════════════════ */}
-        <div
-          className="hidden sm:flex w-full flex-wrap md:flex-nowrap items-center justify-between"
-          style={{
-            paddingTop:    'clamp(14px, 1.875vw, 27px)',   // 27px   @ 1440px
-            paddingBottom: 'clamp(14px, 1.875vw, 27px)',
-            paddingLeft:   'clamp(10px, 1.389vw, 20px)',   // 20px   @ 1440px
-            paddingRight:  'clamp(10px, 1.389vw, 20px)',   // 20px   @ 1440px
-            minHeight:     'clamp(100px, 7.361vw, 106px)', // 106px  @ 1440px
-            borderRadius:  'clamp(8px, 1vw, 14.4px)',      // 14.4px @ 1440px
-            gap:           'clamp(16px, 2.222vw, 32px)',    // 32px   @ 1440px
-          }}
-        >
-          {STATS.map((stat, i) => (
-            <div key={i} className="flex flex-col items-start w-[45%] md:w-auto">
-              {/* Stat value */}
-              <span
-                className="font-roundo font-medium text-[#192026]"
-                style={{
-                  fontSize:      'clamp(28px, 3.125vw, 45px)', // 45px @ 1440px
-                  lineHeight:    '1',
-                  letterSpacing: 'clamp(-0.5px, -0.063vw, -0.9px)',
-                }}
-              >
-                {stat.val}
-              </span>
-              {/* Stat label */}
-              <span
-                className="font-sans font-normal text-[#333333] tracking-[-0.32px]"
-                style={{
-                  fontSize:   'clamp(12px, 1.111vw, 16px)', // 16px @ 1440px
-                  lineHeight: 'clamp(16px, 1.35vw, 19.44px)',
-                  marginTop:  'clamp(4px, 0.556vw, 8px)',   // 8px  @ 1440px
-                }}
-              >
-                {stat.label}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* ══════════════════════════════════════════════════════════════════
-            STATS GRID — mobile (< sm)
-            Figma frame: 390×220  padding:27/19/27/19
-              Inner: 338×166 gap:20, containing 2 rows (338×73, justify-between)
-        ══════════════════════════════════════════════════════════════════ */}
-        <div
-          className="sm:hidden w-full"
-          style={{
-            paddingTop:    'clamp(25px, 6.923vw, 30px)',  /* 27/390 */
-            paddingBottom: 'clamp(25px, 6.923vw, 30px)',
-            paddingLeft:   'clamp(17px, 4.872vw, 21px)',   /* 19/390 */
-            paddingRight:  'clamp(17px, 4.872vw, 21px)',
-          }}
-        >
-          <div
-            className="flex flex-col w-full"
-            style={{
-              maxWidth: '372px',
-              gap:      'clamp(18px, 5.128vw, 22px)',   /* 20/390 */
-            }}
-          >
-            {Array.from({ length: Math.ceil(STATS.length / 2) }, (_, row) => (
-              <div key={row} className="w-full flex items-center justify-between">
-                {STATS.slice(row * 2, row * 2 + 2).map((stat, i) => (
-                  <div key={i} className="flex flex-col items-start">
-                    <span
-                      className="font-roundo font-medium text-[#1A1A1A]"
-                      style={{
-                        fontSize: 'clamp(28px, 3.125vw, 45px)',
-                        lineHeight: '1',
-                        letterSpacing: 'clamp(-0.5px, -0.063vw, -0.9px)',
-                      }}
-                    >
-                      {stat.val}
-                    </span>
-                    <span
-                      className="font-sans font-normal text-black/60 tracking-[-0.32px]"
-                      style={{ fontSize: '13px', lineHeight: '1.35', marginTop: '6px' }}
-                    >
-                      {stat.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
         </div>
 
       </div>

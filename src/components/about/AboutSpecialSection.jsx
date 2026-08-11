@@ -440,6 +440,7 @@ export default function AboutSpecialSection({ specialSection }) {
               display: 'flex',
               flexDirection: 'column',
               minHeight: 0,
+              borderTop: '1px solid rgba(33,35,37,0.12)',
             }}
           >
             {/*

@@ -1,30 +1,27 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import emailjs from '@emailjs/browser';
 
 /**
  * ─────────────────────────────────────────────────────────────────────────────
- * useContactForm — shared state, validation and EmailJS delivery for every
+ * useContactForm — shared state, validation and Resend delivery for every
  * contact form on the site (home, gallery, project-list, contact page).
  * ─────────────────────────────────────────────────────────────────────────────
  * All four forms carry the same four fields, so this lives here once rather
  * than being copy-pasted per section.
  *
  * DELIVERY — two independent sends on submit:
- *   1. EmailJS, straight from the browser — this is what actually notifies
- *      the team, and its success/failure drives the UI status message.
- *      Set these in .env.local (see the block there for where to find each):
- *        NEXT_PUBLIC_EMAILJS_SERVICE_ID
- *        NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
- *        NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
- *      The destination address is set on the EmailJS template itself
- *      ("To Email"), not here — so changing the recipient needs no code change.
+ *   1. POST /api/contact (see src/app/api/contact/route.js) — this Next.js
+ *      route handler sends the email via Resend and is what actually
+ *      notifies the team; its success/failure drives the UI status message.
+ *      Configure RESEND_API_KEY and CONTACT_EMAIL in .env.local (see the
+ *      block there for details) — the API key stays server-side, unlike the
+ *      EmailJS public key this replaces.
  *   2. POST /api/contacts on the admin backend — persists the enquiry so it
  *      shows up in the admin dashboard (Recent Inquiries, New Inquiries
  *      count). Best-effort: a failure here is logged but never blocks the
- *      visitor's success message, since EmailJS already delivered the
- *      enquiry to the team's inbox regardless of database state.
+ *      visitor's success message, since the Resend route already delivered
+ *      the enquiry to the team's inbox regardless of database state.
  *      Uses NEXT_PUBLIC_API_URL (see src/lib/api.js for the same pattern).
  *
  * Validation behaviour:
@@ -38,19 +35,11 @@ import emailjs from '@emailjs/browser';
 
 const EMPTY = { name: '', email: '', phone: '', message: '' };
 
-/* The public key is meant to be exposed in the browser — that is how EmailJS
-   works — so NEXT_PUBLIC_ is correct. It does mean anyone can read it and
-   spend your monthly quota, so lock the account to your own domains under
-   EmailJS → Account → Security → Allowed Origins. */
-const SERVICE_ID  = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
-const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
-const PUBLIC_KEY  = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
-
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 /* Best-effort save to the admin backend so the enquiry shows up in the
    dashboard. Never throws — a dead backend must not stop the visitor's
-   message from sending via EmailJS. */
+   message from sending via the Resend route. */
 async function saveContactToBackend(form, source) {
   try {
     const res = await fetch(`${API_URL}/contacts`, {
@@ -161,43 +150,31 @@ export default function useContactForm(source = 'Website') {
       return false;
     }
 
-    // Fired independently of EmailJS below — an enquiry should still reach
-    // the admin dashboard even if email delivery is misconfigured or down.
+    // Fired independently of the Resend route below — an enquiry should
+    // still reach the admin dashboard even if email delivery is
+    // misconfigured or down.
     saveContactToBackend(form, source);
-
-    if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
-      // Fail loudly in the console rather than showing the visitor a success
-      // message for an email that was never sent.
-      console.error(
-        '[contact] EmailJS is not configured — set NEXT_PUBLIC_EMAILJS_SERVICE_ID, ' +
-        'NEXT_PUBLIC_EMAILJS_TEMPLATE_ID and NEXT_PUBLIC_EMAILJS_PUBLIC_KEY in .env.local, ' +
-        'then restart the dev server.'
-      );
-      setStatus('error');
-      setStatusMessage('Could not send your message. Please try again.');
-      return false;
-    }
 
     setStatus('sending');
     setStatusMessage('');
 
     try {
-      /* These keys are the variables your EmailJS template can reference,
-         e.g. {{name}} / {{email}} / {{phone}} / {{message}} / {{source}}.
-         `reply_to` lets you hit Reply in Gmail and answer the sender. */
-      await emailjs.send(
-        SERVICE_ID,
-        TEMPLATE_ID,
-        {
-          name:     form.name,
-          email:    form.email,
-          phone:    form.phone,
-          message:  form.message,
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          message: form.message,
           source,
-          reply_to: form.email,
-        },
-        PUBLIC_KEY
-      );
+        }),
+      });
+
+      const result = await res.json();
+      if (!result.success) {
+        throw new Error(result.message || 'Failed to send message.');
+      }
 
       setForm(EMPTY);
       setAttempted(false);
@@ -205,9 +182,7 @@ export default function useContactForm(source = 'Website') {
       setStatusMessage('Thanks — your message has been sent. We will be in touch shortly.');
       return true;
     } catch (err) {
-      // EmailJS rejects with { status, text } — the text names the real cause
-      // (bad template id, origin not allow-listed, quota exhausted…).
-      console.error('[contact] EmailJS send failed:', err?.text || err?.message || err);
+      console.error('[contact] Send failed:', err?.message || err);
       setStatus('error');
       setStatusMessage('Could not send your message. Please try again.');
       return false;

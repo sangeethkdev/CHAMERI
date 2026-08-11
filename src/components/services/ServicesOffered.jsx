@@ -294,7 +294,7 @@ export default function ServicesOffered({ cardsSection }) {
           style={{
             width: "100%",
             paddingTop: "clamp(12px, 3.95vw, 57px)",
-            paddingRight: "clamp(24px, 2.778vw, 40px)",
+            paddingRight: "clamp(28px, 3.268vw, 47px)",
             paddingBottom: "clamp(14px, 1.389vw, 20px)",
             paddingLeft: "clamp(28px, 3.264vw, 47px)",
             borderTop: "1px solid rgba(0,0,0,0.08)",
@@ -618,13 +618,13 @@ function ServiceCard({ service }) {
     <div
       style={{
         width: "clamp(260px, 29.861vw, 430px)",
-        height: "clamp(360px, 37.569vw, 521px)",
+        height: "clamp(360px, 37.569vw, 501px)",
         flexShrink: 0,
         display: "flex",
         flexDirection: "column",
         gap: "clamp(14px, 1.528vw, 22px)",
         paddingTop: "clamp(8px, 3.016vw, 20px)",
-        paddingRight: "clamp(8px, 0.903vw, 13px)",
+        paddingRight: "clamp(16px, 1.667vw, 24px)",
         paddingBottom: "clamp(24px, 3.056vw, 44px)",
         paddingLeft: "clamp(16px, 1.667vw, 24px)",
         borderLeft: "1px solid #00000047",
@@ -713,37 +713,6 @@ function ServiceCard({ service }) {
         >
           {service.description}
         </p>
-
-        <button
-          type="button"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "clamp(4px, 0.347vw, 5px)",
-            paddingTop: "clamp(4px, 0.417vw, 6px)",
-            paddingBottom: "clamp(4px, 0.417vw, 6px)",
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            width: "fit-content",
-          }}
-        >
-          <span
-            style={{
-              fontFamily: "var(--font-geist-sans), 'Geist'",
-              fontWeight: 400,
-              fontSize: "clamp(11px, 1.042vw, 15px)",
-              lineHeight: "clamp(16px, 1.5625vw, 22.5px)",
-              color: "#1A1A1A",
-              textDecoration: "underline",
-            }}
-          >
-            Learn More
-          </span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M5 12h14M12 5l7 7-7 7" />
-          </svg>
-        </button>
       </div>
 
       {/* Image — same left edge as the title and description. maxWidth accounts

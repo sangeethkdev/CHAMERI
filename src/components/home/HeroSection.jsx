@@ -478,7 +478,7 @@ export default function HeroSection({ hero }) {
     setAnimState("outro");
 
     let start;
-    const duration = 2800;
+    const duration = 1000;
 
     const step = (timestamp) => {
       if (!start) start = timestamp;
@@ -789,36 +789,31 @@ export default function HeroSection({ hero }) {
           className="hidden sm:block absolute pointer-events-none"
           style={{
             top: "50.83%",         /* 602.47 / 1024 */
-            left: "22.88%",         /* 329.5  / 1440 */
+            left: "50%",            /* centered on the viewport instead of the Figma-literal 22.88% left offset, which put the heading right-of-center */
             width: "72.47%",         /* 1043.5 / 1440 */
             height: "37.85%",        /* 387.55 / 1024 */
             overflow: "visible",
             opacity: head1T,
-            transform: `translateY(${40 * (1 - head1T)}px)`,
+            transform: `translate(-50%, ${40 * (1 - head1T)}px)`,
           }}
         >
 
           {/* ── Heading — "Premium residence for those who seek refined living."
-              Rendered as ONE h1 (single sentence) with each line as an
-              absolutely-positioned span, so it stays one semantic heading
-              instead of two. Positioning/logic per line is unchanged.
+              Rendered as ONE h1 (single sentence) with each line stacked in a
+              centered flex column, so the block stays centered within its
+              container no matter how long the admin-provided text is
+              (the old absolute left-offsets were tuned to the default copy's
+              exact word widths and went ragged/left-anchored with other text).
           ─────────────────────────────────────────────────────── */}
-          <h1 style={{ margin: 0, padding: 0 }}>
-            {/* ── Line 1: "Premium residence for those"
-                Figma: w:780  h:65  top:602.47  left:329.5
-                Relative to parent (602.47, 329.5) → top:0  left:0
-            ─────────────────────────────────────────────────────── */}
+          <h1 style={{ margin: 0, padding: 0, display: "flex", flexDirection: "column", alignItems: "center" }}>
+            {/* ── Line 1: "Premium residence for those" ── */}
             <span
               style={{
-                position: "absolute",
-                top: "clamp(-30px, 1vh, -100px)",
-                left: 0,
-                width: "clamp(200px, 54.17vw, 780px)",   /* 780/1440 */
-                height: "clamp(40px, 6.35vh, 65px)",      /* 65/1024  */
+                maxWidth: "clamp(200px, 90vw, 1200px)",
                 fontFamily: "var(--font-roundo), 'Roundo', var(--font-outfit), system-ui, sans-serif",
                 fontWeight: 500,
                 fontSize: "clamp(26px, 4.595vw, 75.41px)",
-                lineHeight: "clamp(10px, 2.06vh, 29.08px)",   /* 64.08/1024 */
+                lineHeight: "1.06",   /* 64.08/60.41 — a fixed ratio scales with fontSize instead of drifting apart from it */
                 letterSpacing: "clamp(-0.8px, -0.133vw, -1.92px)",
                 color: "#ffffff",
                 textAlign: "center",
@@ -831,23 +826,14 @@ export default function HeroSection({ hero }) {
               {hero?.heading || "Premium residence for those"}
             </span>
 
-            {/* ── Line 2: "who seek refined living."
-                Figma: w:611  h:65  top:667.01  left:414.19
-                Relative to parent (602.47, 329.5):
-                  top = 667.01 - 602.47 = 64.54px
-                  left = 414.19 - 329.5 = 84.69px
-            ─────────────────────────────────────────────────────── */}
+            {/* ── Line 2: "who seek refined living." ── */}
             <span
               style={{
-                position: "absolute",
-                top: "clamp(-80px, -1vh, 30.54px)",   /* 64.54/1024 */
-                left: "clamp(14px, 6.28vw, 96.69px)",   /* 84.69/1440 */
-                width: "clamp(160px, 42.43vw, 611px)",   /* 611/1440   */
-                height: "clamp(40px, 6.35vh, 65px)",
+                maxWidth: "clamp(160px, 80vw, 1000px)",
                 fontFamily: "var(--font-roundo), 'Roundo'",
                 fontWeight: 500,
                 fontSize: "clamp(26px, 4.157vw, 75.41px)",
-                lineHeight: "clamp(30px, 12.26vh, 104.08px)",
+                lineHeight: "1.06",
                 letterSpacing: "clamp(-0.8px, -0.133vw, -1.92px)",
                 color: "#ffffff",
                 textAlign: "center",

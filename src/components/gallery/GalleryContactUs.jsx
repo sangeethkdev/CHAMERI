@@ -277,7 +277,7 @@ const GalleryContactUs = () => {
               letterSpacing: 'clamp(-0.5px, -0.06vw, -0.9px)',
             }}
           >
-            get in touch
+            Get In Touch
           </h2>
 
           {/* Form */}

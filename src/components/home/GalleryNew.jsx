@@ -1,381 +1,3 @@
-// 'use client';
-
-// import React from 'react';
-// import Image from 'next/image';
-
-// const VILLAS = [
-//   { id: 1, name: 'VILLA 01',  location: 'Calicut , Kerala',       year: '2024', img: '/dummyimages/Frame 2121454280.png', alt: '/dummyimages/Container.png',           side: 'left'  },
-//   { id: 2, name: 'Villa 1',   location: 'Calicut, Kerala',        year: '2025', img: '/dummyimages/Container.png',        alt: '/dummyimages/Frame 2121454280.png',    side: 'right' },
-//   { id: 3, name: 'Villa No3', location: 'Calicut, Kerala',        year: '2025', img: '/dummyimages/Overlay.png',          alt: '/dummyimages/Frame 2121454280.png',    side: 'left'  },
-//   { id: 4, name: 'Villa No4', location: 'Calicut, Kerala',        year: '2024', img: '/dummyimages/Container.png',        alt: '/dummyimages/Frame 2121454280.png',    side: 'right' },
-//   { id: 5, name: 'Villa No5', location: 'Lorum Ipsum sit',        year: '2025', img: '/dummyimages/Overlay.png',          alt: '/dummyimages/Frame 2121454280.png',    side: 'right' },
-//   { id: 6, name: 'Villa No6', location: 'Lorum Ipsum sit consit', year: '2024', img: '/dummyimages/Frame 2121454280.png', alt: '/dummyimages/Overlay.png',             side: 'left'  },
-//   { id: 7, name: 'Villa No7', location: 'Lorum Ipsum consit',     year: '2023', img: '/dummyimages/Container.png',        alt: '/dummyimages/Frame 2121454280.png',    side: 'right' },
-// ];
-
-// const ViewProjectBtn = () => (
-//   <div className="group/btn absolute top-1/2 left-[0%] -translate-x-1/2 -translate-y-1/2 z-50 transition-all duration-500 shadow-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible"
-//     style={{
-//       width:        '161px',
-//       height:       '31px',
-//       borderRadius: '4px',
-//       backgroundColor: '#EDE7DE',
-//       display:      'flex',
-//       alignItems:   'center',
-//       justifyContent: 'center',
-//       overflow:     'hidden',
-//     }}
-//   >
-//     <span
-//       className="absolute z-0 font-sans font-medium text-[#334454]"
-//       style={{ fontSize: '13px' }}
-//     >
-//       View Project
-//     </span>
-
-//     {/* Left blue half */}
-//     <div
-//       className="absolute left-0 top-0 h-full bg-[#6B859E] overflow-hidden rounded-l-[4px] z-10 flex items-center"
-//       style={{ width: '50%' }}
-//     >
-//       <span
-//         className="absolute left-0 w-full text-center font-sans font-medium text-[#EDE7DE]"
-//         style={{
-//           fontSize: '13px',
-//           width:    '161px',
-//         }}
-//       >
-//         View Project
-//       </span>
-//     </div>
-
-//     {/* Left arrow box */}
-//     <div
-//       className="absolute z-20 overflow-hidden bg-[#EDE7DE]"
-//       style={{
-//         top:          '5.5px',
-//         left:         '6.8px',
-//         width:        '20px',
-//         height:       '20px',
-//         borderRadius: '4.4px',
-//       }}
-//     >
-//       <div className="absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-in-out group-hover/btn:-translate-x-full">
-//         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#6B859E" strokeWidth="2.5" className="rotate-180">
-//           <path d="M5 12h14M12 5l7 7-7 7" />
-//         </svg>
-//       </div>
-//       <div className="absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-in-out translate-x-full group-hover/btn:translate-x-0">
-//         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#6B859E" strokeWidth="2.5" className="rotate-180">
-//           <path d="M5 12h14M12 5l7 7-7 7" />
-//         </svg>
-//       </div>
-//     </div>
-
-//     {/* Right arrow box */}
-//     <div
-//       className="absolute z-20 overflow-hidden bg-[#334454]"
-//       style={{
-//         top:          '5.9px',
-//         right:        '6.8px',
-//         width:        '20px',
-//         height:       '20px',
-//         borderRadius: '4.4px',
-//       }}
-//     >
-//       <div className="absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-in-out group-hover/btn:translate-x-full">
-//         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#EDE7DE" strokeWidth="2.5">
-//           <path d="M5 12h14M12 5l7 7-7 7" />
-//         </svg>
-//       </div>
-//       <div className="absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-in-out -translate-x-full group-hover/btn:translate-x-0">
-//         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#EDE7DE" strokeWidth="2.5">
-//           <path d="M5 12h14M12 5l7 7-7 7" />
-//         </svg>
-//       </div>
-//     </div>
-//   </div>
-// );
-
-// const GalleryNew = () => {
-//   return (
-//     <section className="w-full bg-[#EDE7DE] flex justify-center overflow-hidden">
-//       {/* Main Section Layout */}
-//       <div
-//         className="mx-auto"
-//         style={{
-//           width: '100%',
-//           maxWidth: '1440px',
-//           paddingTop: '60px',
-//           paddingRight: '82px',
-//           paddingBottom: '60px',
-//           paddingLeft: '82px',
-//         }}
-//       >
-//         {/* Main Inner Wrapper */}
-//         <div
-//           className="mx-auto flex flex-col"
-//           style={{
-//             width: '100%',
-//             maxWidth: '1255.83px',
-//             paddingLeft: '18.17px',
-//             paddingRight: '18.17px',
-//             gap: '72.68px',
-//           }}
-//         >
-//           {/* 1) TITLE CONTAINER */}
-//           <div
-//             className="flex justify-between w-full"
-//             style={{
-//               maxWidth: '1254px',
-//               minHeight: '132.63px',
-//             }}
-//           >
-//             {/* Gallery Badge */}
-//             <div
-//               className="flex items-center flex-shrink-0"
-//               style={{
-//                 width: '102.6px',
-//                 height: '30.8px',
-//                 paddingTop: '5.4px',
-//                 paddingRight: '7.2px',
-//                 paddingBottom: '5.4px',
-//                 paddingLeft: '7.2px',
-//                 gap: '7.2px',
-//                 borderRadius: '90px',
-//               }}
-//             >
-//               <div
-//                 className="bg-[#334454] flex-shrink-0"
-//                 style={{
-//                   width: '14px',
-//                   height: '14px',
-//                   borderRadius: '3px',
-//                   padding: '3.6px',
-//                 }}
-//               />
-//               <span
-//                 className="font-geist uppercase text-[#334454]"
-//                 style={{
-//                   fontSize: '16.2px',
-//                   lineHeight: '19.44px',
-//                   letterSpacing: '-0.32px',
-//                   width: '67px',
-//                   height: '20px',
-//                   display: 'flex',
-//                   alignItems: 'center',
-//                 }}
-//               >
-//                 GALLERY
-//               </span>
-//             </div>
-
-//             {/* Title & Desc */}
-//             <div
-//               className="flex justify-between"
-//               style={{
-//                 width: '100%',
-//                 maxWidth: '975.6px',
-//                 minHeight: '132.63px',
-//               }}
-//             >
-//               {/* Title */}
-//               <div style={{ maxWidth: '504.2px', position: 'relative', top: '-0.55px' }}>
-//                 <h2
-//                   className="font-roundo font-medium text-[#334454]"
-//                   style={{
-//                     fontSize: '60px',
-//                     lineHeight: '66.14px',
-//                     letterSpacing: '-3.05px',
-//                     width: '667.67px', // Allows text to break naturally as per Figma
-//                   }}
-//                 >
-//                   Elegant Spaces For Built<br/>Views Photo Frame
-//                 </h2>
-//               </div>
-              
-//               {/* Description */}
-//               <div className="self-end" style={{ maxWidth: '264px' }}>
-//                 <p
-//                   className="font-geist text-[#334454]"
-//                   style={{
-//                     fontSize: '20px',
-//                     lineHeight: '21.8px',
-//                     letterSpacing: '-0.44px',
-//                   }}
-//                 >
-//                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-//                 </p>
-//               </div>
-//             </div>
-//           </div>
-
-//           {/* 2) PROJECT GRID */}
-//           <div
-//             className="flex flex-col w-full"
-//             style={{
-//               maxWidth: '1219.5px',
-//               gap: '50.87px',
-//             }}
-//           >
-//             {/* ROW 1 */}
-//             <div
-//               className="flex justify-between w-full"
-//               style={{ height: '642px' }}
-//             >
-//               {/* Item 1 */}
-//               <div className="group" style={{ width: '543.52px', paddingTop: '148.74px' }}>
-//                 <div className="relative" style={{ height: '466.86px' }}>
-//                   <div className="absolute inset-0 overflow-hidden">
-//                     <Image src={VILLAS[0].img} alt={VILLAS[0].name} fill className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-105" />
-//                     <Image src={VILLAS[0].alt} alt={`${VILLAS[0].name} alt`} fill className="object-cover transition-all duration-700 ease-in-out opacity-0 group-hover:scale-105 group-hover:opacity-100" />
-//                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-//                   </div>
-//                   <ViewProjectBtn />
-//                 </div>
-//                 <div className="flex justify-between items-center" style={{ marginTop: '15px' }}>
-//                   <div className="flex items-center gap-[3.31px]">
-//                     <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">{VILLAS[0].name}</span>
-//                     <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">—</span>
-//                     <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">{VILLAS[0].location}</span>
-//                   </div>
-//                   <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">{VILLAS[0].year}</span>
-//                 </div>
-//               </div>
-
-//               {/* Item 2 */}
-//               <div className="group" style={{ width: '499.99px' }}>
-//                 <div className="relative" style={{ height: '436.05px' }}>
-//                   <div className="absolute inset-0 overflow-hidden">
-//                     <Image src={VILLAS[1].img} alt={VILLAS[1].name} fill className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-105" />
-//                     <Image src={VILLAS[1].alt} alt={`${VILLAS[1].name} alt`} fill className="object-cover transition-all duration-700 ease-in-out opacity-0 group-hover:scale-105 group-hover:opacity-100" />
-//                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-//                   </div>
-//                   <ViewProjectBtn />
-//                 </div>
-//                 <div className="flex justify-between items-center" style={{ marginTop: '15px' }}>
-//                   <div className="flex items-center gap-[3.63px]">
-//                     <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">{VILLAS[1].name}</span>
-//                     <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">—</span>
-//                     <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">{VILLAS[1].location}</span>
-//                   </div>
-//                   <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">{VILLAS[1].year}</span>
-//                 </div>
-//               </div>
-//             </div>
-
-//             {/* ROW 2 (Right aligned) */}
-//             <div className="flex justify-end w-full">
-//               <div className="group" style={{ width: '646.08px' }}>
-//                 <div className="relative" style={{ height: '526.86px' }}>
-//                   <div className="absolute inset-0 overflow-hidden">
-//                     <Image src={VILLAS[4].img} alt={VILLAS[4].name} fill className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-105" />
-//                     <Image src={VILLAS[4].alt} alt={`${VILLAS[4].name} alt`} fill className="object-cover transition-all duration-700 ease-in-out opacity-0 group-hover:scale-105 group-hover:opacity-100" />
-//                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-//                   </div>
-//                   <ViewProjectBtn />
-//                 </div>
-//                 <div className="flex justify-between items-center" style={{ marginTop: '15px' }}>
-//                   <div className="flex items-center gap-[2.57px]">
-//                     <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">{VILLAS[4].name}</span>
-//                     <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">—</span>
-//                     <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">{VILLAS[4].location}</span>
-//                   </div>
-//                   <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">{VILLAS[4].year}</span>
-//                 </div>
-//               </div>
-//             </div>
-
-//             {/* ROW 3 */}
-//             <div
-//               className="flex justify-between w-full"
-//               style={{ height: '705.86px' }}
-//             >
-//               {/* Item 4 */}
-//               <div className="group" style={{ width: '499.99px' }}>
-//                 <div className="relative" style={{ height: '436.05px' }}>
-//                   <div className="absolute inset-0 overflow-hidden">
-//                     <Image src={VILLAS[5].img} alt={VILLAS[5].name} fill className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-105" />
-//                     <Image src={VILLAS[5].alt} alt={`${VILLAS[5].name} alt`} fill className="object-cover transition-all duration-700 ease-in-out opacity-0 group-hover:scale-105 group-hover:opacity-100" />
-//                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-//                   </div>
-//                   <ViewProjectBtn />
-//                 </div>
-//                 <div className="flex justify-between items-center" style={{ marginTop: '15px' }}>
-//                   <div className="flex items-center gap-[3.63px]">
-//                     <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">{VILLAS[5].name}</span>
-//                     <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">—</span>
-//                     <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">{VILLAS[5].location}</span>
-//                   </div>
-//                   <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">{VILLAS[5].year}</span>
-//                 </div>
-//               </div>
-
-//               {/* Item 5 */}
-//               <div className="group" style={{ width: '597.55px', paddingTop: '163.52px' }}>
-//                 <div className="relative" style={{ height: '513.27px' }}>
-//                   <div className="absolute inset-0 overflow-hidden">
-//                     <Image src={VILLAS[6].img} alt={VILLAS[6].name} fill className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-105" />
-//                     <Image src={VILLAS[6].alt} alt={`${VILLAS[6].name} alt`} fill className="object-cover transition-all duration-700 ease-in-out opacity-0 group-hover:scale-105 group-hover:opacity-100" />
-//                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-//                   </div>
-//                   <ViewProjectBtn />
-//                 </div>
-//                 <div className="flex justify-between items-center" style={{ marginTop: '15px' }}>
-//                   <div className="flex items-center gap-[3.63px]">
-//                     <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">{VILLAS[6].name}</span>
-//                     <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">—</span>
-//                     <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">{VILLAS[6].location}</span>
-//                   </div>
-//                   <span className="font-geist text-[14px] leading-[19.83px] tracking-[-0.4px] text-[#334454]">{VILLAS[6].year}</span>
-//                 </div>
-//               </div>
-//             </div>
-
-//             {/* ROW 4 - BUTTON */}
-//             <div className="flex justify-center w-full" style={{ height: '52px' }}>
-//               <button
-//                 className="group relative flex items-center justify-center bg-[#6B859E] hover:bg-[#4a6074] transition-colors duration-500 overflow-hidden cursor-pointer border-none"
-//                 style={{ width: '167px', height: '52px', borderRadius: '12px' }}
-//               >
-//                 {/* Sliding text */}
-//                 <div
-//                   className="absolute overflow-hidden"
-//                   style={{ top: '14.5px', left: '12px', width: '97px', height: '23px' }}
-//                 >
-//                   <div className="flex flex-col transition-transform duration-500 ease-in-out group-hover:-translate-y-1/2">
-//                     <span className="font-sans font-medium text-white whitespace-nowrap flex items-center" style={{ height: '23px', fontSize: '15px' }}>Learn More</span>
-//                     <span className="font-sans font-medium text-white whitespace-nowrap flex items-center" style={{ height: '23px', fontSize: '15px' }}>Learn More</span>
-//                   </div>
-//                 </div>
-
-//                 {/* Arrow box */}
-//                 <div
-//                   className="absolute bg-white group-hover:bg-[#EDE7DE] transition-colors duration-500 overflow-hidden"
-//                   style={{ right: '12px', width: '30px', height: '30px', borderRadius: '7px' }}
-//                 >
-//                   <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out group-hover:translate-x-full">
-//                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-[#6B859E] w-[14px] h-[14px]">
-//                       <path d="M5 12h14M12 5l7 7-7 7" />
-//                     </svg>
-//                   </div>
-//                   <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out -translate-x-full group-hover:translate-x-0">
-//                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-[#6B859E] w-[14px] h-[14px]">
-//                       <path d="M5 12h14M12 5l7 7-7 7" />
-//                     </svg>
-//                   </div>
-//                 </div>
-//               </button>
-//             </div>
-
-//           </div>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default GalleryNew;
 
 
 // ------------------------------------------------
@@ -640,11 +262,12 @@ const GalleryNew = ({ gallery }) => {
         </div>
 
             {/* H2 Title — center */}
-            <div style={{ maxWidth: clamp(380, 808) }}>
+            <div style={{ maxWidth: clamp(380, 758) }}>
               <h2
                 className="font-roundo font-medium text-[#000000]"
                 style={{
-                  fontSize: "clamp(20px, 4vw, 60px)",
+                  fontSize: "clamp(20px, 3.700vw, 60px)",
+                  marginLeft: "clamp(30px, 5vw, 60px)",
                   lineHeight:    '1.1',
                   letterSpacing: clamp(-1, -3.05),
                 }}
@@ -662,7 +285,7 @@ const GalleryNew = ({ gallery }) => {
               <p
                 className="font-geist text-[#334454]"
                 style={{
-                  fontSize:      clamp(10, 22),
+                  fontSize:      clamp(10, 18),
                   lineHeight:    '1.09',
                   letterSpacing: '-0.44px',
                   whiteSpace:    'pre-line',
@@ -873,28 +496,56 @@ const GalleryNew = ({ gallery }) => {
                 className="absolute"
                 style={{ top: `${card.top}%`, left: `${card.left}%`, width: `${card.width}%` }}
               >
-                <div className="relative w-full overflow-hidden" style={{ aspectRatio: card.ratio }}>
+                <Link href="/gallery" className="relative block w-full overflow-hidden" style={{ aspectRatio: card.ratio }}>
                   <Image src={villa.img} alt={villa.name} fill className="object-cover" />
-                </div>
+                </Link>
                 <Caption villa={villa} gap={3} />
               </div>
             );
           })}
 
-          {/* Learn More button */}
+          {/* Learn More button — same markup/style as TestimonialsSection's CTA */}
           <Link
             href="/gallery"
-            className="group absolute flex items-center justify-center bg-[#6B859E] hover:bg-[#4a6074] transition-colors duration-500 overflow-hidden"
+            aria-label="View the full gallery"
+            className="group absolute no-underline flex items-center border-none cursor-pointer overflow-hidden transition-colors duration-500 bg-[#6B859E] hover:bg-[#4a6074]"
             style={{ top: '93.9%', left: '31.8%', width: '136px', height: '40px', borderRadius: '12px' }}
           >
-            <span className="font-sans font-medium text-white" style={{ fontSize: '14px', marginLeft: '-20px' }}>Learn More</span>
+            {/* Sliding text */}
             <div
-              className="absolute bg-white flex items-center justify-center overflow-hidden"
-              style={{ right: '8px', width: '24px', height: '24px', borderRadius: '6px' }}
+              className="absolute overflow-hidden"
+              style={{ top: '50%', transform: 'translateY(-50%)', left: '14px', height: '17px' }}
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-black w-[13px] h-[13px]">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
+              <div className="flex flex-col transition-transform duration-500 ease-in-out group-hover:-translate-y-1/2">
+                {['Learn More', 'Learn More'].map((label, i) => (
+                  <span
+                    key={i}
+                    className="font-sans font-medium text-[#EDE7DE] whitespace-nowrap flex items-center"
+                    style={{ height: '17px', fontSize: '14px' }}
+                  >
+                    {label}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Arrow box */}
+            <div
+              className="absolute bg-[#EDE7DE] group-hover:bg-[#EDE7DE] transition-colors duration-500 overflow-hidden"
+              style={{ right: '8px', width: '24px', height: '24px', borderRadius: '6px', top: '50%', transform: 'translateY(-50%)' }}
+            >
+              {/* Arrow slide out */}
+              <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out group-hover:translate-x-full">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-[#000000] w-[14.8px] h-[14.8px]">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </div>
+              {/* Arrow slide in */}
+              <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out -translate-x-full group-hover:translate-x-0">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-[#000000] w-[15px] h-[15px]">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </div>
             </div>
           </Link>
         </div>

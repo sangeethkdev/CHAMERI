@@ -1,592 +1,3 @@
-// 'use client';
-
-// import React, { useState } from 'react';
-// import Image from 'next/image';
-
-// const WhyChooseUs = () => {
-//   const [activeCard, setActiveCard] = useState(null);
-
-//   const cards = [
-//     {
-//       img: '/dummyimages/Container.png',
-//       icon: (
-//         <Image src="/icons/Vector.svg" alt="Design icon" width={25} height={25} />
-//       ),
-//       title: "Design-Driven, Modern Approach",
-//       desc: "We don’t follow outdated construction templates. Every Chameri project is crafted with a modern, minimal, and premium design philosophy—blending aesthetics with functionality to create spaces that feel timeless and refined."
-//     },
-//     {
-//       img: '/dummyimages/Container.png',
-//       icon: (
-//         <Image src="/icons/692885226ea01d367379ce40_Frame.svg.svg" alt="Expertise icon" width={25} height={25} />
-//       ),
-//       title: <>Proven Expertise <br/>& Trusted Network</>,
-//       desc: "With a portfolio of completed projects and collaborations with experienced architects, we bring proven expertise to every build. Our work speaks through real results, client satisfaction, and trusted industry partnerships."
-//     },
-//     {
-//       img: '/dummyimages/Overlay.png',
-//       icon: (
-//         <Image src="/icons/healthicons_people-outline.svg" alt="People icon" width={25} height={25} />
-//       ),
-//       title: "Client-Centric, Seamless Experience",
-//       desc: "From booking a site visit to final handover, we ensure a smooth and transparent journey. Clear communication, guided decisions, and a focus on your vision make the entire process seamless and stress-free."
-//     }
-//   ];
-
-//   return (
-//     <section className="
-//       w-full bg-[#EDE7DE] flex flex-col items-center overflow-hidden
-//       h-auto py-[40px] px-[20px] gap-[40px]
-//       md:py-[50px] md:px-[40px] md:gap-[50px]
-//       lg:h-[475px] lg:py-[42px] lg:px-[56px] lg:gap-[42px]
-//       xl:h-[593px] xl:py-[53px] xl:px-[71px] xl:gap-[53px]
-//       2xl:h-[712px] 2xl:py-[64px] 2xl:px-[85px] 2xl:gap-[64px]
-//       3xl:h-[668.3px] 3xl:py-[60px] 3xl:px-[80px] 3xl:gap-[60px]
-//       4xl:h-[890px] 4xl:py-[80px] 4xl:px-[106px] 4xl:gap-[80px]
-//     ">
-//       {/* ── Top Header Section ── */}
-//       <div className="
-//         w-full flex flex-col 
-//         gap-[16px] lg:gap-[10.6px] xl:gap-[13.3px] 2xl:gap-[16px] 3xl:gap-[15px] 4xl:gap-[20px]
-//         sm:max-w-[80%]    
-//         md:max-w-[85%]    
-//         lg:max-w-[82%]    
-//         xl:max-w-[84%]    
-//         2xl:max-w-[86%]   
-//         3xl:max-w-[1280px] 3xl:w-[1280px] 3xl:h-[135.8px]
-//         4xl:max-w-[88%]
-//       ">
-//         {/* Badge */}
-//         <div className="
-//           flex items-center rounded-[90px] self-start
-//           px-[5px] py-[4px] gap-[5px]
-//           lg:px-[5.1px] lg:py-[3.8px] lg:gap-[5.1px]
-//           xl:px-[6.4px] xl:py-[4.8px] xl:gap-[6.4px]
-//           2xl:px-[7.6px] 2xl:py-[5.7px] 2xl:gap-[7.6px]
-//           3xl:px-[7.2px] 3xl:py-[5.4px] 3xl:gap-[7.2px] 3xl:w-[163.6px] 3xl:h-[30.8px]
-//           4xl:px-[9.6px] 4xl:py-[7.2px] 4xl:gap-[9.6px]
-//         ">
-//           <div className="
-//             bg-[#334454] 
-//             w-[10px] h-[10px] rounded-[2px]
-//             lg:w-[9.9px] lg:h-[9.9px] lg:rounded-[2px]
-//             xl:w-[12.4px] xl:h-[12.4px] xl:rounded-[2.6px]
-//             2xl:w-[14.9px] 2xl:h-[14.9px] 2xl:rounded-[3.2px]
-//             3xl:w-[14px] 3xl:h-[14px] 3xl:rounded-[3px] 3xl:p-[3.6px]
-//             4xl:w-[18.6px] 4xl:h-[18.6px] 4xl:rounded-[4px]
-//           " />
-//           <span className="
-//             font-sans font-normal uppercase text-black
-//             text-[12px] tracking-[-0.2px]
-//             lg:text-[11.5px] lg:tracking-[-0.22px]
-//             xl:text-[14.3px] xl:tracking-[-0.28px]
-//             2xl:text-[17.2px] 2xl:tracking-[-0.34px]
-//             3xl:text-[16.2px] 3xl:tracking-[-0.32px] 3xl:w-[128px] 3xl:h-[20px] 3xl:flex 3xl:items-center
-//             4xl:text-[21.6px] 4xl:tracking-[-0.42px]
-//           ">
-//             WHY CHOOSE US
-//           </span>
-//         </div>
-
-//         {/* Main Heading Row */}
-//         <div className="
-//           flex flex-col md:flex-row justify-between items-start md:items-end w-full 
-//           gap-[20px] lg:gap-[35px] xl:gap-[44px] 2xl:gap-[53px] 3xl:gap-[50px] 4xl:gap-[66px]
-//           3xl:h-[90px]
-//         ">
-//           <h2 className="
-//             font-roundo font-medium text-[#1A1A1A] capitalize
-//             text-[28px] leading-[32px] tracking-[-0.5px] max-w-full
-//             md:text-[36px] md:leading-[40px] md:tracking-[-0.7px]
-//             lg:text-[32px] lg:leading-[32px] lg:tracking-[-0.64px] lg:max-w-[364px]
-//             xl:text-[40px] xl:leading-[40px] xl:tracking-[-0.8px] xl:max-w-[454px]
-//             2xl:text-[48px] 2xl:leading-[48px] 2xl:tracking-[-0.96px] 2xl:max-w-[545px]
-//             3xl:text-[45px] 3xl:leading-[45px] 3xl:tracking-[-0.9px] 3xl:w-[512.08px] 3xl:max-w-[512.08px] 3xl:h-[90px]
-//             4xl:text-[60px] 4xl:leading-[60px] 4xl:tracking-[-1.2px] 4xl:max-w-[682px]
-//           ">
-//             Proven Trust Value Modern Homes Leader
-//           </h2>
-//           <p className="
-//             font-sans font-normal text-black/60
-//             text-[16px] leading-[22px] tracking-[-0.3px] max-w-[100%]
-//             lg:text-[14.2px] lg:leading-[15.5px] lg:tracking-[-0.31px] lg:max-w-[396px]
-//             xl:text-[17.7px] xl:leading-[19.3px] xl:tracking-[-0.39px] xl:max-w-[495px]
-//             2xl:text-[21.3px] 2xl:leading-[23.2px] 2xl:tracking-[-0.46px] 2xl:max-w-[594px]
-//             3xl:text-[20px] 3xl:leading-[21.8px] 3xl:tracking-[-0.44px] 3xl:w-[558px] 3xl:max-w-[558px] 3xl:h-[66px]
-//             4xl:text-[26.6px] 4xl:leading-[29px] 4xl:tracking-[-0.58px] 4xl:max-w-[743px]
-//           ">
-//             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim.
-//           </p>
-//         </div>
-//       </div>
-
-//       {/* ── Feature Cards (Accordion Effect) ── */}
-//       <div className="
-//         w-full flex flex-col lg:flex-row justify-center
-//         gap-[16px] lg:gap-[7px] xl:gap-[8.8px] 2xl:gap-[10.6px] 3xl:gap-[10px] 4xl:gap-[13.3px]
-//         sm:max-w-[80%] md:max-w-[85%] lg:max-w-[82%] xl:max-w-[84%] 2xl:max-w-[86%] 3xl:max-w-[1280px] 3xl:w-[1280px] 4xl:max-w-[88%]
-//         [--active-w:100%] [--inactive-w:100%] [--card-h:auto] [--card-p:24px]
-//         lg:[--active-w:325.6px] lg:[--inactive-w:284.4px] lg:[--card-h:250.6px] lg:[--card-p:24px]
-//         xl:[--active-w:406.7px] xl:[--inactive-w:355.2px] xl:[--card-h:313px] xl:[--card-p:30px]
-//         2xl:[--active-w:488px] 2xl:[--inactive-w:426.4px] 2xl:[--card-h:475.7px] 2xl:[--card-p:40px]
-//         3xl:[--active-w:458px] 3xl:[--inactive-w:400px] 3xl:[--card-h:352.5px] 3xl:[--card-p:37.5px]
-//         4xl:[--active-w:610px] 4xl:[--inactive-w:533px] 4xl:[--card-h:470px] 4xl:[--card-p:50px]
-//       ">
-//         {cards.map((card, i) => {
-//           const isActive = activeCard === i;
-          
-//           return (
-//           <div
-//             key={i}
-//             onMouseEnter={() => setActiveCard(i)}
-//             style={{ 
-//               width: typeof window !== 'undefined' && window.innerWidth >= 1024 
-//                 ? (isActive ? 'var(--active-w)' : 'var(--inactive-w)') 
-//                 : '100%', 
-//               height: typeof window !== 'undefined' && window.innerWidth >= 1024 ? 'var(--card-h)' : 'auto', 
-//               padding: 'var(--card-p)' 
-//             }}
-//             className={`relative rounded-[8px] overflow-hidden transition-all duration-700 ease-in-out cursor-pointer flex-shrink-0 min-h-[300px] lg:min-h-0`}
-//           >
-//             {/* Background Image */}
-//             <Image
-//               src={card.img}
-//               alt="Background"
-//               fill
-//               className={`object-cover transition-transform duration-700 ${isActive ? 'scale-105' : 'scale-100'}`}
-//             />
-//             {/* Dark Overlay */}
-//             <div className={`absolute inset-0 transition-colors duration-700 ${isActive ? 'bg-black/50' : 'bg-black/40'}`} />
-
-//             {/* Content Container — centers the inner block in the card */}
-//             <div className="absolute inset-0 flex items-center justify-center p-[var(--card-p)]">
-//               {/* Inner content */}
-//               <div className="
-//                 flex flex-col
-//                 w-full lg:w-[243px] xl:w-[303px] 2xl:w-[364px] 3xl:w-[342px] 4xl:w-[456px]
-//                 min-h-[auto] lg:min-h-[197.3px] xl:min-h-[246px] 2xl:min-h-[295.8px] 3xl:min-h-[277.5px] 4xl:min-h-[370px]
-//                 gap-[14px] lg:gap-[10px] xl:gap-[12.4px] 2xl:gap-[14.9px] 3xl:gap-[14px] 4xl:gap-[18.6px]
-//               ">
-//                 {/* White Icon Box */}
-//                 <div className="
-//                   bg-white flex items-center justify-center shadow-lg flex-shrink-0
-//                   rounded-[5px] w-[40px] h-[40px] p-[6px]
-//                   lg:w-[32.7px] lg:h-[32.7px] lg:rounded-[3.5px] lg:p-[4.2px]
-//                   xl:w-[40.8px] xl:h-[40.8px] xl:rounded-[4.4px] xl:p-[5.3px]
-//                   2xl:w-[49px] 2xl:h-[49px] 2xl:rounded-[5.3px] 2xl:p-[6.4px]
-//                   3xl:w-[46px] 3xl:h-[46px] 3xl:rounded-[5px] 3xl:p-[6px]
-//                   4xl:w-[61.3px] 4xl:h-[61.3px] 4xl:rounded-[6.6px] 4xl:p-[8px]
-//                 ">
-//                   <div className="text-[#334454] flex items-center justify-center w-full h-full">
-//                     {card.icon}
-//                   </div>
-//                 </div>
-
-//                 {/* Title */}
-//                 <h3 className="
-//                   font-roundo font-medium text-white
-//                   text-[24px] leading-[28px] tracking-[-0.5px]
-//                   lg:text-[23.4px] lg:leading-[27px] lg:tracking-[-0.47px]
-//                   xl:text-[29.3px] xl:leading-[33.7px] xl:tracking-[-0.58px]
-//                   2xl:text-[35.1px] 2xl:leading-[40.4px] 2xl:tracking-[-0.7px]
-//                   3xl:text-[33px] 3xl:leading-[37.95px] 3xl:tracking-[-0.66px] 3xl:w-[342px] 3xl:h-[77px] 3xl:flex 3xl:items-center
-//                   4xl:text-[44px] 4xl:leading-[50.5px] 4xl:tracking-[-0.88px]
-//                 ">
-//                   {card.title}
-//                 </h3>
-
-//                 {/* Description — visible on hover */}
-//                 <p className={`
-//                   font-sans font-normal text-white/80 transition-opacity duration-500 delay-100
-//                   lg:absolute lg:bottom-[var(--card-p)] lg:left-[var(--card-p)] lg:right-[var(--card-p)]
-//                   static
-//                   text-[15px] leading-[22px] tracking-[0px]
-//                   lg:text-[10.6px] lg:leading-[16px]
-//                   xl:text-[13.3px] xl:leading-[20px]
-//                   2xl:text-[16px] 2xl:leading-[24px]
-//                   3xl:text-[15px] 3xl:leading-[22.5px] 3xl:w-[342px] 3xl:h-[113px] 3xl:tracking-[0px]
-//                   4xl:text-[20px] 4xl:leading-[30px]
-//                   ${isActive ? 'opacity-100 relative lg:absolute' : 'opacity-0 absolute lg:absolute pointer-events-none'}
-//                 `} style={{ fontFamily: 'Instrument Sans, var(--font-geist-sans), sans-serif' }}>
-//                   {card.desc}
-//                 </p>
-//               </div>
-//             </div>
-//           </div>
-//         )})}
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default WhyChooseUs;
-
-
-// ----------------github code----------------------------
-
-// 'use client';
-
-// import React, { useState } from 'react';
-// import Image from 'next/image';
-
-// const WhyChooseUs = () => {
-//   const [activeCard, setActiveCard] = useState(null);
-
-//   const cards = [
-//     {
-//       img: '/dummyimages/Container.png',
-//       icon: (
-//         <Image src="/icons/Vector.svg" alt="Design icon" width={25} height={25} />
-//       ),
-//       title: "Design-Driven, Modern Approach",
-//       desc: "With a portfolio of completed projects and collaborations with experienced architects, we bring proven expertise to every build. Our work speaks through real results, client satisfaction, and trusted industry partnerships."
-//     },
-//     {
-//       img: '/dummyimages/Container.png',
-//       icon: (
-//         <Image src="/icons/692885226ea01d367379ce40_Frame.svg.svg" alt="Expertise icon" width={25} height={25} />
-//       ),
-//       title: "Proven Expertise & Trusted Network",
-//       desc: "With a portfolio of completed projects and collaborations with experienced architects, we bring proven expertise to every build. Our work speaks through real results, client satisfaction, and trusted industry partnerships."
-//     },
-//     {
-//       img: '/dummyimages/Overlay.png',
-//       icon: (
-//         <Image src="/icons/healthicons_people-outline.svg" alt="People icon" width={25} height={25} />
-//       ),
-//       title: "Client-Centric, Seamless Experience",
-//       desc: "With a portfolio of completed projects and collaborations with experienced architects, we bring proven expertise to every build. Our work speaks through real results, client satisfaction, and trusted industry partnerships."
-//     }
-//   ];
-
-//   return (
-//     <section className="w-full h-[628px] bg-[#EDE7DE] py-[60px] px-[80px] flex flex-col items-center gap-[60px] overflow-hidden">
-//       {/* ── Top Header Section ── */}
-//       <div className="w-full max-w-[1280px] flex flex-col gap-6">
-//         {/* Badge */}
-//         <div className="flex items-center gap-[7.2px] px-[7.2px] py-[5.4px] rounded-[90px] self-start">
-//           <div className="w-[14px] h-[14px] bg-[#334454] rounded-[3px]" />
-//           <span className="text-[16.2px] font-sans font-normal uppercase tracking-[-0.32px] text-black">
-//             WHY CHOOSE US
-//           </span>
-//         </div>
-
-//         {/* Main Heading Row */}
-//         <div className="flex justify-between items-end w-full gap-[50px]">
-//           <h2 className="font-roundo font-medium text-[45px] leading-[45px] tracking-[-0.9px] text-[#1A1A1A] max-w-[512px] capitalize">
-//             Proven Trust Value Modern Homes Leader
-//           </h2>
-//           <p className="font-sans font-normal text-[20px] leading-[21.8px] tracking-[-0.44px] text-black/60 max-w-[558px]">
-//             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim.
-//           </p>
-//         </div>
-//       </div>
-
-//       {/* ── Feature Cards (Accordion Effect) ── */}
-//       <div className="w-full max-w-[1280px] flex justify-center gap-[10px]">
-//         {cards.map((card, i) => {
-//           const isActive = activeCard === i;
-          
-//           return (
-//           <div
-//             key={i}
-//             onMouseEnter={() => setActiveCard(i)}
-//             style={{ width: isActive ? '458px' : '400px', height: '352.5px', padding: '37.5px' }}
-//             className={`relative rounded-[8px] overflow-hidden transition-all duration-700 ease-in-out cursor-pointer flex-shrink-0`}
-//           >
-//             {/* Background Image */}
-//             <Image
-//               src={card.img}
-//               alt={card.title}
-//               fill
-//               className={`object-cover transition-transform duration-700 ${isActive ? 'scale-105' : 'scale-100'}`}
-//             />
-//             {/* Dark Overlay */}
-//             <div className={`absolute inset-0 transition-colors duration-700 ${isActive ? 'bg-black/50' : 'bg-black/40'}`} />
-
-//             {/* Content Container — centers the inner block in the card */}
-//             <div className="absolute inset-0 flex items-center justify-center">
-//               {/* Inner content: 342×277.5 spec, gap 14px, icon→title→desc */}
-//               <div className="w-[342px] min-h-[277.5px] flex flex-col gap-[14px]">
-//                 {/* White Icon Box — 46×46, border-radius 5px, padding 6px */}
-//                 <div className="w-[46px] h-[46px] bg-white rounded-[5px] p-[6px] flex items-center justify-center shadow-lg flex-shrink-0">
-//                   <div className="text-[#334454] flex items-center justify-center w-full h-full">
-//                     {card.icon}
-//                   </div>
-//                 </div>
-
-//                 {/* Title */}
-//                 <h3 className="font-roundo font-medium text-[33px] leading-[37.95px] tracking-[-0.66px] text-white">
-//                   {card.title}
-//                 </h3>
-
-//                 {/* Description — visible on hover */}
-//                 <p className={`font-sans font-normal text-[15px] leading-[22.5px] text-white/80 transition-opacity duration-500 delay-100 pointer-events-none ${isActive ? 'opacity-100' : 'opacity-0'}`}>
-//                   {card.desc}
-//                 </p>
-//               </div>
-//             </div>
-//           </div>
-//         )})}
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default WhyChooseUs;
-
-
-// -------------------------------------------
-
-// 'use client';
-
-// import React, { useState } from 'react';
-// import Image from 'next/image';
-
-// /*
-//   CLAMP FORMULA:
-//   vw = (maxVal - minVal) / (maxViewport - minViewport) * 100
-//   Viewport range: 375px (mobile) → 1920px (4xl)
-
-//   Key Figma values (at 1440px / 3xl):
-//   - Section padding V: 60px     → clamp(28px, 3.125vw, 60px)
-//   - Section padding H: 80px     → clamp(16px, 4.167vw, 80px)
-//   - Section gap:       60px     → clamp(28px, 3.125vw, 60px)
-//   - Section height:    628px    → auto (let content define it)
-
-//   Badge:
-//   - gap/px/py:  7.2px/5.4px    → clamp(4px, 0.375vw, 7.2px)
-//   - dot size:   14px            → clamp(9px, 0.729vw, 14px)
-//   - text:       16.2px          → clamp(11px, 0.844vw, 16.2px)
-
-//   Heading row:
-//   - gap:        50px            → clamp(20px, 2.604vw, 50px)
-//   - h2:         45px            → clamp(24px, 2.344vw, 45px)
-//   - h2 max-w:   512px           → clamp(260px, 26.67vw, 512px)
-//   - p:          20px            → clamp(13px, 1.042vw, 20px)
-//   - p max-w:    558px           → clamp(280px, 29.063vw, 558px)
-
-//   Cards:
-//   - gap:        10px            → clamp(6px, 0.521vw, 10px)
-//   - card h:     352.5px         → clamp(220px, 18.359vw, 352.5px)
-//   - card pad:   37.5px          → clamp(18px, 1.953vw, 37.5px)
-//   - card w collapsed: 400px    → clamp(240px, 20.833vw, 400px)
-//   - card w active: 458px       → clamp(280px, 23.854vw, 458px)
-
-//   Card content:
-//   - inner w:    342px           → clamp(200px, 17.813vw, 342px)
-//   - inner min-h:277.5px         → clamp(160px, 14.453vw, 277.5px)
-//   - inner gap:  14px            → clamp(8px, 0.729vw, 14px)
-//   - icon box:   46px            → clamp(30px, 2.396vw, 46px)
-//   - icon pad:   6px             → clamp(4px, 0.313vw, 6px)
-//   - title:      33px            → clamp(18px, 1.719vw, 33px)
-//   - title lh:   37.95px         → clamp(21px, 1.977vw, 37.95px)
-//   - desc:       15px            → clamp(11px, 0.781vw, 15px)
-//   - desc lh:    22.5px          → clamp(16px, 1.172vw, 22.5px)
-// */
-
-// const WhyChooseUs = () => {
-//   const [activeCard, setActiveCard] = useState(null);
-
-//   const cards = [
-//     {
-//       img: '/dummyimages/Container.png',
-//       icon: <Image src="/icons/Vector.svg" alt="Design icon" width={25} height={25} />,
-//       title: 'Design-Driven, Modern Approach',
-//       desc: 'With a portfolio of completed projects and collaborations with experienced architects, we bring proven expertise to every build. Our work speaks through real results, client satisfaction, and trusted industry partnerships.',
-//     },
-//     {
-//       img: '/dummyimages/Container.png',
-//       icon: <Image src="/icons/692885226ea01d367379ce40_Frame.svg.svg" alt="Expertise icon" width={25} height={25} />,
-//       title: 'Proven Expertise & Trusted Network',
-//       desc: 'With a portfolio of completed projects and collaborations with experienced architects, we bring proven expertise to every build. Our work speaks through real results, client satisfaction, and trusted industry partnerships.',
-//     },
-//     {
-//       img: '/dummyimages/Overlay.png',
-//       icon: <Image src="/icons/healthicons_people-outline.svg" alt="People icon" width={25} height={25} />,
-//       title: 'Client-Centric, Seamless Experience',
-//       desc: 'With a portfolio of completed projects and collaborations with experienced architects, we bring proven expertise to every build. Our work speaks through real results, client satisfaction, and trusted industry partnerships.',
-//     },
-//   ];
-
-//   return (
-//     <section
-//       className="w-full bg-[#EDE7DE] flex flex-col items-center overflow-hidden"
-//       style={{
-//         paddingTop:    'clamp(28px, 3.125vw, 60px)',
-//         paddingBottom: 'clamp(28px, 3.125vw, 60px)',
-//         paddingLeft:   'clamp(16px, 4.167vw, 80px)',
-//         paddingRight:  'clamp(16px, 4.167vw, 80px)',
-//         gap:           'clamp(28px, 3.125vw, 60px)',
-//       }}
-//     >
-
-//       {/* ── Top Header ─────────────────────────────────────────────────── */}
-//       <div
-//         className="w-full max-w-[1280px] flex flex-col"
-//         style={{ gap: 'clamp(12px, 1.25vw, 24px)' }}
-//       >
-
-//         {/* Badge */}
-//         <div
-//           className="flex items-center self-start rounded-[90px]"
-//           style={{
-//             gap:           'clamp(4px, 0.375vw, 7.2px)',
-//             paddingLeft:   'clamp(4px, 0.375vw, 7.2px)',
-//             paddingRight:  'clamp(4px, 0.375vw, 7.2px)',
-//             paddingTop:    'clamp(3px, 0.281vw, 5.4px)',
-//             paddingBottom: 'clamp(3px, 0.281vw, 5.4px)',
-//           }}
-//         >
-//           <div
-//             className="bg-[#334454] flex-shrink-0"
-//             style={{
-//               width:        'clamp(9px, 0.729vw, 14px)',
-//               height:       'clamp(9px, 0.729vw, 14px)',
-//               borderRadius: 'clamp(2px, 0.156vw, 3px)',
-//             }}
-//           />
-//           <span
-//             className="font-sans font-normal uppercase text-black"
-//             style={{
-//               fontSize:      'clamp(11px, 0.844vw, 16.2px)',
-//               letterSpacing: 'clamp(-0.22px, -0.017vw, -0.32px)',
-//             }}
-//           >
-//             WHY CHOOSE US
-//           </span>
-//         </div>
-
-//         {/* Heading row */}
-//         <div
-//           className="flex flex-col lg:flex-row lg:justify-between lg:items-end w-full"
-//           style={{ gap: 'clamp(12px, 2.604vw, 50px)' }}
-//         >
-//           <h2
-//             className="font-roundo font-medium text-[#1A1A1A] capitalize"
-//             style={{
-//               fontSize:      'clamp(24px, 2.344vw, 45px)',
-//               lineHeight:    1.0,
-//               letterSpacing: 'clamp(-0.48px, -0.047vw, -0.9px)',
-//               maxWidth:      'clamp(260px, 26.667vw, 512px)',
-//             }}
-//           >
-//             Proven Trust Value Modern Homes Leader
-//           </h2>
-//           <p
-//             className="font-sans font-normal text-black/60"
-//             style={{
-//               fontSize:      'clamp(13px, 1.042vw, 20px)',
-//               lineHeight:    'clamp(15px, 1.135vw, 21.8px)',
-//               letterSpacing: 'clamp(-0.26px, -0.023vw, -0.44px)',
-//               maxWidth:      'clamp(280px, 29.063vw, 558px)',
-//             }}
-//           >
-//             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-//             tempor incididunt ut labore et dolore magna aliqua ut enim.
-//           </p>
-//         </div>
-//       </div>
-
-//       {/* ── Feature Cards ──────────────────────────────────────────────── */}
-//       <div
-//         className="w-full max-w-[1920px] flex flex-col lg:flex-row justify-center"
-//         style={{ gap: 'clamp(6px, 0.521vw, 10px)' }}
-//       >
-//         {cards.map((card, i) => {
-//           const isActive = activeCard === i;
-
-//           return (
-//             <div
-//               key={i}
-//               onMouseEnter={() => setActiveCard(i)}
-//               onMouseLeave={() => setActiveCard(null)}
-//               className="relative rounded-[8px] overflow-hidden transition-all duration-700 ease-in-out cursor-pointer flex-shrink-0"
-//               style={{
-//                 width:   isActive
-//                   ? 'clamp(280px, 23.854vw, 458px)'
-//                   : 'clamp(240px, 20.833vw, 400px)',
-//                 height:   'clamp(220px, 18.359vw, 352.5px)',
-//                 padding:  'clamp(18px, 1.953vw, 37.5px)',
-//                 // On mobile stack to full width
-//                 ...(typeof window !== 'undefined' && window.innerWidth < 1024
-//                   ? { width: '100%' }
-//                   : {}),
-//               }}
-//             >
-//               {/* Background image */}
-//               <Image
-//                 src={card.img}
-//                 alt={card.title}
-//                 fill
-//                 className={`object-cover transition-transform duration-700 ${isActive ? 'scale-105' : 'scale-100'}`}
-//               />
-
-//               {/* Overlay */}
-//               <div
-//                 className={`absolute inset-0 transition-colors duration-700 ${isActive ? 'bg-black/50' : 'bg-black/40'}`}
-//               />
-
-//               {/* Card content */}
-//               <div className="absolute inset-0 flex items-center justify-center">
-//                 <div
-//                   className="flex flex-col"
-//                   style={{
-//                     width:     'clamp(200px, 17.813vw, 342px)',
-//                     minHeight: 'clamp(160px, 14.453vw, 277.5px)',
-//                     gap:       'clamp(8px, 0.729vw, 14px)',
-//                   }}
-//                 >
-//                   {/* Icon box */}
-//                   <div
-//                     className="bg-white flex items-center justify-center shadow-lg flex-shrink-0"
-//                     style={{
-//                       width:        'clamp(30px, 2.396vw, 46px)',
-//                       height:       'clamp(30px, 2.396vw, 46px)',
-//                       borderRadius: 'clamp(3px, 0.26vw, 5px)',
-//                       padding:      'clamp(4px, 0.313vw, 6px)',
-//                     }}
-//                   >
-//                     <div className="text-[#334454] flex items-center justify-center w-full h-full">
-//                       {card.icon}
-//                     </div>
-//                   </div>
-
-//                   {/* Title */}
-//                   <h3
-//                     className="font-roundo font-medium text-white"
-//                     style={{
-//                       fontSize:      'clamp(18px, 1.719vw, 33px)',
-//                       lineHeight:    'clamp(21px, 1.977vw, 37.95px)',
-//                       letterSpacing: 'clamp(-0.36px, -0.034vw, -0.66px)',
-//                     }}
-//                   >
-//                     {card.title}
-//                   </h3>
-
-//                   {/* Description — fades in on hover */}
-//                   <p
-//                     className={`font-sans font-normal text-white/80 transition-opacity duration-500 delay-100 pointer-events-none ${isActive ? 'opacity-100' : 'opacity-0'}`}
-//                     style={{
-//                       fontSize:   'clamp(11px, 0.781vw, 15px)',
-//                       lineHeight: 'clamp(16px, 1.172vw, 22.5px)',
-//                     }}
-//                   >
-//                     {card.desc}
-//                   </p>
-//                 </div>
-//               </div>
-//             </div>
-//           );
-//         })}
-//       </div>
-
-//     </section>
-//   );
-// };
-
-// export default WhyChooseUs;
-
 
 // -------------new code-----------------------
 
@@ -657,27 +68,40 @@ const STATIC_CARDS = [
   {
     img: '/dummyimages/Container.png',
     icon: <Image src="/icons/Vector.svg" alt="Design icon" width={25} height={25} />,
+    mobileIcon: <Image src="/images/692885235bac36a9a3203cd0_Group.svg (1).svg" alt="Design icon" width={25} height={25} />,
     title: 'Design-Driven, Modern Approach',
     desc: 'With a portfolio of completed projects and collaborations with experienced architects, we bring proven expertise to every build. Our work speaks through real results, client satisfaction, and trusted industry partnerships.',
   },
   {
     img: '/dummyimages/Container.png',
     icon: <Image src="/icons/692885226ea01d367379ce40_Frame.svg.svg" alt="Expertise icon" width={25} height={25} />,
+    mobileIcon: <Image src="/images/692885226ea01d367379ce40_Frame.svg (1).svg" alt="Expertise icon" width={25} height={25} />,
     title: 'Proven Expertise & Trusted Network',
     desc: 'With a portfolio of completed projects and collaborations with experienced architects, we bring proven expertise to every build. Our work speaks through real results, client satisfaction, and trusted industry partnerships.',
   },
   {
     img: '/dummyimages/Overlay.png',
     icon: <Image src="/icons/healthicons_people-outline.svg" alt="People icon" width={25} height={25} />,
+    mobileIcon: <Image src="/images/healthicons_people-outline (1).svg" alt="People icon" width={25} height={25} />,
     title: 'Client-Centric, Seamless Experience',
     desc: 'With a portfolio of completed projects and collaborations with experienced architects, we bring proven expertise to every build. Our work speaks through real results, client satisfaction, and trusted industry partnerships.',
   },
 ];
 
+// Desktop cards sit on a light beige icon box, so they keep the dark
+// (#334454) stroke icons. Mobile cards sit on a dark translucent glass box,
+// where those same dark icons vanish — these three are the light (#EDE7DE)
+// versions made for that context.
 const ICONS = [
   <Image key="0" src="/icons/Vector.svg" alt="Design icon" width={25} height={25} />,
   <Image key="1" src="/icons/692885226ea01d367379ce40_Frame.svg.svg" alt="Expertise icon" width={25} height={25} />,
   <Image key="2" src="/icons/healthicons_people-outline.svg" alt="People icon" width={25} height={25} />,
+];
+
+const MOBILE_ICONS = [
+  <Image key="0" src="/images/692885235bac36a9a3203cd0_Group.svg (1).svg" alt="Design icon" width={25} height={25} />,
+  <Image key="1" src="/images/692885226ea01d367379ce40_Frame.svg (1).svg" alt="Expertise icon" width={25} height={25} />,
+  <Image key="2" src="/images/healthicons_people-outline (1).svg" alt="People icon" width={25} height={25} />,
 ];
 
 // Shown only until the admin fills in Home → Choose Us.
@@ -712,6 +136,7 @@ const WhyChooseUs = ({ chooseUs }) => {
     ? [chooseUs.card1, chooseUs.card2, chooseUs.card3].map((c, i) => ({
         img: c?.image || STATIC_CARDS[i].img,
         icon: ICONS[i],
+        mobileIcon: MOBILE_ICONS[i],
         title: c?.heading || STATIC_CARDS[i].title,
         desc: c?.subheading || STATIC_CARDS[i].desc,
       }))
@@ -979,10 +404,10 @@ const WhyChooseUs = ({ chooseUs }) => {
               className="relative overflow-hidden transition-all duration-700 ease-in-out flex-shrink-0 w-full flex flex-col"
               style={{
                 height:        '316.12px',
-                paddingTop:    '28px',
-                paddingRight:  '29px',
-                paddingBottom: '28px',
-                paddingLeft:   '29.48px',
+                paddingTop:    '22px',
+                paddingRight:  '24px',
+                paddingBottom: '24px',
+                paddingLeft:   '24px',
                 borderRadius:  '6.29px',
                 gap:           '7.86px',
               }}
@@ -1012,7 +437,7 @@ const WhyChooseUs = ({ chooseUs }) => {
                   maxWidth: '100%',
                   minHeight: '218.12px',
                   gap: '11px',
-                  marginTop: isActive ? '20px' : 'clamp(160px, 15vw, 180px)',
+                  marginTop: isActive ? '10px' : 'clamp(130px, 15vw, 180px)',
                 }}
               >
                 {/* Icon box */}
@@ -1031,8 +456,8 @@ const WhyChooseUs = ({ chooseUs }) => {
     backdropFilter: "blur(12px)",
   }}
 >
-  <div className="text-[#EDE7DE] flex items-center justify-center w-full h-full">
-    {card.icon}
+  <div className="text-white flex items-center justify-center w-full h-full">
+    {card.mobileIcon}
   </div>
 </div>
 
