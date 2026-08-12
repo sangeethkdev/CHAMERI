@@ -99,9 +99,9 @@ const ICONS = [
 ];
 
 const MOBILE_ICONS = [
-  <Image key="0" src="/images/692885235bac36a9a3203cd0_Group.svg (1).svg" alt="Design icon" width={25} height={25} />,
-  <Image key="1" src="/images/692885226ea01d367379ce40_Frame.svg (1).svg" alt="Expertise icon" width={25} height={25} />,
-  <Image key="2" src="/images/healthicons_people-outline (1).svg" alt="People icon" width={25} height={25} />,
+  <Image key="0" src="/images/692885235bac36a9a3203cd0_Group.svg (1).svg" alt="Design icon" width={18} height={18} />,
+  <Image key="1" src="/images/692885226ea01d367379ce40_Frame.svg (1).svg" alt="Expertise icon" width={20} height={20} />,
+  <Image key="2" src="/images/healthicons_people-outline (1).svg" alt="People icon" width={19} height={19} />,
 ];
 
 // Shown only until the admin fills in Home → Choose Us.

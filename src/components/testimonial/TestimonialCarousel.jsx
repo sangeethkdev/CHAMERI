@@ -271,10 +271,12 @@ export default function TestimonialCarousel({ reviews }) {
             current={current}
             maxLines={4}
             textStyle={{
+              fontFamily:"var(--font-roundo), Roundo, system-ui, sans-serif",
               color:      '#212325',
               fontWeight: 500,
               fontSize:   'clamp(22px, 4.222vw, 52px)',
               lineHeight: 'clamp(26px, 3.586vw, 73px)',
+              letterSpacing: 'clamp(-0.4px, -0.04vw, -2px)',
             }}
           />
         </div>

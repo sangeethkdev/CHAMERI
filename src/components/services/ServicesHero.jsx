@@ -137,8 +137,8 @@ export default function ServicesHero({ hero }) {
           className="whitespace-pre-wrap font-roundo font-medium"
           style={{
             // fontFamily: "var(--font-roundo), 'Roundo'",
-            fontWeight: 400,
-            fontSize: "clamp(26px, 3.472vw, 50px)",
+            fontWeight: 500,
+            fontSize: "clamp(26px, 3.472vw, 70px)",
             lineHeight: "clamp(34px, 4.593vw, 66.14px)",
             letterSpacing: "clamp(-3.05px, -0.212vw, -1.2px)",
             color: "#ffffff",

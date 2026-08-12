@@ -322,7 +322,7 @@ const FAQSection = ({ faqSection }) => {
               fontSize:      'clamp(28px, 4.17vw, 74px)',
               lineHeight:    '1.05',
               letterSpacing: 'clamp(-0.5px, -0.063vw, -1.2px)',
-              maxWidth:      'clamp(280px, 51.04vw, 980px)',
+              maxWidth:      'clamp(350px, 54.04vw, 990px)',
             }}
           >
             {faqSection?.heading || 'Frequent Asked Questions'}
@@ -362,7 +362,7 @@ const FAQSection = ({ faqSection }) => {
                   borderRadius:    'clamp(4px, 0.56vw, 8px)',
                   padding:         'clamp(4px, 0.56vw, 8px)',
                   gap:             isOpen ? 'clamp(8px, 0.83vw, 16px)' : '0px',
-                  transition:      'gap 300ms ease',
+                  transition:      'gap 600ms cubic-bezier(0.4, 0, 0.2, 1)',
                 }}
               >
                 {/* Question row */}
@@ -407,7 +407,7 @@ const FAQSection = ({ faqSection }) => {
                       strokeWidth="2.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+                      className={`transition-transform duration-[600ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${isOpen ? 'rotate-180' : 'rotate-0'}`}
                       style={{ width: '100%', height: '100%' }}
                     >
                       <path d="m6 9 6 6 6-6" />
@@ -417,33 +417,35 @@ const FAQSection = ({ faqSection }) => {
 
                 {/* Answer panel */}
                 <div
-                  className="overflow-hidden"
                   style={{
-                    maxHeight:  isOpen ? '400px' : '0px',
-                    opacity:    isOpen ? 1 : 0,
-                    transition: 'max-height 300ms ease, opacity 300ms ease',
+                    display:          'grid',
+                    gridTemplateRows: isOpen ? '1fr' : '0fr',
+                    opacity:          isOpen ? 1 : 0,
+                    transition:       'grid-template-rows 600ms cubic-bezier(0.4, 0, 0.2, 1), opacity 600ms cubic-bezier(0.4, 0, 0.2, 1)',
                   }}
                 >
-                  <div
-                    style={{
-                      backgroundColor: '#334454',
-                      borderRadius:    'clamp(4px, 0.56vw, 8px)',
-                      paddingTop:      'clamp(14px, 1.11vw, 21.3px)',
-                      paddingBottom:   'clamp(14px, 1.11vw, 21.3px)',
-                      paddingLeft:     'clamp(10px, 0.83vw, 16px)',
-                      paddingRight:    'clamp(10px, 0.83vw, 16px)',
-                    }}
-                  >
-                    <p
-                      className="font-sans font-normal text-white/85 m-0"
+                  <div style={{ overflow: 'hidden' }}>
+                    <div
                       style={{
-                        fontSize:      'clamp(16px, 1.25vw, 24px)',
-                        lineHeight:    'clamp(18px, 1.5vw, 28.8px)',
-                        letterSpacing: 'clamp(-0.26px, -0.025vw, -0.48px)',
+                        backgroundColor: '#334454',
+                        borderRadius:    'clamp(4px, 0.56vw, 8px)',
+                        paddingTop:      'clamp(14px, 1.11vw, 21.3px)',
+                        paddingBottom:   'clamp(14px, 1.11vw, 21.3px)',
+                        paddingLeft:     'clamp(10px, 0.83vw, 16px)',
+                        paddingRight:    'clamp(10px, 0.83vw, 16px)',
                       }}
                     >
-                      {faq.a}
-                    </p>
+                      <p
+                        className="font-sans font-normal text-white/85 m-0"
+                        style={{
+                          fontSize:      'clamp(16px, 1.25vw, 24px)',
+                          lineHeight:    'clamp(18px, 1.5vw, 28.8px)',
+                          letterSpacing: 'clamp(-0.26px, -0.025vw, -0.48px)',
+                        }}
+                      >
+                        {faq.a}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>

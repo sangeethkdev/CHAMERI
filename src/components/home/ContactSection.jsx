@@ -999,7 +999,7 @@ every step of the way.
                   paddingLeft: 'clamp(6px, 0.55vw, 34.6px)',
                 }}
               >
-                +91 987654321
+                +91 9188913114
               </a>
             </div>
 
@@ -1034,7 +1034,7 @@ every step of the way.
                   paddingLeft: 'clamp(6px, 0.55vw, 34.6px)',
                 }}
               >
-                Chameri@gmail.com
+                info@chameribuilders.com
               </a>
             </div>
           </div>

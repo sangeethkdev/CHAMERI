@@ -424,7 +424,7 @@ const VillaPlansSection = ({ villaPlan }) => {
     <section
       className="villa-plans-section w-full bg-[#EDE7DE] flex justify-center overflow-hidden"
       style={{
-        paddingTop:    'clamp(40px, 4.17vw, 60px)',
+        paddingTop:    'clamp(16px, 4.17vw, 60px)',
         paddingBottom: 'clamp(40px, 4.17vw, 60px)',
         paddingLeft:   'clamp(20px, 5.28vw, 76px)',
         paddingRight:  'clamp(20px, 5.28vw, 76px)',
@@ -559,8 +559,8 @@ const VillaPlansSection = ({ villaPlan }) => {
                 height:       'clamp(36px, 3.38vw, 48.72px)',
                 paddingTop:   'clamp(8px, 0.87vw, 12.53px)',
                 paddingBottom:'clamp(8px, 0.87vw, 12.53px)',
-                paddingLeft:  'clamp(17px, 2.27vw, 24.92px)',
-                paddingRight: 'clamp(14px, 2.27vw, 24.92px)',
+                paddingLeft:  'clamp(19px, 2.67vw, 26.92px)',
+                paddingRight: 'clamp(16px, 2.67vw, 26.92px)',
                 borderRadius: 'clamp(6px, 0.58vw, 8.35px)',
                 gap: activeTab === 'villaments' ? 'clamp(6px, 0.97vw, 13.92px)' : '0',
               }}

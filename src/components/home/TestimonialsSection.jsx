@@ -722,7 +722,7 @@ const TestimonialsSection = ({ testimonial }) => {
               fontSize:      'clamp(32px, 4.17vw, 60px)',
               lineHeight:    'clamp(36.6px, 4.17vw, 60px)',
               letterSpacing: 'clamp(-0.73px, -0.06vw, -0.9px)',
-              width:         'clamp(358px, 42.22vw, 648px)',
+              width:         'clamp(358px, 44.22vw, 658px)',
               minHeight:     'clamp(37px, 4.17vw, 60px)',
               whiteSpace:    'pre-line'
             }}

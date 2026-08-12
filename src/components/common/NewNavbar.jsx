@@ -456,10 +456,10 @@ export default function NewNavbar({ opacity = 1, showLogo = true, darkLogo = fal
           width:        '100%',
           height:       '74px',
           borderRadius: '8px',
-          border:       '2px solid transparent',
+          // border:       '2px solid transparent',
           background:
             'linear-gradient(110.72deg, rgba(255, 255, 255, 0.36) 1.21%, rgba(196, 196, 196, 0.06) 100%) padding-box, ' +
-            'linear-gradient(110.21deg, rgba(255, 255, 255, 0.35) 2.78%, rgba(107, 133, 158, 0.455) 38.77%, rgba(107, 133, 158, 0.476) 66.35%, rgba(255, 255, 255, 0.35) 100%) border-box',
+            'linear-gradient(110.21deg, rgba(255, 255, 255, 0.35) 2.78%, rgba(155, 156, 157, 0.46) 38.77%, rgba(165, 166, 166, 0.48) 66.35%, rgba(255, 255, 255, 0.35) 100%) border-box',
           backdropFilter:       'blur(30px)',
           WebkitBackdropFilter: 'blur(30px)',
           pointerEvents:        opacity > 0.05 ? 'auto' : 'none',

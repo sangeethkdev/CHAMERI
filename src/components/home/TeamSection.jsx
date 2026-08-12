@@ -368,7 +368,7 @@ const TeamSection = ({ ourTeam }) => {
 
           {/* Sub-heading */}
           <p
-            className="font-sans font-normal text-[#334454]/75 m-0"
+            className="font-sans font-normal text-[#1C1C1C] m-0"
             style={{
               fontSize:      'clamp(14.9px, 1.39vw, 26.6px)', // 20px @ 1440 → 26.6px @ 1920
               lineHeight:    'clamp(18.4px, 1.72vw, 32.9px)',
