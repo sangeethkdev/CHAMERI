@@ -176,7 +176,7 @@ const ProjectContactUs = () => {
                 letterSpacing: 'clamp(-0.5px, -0.07vw, -2px)',
               }}
             >
-              Lorem ipsum dolor sit amet, consectetur ipsum dolor sit amet, consecteturLorem ipsum dolor
+              Schedule a site visit or request detailed project information. We are here to help you every step of the way.
             </p>
           </div>
 
@@ -214,7 +214,7 @@ const ProjectContactUs = () => {
                   paddingLeft: 'clamp(0px, 0.25vw, 34.6px)',
                 }}
               >
-                +91 987654321
+                +91 9188913114
               </a>
             </div>
 
@@ -249,7 +249,7 @@ const ProjectContactUs = () => {
                   paddingLeft: 'clamp(0px, 0.25vw, 34.6px)',
                 }}
               >
-                Chameri@gmail.com
+                info@chameribuilders.com
               </a>
             </div>
           </div>

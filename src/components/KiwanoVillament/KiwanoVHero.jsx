@@ -75,7 +75,7 @@ export default function KiwanoHero({ hero }) {
     const makeImg = (i) => {
       const img = new Image();
       const n   = String(i + 1).padStart(4, "0");
-      img.src   = `/frames/kiwano/frame_${n}.jpg`;
+      img.src   = `/frames/kiwano-villament/frame_${n}.jpg`;
       framesRef.current[i] = img;
       return img;
     };
@@ -153,7 +153,7 @@ export default function KiwanoHero({ hero }) {
             width:               "100%",
             height:              "100vh",
             overflow:            "hidden",
-            backgroundImage:     "url('/frames/kiwano/frame_0001.jpg')",
+            backgroundImage:     "url('/frames/kiwano-villament/frame_0001.jpg')",
             backgroundSize:      "cover",
             backgroundPosition:  "center",
           }}

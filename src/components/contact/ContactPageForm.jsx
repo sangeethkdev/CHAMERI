@@ -666,7 +666,7 @@ export default function ContactPageForm() {
                     className="font-geist font-medium text-[#6B859E] underline hover:text-[#000000] transition-colors"
                     style={{ fontSize: 'clamp(13px, 1.250vw, 22px)' }}
                   >
-                    +91 987654321
+                    +91 9188913114
                   </a>
                 </div>
 
@@ -707,7 +707,7 @@ export default function ContactPageForm() {
                     className="font-geist font-medium text-[#6B859E] underline hover:text-[#000000] transition-colors"
                     style={{ fontSize: 'clamp(13px, 1.250vw, 22px)' }}
                   >
-                    Chameri@gmail.com
+                    info@chameribuilders.com
                   </a>
                 </div>
               </div>
