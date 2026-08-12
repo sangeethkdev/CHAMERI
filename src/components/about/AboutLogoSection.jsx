@@ -158,7 +158,7 @@ export default function AboutLogoSection({ workLogos }) {
               /* 111px @ 1440 → 7.71vw */
               height: 'clamp(29px, 7.71vw, 148px)',
               /* 30px @ 1440 → 2.08vw */
-              paddingTop: 'clamp(8px, 2.08vw, 40px)',
+              paddingTop: 'clamp(8px, 3.08vw, 60px)',
               paddingBottom: 'clamp(8px, 2.08vw, 40px)',
               display: 'flex',
               alignItems: 'center',
@@ -171,7 +171,7 @@ export default function AboutLogoSection({ workLogos }) {
               className="flex animate-marquee whitespace-nowrap"
               style={{
                 /* Gap 53px @ 1440 → 3.68vw */
-                gap: 'clamp(14px, 3.68vw, 71px)',
+                gap: 'clamp(5px, 1.68vw, 21px)',
               }}
             >
               {scrollLogos.map((logo, index) => (
@@ -181,9 +181,9 @@ export default function AboutLogoSection({ workLogos }) {
                     flexShrink: 0,
                     position: 'relative',
                     /* Fallback width logic since it wasn't specified. Assuming typical logo aspect ratio */
-                    width: 'clamp(40px, 10.42vw, 200px)',
+                    width: 'clamp(40px, 12.42vw, 300px)',
                     /* Inner height 51px @ 1440 → 3.54vw */
-                    height: 'clamp(13px, 3.54vw, 68px)',
+                    height: 'clamp(13px, 6.54vw, 98px)',
                   }}
                 >
                   <Image

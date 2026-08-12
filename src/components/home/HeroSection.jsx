@@ -760,7 +760,7 @@ export default function HeroSection({ hero }) {
         id="hero"
         ref={sectionRef}
         className={`relative w-full z-20 pointer-events-auto ${animState === "waiting" ? "cursor-pointer" : ""}`}
-        style={{ marginTop: "-60vh", height: "100vh" }}
+        style={{ marginTop: "-60vh", height: "85vh" }}
         onClick={requestReveal}
       >
 
@@ -788,7 +788,7 @@ export default function HeroSection({ hero }) {
         <div
           className="hidden sm:block absolute pointer-events-none"
           style={{
-            top: "50.83%",         /* 602.47 / 1024 */
+            top: "40.83%",         /* 602.47 / 1024 */
             left: "50%",            /* centered on the viewport instead of the Figma-literal 22.88% left offset, which put the heading right-of-center */
             width: "72.47%",         /* 1043.5 / 1440 */
             height: "37.85%",        /* 387.55 / 1024 */
@@ -812,7 +812,7 @@ export default function HeroSection({ hero }) {
                 maxWidth: "clamp(200px, 90vw, 1200px)",
                 fontFamily: "var(--font-roundo), 'Roundo', var(--font-outfit), system-ui, sans-serif",
                 fontWeight: 500,
-                fontSize: "clamp(26px, 4.595vw, 75.41px)",
+                fontSize: "clamp(20px, 4.095vw, 70.41px)",
                 lineHeight: "1.06",   /* 64.08/60.41 — a fixed ratio scales with fontSize instead of drifting apart from it */
                 letterSpacing: "clamp(-0.8px, -0.133vw, -1.92px)",
                 color: "#ffffff",
@@ -832,7 +832,7 @@ export default function HeroSection({ hero }) {
                 maxWidth: "clamp(160px, 80vw, 1000px)",
                 fontFamily: "var(--font-roundo), 'Roundo'",
                 fontWeight: 500,
-                fontSize: "clamp(26px, 4.157vw, 75.41px)",
+                fontSize: "clamp(20px, 4.095vw, 70.41px)",
                 lineHeight: "1.06",
                 letterSpacing: "clamp(-0.8px, -0.133vw, -1.92px)",
                 color: "#ffffff",
