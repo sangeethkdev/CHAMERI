@@ -565,8 +565,8 @@ import { socialHref } from '@/lib/socialLinks';
 const QUICK_LINKS = [
   { label: 'Home',       href: '/'         },
   { label: 'About Us',  href: '/about'    },
-  { label: 'Project',   href: '/project-list'   },
-  { label: 'Service',   href: '/services' },
+  { label: 'Projects',   href: '/project-list'   },
+  { label: 'Services',   href: '/services' },
   { label: 'Gallery',   href: '/gallery'  },
   { label: 'Contact Us',href: '/contact'  },
 ];
@@ -739,7 +739,7 @@ const Footer = () => {
                   style={{
                     fontSize:   'clampclamp(19px, 1.11vw, 21.3px)',
                     lineHeight: 1.6,
-                    maxWidth:   'clamp(141.6px, 13.82vw, 265.7px)',
+                    maxWidth:   'clamp(261.6px, 13.82vw, 265.7px)',
                   }}
                 >
                   #27/205, Madapeedika, Paral (PO), Thalasserry, Kannur, Kerala, 670601
@@ -755,7 +755,7 @@ const Footer = () => {
                   Contact Us
                 </h3>
                 <div className="flex flex-col" style={{ gap: 'clamp(7.1px, 0.69vw, 13.3px)' }}>
-                  {['+91 91889 13114', '+91 91889 13114'].map((num, i) => (
+                  {['+91 91889 13114'].map((num, i) => (
                     <a
                       key={i}
                       href="tel:+919188913114"

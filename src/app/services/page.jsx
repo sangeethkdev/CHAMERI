@@ -21,7 +21,7 @@ export default async function ServicesPage() {
 
   return (
     <main className="min-h-screen bg-[#EFEDE7]">
-      <NewNavbar darkLogo />
+      <NewNavbar />
       <ServicesHero hero={service?.heroSection} />
       <ServicesOffered cardsSection={service?.cardsSection} />
       <ServicesTestimonials testimonial={service?.testimonial} />

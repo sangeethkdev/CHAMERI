@@ -71,8 +71,8 @@ export default function AboutLogoSection({ workLogos }) {
 
           <div
             style={{
-              width: '100%',
-              height: '79.7px',
+              width: 'clamp(280px, 86.33vw, 1700px)',
+              height: 'clamp(60px, 7.7vw, 160px)',
               display: 'flex',
               alignItems: 'center',
               overflow: 'hidden',
@@ -81,7 +81,7 @@ export default function AboutLogoSection({ workLogos }) {
           >
             <div
               className="flex animate-marquee whitespace-nowrap"
-              style={{ gap: '10px' }}
+              style={{ gap: 'clamp(0px, 0.8vw, 12px)' }}
             >
               {scrollLogos.map((logo, index) => (
                 <div
@@ -89,8 +89,8 @@ export default function AboutLogoSection({ workLogos }) {
                   style={{
                     flexShrink: 0,
                     position: 'relative',
-                    width: '86px',
-                    height: '36px',
+                    width: 'clamp(120px, 12.73vw, 400px)',
+                    height: 'clamp(50px, 5.88vw, 350px)',
                   }}
                 >
                   <Image
