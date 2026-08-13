@@ -317,14 +317,14 @@ export default function AboutFounderNote({ founder }) {
                 />
 
                 {/* Bottom fade — same treatment the other sections use */}
-                <div
+                {/* <div
                   style={{
                     position: 'absolute',
                     inset: 0,
                     pointerEvents: 'none',
                     background: 'linear-gradient(0deg, #000000 0%, rgba(0, 0, 0, 0) 39%)',
                   }}
-                />
+                /> */}
               </div>
 
               {/* Quote + author */}
@@ -518,14 +518,14 @@ export default function AboutFounderNote({ founder }) {
             />
 
             {/* Bottom fade — same treatment the other sections use */}
-            <div
+            {/* <div
               style={{
                 position: 'absolute',
                 inset: 0,
                 pointerEvents: 'none',
                 background: 'linear-gradient(0deg, #000000 0%, rgba(0, 0, 0, 0) 39%)',
               }}
-            />
+            /> */}
           </div>
 
           {/* ── Text block ──────────────────────────────────────────── */}

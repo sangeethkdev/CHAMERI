@@ -26,7 +26,7 @@ export default async function AboutPage() {
 
   return (
     <main className="min-h-screen bg-[#EFEDE7] relative">
-      <NewNavbar darkLogo />
+      <NewNavbar />
       <AboutHeroSection hero={about?.hero} />
       <AboutOriginStory story={about?.story} />
       <AboutFounderNote founder={about?.founder} />

@@ -118,7 +118,7 @@ function MobileProjectCard({ project }) {
               className="flex items-center flex-shrink-0"
               style={{ gap: '7.2px', borderRadius: '90px', paddingLeft: '2px', paddingRight: '2px', width: 'fit-content' }}
             >
-              <span className="inline-block flex-shrink-0" style={{ width: '10px', height: '10px', background: '#334454' }} />
+              <span className="inline-block flex-shrink-0" style={{ width: '10px', height: '10px', background: '#334454', borderRadius: '2px' }} />
               <span
                 className="font-sans uppercase whitespace-nowrap"
                 style={{ fontWeight: 400, fontSize: '12px', lineHeight: '19.44px', letterSpacing: '-0.32px', color: '#000000' }}
@@ -217,6 +217,7 @@ export default function ProjectsShowcase({ cardsSection, projects }) {
               width: 'clamp(10px, 0.972vw, 14px)',
               height: 'clamp(10px, 0.972vw, 14px)',
               background: '#334454',
+              borderRadius: '3px',
             }}
           />
           <span

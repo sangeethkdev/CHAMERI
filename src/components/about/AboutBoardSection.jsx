@@ -702,7 +702,7 @@ function MobileBoardSection({ boardMembers, title }) {
               />
 
               {/* Gradient overlay */}
-              <div
+              {/* <div
                 style={{
                   position: 'absolute',
                   inset: 0,
@@ -710,7 +710,7 @@ function MobileBoardSection({ boardMembers, title }) {
                   zIndex: 1,
                   pointerEvents: 'none',
                 }}
-              />
+              /> */}
 
               {/* Text block */}
               <div

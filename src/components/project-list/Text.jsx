@@ -69,6 +69,7 @@ export default function Text({ project }) {
                 width: 'clamp(10px, 0.972vw, 14px)',
                 height: 'clamp(10px, 0.972vw, 14px)',
                 background: '#334454',
+                borderRadius: '3px',
               }}
             />
             <span

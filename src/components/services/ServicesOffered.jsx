@@ -327,6 +327,7 @@ export default function ServicesOffered({ cardsSection }) {
                   alignItems: "center",
                   gap: "clamp(4px, 1.5vw, 10.6px)",
                   width: "fit-content",
+                  paddingBottom: "clamp(14px, 2.389vw, 25px)",
                 }}
               >
           <div
