@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
+import { isValidPhoneNumber } from 'react-phone-number-input';
 
 /**
  * ─────────────────────────────────────────────────────────────────────────────
@@ -65,12 +66,6 @@ async function saveContactToBackend(form, source) {
    rejecting valid but unusual mailboxes. */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/* react-phone-number-input seeds the field with the country dial code, so
-   `form.phone` is "+91" the moment the picker mounts even though the user has
-   typed nothing. A plain emptiness check would treat that as filled — count
-   the digits and require a real national number behind the dial code. */
-const PHONE_MIN_DIGITS = 8;
-
 export function validateContactForm(values) {
   const errors = {};
 
@@ -84,11 +79,17 @@ export function validateContactForm(values) {
     errors.email = 'Please enter a valid email address.';
   }
 
-  const phoneDigits = (values.phone || '').replace(/\D/g, '');
-  if (!phoneDigits) {
+  /* react-phone-number-input seeds the field with the country dial code, so
+     `form.phone` is "+91" the moment the picker mounts even though the user
+     has typed nothing — `isValidPhoneNumber` correctly rejects a bare dial
+     code as incomplete, so no separate emptiness check is needed. It applies
+     each country's own numbering-plan rules (length, prefixes, …) rather than
+     a single digit-count guess, so a valid UK or US number isn't rejected by
+     rules tuned for Indian numbers, and vice versa. */
+  if (!values.phone?.trim()) {
     errors.phone = 'Please enter your phone number.';
-  } else if (phoneDigits.length < PHONE_MIN_DIGITS) {
-    errors.phone = 'Please enter a complete phone number.';
+  } else if (!isValidPhoneNumber(values.phone)) {
+    errors.phone = 'Please enter a valid phone number for the selected country.';
   }
 
   if (!values.message?.trim()) {

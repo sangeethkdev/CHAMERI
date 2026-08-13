@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
 /**
  * Contact form email delivery via Resend.
@@ -125,6 +126,16 @@ export async function POST(request) {
   if (!name || !email || !message) {
     return Response.json(
       { success: false, message: 'Required fields are missing.' },
+      { status: 400 }
+    );
+  }
+
+  // Mirrors useContactForm's client-side check so a request sent straight to
+  // this route — bypassing the browser form — can't slip an invalid phone
+  // number into the enquiry email.
+  if (!phone || !isValidPhoneNumber(phone)) {
+    return Response.json(
+      { success: false, message: 'Please provide a valid phone number.' },
       { status: 400 }
     );
   }
