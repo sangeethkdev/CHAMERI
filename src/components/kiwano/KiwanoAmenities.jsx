@@ -418,6 +418,7 @@ export default function KiwanoAmenities({ amenities }) {
               flexWrap: "wrap",
               alignItems: "center",
               gap: "20px",
+              paddingTop: "clamp(10px, 1.2vw, 200px)"
             }}
           >
             {/* Title */}
@@ -576,8 +577,8 @@ export default function KiwanoAmenities({ amenities }) {
                       justifyContent: "space-between",
                       /* No row rule — each card draws its own underline beneath
                          its distance text, so a full-width one doubled up. */
-                      paddingTop: "21.6px",
-                      paddingBottom: "21.6px",
+                      paddingTop: "15.6px",
+                      paddingBottom: "15.6px",
                     }}
                   >
                     {AMENITIES.slice(rowIndex * 4, rowIndex * 4 + 4).map((amenity) => (
