@@ -34,6 +34,14 @@ export const metadata = {
   title: "Chameri — Premium Villa Residences",
   description:
     "Chameri offers premium villa residences for those who seek refined living. Bespoke glass systems for ambitious architectural projects.",
+  icons: {
+    // Same swirl mark in both files — just re-colored to stay legible
+    // against the browser's own tab background in each theme.
+    icon: [
+      { url: "/favicon-light.png", media: "(prefers-color-scheme: light)" },
+      { url: "/favicon-dark.png", media: "(prefers-color-scheme: dark)" },
+    ],
+  },
 };
 
 export default function RootLayout({ children }) {
