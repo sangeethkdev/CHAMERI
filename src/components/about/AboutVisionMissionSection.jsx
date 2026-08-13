@@ -722,7 +722,7 @@ function CardTexts({ card, showTexts }) {
               lineHeight: 1.35,
               letterSpacing: '-0.4px',
               // marginBottom:'clamp(10px, 40vw, 520px)',
-              marginTop:'clamp(-40px, -2vw, -20px)',
+              marginTop:'clamp(-40px, -1.134vw, -16px)',
               color: '#FFFFFF',
               margin: 0,
             }}
@@ -748,7 +748,7 @@ function CardTexts({ card, showTexts }) {
         <div
           style={{
             position: 'absolute',
-            top: '84.34%',
+            top: '86.34%',
             left: '6%',
             zIndex: 2,
           }}
