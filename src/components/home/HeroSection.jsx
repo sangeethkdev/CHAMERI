@@ -547,6 +547,14 @@ export default function HeroSection({ hero }) {
   // 3. A single scroll gesture triggers the reveal. Native scrolling is locked
   // (body overflow is hidden until the outro finishes) so the `scroll` event
   // never fires here — wheel, touch and keys are the only signals available.
+  //
+  // The 8px touchmove threshold alone isn't reliable on every mobile browser
+  // (gesture-nav swipe interception, gesture-event timing, gesture cancels
+  // fired before enough delta accumulates, …) — any of those leave a visitor
+  // stuck on the half-revealed frame with the page's scroll still locked.
+  // touchend is a second, coarser signal: it fires once the gesture completes
+  // even if touchmove never reported enough travel, so any upward-ish touch —
+  // swipe or plain tap — still gets through.
   useEffect(() => {
     if (animState === "outro" || animState === "done") return;
 
@@ -567,6 +575,13 @@ export default function HeroSection({ hero }) {
       if (touchStartY - (e.touches[0]?.clientY ?? touchStartY) > 8) requestReveal();
     };
 
+    const onTouchEnd = () => {
+      // Reaching here at all means touchmove's threshold never fired —
+      // treat the completed gesture (swipe or tap) as intent to continue.
+      touchStartY = null;
+      requestReveal();
+    };
+
     const onKeyDown = (e) => {
       if (["ArrowDown", "PageDown", "End", " ", "Spacebar"].includes(e.key)) {
         requestReveal();
@@ -576,14 +591,27 @@ export default function HeroSection({ hero }) {
     window.addEventListener("wheel", onWheel, { passive: true });
     window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
     window.addEventListener("keydown", onKeyDown);
 
     return () => {
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("keydown", onKeyDown);
     };
+  }, [animState, requestReveal]);
+
+  // 4. Safety net: if no gesture is ever detected — the swipe/tap fails to
+  // register at all on some mobile browser/device combination — the page
+  // would otherwise stay scroll-locked on the half-revealed frame forever.
+  // Auto-advance a few seconds after the intro settles so no visitor can get
+  // permanently stuck, even if every gesture signal above somehow misses.
+  useEffect(() => {
+    if (animState !== "waiting") return;
+    const id = setTimeout(() => requestReveal(), 4000);
+    return () => clearTimeout(id);
   }, [animState, requestReveal]);
 
   // ── Derived values ─────────────────────────────────────────────────────────
@@ -719,7 +747,7 @@ export default function HeroSection({ hero }) {
             className="absolute z-30 flex flex-col items-center"
             style={{
               left: "50%",
-              top: "50%",
+              top: "45%",
               gap: `${logoGap}px`,
               transform: `translate(-50%, -50%) translateY(${groupY}px) scale(${groupScale})`,
               transformOrigin: "center center",
