@@ -489,7 +489,7 @@ export default function ContactPageForm() {
        * two fixed-width columns to opposite ends of the row.
        */}
       <div
-        className="flex flex-col lg:flex-row justify-between w-full mx-auto gap-[14px] lg:gap-0"
+        className="flex flex-col lg:flex-row justify-between w-full mx-auto gap-[28px] lg:gap-0"
         style={{
           maxWidth:      'clamp(300px, 100vw, 1920px)',
           paddingTop:    'clamp(40px, 4.167vw, 60px)',
@@ -534,8 +534,7 @@ export default function ContactPageForm() {
 
             {/* ── TOP: Badge + Heading — order-1 on mobile ─────────────── */}
             <div
-              className="order-1 lg:order-none flex flex-col"
-              style={{ gap: 'clamp(12px, 1.111vw, 16px)' }}
+              className="order-1 lg:order-none w-full pt-[28px] pb-[6px] lg:pt-0 lg:pb-0 flex flex-col gap-[7px] lg:gap-[clamp(12px,1.111vw,16px)]"
             >
 
               {/*
@@ -611,9 +610,8 @@ export default function ContactPageForm() {
 
             {/* ── BOTTOM: Contact details + socials — order-3 on mobile, so it renders after the form ── */}
             <div
-              className="order-3 lg:order-none flex flex-col"
+              className="order-3 lg:order-none flex flex-col gap-[16px] lg:gap-[clamp(12px,1.250vw,18px)]"
               style={{
-                gap:          'clamp(12px, 1.250vw, 18px)',
                 marginBottom: 'clamp(0px, 2.083vw, 30px)',
                 maxWidth: 'clamp(400px, 40vw, 616px)',
               }}

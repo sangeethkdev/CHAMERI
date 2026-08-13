@@ -735,7 +735,7 @@ function CardTexts({ card, showTexts }) {
         <div
           style={{
             position: 'absolute',
-            top: '82.61%',
+            top: '84.61%',
             left: '5.9%',
             width: '84%',
             height: 0,

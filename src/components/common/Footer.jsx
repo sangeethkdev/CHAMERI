@@ -737,7 +737,7 @@ const Footer = () => {
                   rel="noopener noreferrer"
                   className="font-sans font-normal text-[#FFFFFF] hover:text-[#EDE7DE]/80 transition-colors"
                   style={{
-                    fontSize:   'clamp(14px, 1.04vw, 20px)',
+                    fontSize:   'clampclamp(19px, 1.11vw, 21.3px)',
                     lineHeight: 1.6,
                     maxWidth:   'clamp(141.6px, 13.82vw, 265.7px)',
                   }}
@@ -760,7 +760,7 @@ const Footer = () => {
                       key={i}
                       href="tel:+919188913114"
                       className="font-sans font-normal text-[#FFFFFF] hover:text-[#EDE7DE]/80 transition-colors"
-                      style={{ fontSize: 'clamp(14px, 1.04vw, 20px)' }}
+                      style={{ fontSize: 'clampclamp(15px, 1.11vw, 21.3px)' }}
                     >
                       {num}
                     </a>
@@ -790,8 +790,8 @@ const Footer = () => {
                   aria-label={`Chameri on ${label}`}
                   className="text-[#EDE7DE] hover:text-white hover:scale-110 transition-all flex items-center justify-center flex-shrink-0"
                   style={{
-                    width:  'clamp(15.6px, 1.53vw, 29.3px)',
-                    height: 'clamp(15.2px, 1.49vw, 28.4px)',
+                    width:  'clamp(18.6px, 1.83vw, 29.3px)',
+                    height: 'clamp(18.2px, 1.89vw, 28.4px)',
                   }}
                 >
                   {svg}

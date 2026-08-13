@@ -139,7 +139,7 @@ export default function AboutTestimonialSection({ testimonialSection }) {
       <div
         className="w-full mx-auto flex flex-col items-center text-center"
         style={{
-          width: 'clamp(390px, 90.28vw, 1300px)',
+          width: 'clamp(390px, 90.28vw, 1400px)',
           gap:   'clamp(10px, 1.11vw, 16px)',
         }}
       >
@@ -186,7 +186,7 @@ export default function AboutTestimonialSection({ testimonialSection }) {
               fontSize:      'clamp(32px, 4.17vw, 60px)',
               lineHeight:    'clamp(36.6px, 4.17vw, 60px)',
               letterSpacing: 'clamp(-0.73px, -0.06vw, -0.9px)',
-              width:         'clamp(358px, 42.22vw, 648px)',
+              width:         'clamp(458px, 44.22vw, 668px)',
               minHeight:     'clamp(37px, 4.17vw, 60px)',
               whiteSpace:    'pre-line',
             }}
