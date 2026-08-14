@@ -765,7 +765,7 @@ export default function HeroSection({ hero }) {
             className="absolute z-30 flex flex-col items-center"
             style={{
               left: "50%",
-              top: "clamp(42%, 48%, 52%)",
+              top: "clamp(46%, 50%, 52%)",
               gap: `${logoGap}px`,
               transform: `translate(-50%, -50%) translateY(${groupY}px) scale(${groupScale})`,
               transformOrigin: "center center",
