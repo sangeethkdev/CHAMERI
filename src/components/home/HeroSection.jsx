@@ -454,13 +454,31 @@ export default function HeroSection({ hero }) {
   // resizing (e.g. DevTools responsive mode) after the animation has settled
   // leaves the logo's transform frozen at the old viewport size, since
   // nothing else triggers a re-render once `progress` stops changing.
+  //
+  // Real mobile devices only: `window.innerHeight` (and CSS `100vh`) report
+  // the browser's "layout viewport" — its height with the address bar
+  // collapsed — even while the bar is still on screen shrinking the actually
+  // visible area. That gap doesn't exist in desktop Chrome or in DevTools'
+  // emulated mobile mode (no real address bar to hide/show), which is why
+  // the logo lines up fine there but sits too low, straddling the navy/cream
+  // handoff, on a real phone. `visualViewport.height` tracks the true
+  // visible height instead, so the mobile branch below reads from it (and
+  // re-measures on visualViewport's own resize event, which fires as the
+  // address bar animates) while desktop keeps using `window.innerHeight`.
   useEffect(() => {
     const updateViewport = () => {
-      setViewport({ vw: window.innerWidth, vh: window.innerHeight });
+      const vv = window.visualViewport;
+      const isMobileWidth = window.innerWidth < 640;
+      const vh = isMobileWidth && vv ? vv.height : window.innerHeight;
+      setViewport({ vw: window.innerWidth, vh });
     };
     updateViewport();
     window.addEventListener("resize", updateViewport);
-    return () => window.removeEventListener("resize", updateViewport);
+    window.visualViewport?.addEventListener("resize", updateViewport);
+    return () => {
+      window.removeEventListener("resize", updateViewport);
+      window.visualViewport?.removeEventListener("resize", updateViewport);
+    };
   }, []);
 
   // The reveal is user-driven. These are refs, not state, because the gesture
@@ -693,7 +711,7 @@ export default function HeroSection({ hero }) {
   return (
     <>
       {/* ── Sticky Background ─────────────────────────────────────────────── */}
-      <div className="sticky top-0 left-0 w-full h-screen overflow-hidden pointer-events-none -z-10">
+      <div className="sticky top-0 left-0 w-full h-dvh overflow-hidden pointer-events-none -z-10">
 
         {/* Layer 0: Dark blue + waves */}
         <div className="absolute inset-0 w-full h-full -z-30 overflow-hidden pointer-events-none bg-[#2A3A4A]">
@@ -736,10 +754,10 @@ export default function HeroSection({ hero }) {
 
       {/* ── Sticky Header (Logo & Navbar) ─────────────────────────────────── */}
       <div
-        className="sticky top-[-1%] left-0 w-full h-screen pointer-events-none z-50 overflow-visible"
-        style={{ marginTop: "-100vh" }}
+        className="sticky top-0 left-0 w-full h-dvh pointer-events-none z-50 overflow-visible"
+        style={{ marginTop: "-100dvh" }}
       >
-        <div className="absolute top-[1%]  left-0 w-full h-screen pointer-events-none">
+        <div className="absolute top-[1%]  left-0 w-full h-dvh pointer-events-none">
 
           {/* Layer 2: Animated logo group — fades out once the reveal is
               done, handing off to NewNavbar's own logo below */}
@@ -747,7 +765,7 @@ export default function HeroSection({ hero }) {
             className="absolute z-30 flex flex-col items-center"
             style={{
               left: "50%",
-              top: " clamp(46%, 50%, 48%)",
+              top: "clamp(42%, 48%, 52%)",
               gap: `${logoGap}px`,
               transform: `translate(-50%, -50%) translateY(${groupY}px) scale(${groupScale})`,
               transformOrigin: "center center",
@@ -760,7 +778,7 @@ export default function HeroSection({ hero }) {
                 src="/icons/logo (6).svg"
                 alt="Chameri mark"
                 fill
-                sizes="400px"
+                sizes={isMobile ? "200px" : "400px"}
                 style={{ objectFit: "contain" }}
                 priority
               />
@@ -770,7 +788,7 @@ export default function HeroSection({ hero }) {
                 src="/icons/logo (7).svg"
                 alt="CHAMERI"
                 fill
-                sizes="800px"
+                sizes={isMobile ? "400px" : "800px"}
                 style={{ objectFit: "contain" }}
                 priority
               />
