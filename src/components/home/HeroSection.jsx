@@ -736,10 +736,10 @@ export default function HeroSection({ hero }) {
 
       {/* ── Sticky Header (Logo & Navbar) ─────────────────────────────────── */}
       <div
-        className="sticky top-0 left-0 w-full h-screen pointer-events-none z-50 overflow-visible"
+        className="sticky top-[-1%] left-0 w-full h-screen pointer-events-none z-50 overflow-visible"
         style={{ marginTop: "-100vh" }}
       >
-        <div className="absolute top-0 left-0 w-full h-screen pointer-events-none">
+        <div className="absolute top-[1%]  left-0 w-full h-screen pointer-events-none">
 
           {/* Layer 2: Animated logo group — fades out once the reveal is
               done, handing off to NewNavbar's own logo below */}
@@ -747,7 +747,7 @@ export default function HeroSection({ hero }) {
             className="absolute z-30 flex flex-col items-center"
             style={{
               left: "50%",
-              top: " clamp(45%, 50%, 53%)",
+              top: " clamp(46%, 50%, 48%)",
               gap: `${logoGap}px`,
               transform: `translate(-50%, -50%) translateY(${groupY}px) scale(${groupScale})`,
               transformOrigin: "center center",
