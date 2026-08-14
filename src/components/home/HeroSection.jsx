@@ -429,6 +429,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import NewNavbar from "../common/NewNavbar";
 
 // ─── Easing helpers ────────────────────────────────────────────────────────────
@@ -633,7 +634,14 @@ export default function HeroSection({ hero }) {
   }, [animState, requestReveal]);
 
   // ── Derived values ─────────────────────────────────────────────────────────
-  const pct = Math.round(progress * 100);
+  // `progress` spans both the intro (0→0.6) AND the outro reveal (0.6→1.0),
+  // so displaying it directly reads as "60%" the whole time the page sits in
+  // the "waiting" state — looking stuck/unfinished right when the intro has
+  // actually finished loading. Rescale just the intro's own 0→0.6 span to a
+  // 0–100% counter instead, so it reads 100% once settled and stays there
+  // through the outro (rather than resuming a live 60→100% count on scroll,
+  // which would contradict having just shown 100%).
+  const pct = Math.min(100, Math.round((progress / 0.6) * 100));
 
   const phase1T = easeOutCubic(mapRange(progress, 0.00, 0.40, 0, 1));
   const phase2T = easeInOutCubic(mapRange(progress, 0.40, 0.60, 0, 1));
@@ -702,6 +710,14 @@ export default function HeroSection({ hero }) {
   const sub2T = easeOutQuart(mapRange(progress, 0.90, 0.98, 0, 1));
 
   const counterOpacity = progress < 0.95 ? 1 : mapRange(progress, 0.95, 1.0, 1, 0);
+
+  // The new top/bottom info rows use fixed dark/light text colors matched to
+  // the cream-and-photo backdrop that's only actually on screen once the
+  // beige curtain has mostly risen. Before that (progress 0–0.5) the full
+  // viewport is still the dark navy intro background, where that text
+  // wouldn't read — so fade the rows in over the same span the curtain
+  // finishes revealing, rather than showing them from progress 0.
+  const infoRowT = mapRange(progress, 0.5, 0.65, 0, 1);
 
   // Once the auto-reveal (outro) fully finishes, hand off from this animated
   // logo to NewNavbar's own logo: the big logo fades out and only then does
@@ -799,6 +815,147 @@ export default function HeroSection({ hero }) {
         {/* Layer 3: Navbar — only fades in (with its own logo) once the
             animated logo above has fully hidden itself */}
         <NewNavbar opacity={isDone ? 1 : 0}  />
+
+        {/* ══════════════════════════════════════════════════════════════════════
+            TOP INFO ROW — quick links (left) + tagline heading (right)
+            Figma canvas: 1440 × 900px
+            Row: w:1360  h:58  top:175  left:40  justify-content:space-between
+            Converted → top: 175/900 = 19.44vh   left/right: 40/1440 = 2.78vw
+            Lives in the viewport-pinned Sticky Header (like the logo/navbar
+            above it), not in the `<section>` below — that section is offset
+            by a scroll-rig negative margin so its own percentages don't
+            correspond to actual viewport position; this does. Desktop only,
+            matching the sm:block content block below — the mobile hero has
+            its own, separately-designed stacked layout.
+        ════════════════════════════════════════════════════════════════════════ */}
+        <div
+          className="hidden sm:flex absolute items-center justify-between pointer-events-auto"
+          style={{
+            top: "clamp(90px, 13.44vh, 155px)",
+            left: "clamp(20px, 2.78vw, 40px)",
+            right: "clamp(20px, 2.78vw, 40px)",
+            opacity: infoRowT * counterOpacity,
+            transform: `translateY(${20 * (1 - infoRowT)}px)`,
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Quick links — Figma: w:200 h:21 gap:16 */}
+          <nav
+            className="flex items-center"
+            style={{ gap: "clamp(10px, 1.11vw, 16px)", marginBottom: "20px" }}
+          >
+            {[
+              { label: "Projects", href: "/project-list" },
+              { label: "Service", href: "/services" },
+              { label: "Gallery", href: "/gallery" },
+            ].map(({ label, href }) => (
+              <Link
+                key={label}
+                href={href}
+                className="hover:opacity-70 transition-opacity"
+                style={{
+                  fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                  fontWeight: 400,
+                  fontSize: "clamp(13px, 1.11vw, 16px)",
+                  lineHeight: "100%",
+                  letterSpacing: "0",
+                  textAlign: "center",
+                  textTransform: "capitalize",
+                  color: "#000000",
+                  whiteSpace: "nowrap",
+
+                }}
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Tagline heading — Figma: w:346 h:58, Roundo 500 24px, right-aligned */}
+          <p
+            style={{
+              width: "clamp(220px, 24.03vw, 346px)",
+              margin: 0,
+              fontFamily: "var(--font-roundo), 'Roundo', var(--font-outfit), system-ui, sans-serif",
+              fontWeight: 500,
+              fontSize: "clamp(18px, 1.667vw, 24px)",
+              lineHeight: "100%",
+              letterSpacing: "0",
+              textAlign: "right",
+              textTransform: "capitalize",
+              color: "#000000",
+              paddingTop:'20px',
+            }}
+          >
+            Premium residence for those who seek refined living.
+          </p>
+        </div>
+
+        {/* ══════════════════════════════════════════════════════════════════════
+            BOTTOM INFO ROW — "Scroll down" hint (left) + live percentage (right)
+            Figma canvas: 1440 × 900px
+            Row: w:1375  h:41  top:694  left:32  justify-content:space-between
+            Converted → top: 694/900 = 77.11vh   left/right: 32/1440 ≈ 2.22vw
+            Figma calls for #00000080 (black/50%) text, but early in the
+            animation this row sits over the still-navy intro background
+            (before the curtain has risen this far down), and later over the
+            photo — black text isn't reliably readable against either, so it
+            keeps the same translucent-white treatment the rest of the hero
+            uses over dark/photo backdrops. */}
+        <div
+          className="hidden sm:flex absolute items-center justify-between pointer-events-none"
+          style={{
+            top: "clamp(340px, 95.11vh, 994px)",
+            left: "clamp(16px, 2.22vw, 32px)",
+            right: "clamp(16px, 2.29vw, 33px)",
+            opacity: infoRowT * counterOpacity,
+            transform: `translateY(${20 * (1 - infoRowT)}px)`,
+          }}
+        >
+          {/* "Scroll down" + chevron — Figma: w:132 h:41 gap:4 padding:10 */}
+          <div
+            className="flex items-center"
+            style={{ gap: "clamp(3px, 0.28vw, 4px)", padding: "clamp(6px, 0.69vw, 10px)" }}
+          >
+            <span
+              className="tabular-nums"
+              style={{
+                fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                fontWeight: 500,
+                fontSize: "clamp(13px, 1.11vw, 16px)",
+                lineHeight: "100%",
+                letterSpacing: "0",
+                textAlign: "center",
+                color: "#00000080",
+              }}
+            >
+              Scroll down
+            </span>
+            <svg
+              viewBox="0 0 19 8.3125"
+              fill="none"
+              style={{ width: "clamp(14px, 1.32vw, 19px)", height: "clamp(6px, 0.577vw, 8.3125px)" }}
+            >
+              <path d="M1 1L9.5 7.3125L18 1" stroke="#00000080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+
+          {/* Live percentage — Figma: w:52 h:26 Geist 500 20.29px */}
+          <span
+            className="tabular-nums"
+            style={{
+              fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+              fontWeight: 500,
+              fontSize: "clamp(16px, 1.409vw, 20.29px)",
+              lineHeight: "100%",
+              letterSpacing: "0",
+              textAlign: "center",
+              color: "#00000080",
+            }}
+          >
+            {pct}%
+          </span>
+        </div>
       </div>
 
       {/* ── Scrolling Content ─────────────────────────────────────────────── */}
@@ -1090,28 +1247,6 @@ export default function HeroSection({ hero }) {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* ══ Percentage counter ══ */}
-        <div
-          className="absolute pointer-events-none"
-          style={{
-            // 85vh / 6vw are already viewport-relative — no change needed
-            top: "85vh",
-            right: "6vw",
-            opacity: counterOpacity,
-          }}
-        >
-          <span
-            className="font-outfit font-light text-white/90 leading-none tabular-nums"
-            style={{
-              // Already uses clamp — preserved as-is
-              fontSize: "clamp(34px, 3.61vw, 80px)",
-              letterSpacing: "-0.06vw",
-            }}
-          >
-            {pct}%
-          </span>
         </div>
 
       </section>
