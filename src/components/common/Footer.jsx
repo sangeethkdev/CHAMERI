@@ -817,7 +817,7 @@ const Footer = () => {
             className="footer-copyright font-sans font-normal text-[#FFFFFF] hover:text-[#EDE7DE]/80 transition-colors"
             style={{ fontSize: 'clamp(12px, 0.83vw, 16px)' }}
           >
-            © Chameri Builders pvt limited
+            © Chameri Builders & Developers
           </a>
         </div>
 

@@ -172,6 +172,12 @@ export default function NewNavbar({ opacity = 1, showLogo = true, darkLogo = fal
               height:         'clamp(30px, 3.194vw, 46px)',
               position:       'relative',
               zIndex:         2,
+              // This row is full-width (flex `stretch` from the column
+              // parent), but only the menu icon and Contact Us button should
+              // be clickable — the empty middle is otherwise a transparent
+              // box sitting in front of (higher z-index than) the logo link
+              // below it, silently swallowing clicks aimed at the logo.
+              pointerEvents:  'none',
             }}
           >
             {/*
@@ -190,6 +196,7 @@ export default function NewNavbar({ opacity = 1, showLogo = true, darkLogo = fal
                 justifyContent: 'center',
                 cursor:         'pointer',
                 flexShrink:     0,
+                pointerEvents:  'auto',
               }}
             >
               <svg
@@ -254,6 +261,7 @@ export default function NewNavbar({ opacity = 1, showLogo = true, darkLogo = fal
                 display:'flex',
                 alignItems: 'center',
                 gap:    'clamp(6px, 0.694vw, 10px)',
+                pointerEvents: 'auto',
               }}
             >
               {/* Button — Figma: w:147 h:46 radius:12px
