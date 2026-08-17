@@ -591,7 +591,7 @@ export default function ContactPageForm() {
                * letterSpacing: -3.05px → -0.212vw (negative clamp)
                */}
               <div className="flex flex-col">
-                {['Connect with us', 'To build the dream.'].map((text, i) => (
+                {['Connect with us', 'to build the dream.'].map((text, i) => (
                   <h2
                     key={i}
                     className="font-roundo font-medium text-[#1A1A1A] text-left"
@@ -697,7 +697,7 @@ export default function ContactPageForm() {
                         letterSpacing: '-1px',
                       }}
                     >
-                      Drop Us A Email At:
+                      Drop us an Email at:
                     </span>
                   </div>
                   <a

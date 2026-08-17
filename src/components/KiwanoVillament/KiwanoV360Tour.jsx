@@ -3,6 +3,17 @@
 import { useRef, useState, useCallback, useEffect } from "react";
 import Image from "next/image";
 
+/* The CMS `media` field for this section has held either a static photo or an
+   actual video (Cloudinary's own /video/upload/ path, or a video file
+   extension) — next/image's optimizer only understands image formats, so
+   piping a video through it silently fails (a black box with the broken
+   alt text showing through). Detect it and render a plain <video> instead,
+   which accepts the same object-fit/object-position pan styling as <img>. */
+function isVideoSrc(src) {
+  if (!src) return false;
+  return /\/video\/upload\//.test(src) || /\.(mp4|webm|mov|m4v)(\?|$)/i.test(src);
+}
+
 /**
  * ─────────────────────────────────────────────────────────────────────────────
  * Kiwano360Tour — 360° photo + video section
@@ -98,25 +109,46 @@ function Viewer360Inner({
         background:   "#1a1a1a",
       }}
     >
-      {/* ── STATIC PHOTO (pans via objectPosition) ───────────────── */}
-      <Image
-        src={src}
-        alt="Explore Every Angle Of Luxury Living — Kiwano Villa"
-        fill
-        priority
-        sizes="(max-width: 768px) 100vw, 1285px"
-        style={{
-          objectFit:      "cover",
-          objectPosition: `${imgPosX}% 50%`,
-          /* No easing mid-drag — the 0.25s ease would lag behind the pointer
-             and break the sense of grabbing the scene. It stays on for the
-             arrow buttons, whose stepped panning benefits from smoothing. */
-          transition:     dragging ? "none" : "object-position 0.25s ease-out",
-          userSelect:     "none",
-          pointerEvents:  "none",
-        }}
-        draggable={false}
-      />
+      {/* ── PHOTO or VIDEO (pans via objectPosition either way) ───── */}
+      {isVideoSrc(src) ? (
+        <video
+          src={src}
+          autoPlay
+          muted
+          loop
+          playsInline
+          style={{
+            position:       "absolute",
+            inset:          0,
+            width:          "100%",
+            height:         "100%",
+            objectFit:      "cover",
+            objectPosition: `${imgPosX}% 50%`,
+            transition:     dragging ? "none" : "object-position 0.25s ease-out",
+            userSelect:     "none",
+            pointerEvents:  "none",
+          }}
+        />
+      ) : (
+        <Image
+          src={src}
+          alt="Explore Every Angle Of Luxury Living — Kiwano Villa"
+          fill
+          priority
+          sizes="(max-width: 768px) 100vw, 1285px"
+          style={{
+            objectFit:      "cover",
+            objectPosition: `${imgPosX}% 50%`,
+            /* No easing mid-drag — the 0.25s ease would lag behind the pointer
+               and break the sense of grabbing the scene. It stays on for the
+               arrow buttons, whose stepped panning benefits from smoothing. */
+            transition:     dragging ? "none" : "object-position 0.25s ease-out",
+            userSelect:     "none",
+            pointerEvents:  "none",
+          }}
+          draggable={false}
+        />
+      )}
 
       {/* Subtle bottom vignette */}
       <div

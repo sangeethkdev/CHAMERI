@@ -1,5 +1,6 @@
 import { Geist, Outfit, Instrument_Sans } from "next/font/google";
 import localFont from "next/font/local";
+import FloatingContactButtons from "@/components/common/FloatingContactButtons";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -47,7 +48,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${geistSans.variable} ${outfit.variable} ${instrumentSans.variable} ${roundo.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <FloatingContactButtons />
+      </body>
     </html>
   );
 }

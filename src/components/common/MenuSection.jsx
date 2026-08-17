@@ -50,7 +50,7 @@ const NAV_LINKS = [
   { label: 'Projects', href: '/project-list' },
   { label: 'Services',      href: '/services' },
   { label: 'Gallery',          href: '/gallery' },
-  { label: 'Testimonial',      href: '/testimonial' },
+  { label: 'Testimonials',      href: '/testimonial' },
   { label: 'Contact Us',       href: '/contact' },
 ];
 

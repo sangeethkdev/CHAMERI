@@ -238,7 +238,7 @@ const ProjectContactUs = () => {
                     letterSpacing: 'clamp(-0.5px, -0.07vw, -1px)',
                   }}
                 >
-                  Drop us a Email at
+                  Drop us an Email at
                 </span>
               </div>
               <a

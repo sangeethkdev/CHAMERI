@@ -129,7 +129,7 @@ export default function ServicesHero({ hero }) {
           top: "42.144%",
           left: "50%",
           transform: "translateX(-50%)",
-          width: "clamp(300px, 42.986vw, 619px)",
+          width: "clamp(300px, 43.986vw, 649px)",
           textAlign: "center",
         }}
       >

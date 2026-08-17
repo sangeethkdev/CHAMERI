@@ -137,17 +137,15 @@ const SPECS = [
 
 // ─── Zoomable / pannable site-plan image ──────────────────────────────────────
 //
-// The source PNG (1901×2110) is portrait, with the dark access road running
-// along its BOTTOM edge. Figma shows it rotated +90deg (clockwise) so the road
-// ends up vertical along the LEFT edge and the plan reads as landscape.
-// Rotating the other way (-90deg) mirrors the layout — road on the right.
+// The current asset (Masterplan  copy.jpg.jpg, 15360×10108) is already
+// landscape, so the wrapper just fills the container 1:1 — no rotation. (An
+// earlier, portrait-oriented placeholder needed a +90deg correction here;
+// that logic was left in after the asset was swapped for the real landscape
+// render, which is what was rotating the correctly-oriented image sideways
+// and leaving the dead white margins.)
 //
-// Key geometry trick:
-//   Container is W × H. After rotating the inner wrapper 90deg its visual
-//   width = wrapper's HEIGHT and visual height = wrapper's WIDTH.
-//   So set wrapper to (H × W) and it will fill the container exactly at scale=1.
-//   We measure the live container size via ResizeObserver so this stays correct
-//   at every responsive breakpoint.
+// We still measure the live container size via ResizeObserver so pan/zoom
+// clamping stays correct at every responsive breakpoint.
 
 const MIN_SCALE = 1;
 const MAX_SCALE = 5;
@@ -277,9 +275,10 @@ function ZoomableSitePlan() {
   const zoomIn  = () => setScale((s) => Math.min(MAX_SCALE, s * ZOOM_STEP));
   const zoomOut = () => setScale((s) => Math.max(MIN_SCALE, s / ZOOM_STEP));
 
-  // wrapper is H×W so after rotate(90deg) it fills W×H exactly
-  const wW = cSize.h;
-  const wH = cSize.w;
+  // No rotation applied (the current asset is already landscape), so the
+  // wrapper just matches the container 1:1.
+  const wW = cSize.w;
+  const wH = cSize.h;
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
@@ -303,7 +302,7 @@ function ZoomableSitePlan() {
           touchAction: "none",
         }}
       >
-        {/* Image wrapper — dimensions swapped so rotation fills container */}
+        {/* Image wrapper — fills the container 1:1, no rotation needed */}
         <div
           style={{
             position: "absolute",
@@ -311,14 +310,14 @@ function ZoomableSitePlan() {
             left: "50%",
             width: `${wW}px`,
             height: `${wH}px`,
-            transform: `translate(-50%, -50%) translate(${pan.x}px, ${pan.y}px) scale(${scale}) rotate(90deg)`,
+            transform: `translate(-50%, -50%) translate(${pan.x}px, ${pan.y}px) scale(${scale})`,
             transformOrigin: "center",
             willChange: "transform",
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/icons/db98af1a8b2a5f0c0de07f9eff4b0564860775be.png"
+            src="/images/Masterplan  copy.jpg.jpg"
             alt="Kiwano site plan"
             draggable={false}
             style={{

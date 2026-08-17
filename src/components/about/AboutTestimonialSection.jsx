@@ -444,7 +444,7 @@ export default function AboutTestimonialSection({ testimonialSection }) {
             }}
           >
             <div className="flex flex-col transition-transform duration-500 ease-in-out group-hover:-translate-y-1/2">
-              {['Learn More', 'Learn More'].map((label, i) => (
+              {['View More', 'View More'].map((label, i) => (
                 <span
                   key={i}
                   style={{

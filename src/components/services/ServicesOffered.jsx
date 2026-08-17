@@ -393,7 +393,10 @@ export default function ServicesOffered({ cardsSection }) {
         <div
           style={{
             width: "100%",
-            height: "clamp(380px, 40.569vw, 601px)",
+            // Every card shares this one fixed height, which is what keeps
+            // titles/descriptions/images lined up at the same row position
+            // across all cards regardless of how long each one's text is.
+            height: "clamp(402px, 40.569vw, 632px)",
             position: "relative",
             overflow: "hidden",
           }}
@@ -619,7 +622,7 @@ function ServiceCard({ service }) {
     <div
       style={{
         width: "clamp(260px, 29.861vw, 430px)",
-        height: "clamp(360px, 37.569vw, 501px)",
+        height: "clamp(382px, 37.569vw, 532px)",
         flexShrink: 0,
         display: "flex",
         flexDirection: "column",
@@ -685,8 +688,8 @@ function ServiceCard({ service }) {
       </div>
 
       {/* Description + Learn More — indented to the title's left edge. Fixed
-         height (4-line description) so short or long descriptions never move
-         the image below */}
+         height (5-line description — enough for the current longest live
+         copy) so every card lines up its image at the same row position. */}
       <div
         style={{
           display: "flex",
@@ -694,7 +697,7 @@ function ServiceCard({ service }) {
           gap: "1px",
           paddingLeft: TITLE_INDENT,
           paddingRight: INNER_PAD,
-          height: "clamp(89px, 8.438vw, 121.5px)",
+          height: "clamp(111px, 10.548vw, 152px)",
           flexShrink: 0,
         }}
       >
@@ -707,7 +710,7 @@ function ServiceCard({ service }) {
             color: "#000000CC",
             margin: 0,
             display: "-webkit-box",
-            WebkitLineClamp: 4,
+            WebkitLineClamp: 5,
             WebkitBoxOrient: "vertical",
             overflow: "hidden",
           }}
