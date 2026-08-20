@@ -435,7 +435,7 @@ export default function MenuSection({ open = false, onClose }) {
           }}
         >
           <Image
-            src="/dummyimages/4b59d85480acc2dd4abac9efea1543bed7b49afa (1).png"
+            src="/images/Dining%20(1)%201%20(1).png"
             alt="Chameri interior"
             fill
             sizes="clamp(50vw, 25.694vw, 370px)"

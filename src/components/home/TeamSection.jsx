@@ -159,10 +159,13 @@ const ContactCard = ({ heading }) => (
     className="relative overflow-hidden flex-shrink-0 bg-[#334454] w-full aspect-[379/498]"
     style={{ borderRadius: 'clamp(8px, 0.79vw, 15.2px)' }}
   >
-    {/* Decorative blobs */}
-    <div className="absolute -top-12 -right-12 w-[240px] h-[240px] rounded-full bg-[#4a6070]/40" />
-    <div className="absolute top-24 -right-20 w-[200px] h-[200px] rounded-full bg-[#6B859E]/30" />
-    <div className="absolute -bottom-10 left-[30%] w-[160px] h-[160px] rounded-full bg-[#4a6070]/35" />
+    {/* Background image */}
+    <Image
+      src="/images/Group%20(5).png"
+      alt=""
+      fill
+      className="object-cover"
+    />
 
     {/* Heading */}
     <div

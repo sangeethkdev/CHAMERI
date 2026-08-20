@@ -162,60 +162,64 @@ function Viewer360Inner({
       />
 
       {/* ── DRAG AROUND BADGE ───────────────────────────────────────
+          Only makes sense over a static photo — panning/clicking a video
+          doesn't do anything, so it's hidden whenever the media is a video.
           Slides with the pointer while dragging (badgeX), then eases back to
           centre on release. No transition mid-drag so it tracks 1:1. */}
-      <div
-        data-drag-badge
-        style={{
-          position:       "absolute",
-          top:            "50%",
-          left:           "50%",
-          transform:      `translate(-50%, -50%) translateX(${badgeX}px)`,
-          transition:     dragging ? "none" : "transform 420ms cubic-bezier(0.22, 1, 0.36, 1)",
-          zIndex:         2,
-          display:        "flex",
-          alignItems:     "center",
-          gap:            "10px",
-          padding:        "4px 6px",
-          borderRadius:   "8px",
-          background:     "rgba(237, 231, 222, 0.88)",
-          backdropFilter: "blur(10px)",
-          boxShadow:      "0 4px 20px rgba(0,0,0,0.22)",
-          whiteSpace:     "nowrap",
-          userSelect:     "none",
-        }}
-      >
-        <ArrowSquare direction="left" pressed={pressedL} onClick={onPressLeft} />
-
-        <button
-          onPointerDown={onDragPointerDown}
-          onPointerMove={onDragPointerMove}
-          onPointerUp={onDragPointerUp}
-          onPointerCancel={onDragPointerCancel}
-          aria-label="Drag to look around, or click to watch the 360° villa tour"
-          title="Drag to look around · click to watch the full 360° tour"
+      {!isVideoSrc(src) && (
+        <div
+          data-drag-badge
           style={{
-            background:    "transparent",
-            border:        "none",
-            cursor:        dragging ? "grabbing" : "grab",
-            /* Claim horizontal gestures so a sideways drag pans the scene
-               instead of the browser treating it as a page scroll. */
-            touchAction:   "none",
-            padding:       "0 2px",
-            fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
-            fontWeight:    500,
-            fontSize:      "14px",
-            lineHeight:    "1",
-            letterSpacing: "0",
-            textTransform: "capitalize",
-            color:         "#334454",
+            position:       "absolute",
+            top:            "50%",
+            left:           "50%",
+            transform:      `translate(-50%, -50%) translateX(${badgeX}px)`,
+            transition:     dragging ? "none" : "transform 420ms cubic-bezier(0.22, 1, 0.36, 1)",
+            zIndex:         2,
+            display:        "flex",
+            alignItems:     "center",
+            gap:            "10px",
+            padding:        "4px 6px",
+            borderRadius:   "8px",
+            background:     "rgba(237, 231, 222, 0.88)",
+            backdropFilter: "blur(10px)",
+            boxShadow:      "0 4px 20px rgba(0,0,0,0.22)",
+            whiteSpace:     "nowrap",
+            userSelect:     "none",
           }}
         >
-          Drag Around
-        </button>
+          <ArrowSquare direction="left" pressed={pressedL} onClick={onPressLeft} />
 
-        <ArrowSquare direction="right" pressed={pressedR} onClick={onPressRight} />
-      </div>
+          <button
+            onPointerDown={onDragPointerDown}
+            onPointerMove={onDragPointerMove}
+            onPointerUp={onDragPointerUp}
+            onPointerCancel={onDragPointerCancel}
+            aria-label="Drag to look around, or click to watch the 360° villa tour"
+            title="Drag to look around · click to watch the full 360° tour"
+            style={{
+              background:    "transparent",
+              border:        "none",
+              cursor:        dragging ? "grabbing" : "grab",
+              /* Claim horizontal gestures so a sideways drag pans the scene
+                 instead of the browser treating it as a page scroll. */
+              touchAction:   "none",
+              padding:       "0 2px",
+              fontFamily:    "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+              fontWeight:    500,
+              fontSize:      "14px",
+              lineHeight:    "1",
+              letterSpacing: "0",
+              textTransform: "capitalize",
+              color:         "#334454",
+            }}
+          >
+            Drag Around
+          </button>
+
+          <ArrowSquare direction="right" pressed={pressedR} onClick={onPressRight} />
+        </div>
+      )}
     </div>
   );
 }

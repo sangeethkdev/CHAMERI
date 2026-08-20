@@ -87,7 +87,7 @@ export default function KiwanoVBrandStory({ brandStory }) {
               {/* Title — Roundo 500 46.48px / 46.48px ls:-0.7px */}
               <h2
                 style={{
-                  width: "clamp(240px, 25.66vw, 429.49px)",
+                  width: "clamp(240px, 28.66vw, 529.49px)",
                   fontFamily: "var(--font-roundo), 'Roundo', system-ui, sans-serif",
                   fontWeight: 500,
                   fontStyle: "normal",
@@ -210,6 +210,27 @@ export default function KiwanoVBrandStory({ brandStory }) {
                       />
                     </button>
                   )}
+
+                  {/* Date badge — Figma: w:96 h:20 top:542.98 left:12.51 (of the 1225.037×575.9502 video) */}
+                  <span
+                    style={{
+                      position: "absolute",
+                      left: "1.02%",
+                      bottom: "2.25%",
+                      width: "clamp(60px, 6.667vw, 96px)",
+                      fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                      fontWeight: 400,
+                      fontSize: "clamp(14px, 1.389vw, 20px)",
+                      lineHeight: "19.6px",
+                      letterSpacing: "-0.06px",
+                      textAlign: "center",
+                      textTransform: "uppercase",
+                      color: "#FFFFFF",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    {brandStory?.date || "May 2026"}
+                  </span>
                 </div>
 
                 {/* THUMB STRIP — Figma: w:1225.037 h:195.1736 justify-content:space-between */}

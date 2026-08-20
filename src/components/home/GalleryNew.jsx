@@ -86,7 +86,7 @@ const ViewProjectBtn = ({ position }) => (
 
     {/* Left arrow box */}
     <div
-      className="absolute z-20 overflow-hidden bg-[#EDE7DE]"
+      className="absolute z-20 overflow-hidden bg-[#334454]"
       style={{
         top:          clamp(4, 5.5),
         left:         clamp(5, 6.8),
@@ -96,12 +96,12 @@ const ViewProjectBtn = ({ position }) => (
       }}
     >
       <div className="absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-in-out group-hover/btn:-translate-x-full">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#6B859E" strokeWidth="2.5" className="rotate-180">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#EDE7DE" strokeWidth="2.5" className="rotate-180">
           <path d="M5 12h14M12 5l7 7-7 7" />
         </svg>
       </div>
       <div className="absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-in-out translate-x-full group-hover/btn:translate-x-0">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#6B859E" strokeWidth="2.5" className="rotate-180">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#EDE7DE" strokeWidth="2.5" className="rotate-180">
           <path d="M5 12h14M12 5l7 7-7 7" />
         </svg>
       </div>

@@ -167,7 +167,7 @@ const ContactSection = () => {
               letterSpacing: '-0.32px',
             }}
           >
-            Contact Us
+            Get in touch
           </span>
             </div>
 
@@ -176,7 +176,7 @@ const ContactSection = () => {
               className="lg:hidden font-roundo font-medium text-[#000000] m-0"
               style={{ fontSize: '32px', lineHeight: '36.6px', letterSpacing: '-0.73px' }}
             >
-              Contact Us 
+              Get in touch
             </h2>
 
             {/* Description */}
@@ -386,7 +386,7 @@ every step of the way.
                   }}
                 >
                   <div className="flex flex-col transition-transform duration-500 ease-in-out group-hover:-translate-y-1/2">
-                    {['Contact Us', 'Contact Us'].map((label, i) => (
+                    {['Enquire now', 'Enquire now'].map((label, i) => (
                       <span
                         key={i}
                         className="font-sans font-medium text-[#EDE7DE] whitespace-nowrap flex items-center"

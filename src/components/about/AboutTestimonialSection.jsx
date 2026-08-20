@@ -174,7 +174,7 @@ export default function AboutTestimonialSection({ testimonialSection }) {
               letterSpacing: '-0.32px',
             }}
           >
-            testimonial
+            Testimonials
           </span>
           </div>
 

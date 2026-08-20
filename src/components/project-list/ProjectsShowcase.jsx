@@ -2,6 +2,7 @@
 
 import { useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useScroll, useTransform, motion } from 'framer-motion';
 import Section from './Section';
 
@@ -83,8 +84,10 @@ function MobileProjectCard({ project }) {
         boxSizing: 'border-box',
       }}
     >
-      <div
-        className="relative w-full overflow-hidden"
+      <Link
+        href={project.href}
+        aria-label={project.title || project.tag}
+        className="relative w-full overflow-hidden no-underline"
         style={{
           maxWidth: '360px',
           aspectRatio: '360 / 723',
@@ -144,9 +147,9 @@ function MobileProjectCard({ project }) {
                   {project.description}
                 </p>
 
-                {/* Label first, divider under it — same order as the desktop
-                    card in Text.jsx, where the rule underlines the link. */}
-                <a href={project.href} className="flex flex-col no-underline" style={{ gap: '4px', width: '92px' }}>
+                {/* Visual affordance only — the whole card is now the
+                    actual link, so this can't be a nested <a>. */}
+                <div className="flex flex-col" style={{ gap: '4px', width: '92px' }}>
                   <span
                     className="font-sans uppercase whitespace-nowrap flex items-center"
                     style={{ gap: '6px', fontWeight: 600, fontSize: '10.5px', lineHeight: '11.45px', color: '#31444C' }}
@@ -155,7 +158,7 @@ function MobileProjectCard({ project }) {
                     <Image src="/icons/SVG.svg" alt="" width={8} height={8} style={{ width: '7.63px', height: 'auto' }} />
                   </span>
                   <div style={{ width: '100%', height: '1px', background: '#31444C' }} />
-                </a>
+                </div>
               </div>
             </div>
           </div>
@@ -165,7 +168,7 @@ function MobileProjectCard({ project }) {
           className="absolute inset-0 pointer-events-none"
           style={{ zIndex: 1, background: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.05) 100%)' }}
         />
-      </div>
+      </Link>
     </div>
   );
 }

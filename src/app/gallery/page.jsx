@@ -22,7 +22,7 @@ export default async function GalleryPage() {
     <main className="min-h-screen relative bg-[#EDE7DE]">
       <NewNavbar />
       <GalleryHero heroSection={gallery?.heroSection} />
-      <GalleryGrid galleryImages={gallery?.galleryImages} />
+      <GalleryGrid galleryImages={gallery?.galleryImages} galleryEvents={gallery?.galleryEvents} />
       <GalleryContactUs />
       <Footer />
     </main>

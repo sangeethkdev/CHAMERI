@@ -21,7 +21,9 @@ const AMENITIES = [
   { id: 1,  name: "Kannur international airport",       time: "45 Minutes Away", icon: "airport",  query: "Kannur International Airport, Mattannur, Kerala" },
   { id: 2,  name: "Aster MIMS Kannur",                  time: "25 Minutes Away", icon: "hospital", query: "Aster MIMS Kannur, Kerala" },
   { id: 3,  name: "Chinmaya Vidyalaya",                 time: "25 Minutes Away", icon: "school",   query: "Chinmaya Vidyalaya, Thalassery, Kerala" },
-  { id: 4,  name: "Ammayum Kunjum Hospital",            time: "8 Minutes Away", icon: "hospital", query: "Ammayum Kunjum Hospital Thalassery" },
+  // Exact pin from the shared Google Maps link (maps.app.goo.gl/wEMfR2CfsVsiSz7f8)
+  // — the place-name search didn't land on the right spot.
+  { id: 4,  name: "Ammayum Kunjum Hospital",            time: "8 Minutes Away", icon: "hospital", query: "11.754679,75.510274" },
   { id: 5,  name: "Railway Station",                    time: "10 Minutes Away", icon: "train",    query: "TLY Thalassery Railway Station" },
   { id: 6,  name: "Indira Gandhi Cooperative Hospital", time: "7 Minutes Away",  icon: "hospital", query: "Indira Gandhi Co-operative Hospital, Thalassery, Kerala" },
   { id: 7,  name: "Downtown Mall",                      time: "12 Minutes Away", icon: "cart",     query: "Downtown Mall, Thalassery, Kerala" },

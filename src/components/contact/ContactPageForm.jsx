@@ -548,7 +548,7 @@ export default function ContactPageForm() {
               <div
                 className="flex items-center"
                 style={{
-                  width:         'clamp(90px, 8.139vw, 120.2px)',
+                  width:         'clamp(90px, 9.139vw, 130.2px)',
                   height:        'clamp(24px, 2.139vw, 30.8px)',
                   gap:           'clamp(4px, 0.500vw, 7.2px)',
                   paddingTop:    'clamp(3px, 0.375vw, 5.4px)',
@@ -578,9 +578,10 @@ export default function ContactPageForm() {
               fontSize:      'clamp(12px, 1.125vw, 16.2px)',
               lineHeight:    'clamp(14px, 1.35vw, 19.44px)',
               letterSpacing: '-0.32px',
+              // width:         'clamp(90px, 8.139vw, 120.2px)',
             }}
           >
-            CONTACT US
+            Get in touch
           </span>
               </div>
 
@@ -922,7 +923,7 @@ export default function ContactPageForm() {
                   }}
                 >
                   <div className="flex flex-col transition-transform duration-500 ease-in-out group-hover:-translate-y-1/2">
-                    {['Contact us', 'Contact us'].map((label, i) => (
+                    {['Enquire now', 'Enquire now'].map((label, i) => (
                       <span
                         key={i}
                         className="font-sans font-medium text-[#EDE7DE] whitespace-nowrap flex items-center"

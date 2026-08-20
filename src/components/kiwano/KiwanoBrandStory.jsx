@@ -87,7 +87,7 @@ export default function KiwanoBrandStory({ brandStory }) {
               {/* Title — Roundo 500 46.48px / 46.48px ls:-0.7px */}
               <h2
                 style={{
-                  width: "clamp(240px, 25.66vw, 429.49px)",
+                  width: "clamp(340px, 28.66vw, 529.49px)",
                   fontFamily: "var(--font-roundo), 'Roundo', system-ui, sans-serif",
                   fontWeight: 500,
                   fontStyle: "normal",

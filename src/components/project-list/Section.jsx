@@ -2,6 +2,7 @@
 
 import { useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useScroll, useTransform, motion } from 'framer-motion';
 import Text from './Text';
 
@@ -42,8 +43,10 @@ export default function Section({ project }) {
           boxSizing: 'border-box',
         }}
       >
-        <div
-          className="relative w-full h-full flex items-center justify-center overflow-hidden"
+        <Link
+          href={project.href}
+          aria-label={project.title || project.tag}
+          className="relative w-full h-full flex items-center justify-center overflow-hidden no-underline"
           style={{
             background: '#101010',
             borderRadius: 'clamp(2px, 0.265vw, 3.82px)',
@@ -78,7 +81,7 @@ export default function Section({ project }) {
               />
             </motion.div>
           </div>
-        </div>
+        </Link>
       </div>
     </div>
   );

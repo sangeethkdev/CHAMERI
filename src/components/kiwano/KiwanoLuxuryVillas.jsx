@@ -439,7 +439,7 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/icons/Kiwano-Logo-Color-2-Copy-e1772083713999-1024x219.png.svg"
+              src="/images/Kiwano%20villas&villaments.svg"
               alt="Kiwano Luxury Villas"
               style={{ width: "100%", height: "auto", display: "block" }}
             />
@@ -597,7 +597,7 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
                   color: "#041D35",
                 }}
               >
-                Contact Us
+                Download Master Plan
               </span>
 
               <svg
@@ -652,7 +652,7 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
           <div style={{ width: "clamp(160px, 29.17vw, 460px)", flexShrink: 0 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/icons/Kiwano-Logo-Color-2-Copy-e1772083713999-1024x219.png.svg"
+              src="/images/Kiwano%20villas&villaments.svg"
               alt="Kiwano Luxury Villas"
               style={{ width: "100%", height: "auto", display: "block" }}
             />
@@ -750,7 +750,7 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
                   color: "#041D35",
                 }}
               >
-                Contact Us
+                Download Master Plan
               </span>
 
               <svg

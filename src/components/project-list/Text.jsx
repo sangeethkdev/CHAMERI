@@ -105,10 +105,11 @@ export default function Text({ project }) {
                 {project.description}
               </p>
 
+              {/* Visual affordance only — the whole card (Section.jsx) is
+                  now the actual link, so this can't be a nested <a>. */}
               <div className="flex flex-col" style={{ gap: '4px', width: 'clamp(64px, 6.389vw, 92px)' }}>
-                <a
-                  href={project.href}
-                  className="flex items-center justify-center no-underline"
+                <span
+                  className="flex items-center justify-center"
                   style={{ gap: '6px' }}
                 >
                   <span
@@ -129,7 +130,7 @@ export default function Text({ project }) {
                     height={8}
                     style={{ width: 'clamp(6px, 0.53vw, 7.63px)', height: 'auto' }}
                   />
-                </a>
+                </span>
                 <div style={{ width: '95%', height: '1px', background: '#31444C' }} />
               </div>
             </div>
