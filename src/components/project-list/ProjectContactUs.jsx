@@ -156,7 +156,8 @@ const ProjectContactUs = () => {
                 className="font-sans font-normal uppercase text-[#000000] tracking-widest"
                 style={{ fontSize: 'clamp(10px, 1vw, 18px)' }}
               >
-                Contact Us
+
+                Get in touch
               </span>
             </div>
 
@@ -165,7 +166,7 @@ const ProjectContactUs = () => {
               className="lg:hidden font-roundo font-medium text-[#000000] m-0"
               style={{ fontSize: '32px', lineHeight: '36.6px', letterSpacing: '-0.73px' }}
             >
-              Contact us
+              Get in touch
             </h2>
 
             {/* Description */}
@@ -373,7 +374,7 @@ const ProjectContactUs = () => {
                   }}
                 >
                   <div className="flex flex-col transition-transform duration-500 ease-in-out group-hover:-translate-y-1/2">
-                    {['Contact Us', 'Contact Us'].map((label, i) => (
+                    {['Enquire now', 'Enquire now'].map((label, i) => (
                       <span
                         key={i}
                         className="font-sans font-medium text-[#EDE7DE] whitespace-nowrap flex items-center"

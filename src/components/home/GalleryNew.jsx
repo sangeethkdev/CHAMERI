@@ -38,6 +38,14 @@ const STATIC_VILLAS = [
 const clamp = (min, design, max = design) =>
   `clamp(${min}px, ${((design / 1440) * 100).toFixed(4)}vw, ${max}px)`;
 
+/** Maps an admin-selected project key to its live project page, falling
+ * back to the general gallery when no project was chosen. */
+const projectHref = (project) => {
+  if (project === 'kiwano') return '/kiwano';
+  if (project === 'kiwano-villament') return '/kiwano-villament';
+  return '/gallery';
+};
+
 /**
  * Mobile gallery layout — Figma frame 390×1509.
  * top/left/width converted to percentages of that frame so the whole
@@ -64,9 +72,10 @@ const MOBILE_CARDS = [
   { key: 'v5', villaIndex: 4, top: 74.199, left: 21.431, width: 72.983, ratio: 284.635 / 258.338 },
 ];
 
+/* Purely decorative — the whole card (see ProjectCard below) is the actual
+ * link, so this can't be an <a>/<Link> itself (anchors can't nest). */
 const ViewProjectBtn = ({ position }) => (
-  <Link
-    href="/gallery"
+  <div
     className="group/btn absolute z-50 flex items-center justify-center overflow-hidden shadow-sm opacity-0 invisible transition-[opacity,visibility,background-color] duration-500 bg-[#6B859E] group-hover:bg-white group-hover:opacity-100 group-hover:visible"
     style={{
       left:            position.x,
@@ -129,7 +138,7 @@ const ViewProjectBtn = ({ position }) => (
         </svg>
       </div>
     </div>
-  </Link>
+  </div>
 );
 
 /** Reusable caption row under each project image */
@@ -157,9 +166,10 @@ const ProjectCard = ({ villa, height }) => {
   const resetCursor = () => setBtnPos({ x: 0, y: '50%' });
 
   return (
-    <div
+    <Link
+      href={projectHref(villa.project)}
       ref={containerRef}
-      className="relative group overflow-hidden"
+      className="relative group overflow-hidden block"
       style={{ height }}
       onMouseEnter={trackCursor}
       onMouseMove={trackCursor}
@@ -171,7 +181,7 @@ const ProjectCard = ({ villa, height }) => {
         <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
       <ViewProjectBtn position={btnPos} />
-    </div>
+    </Link>
   );
 };
 
@@ -188,6 +198,7 @@ const GalleryNew = ({ gallery }) => {
             year: c.date || '',
             img: c.images?.[0] || STATIC_VILLAS[i]?.img || '/dummyimages/Frame 2121454280.png',
             alt: c.images?.[1] || STATIC_VILLAS[i]?.alt || '/dummyimages/Container.png',
+            project: c.project || '',
             side: i % 2 === 0 ? 'left' : 'right',
           };
         })
@@ -496,7 +507,7 @@ const GalleryNew = ({ gallery }) => {
                 className="absolute"
                 style={{ top: `${card.top}%`, left: `${card.left}%`, width: `${card.width}%` }}
               >
-                <Link href="/gallery" className="relative block w-full overflow-hidden" style={{ aspectRatio: card.ratio }}>
+                <Link href={projectHref(villa.project)} className="relative block w-full overflow-hidden" style={{ aspectRatio: card.ratio }}>
                   <Image src={villa.img} alt={villa.name} fill className="object-cover" />
                 </Link>
                 <Caption villa={villa} gap={3} />
