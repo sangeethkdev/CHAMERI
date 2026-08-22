@@ -874,7 +874,7 @@ export default function HeroSection({ hero }) {
           {/* Tagline heading — Figma: w:346 h:58, Roundo 500 24px, right-aligned */}
           <p
             style={{
-              width: "clamp(220px, 24.03vw, 346px)",
+              width: "clamp(220px, 24.43vw, 386px)",
               margin: 0,
               fontFamily: "var(--font-roundo), 'Roundo', var(--font-outfit), system-ui, sans-serif",
               fontWeight: 500,
@@ -887,7 +887,7 @@ export default function HeroSection({ hero }) {
               paddingTop:'20px',
             }}
           >
-            Premium residence for those who seek refined living.
+            Premium residences for those who seek refined living.
           </p>
         </div>
 
