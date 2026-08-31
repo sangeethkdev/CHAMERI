@@ -7,7 +7,7 @@ import React from 'react';
  * Baseline viewport: 1440px
  */
 const MAP_SRC =
-  'https://www.google.com/maps?q=Chameri+Builders+%26+Developers,+27%2F205+Madapeedika,+Paral+(PO),+Thalassery,+Kannur,+Kerala+670601&ll=11.7485921,75.5322851&z=17&output=embed';
+  'https://www.google.com/maps?q=11.7488333,75.5324167(Chameri+Builders+%26+Developers)&ll=11.7488333,75.5324167&z=17&output=embed';
 
 export default function ContactLocations() {
   return (
