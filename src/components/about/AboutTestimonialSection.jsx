@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import { useSwipe } from '@/hooks/useSwipe';
 import Link from 'next/link';
 
 const STATIC_TESTIMONIALS = [
@@ -93,6 +94,11 @@ export default function AboutTestimonialSection({ testimonialSection }) {
 
   const next = useCallback(() => setCurrent((c) => c + 1), []);
   const prev = useCallback(() => setCurrent((c) => c - 1), []);
+
+  // Touch/drag navigation. Swiping right-to-left advances (same direction the
+  // track itself moves), right-to-left goes back — matching the arrow buttons.
+  // `next`/`prev` are already stable useCallbacks, so the handlers memoise.
+  const swipe = useSwipe({ onSwipeLeft: next, onSwipeRight: prev });
 
   const handleTransitionEnd = useCallback((e) => {
     // Ignore bubbled clip-path/opacity events from child cards
@@ -214,8 +220,13 @@ export default function AboutTestimonialSection({ testimonialSection }) {
       {/* ── 2 — Carousel ────────────────────────────────────────────────── */}
       <div
         ref={wrapperRef}
+        {...swipe.handlers}
         className="relative overflow-hidden w-full"
-        style={{ height: `${cardH}px` }}
+        style={{
+          height: `${cardH}px`,
+          // Let the browser keep vertical scrolling; horizontal intent is ours.
+          touchAction: 'pan-y',
+        }}
       >
         {/* Sliding track */}
         <div

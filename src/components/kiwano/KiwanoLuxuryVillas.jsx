@@ -618,6 +618,101 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
             </Link>
           </div>
         </div>
+
+        <div style={{ paddingLeft: "20px", paddingRight: "20px", boxSizing: "border-box" }}>
+        {/* ══════════════════════════════════════════════════════════════
+            RERA QR BAND — navy panel: QR block (left) + statement (right)
+            Figma (1440 canvas): 1259 × 188.41, radius 2, bg #334454
+            padding 20 / 27 / 23 / 33, gap 67
+        ══════════════════════════════════════════════════════════════ */}
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "clamp(343px, 87.43vw, 1259px)",
+            margin: "0 auto",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "24px",
+            padding: "24px 20px 26px",
+            borderRadius: "2px",
+            background: "#334454",
+            boxSizing: "border-box",
+          }}
+        >
+          {/* ── QR block — Figma: 131 × 145.41, gap 7.57, pad 4.42/7.57/7.57/7.57 ── */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "clamp(6px, 0.53vw, 7.57px)",
+              paddingTop: "clamp(4px, 0.31vw, 4.42px)",
+              paddingRight: "clamp(6px, 0.53vw, 7.57px)",
+              paddingBottom: "clamp(6px, 0.53vw, 7.57px)",
+              paddingLeft: "clamp(6px, 0.53vw, 7.57px)",
+              flexShrink: 0,
+              boxSizing: "border-box",
+            }}
+          >
+            {/* "Scan The Qr" — Geist 500, 10.1px, centered, white */}
+            <span
+              style={{
+                fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                fontWeight: 500,
+                fontSize: "clamp(9px, 0.70vw, 10.1px)",
+                lineHeight: "100%",
+                letterSpacing: "0",
+                textAlign: "center",
+                color: "#FFFFFF",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Scan The Qr
+            </span>
+
+            {/* QR code — Figma: 115.857 × 115.852 (square in practice) */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/Frame 2147240476.png"
+              alt="Kiwano Luxury Villas RERA QR code"
+              style={{
+                width: "clamp(96px, 8.05vw, 115.86px)",
+                height: "clamp(96px, 8.05vw, 115.86px)",
+                display: "block",
+                objectFit: "contain",
+              }}
+            />
+          </div>
+
+          {/* ── Statement — Figma: 940 × 129, padding-top 17 ── */}
+          <div
+            style={{
+              flex: "1 1 auto",
+              maxWidth: "clamp(280px, 65.28vw, 940px)",
+              paddingTop: "0px",
+              boxSizing: "border-box",
+            }}
+          >
+            <p
+              style={{
+                margin: 0,
+                fontFamily: "var(--font-roundo), 'Roundo', var(--font-outfit), system-ui, sans-serif",
+                fontWeight: 500,
+                fontSize: "clamp(20px, 3.125vw, 45px)",
+                lineHeight: "clamp(24px, 3.47vw, 50px)",
+                letterSpacing: "-0.02em",
+                textTransform: "capitalize",
+                color: "#FFFFFF",
+                textAlign: "center",
+              }}
+            >
+              {luxuryVillas?.qrStatement ||
+                "Your Luxury Oasis Awaits Scan to Explore Now."}
+            </p>
+          </div>
+        </div>
+        </div>
       </div>
 
       {/* ══════════════════════════════════════════════════════════════
@@ -686,7 +781,6 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
           width: "100%",
           paddingLeft: "clamp(20px, 6.28vw, 90.5px)",
           paddingRight: "clamp(20px, 6.25vw, 90px)",
-          paddingBottom: "clamp(40px, 5.56vw, 80px)",
           boxSizing: "border-box",
           display: "flex",
           flexDirection: "row",
@@ -829,6 +923,111 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
               </span>
             </div>
           ))}
+        </div>
+      </div>
+
+      <div
+        style={{
+          width: "100%",
+          paddingLeft: "clamp(20px, 6.25vw, 90px)",
+          paddingRight: "clamp(20px, 6.25vw, 90px)",
+          boxSizing: "border-box",
+        }}
+      >
+        {/* ══════════════════════════════════════════════════════════════
+            RERA QR BAND — navy panel: QR block (left) + statement (right)
+            Figma (1440 canvas): 1259 × 188.41, radius 2, bg #334454
+            padding 20 / 27 / 23 / 33, gap 67
+        ══════════════════════════════════════════════════════════════ */}
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "clamp(343px, 87.43vw, 1259px)",
+            margin: "0 auto",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: "clamp(24px, 4.65vw, 67px)",
+            paddingTop: "clamp(14px, 1.39vw, 20px)",
+            paddingRight: "clamp(18px, 1.88vw, 27px)",
+            paddingBottom: "clamp(16px, 1.60vw, 23px)",
+            paddingLeft: "clamp(20px, 2.29vw, 33px)",
+            borderRadius: "2px",
+            background: "#334454",
+            boxSizing: "border-box",
+          }}
+        >
+          {/* ── QR block — Figma: 131 × 145.41, gap 7.57, pad 4.42/7.57/7.57/7.57 ── */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "clamp(6px, 0.53vw, 7.57px)",
+              paddingTop: "clamp(4px, 0.31vw, 4.42px)",
+              paddingRight: "clamp(6px, 0.53vw, 7.57px)",
+              paddingBottom: "clamp(6px, 0.53vw, 7.57px)",
+              paddingLeft: "clamp(6px, 0.53vw, 7.57px)",
+              flexShrink: 0,
+              boxSizing: "border-box",
+            }}
+          >
+            {/* "Scan The Qr" — Geist 500, 10.1px, centered, white */}
+            <span
+              style={{
+                fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                fontWeight: 500,
+                fontSize: "clamp(9px, 0.70vw, 10.1px)",
+                lineHeight: "100%",
+                letterSpacing: "0",
+                textAlign: "center",
+                color: "#FFFFFF",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Scan The Qr
+            </span>
+
+            {/* QR code — Figma: 115.857 × 115.852 (square in practice) */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/Frame 2147240476.png"
+              alt="Kiwano Luxury Villas RERA QR code"
+              style={{
+                width: "clamp(96px, 8.05vw, 115.86px)",
+                height: "clamp(96px, 8.05vw, 115.86px)",
+                display: "block",
+                objectFit: "contain",
+              }}
+            />
+          </div>
+
+          {/* ── Statement — Figma: 940 × 129, padding-top 17 ── */}
+          <div
+            style={{
+              flex: "1 1 auto",
+              maxWidth: "clamp(280px, 65.28vw, 940px)",
+              paddingTop: "clamp(8px, 1.18vw, 17px)",
+              boxSizing: "border-box",
+            }}
+          >
+            <p
+              style={{
+                margin: 0,
+                fontFamily: "var(--font-roundo), 'Roundo', var(--font-outfit), system-ui, sans-serif",
+                fontWeight: 500,
+                fontSize: "clamp(20px, 3.125vw, 45px)",
+                lineHeight: "clamp(24px, 3.47vw, 50px)",
+                letterSpacing: "-0.02em",
+                textTransform: "capitalize",
+                color: "#FFFFFF",
+                textAlign: "left",
+              }}
+            >
+              {luxuryVillas?.qrStatement ||
+                "Your Luxury Oasis Awaits Scan to Explore Now."}
+            </p>
+          </div>
         </div>
       </div>
       </div>

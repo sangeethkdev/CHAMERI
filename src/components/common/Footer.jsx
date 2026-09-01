@@ -747,7 +747,7 @@ const Footer = () => {
               </div>
 
               {/* Contact Us */}
-              <div className="flex flex-col ml-0 md:ml-[clamp(20px,3.63vw,140px)]" style={{ gap: 'clamp(14.2px, 1.4vw, 26.6px)' }}>
+              <div className="flex flex-col ml-0 md:ml-[clamp(20px,3.63vw,140px)]" style={{ gap: 'clamp(10.2px, 1vw, 20.6px)' }}>
                 <h3
                   className="font-roundo font-medium text-white"
                   style={{ fontSize: 'clamp(18px, 1.4vw, 26.6px)' }}
@@ -766,10 +766,7 @@ const Footer = () => {
                     </a>
                   ))}
                 </div>
-              </div>
-
-              {/* Email */}
-              <div className="flex flex-col ml-0 md:ml-[clamp(20px,3.63vw,140px)]" style={{ gap: 'clamp(14.2px, 1.4vw, 26.6px)', marginTop:'clamp(6.2px, 0.5vw, 16.6px)', marginRight:'clamp(16px, 1.04vw, 20px)' }}>
+                <div className="flex flex-col ml-0 md:ml-[clamp(20px,3.63vw,140px)]" style={{ gap: 'clamp(10.2px, 1vw, 20.6px)', marginTop:'clamp(6.2px, 0.5vw, 16.6px)', marginRight:'clamp(16px, 1.04vw, 20px)' }}>
                 <h3
                   className="font-roundo font-medium text-white capitalize"
                   style={{ fontSize: 'clamp(18px, 1.4vw, 26.6px)', lineHeight: 1 }}
@@ -786,6 +783,26 @@ const Footer = () => {
                   </a>
                 </div>
               </div>
+              </div>
+
+              {/* Email */}
+              {/* <div className="flex flex-col ml-0 md:ml-[clamp(20px,3.63vw,140px)]" style={{ gap: 'clamp(14.2px, 1.4vw, 26.6px)', marginTop:'clamp(6.2px, 0.5vw, 16.6px)', marginRight:'clamp(16px, 1.04vw, 20px)' }}>
+                <h3
+                  className="font-roundo font-medium text-white capitalize"
+                  style={{ fontSize: 'clamp(18px, 1.4vw, 26.6px)', lineHeight: 1 }}
+                >
+                  Email
+                </h3>
+                <div className="flex flex-col" style={{ gap: 'clamp(7.1px, 0.69vw, 13.3px)', marginTop:'clamp(3.2px, 0.4vw, 14.6px)' }}>
+                  <a
+                    href="mailto:info@chameribuilders.com"
+                    className="font-sans font-normal text-[#FFFFFF] hover:text-[#EDE7DE]/80 transition-colors"
+                    style={{ fontSize: 'clamp(15px, 1.11vw, 21.3px)', lineHeight: 1 }}
+                  >
+                    info@chameribuilders.com
+                  </a>
+                </div>
+              </div> */}
             </div>
 
             {/* Social Icons */}

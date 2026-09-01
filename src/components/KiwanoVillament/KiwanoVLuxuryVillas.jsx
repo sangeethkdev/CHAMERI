@@ -115,6 +115,24 @@ function IconCar() {
   );
 }
 
+// 8. Balconies -> railing balustrade projecting from a wall line
+function IconBalcony() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#334454" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      {/* Wall / floor slab the balcony hangs off */}
+      <line x1="2" y1="8" x2="22" y2="8" />
+      {/* Handrail */}
+      <line x1="4" y1="12" x2="20" y2="12" />
+      {/* Balusters */}
+      <line x1="7"  y1="12" x2="7"  y2="19" />
+      <line x1="12" y1="12" x2="12" y2="19" />
+      <line x1="17" y1="12" x2="17" y2="19" />
+      {/* Base rail */}
+      <line x1="4" y1="19" x2="20" y2="19" />
+    </svg>
+  );
+}
+
 const ICON_MAP = {
   home: <IconHome />,
   area: <IconArea />,
@@ -123,16 +141,17 @@ const ICON_MAP = {
   design: <IconDesign />,
   calendar: <IconCalendar />,
   car: <IconCar />,
+  balcony: <IconBalcony />,
 };
 
 const SPECS = [
-  { icon: "home",     label: "Configuration:",      value: "4BHK" },
-  { icon: "area",     label: "Built-up Area:",       value: "2806 Sq.ft" },
+  { icon: "home",     label: "Configuration:",      value: "3BHK" },
+  { icon: "design",   label: "Unit Type:",        value: "Premium Villaments" },
+  { icon: "area",     label: "Saleable Area:",       value: "Upto 2362 Sq.ft" },
   { icon: "plot",     label: "Plot Range:",          value: "6.59 Cents to 7.01 Cents" },
-  { icon: "units",    label: "Number of Units:",     value: "9 Units" },
-  { icon: "design",   label: "Design Style:",        value: "Tropical Modernism" },
+  { icon: "units",    label: "Number of Units:",     value: "24 Units" },
+  { icon: "balcony",      label: "Balconies:",            value: "Upto 4" },
   { icon: "calendar", label: "Expected Completion:", value: "March 2027" },
-  { icon: "car",      label: "Parking:",             value: "2 Cars" },
 ];
 
 // ─── Zoomable / pannable site-plan image ──────────────────────────────────────
@@ -502,7 +521,9 @@ export default function KiwanoVLuxuryVillas({ luxuryVillas }) {
                       flexShrink: 0,
                     }}
                   >
-                    {cloneElement(ICON_MAP[spec.icon], { width: 18, height: 18, stroke: "#334454" })}
+                    {ICON_MAP[spec.icon]
+                      ? cloneElement(ICON_MAP[spec.icon], { width: 18, height: 18, stroke: "#334454" })
+                      : null}
                   </div>
                   <span
                     style={{
@@ -614,6 +635,101 @@ export default function KiwanoVLuxuryVillas({ luxuryVillas }) {
             </Link>
           </div>
         </div>
+
+        <div style={{ paddingLeft: "20px", paddingRight: "20px", boxSizing: "border-box" }}>
+        {/* ══════════════════════════════════════════════════════════════
+            RERA QR BAND — navy panel: QR block (left) + statement (right)
+            Figma (1440 canvas): 1259 × 188.41, radius 2, bg #334454
+            padding 20 / 27 / 23 / 33, gap 67
+        ══════════════════════════════════════════════════════════════ */}
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "clamp(343px, 87.43vw, 1259px)",
+            margin: "0 auto",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "24px",
+            padding: "24px 20px 26px",
+            borderRadius: "2px",
+            background: "#334454",
+            boxSizing: "border-box",
+          }}
+        >
+          {/* ── QR block — Figma: 131 × 145.41, gap 7.57, pad 4.42/7.57/7.57/7.57 ── */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "clamp(6px, 0.53vw, 7.57px)",
+              paddingTop: "clamp(4px, 0.31vw, 4.42px)",
+              paddingRight: "clamp(6px, 0.53vw, 7.57px)",
+              paddingBottom: "clamp(6px, 0.53vw, 7.57px)",
+              paddingLeft: "clamp(6px, 0.53vw, 7.57px)",
+              flexShrink: 0,
+              boxSizing: "border-box",
+            }}
+          >
+            {/* "Scan The Qr" — Geist 500, 10.1px, centered, white */}
+            <span
+              style={{
+                fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                fontWeight: 500,
+                fontSize: "clamp(9px, 0.70vw, 10.1px)",
+                lineHeight: "100%",
+                letterSpacing: "0",
+                textAlign: "center",
+                color: "#FFFFFF",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Scan The Qr
+            </span>
+
+            {/* QR code — Figma: 115.857 square */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/Frame 2147240476.png"
+              alt="Kiwano Villament RERA QR code"
+              style={{
+                width: "clamp(96px, 8.05vw, 115.86px)",
+                height: "clamp(96px, 8.05vw, 115.86px)",
+                display: "block",
+                objectFit: "contain",
+              }}
+            />
+          </div>
+
+          {/* ── Statement — Figma: 940 × 129, padding-top 17 ── */}
+          <div
+            style={{
+              flex: "1 1 auto",
+              maxWidth: "clamp(280px, 65.28vw, 940px)",
+              paddingTop: "0px",
+              boxSizing: "border-box",
+            }}
+          >
+            <p
+              style={{
+                margin: 0,
+                fontFamily: "var(--font-roundo), 'Roundo', var(--font-outfit), system-ui, sans-serif",
+                fontWeight: 500,
+                fontSize: "clamp(20px, 3.125vw, 45px)",
+                lineHeight: "clamp(24px, 3.47vw, 50px)",
+                letterSpacing: "-0.02em",
+                textTransform: "capitalize",
+                color: "#FFFFFF",
+                textAlign: "center",
+              }}
+            >
+              {luxuryVillas?.qrStatement ||
+                "Your Perfect Villament Awaits. Scan to Explore."}
+            </p>
+          </div>
+        </div>
+        </div>
       </div>
 
       {/* ══════════════════════════════════════════════════════════════
@@ -682,7 +798,6 @@ export default function KiwanoVLuxuryVillas({ luxuryVillas }) {
           width: "100%",
           paddingLeft: "clamp(20px, 6.28vw, 90.5px)",
           paddingRight: "clamp(20px, 6.25vw, 90px)",
-          paddingBottom: "clamp(40px, 5.56vw, 80px)",
           boxSizing: "border-box",
           display: "flex",
           flexDirection: "row",
@@ -825,6 +940,111 @@ export default function KiwanoVLuxuryVillas({ luxuryVillas }) {
               </span>
             </div>
           ))}
+        </div>
+      </div>
+
+      <div
+        style={{
+          width: "100%",
+          paddingLeft: "clamp(20px, 6.25vw, 90px)",
+          paddingRight: "clamp(20px, 6.25vw, 90px)",
+          boxSizing: "border-box",
+        }}
+      >
+        {/* ══════════════════════════════════════════════════════════════
+            RERA QR BAND — navy panel: QR block (left) + statement (right)
+            Figma (1440 canvas): 1259 × 188.41, radius 2, bg #334454
+            padding 20 / 27 / 23 / 33, gap 67
+        ══════════════════════════════════════════════════════════════ */}
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "clamp(343px, 87.43vw, 1259px)",
+            margin: "0 auto",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: "clamp(24px, 4.65vw, 67px)",
+            paddingTop: "clamp(14px, 1.39vw, 20px)",
+            paddingRight: "clamp(18px, 1.88vw, 27px)",
+            paddingBottom: "clamp(16px, 1.60vw, 23px)",
+            paddingLeft: "clamp(20px, 2.29vw, 33px)",
+            borderRadius: "2px",
+            background: "#334454",
+            boxSizing: "border-box",
+          }}
+        >
+          {/* ── QR block — Figma: 131 × 145.41, gap 7.57, pad 4.42/7.57/7.57/7.57 ── */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "clamp(6px, 0.53vw, 7.57px)",
+              paddingTop: "clamp(4px, 0.31vw, 4.42px)",
+              paddingRight: "clamp(6px, 0.53vw, 7.57px)",
+              paddingBottom: "clamp(6px, 0.53vw, 7.57px)",
+              paddingLeft: "clamp(6px, 0.53vw, 7.57px)",
+              flexShrink: 0,
+              boxSizing: "border-box",
+            }}
+          >
+            {/* "Scan The Qr" — Geist 500, 10.1px, centered, white */}
+            <span
+              style={{
+                fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                fontWeight: 500,
+                fontSize: "clamp(9px, 0.70vw, 10.1px)",
+                lineHeight: "100%",
+                letterSpacing: "0",
+                textAlign: "center",
+                color: "#FFFFFF",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Scan The Qr
+            </span>
+
+            {/* QR code — Figma: 115.857 square */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/Frame 2147240476.png"
+              alt="Kiwano Villament RERA QR code"
+              style={{
+                width: "clamp(96px, 8.05vw, 115.86px)",
+                height: "clamp(96px, 8.05vw, 115.86px)",
+                display: "block",
+                objectFit: "contain",
+              }}
+            />
+          </div>
+
+          {/* ── Statement — Figma: 940 × 129, padding-top 17 ── */}
+          <div
+            style={{
+              flex: "1 1 auto",
+              maxWidth: "clamp(280px, 65.28vw, 940px)",
+              paddingTop: "clamp(8px, 1.18vw, 17px)",
+              boxSizing: "border-box",
+            }}
+          >
+            <p
+              style={{
+                margin: 0,
+                fontFamily: "var(--font-roundo), 'Roundo', var(--font-outfit), system-ui, sans-serif",
+                fontWeight: 500,
+                fontSize: "clamp(20px, 3.125vw, 45px)",
+                lineHeight: "clamp(24px, 3.47vw, 50px)",
+                letterSpacing: "-0.02em",
+                textTransform: "capitalize",
+                color: "#FFFFFF",
+                textAlign: "left",
+              }}
+            >
+              {luxuryVillas?.qrStatement ||
+                "Your Perfect Villament Awaits. Scan to Explore."}
+            </p>
+          </div>
         </div>
       </div>
       </div>

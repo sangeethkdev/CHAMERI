@@ -444,6 +444,47 @@ const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
 const easeInOutCubic = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
 
+// The exact curve the Testimonial "Clients Notes" carousel uses for its quote
+// reveal (TestimonialCarousel.jsx `revealVariants`: ease [0.65, 0, 0.35, 1]).
+// Framer Motion consumes that as a cubic-bezier; this animation is driven by a
+// RAF progress value rather than by Framer, so the same curve is applied as an
+// explicit bezier solve. Symmetric ease-in-out — gentle start, gentle stop.
+// That slow settle is what makes the testimonial text read as smooth, and
+// reproducing it (rather than an easeOut) is what makes the hero text match.
+const cubicBezier = (p1x, p1y, p2x, p2y) => {
+  const A = (a, b) => 1 - 3 * b + 3 * a;
+  const B = (a, b) => 3 * b - 6 * a;
+  const C = (a) => 3 * a;
+  const calc = (t, a, b) => ((A(a, b) * t + B(a, b)) * t + C(a)) * t;
+  const slope = (t, a, b) => 3 * A(a, b) * t * t + 2 * B(a, b) * t + C(a);
+  return (x) => {
+    if (x <= 0) return 0;
+    if (x >= 1) return 1;
+    // Newton-Raphson: solve calc(t) = x for t, then evaluate the y curve at t.
+    let t = x;
+    for (let k = 0; k < 8; k++) {
+      const d = slope(t, p1x, p2x);
+      if (Math.abs(d) < 1e-6) break;
+      t -= (calc(t, p1x, p2x) - x) / d;
+    }
+    return calc(t, p1y, p2y);
+  };
+};
+
+// Named after its source so the link back to the carousel stays obvious.
+const easeTestimonialReveal = cubicBezier(0.65, 0, 0.35, 1);
+
+// Inverse of easeInOutCubic. The outro bakes that curve into `progress`, so
+// recovering linear time is what lets a second curve be applied cleanly instead
+// of compounding with it. Both halves are solved in closed form.
+const inverseEaseInOutCubic = (y) => {
+  if (y <= 0) return 0;
+  if (y >= 1) return 1;
+  return y < 0.5
+    ? Math.cbrt(y / 4)
+    : 1 - Math.cbrt((1 - y) / 4);
+};
+
 export default function HeroSection({ hero }) {
   const sectionRef = useRef(null);
 
@@ -719,6 +760,42 @@ export default function HeroSection({ hero }) {
   // finishes revealing, rather than showing them from progress 0.
   const infoRowT = mapRange(progress, 0.5, 0.65, 0, 1);
 
+  // ── Top row: the Testimonial "Clients Notes" upward reveal ───────────────
+  //
+  // Matching that carousel means matching three things, not merely "moves up":
+  //
+  //   easing   — cubic-bezier(0.65, 0, 0.35, 1), taken verbatim from
+  //              TestimonialCarousel's `revealVariants`. Symmetric ease-in-out,
+  //              so the text eases in gently and eases to a stop just as gently.
+  //   distance — the carousel travels in PERCENT of the element's own height
+  //              (100% → 0% → -100%), never in pixels, so the motion stays
+  //              proportional to the text instead of being a fixed nudge. The
+  //              transform below uses the same unit.
+  //   masking  — each quote line sits in a fixed-height `overflow: hidden`
+  //              slot, so the text is clipped as it travels rather than
+  //              drifting freely across the page. The row's wrapper does the
+  //              same, which is why it is split into two elements below.
+  //
+  // What necessarily differs: the carousel runs on Framer's own 1.1s timer,
+  // while this has to stay locked to the image reveal. So the same curve is fed
+  // `phase3T` — the 0.60→1.00 value that already opens the curtain
+  // (beigeClipTopPx) and zooms the house (bgScale). The text shares one
+  // timeline with the image and cannot drift out of sync, while the motion
+  // itself — curve, unit, and masking — is the carousel's.
+  // `progress` is already eased — the outro writes 0.6 + easeInOutCubic(t) * 0.4
+  // — so phase3T is a pre-eased value, not linear time. Feeding it straight to
+  // another curve would double-ease it: the earlier attempt did exactly that and
+  // squeezed nearly all the travel into a ~200ms burst mid-reveal, which is the
+  // opposite of the carousel's even glide. Undoing the outro's easing recovers
+  // linear time, so the bezier below is the ONLY curve applied and the result is
+  // the carousel's motion exactly.
+  const revealLinearT = inverseEaseInOutCubic(phase3T);
+  const revealLiftT = easeTestimonialReveal(revealLinearT);
+
+  // -100% at full progress mirrors the carousel's `exit: { y: '-100%' }`: the
+  // text rises by exactly its own height and is clipped away by the mask.
+  const topRowLiftPct = -100 * revealLiftT;
+
   // Once the auto-reveal (outro) fully finishes, hand off from this animated
   // logo to NewNavbar's own logo: the big logo fades out and only then does
   // the navbar (with its own logo) fade in — they're never both visible.
@@ -828,67 +905,83 @@ export default function HeroSection({ hero }) {
             matching the sm:block content block below — the mobile hero has
             its own, separately-designed stacked layout.
         ════════════════════════════════════════════════════════════════════════ */}
+        {/* Outer: positioning, fade and the clipping mask. Kept separate from
+            the moving layer because one element cannot both be the mask and be
+            the thing sliding inside it — the carousel solves this the same way,
+            with a fixed-height `overflow: hidden` slot per quote line. */}
         <div
-          className="hidden sm:flex absolute items-center justify-between pointer-events-auto"
+          className="hidden sm:block absolute pointer-events-auto"
           style={{
             top: "clamp(90px, 13.44vh, 155px)",
             left: "clamp(20px, 2.78vw, 40px)",
             right: "clamp(20px, 2.78vw, 40px)",
             opacity: infoRowT * counterOpacity,
-            transform: `translateY(${20 * (1 - infoRowT)}px)`,
+            overflow: "hidden",
           }}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Quick links — Figma: w:200 h:21 gap:16 */}
-          <nav
-            className="flex items-center"
-            style={{ gap: "clamp(10px, 1.11vw, 16px)", marginBottom: "20px" }}
-          >
-            {[
-              { label: "Projects", href: "/project-list" },
-              { label: "Service", href: "/services" },
-              { label: "Gallery", href: "/gallery" },
-            ].map(({ label, href }) => (
-              <Link
-                key={label}
-                href={href}
-                className="hover:opacity-70 transition-opacity"
-                style={{
-                  fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
-                  fontWeight: 400,
-                  fontSize: "clamp(13px, 1.11vw, 16px)",
-                  lineHeight: "100%",
-                  letterSpacing: "0",
-                  textAlign: "center",
-                  textTransform: "capitalize",
-                  color: "#000000",
-                  whiteSpace: "nowrap",
-
-                }}
-              >
-                {label}
-              </Link>
-            ))}
-          </nav>
-
-          {/* Tagline heading — Figma: w:346 h:58, Roundo 500 24px, right-aligned */}
-          <p
+          {/* Inner: the layer that actually travels, in percent of its own
+              height — the carousel's unit — so both marked elements rise
+              together and are clipped by the mask above. The original 20px
+              fade-in settle is preserved and simply added to the lift. */}
+          <div
+            className="flex items-center justify-between"
             style={{
-              width: "clamp(220px, 24.43vw, 386px)",
-              margin: 0,
-              fontFamily: "var(--font-roundo), 'Roundo', var(--font-outfit), system-ui, sans-serif",
-              fontWeight: 500,
-              fontSize: "clamp(18px, 1.667vw, 24px)",
-              lineHeight: "100%",
-              letterSpacing: "0",
-              textAlign: "right",
-              textTransform: "capitalize",
-              color: "#000000",
-              paddingTop:'20px',
+              transform: `translateY(calc(${20 * (1 - infoRowT)}px + ${topRowLiftPct}%))`,
+              willChange: "transform",
             }}
           >
-            Premium residences for those who seek refined living.
-          </p>
+            {/* Quick links — Figma: w:200 h:21 gap:16 */}
+            <nav
+              className="flex items-center"
+              style={{ gap: "clamp(10px, 1.11vw, 16px)", marginBottom: "20px" }}
+            >
+              {[
+                { label: "Projects", href: "/project-list" },
+                { label: "Service", href: "/services" },
+                { label: "Gallery", href: "/gallery" },
+              ].map(({ label, href }) => (
+                <Link
+                  key={label}
+                  href={href}
+                  className="hover:opacity-70 transition-opacity"
+                  style={{
+                    fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                    fontWeight: 400,
+                    fontSize: "clamp(13px, 1.11vw, 16px)",
+                    lineHeight: "100%",
+                    letterSpacing: "0",
+                    textAlign: "center",
+                    textTransform: "capitalize",
+                    color: "#000000",
+                    whiteSpace: "nowrap",
+
+                  }}
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
+
+            {/* Tagline heading — Figma: w:346 h:58, Roundo 500 24px, right-aligned */}
+            <p
+              style={{
+                width: "clamp(220px, 26.43vw, 396px)",
+                margin: 0,
+                fontFamily: "var(--font-roundo), 'Roundo', var(--font-outfit), system-ui, sans-serif",
+                fontWeight: 500,
+                fontSize: "clamp(18px, 1.667vw, 24px)",
+                lineHeight: "100%",
+                letterSpacing: "0",
+                textAlign: "right",
+                textTransform: "capitalize",
+                color: "#000000",
+                paddingTop:'20px',
+              }}
+            >
+              Premium residences for those who seek refined living.
+            </p>
+          </div>
         </div>
 
         {/* ══════════════════════════════════════════════════════════════════════
@@ -1163,7 +1256,7 @@ export default function HeroSection({ hero }) {
               opacity: head1T,
               transform: `translateY(${40 * (1 - head1T)}px)`,
               fontFamily: "var(--font-roundo), 'Roundo', var(--font-outfit), system-ui, sans-serif",
-              fontWeight: 400,
+              fontWeight: 500,
               fontSize: "clamp(30px, 9.385vw, 36.6px)",   /* 36.6/390 */
               lineHeight: "clamp(30px, 9.385vw, 36.6px)",
               letterSpacing: "-0.73px",

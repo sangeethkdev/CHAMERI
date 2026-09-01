@@ -589,7 +589,7 @@ export default function MenuSection({ open = false, onClose }) {
               color:         '#000000',
             }}
           >
-            © Chameri pvt limited
+            © Chameri Builders & Developers
           </span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '9px', color: '#141414' }}>
             {MOBILE_SOCIALS.map((social) => (

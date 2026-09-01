@@ -445,6 +445,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
+import { useSwipe } from '@/hooks/useSwipe';
 import Link from 'next/link';
 
 /*
@@ -629,6 +630,11 @@ const TestimonialsSection = ({ testimonial }) => {
   const next = useCallback(() => setCurrent((c) => c + 1), []);
   const prev = useCallback(() => setCurrent((c) => c - 1), []);
 
+  // Touch/drag navigation. Swiping right-to-left advances (the same
+  // direction the track moves), left-to-right goes back — matching the
+  // arrow buttons. `next`/`prev` are stable useCallbacks, so this memoises.
+  const swipe = useSwipe({ onSwipeLeft: next, onSwipeRight: prev });
+
   const handleTransitionEnd = useCallback((e) => {
     // Only respond to the track's own transform transition, not bubbled clip-path/opacity events from child cards
     if (e.target !== e.currentTarget) return;
@@ -751,9 +757,12 @@ const TestimonialsSection = ({ testimonial }) => {
       {/* ══ 2 — Carousel ══════════════════════════════════════════════════ */}
       <div
         ref={wrapperRef}
+        {...swipe.handlers}
         className="relative overflow-hidden w-full"
         style={{
           height: `${cardH}px`,
+          // Let the browser keep vertical scrolling; horizontal intent is ours.
+          touchAction: 'pan-y',
           WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)',
           maskImage:       'linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)',
         }}

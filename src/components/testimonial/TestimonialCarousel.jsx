@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import { useSwipe } from '@/hooks/useSwipe';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TESTIMONIALS as DEFAULT_TESTIMONIALS } from '@/data/testimonials';
 
@@ -192,6 +193,11 @@ export default function TestimonialCarousel({ reviews }) {
   const next = useCallback(() => setCurrent((c) => (c + 1) % total), [total]);
   const prev = useCallback(() => setCurrent((c) => (c - 1 + total) % total), [total]);
 
+  // Touch/drag navigation, mirroring the arrow buttons. Attached to the
+  // <section> so it covers the desktop and mobile layouts below in one place
+  // (both are rendered inside it, toggled by breakpoint).
+  const swipe = useSwipe({ onSwipeLeft: next, onSwipeRight: prev });
+
   const item = DATA[current];
   const counter = `${String(current + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
   const googleScore = item.googleScore || '5.0';
@@ -199,7 +205,13 @@ export default function TestimonialCarousel({ reviews }) {
   return (
     <section
       className="relative w-full"
-      style={{ background: '#EDE7DE', borderTop: '1px solid #21232533' }}
+      {...swipe.handlers}
+      style={{
+        background: '#EDE7DE',
+        borderTop: '1px solid #21232533',
+        // Vertical scrolling stays native; horizontal intent is the carousel's.
+        touchAction: 'pan-y',
+      }}
     >
       {/* ══════════════════════════════ DESKTOP (md+) ══════════════════════════ */}
       <div

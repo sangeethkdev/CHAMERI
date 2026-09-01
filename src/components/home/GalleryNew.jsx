@@ -377,7 +377,7 @@ const GalleryNew = ({ gallery }) => {
                 element with no handler, so it did nothing when clicked. */}
             <div className="flex justify-center w-full">
               <Link
-                href="/gallery"
+                href="/project-list"
                 aria-label="View the full gallery"
                 className="group relative flex items-center justify-center no-underline bg-[#6B859E] hover:bg-[#4a6074] transition-colors duration-500 overflow-hidden cursor-pointer border-none"
                 style={{
