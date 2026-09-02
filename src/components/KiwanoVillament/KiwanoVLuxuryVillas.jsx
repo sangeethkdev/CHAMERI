@@ -714,15 +714,21 @@ export default function KiwanoVLuxuryVillas({ luxuryVillas }) {
             />
           </div>
 
-          {/* ── Statement — Figma: 940 × 129, padding-top 17 ── */}
+          {/* ── Statement — Figma: 894 × 129, gap 8, padding-top 4 ──
+              Same content as desktop, centred to match the stacked mobile
+              banner. */}
           <div
             style={{
               flex: "1 1 auto",
-              maxWidth: "clamp(280px, 65.28vw, 940px)",
-              paddingTop: "0px",
+              maxWidth: "clamp(280px, 62.08vw, 894px)",
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+              paddingTop: "4px",
               boxSizing: "border-box",
             }}
           >
+            {/* Headline — Figma: Roundo 500 45px / 50px, ls -0.9px */}
             <p
               style={{
                 margin: 0,
@@ -730,14 +736,33 @@ export default function KiwanoVLuxuryVillas({ luxuryVillas }) {
                 fontWeight: 500,
                 fontSize: "clamp(20px, 3.125vw, 45px)",
                 lineHeight: "clamp(24px, 3.47vw, 50px)",
-                letterSpacing: "-0.02em",
+                letterSpacing: "-0.9px",
                 textTransform: "capitalize",
                 color: "#FFFFFF",
                 textAlign: "center",
               }}
             >
               {luxuryVillas?.qrStatement ||
-                "Your Perfect Villament Awaits. Scan to Explore."}
+                "Your Perfect Villament Awaits."}
+            </p>
+
+            {/* RERA registration — Figma: Geist 400 20px / 24px, ls -0.44px,
+                #D5D5D5CC. See the desktop block: the fallback carries only the
+                portal URL because Villament's own K-RERA number isn't known. */}
+            <p
+              style={{
+                margin: 0,
+                fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                fontWeight: 400,
+                fontSize: "clamp(13px, 1.389vw, 20px)",
+                lineHeight: "clamp(17px, 1.667vw, 24px)",
+                letterSpacing: "-0.44px",
+                color: "#D5D5D5CC",
+                textAlign: "center",
+                whiteSpace: "pre-line",
+              }}
+            >
+              {luxuryVillas?.reraDetails || "rera.kerala.gov.in"}
             </p>
           </div>
         </div>
@@ -1040,15 +1065,21 @@ export default function KiwanoVLuxuryVillas({ luxuryVillas }) {
             />
           </div>
 
-          {/* ── Statement — Figma: 940 × 129, padding-top 17 ── */}
+          {/* ── Statement — Figma: 894 × 129, gap 8, padding-top 4 ──
+              A column so the RERA registration line sits under the headline
+              on the 8px gap, rather than each block owning its own margin. */}
           <div
             style={{
               flex: "1 1 auto",
-              maxWidth: "clamp(280px, 65.28vw, 940px)",
-              paddingTop: "clamp(8px, 1.18vw, 17px)",
+              maxWidth: "clamp(280px, 62.08vw, 894px)",
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+              paddingTop: "4px",
               boxSizing: "border-box",
             }}
           >
+            {/* Headline — Figma: Roundo 500 45px / 50px, ls -0.9px */}
             <p
               style={{
                 margin: 0,
@@ -1056,14 +1087,37 @@ export default function KiwanoVLuxuryVillas({ luxuryVillas }) {
                 fontWeight: 500,
                 fontSize: "clamp(20px, 3.125vw, 45px)",
                 lineHeight: "clamp(24px, 3.47vw, 50px)",
-                letterSpacing: "-0.02em",
+                letterSpacing: "-0.9px",
                 textTransform: "capitalize",
                 color: "#FFFFFF",
                 textAlign: "left",
               }}
             >
               {luxuryVillas?.qrStatement ||
-                "Your Perfect Villament Awaits. Scan to Explore."}
+                "Your Perfect Villament Awaits."}
+            </p>
+
+            {/* RERA registration — Figma: Geist 400 20px / 24px, ls -0.44px,
+                #D5D5D5CC. `white-space: pre-line` splits the registration
+                number and the portal URL across two lines from one stored
+                string. Villament's own K-RERA number is not in the codebase,
+                so the fallback carries only the portal — supply the number
+                via `reraDetails` rather than reusing Kiwano's. */}
+            <p
+              style={{
+                margin: 0,
+                maxWidth: "clamp(240px, 38.75vw, 558px)",
+                fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                fontWeight: 400,
+                fontSize: "clamp(13px, 1.389vw, 20px)",
+                lineHeight: "clamp(17px, 1.667vw, 24px)",
+                letterSpacing: "-0.44px",
+                color: "#D5D5D5CC",
+                textAlign: "left",
+                whiteSpace: "pre-line",
+              }}
+            >
+              {luxuryVillas?.reraDetails || "rera.kerala.gov.in"}
             </p>
           </div>
         </div>

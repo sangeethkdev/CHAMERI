@@ -444,17 +444,24 @@ export default function KiwanoBrandStory({ brandStory }) {
                         height: "100%",
                         overflow: "hidden",
                         border: "none",
-                        background: "transparent",
+                        /* `contain` letterboxes anything that isn't the
+                           slot's ratio; the section ground shows through
+                           those gaps rather than the black video frame. */
+                        background: "#EDE7DE",
                         padding: 0,
                         cursor: "pointer",
                       }}
                     >
+                      {/* `contain`, not `cover`: the slot is a wide ~1.5:1 box
+                          and `cover` scaled wider photos up to fill it, slicing
+                          the top and bottom off. `contain` fits the whole frame
+                          in, so nothing is cropped. */}
                       <Image
                         src={img.src}
                         alt={img.alt}
                         fill
                         sizes="(max-width: 1440px) 25vw, 300px"
-                        style={{ objectFit: "cover" }}
+                        style={{ objectFit: "contain" }}
                       />
                     </button>
                   ))}
@@ -709,7 +716,9 @@ export default function KiwanoBrandStory({ brandStory }) {
               fill
               sizes="100vw"
               style={{ objectFit: "contain" }}
-              priority
+              /* `priority` is deprecated in Next.js 16; the lightbox image only
+                 needs to load at once when opened, not be document-preloaded. */
+              loading="eager"
             />
           </div>
         </div>
