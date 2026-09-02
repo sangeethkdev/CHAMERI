@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 /**
@@ -29,18 +29,120 @@ const DEFAULT_IMAGES = [
   { id: 4, src: "/dummyimages/af18e0d9d8fdfe4f4a5d97f4fbf9edd12b1ff9df.png", alt: "Kiwano villa moment 4" },
 ];
 
+/** The construction-timeline months shown under the thumb strip. */
+const DEFAULT_MONTHS = ["MAY", "JUNE", "JULY", "AUGST", "SETPTEMBER"];
+
+/**
+ * Audio-waveform strip: 140 bars, heights 0-1, derived per render.
+ *
+ * The shape is a 16-bar cone (linear ramps — the straight-edged taper is
+ * what reads as a cone) standing on an even textured baseline. The cone's
+ * peak FOLLOWS the selected month: peak position interpolates across the
+ * strip with timeline progress, and because each bar keeps its identity
+ * between renders and transitions its height, the cone glides to the new
+ * month rather than jumping.
+ *
+ * Decorative — not a readout of the video's audio — so the strip carries
+ * `aria-hidden`. The baseline uses a deterministic sin() texture, identical
+ * on server and client, so hydration never mismatches.
+ */
+const WAVE_BAR_COUNT = 140;
+const WAVE_BASE = 0.13;
+/** Bars on each side of the peak; the full cone is twice this. */
+const WAVE_CONE_HALF = 8;
+/** Peak index for a 0-1 timeline progress — inset by the cone's half-width
+ *  so the cone is never clipped by either end of the strip. */
+const waveConePeak = (progress) =>
+  Math.round(WAVE_CONE_HALF + 5 + progress * (WAVE_BAR_COUNT - 1 - 2 * (WAVE_CONE_HALF + 5)));
+
+const waveBarHeight = (i, peakIndex) => {
+  const distance = Math.abs(i - peakIndex);
+  if (distance < WAVE_CONE_HALF) {
+    return WAVE_BASE + (1 - distance / WAVE_CONE_HALF) * (1 - WAVE_BASE);
+  }
+  return WAVE_BASE * (0.82 + 0.3 * Math.abs(Math.sin(i * 1.9)));
+};
+
+const DEFAULT_VIDEO = "/videos/kiwano-hero.mp4";
+
+/**
+ * Normalises the admin payload into the timeline this component renders:
+ * one stage per month, each owning its own video, thumbnails and date badge.
+ *
+ * Three shapes have to work:
+ *   1. `months[]` — what the admin panel saves now.
+ *   2. Legacy top-level `video`/`images`/`date` with no months — rendered as
+ *      a single stage against the default labels, so documents saved before
+ *      the timeline existed still show their media.
+ *   3. No data at all — the built-in placeholder stages.
+ *
+ * A month that leaves its media blank inherits the section-level media rather
+ * than rendering an empty stage, so a partially-filled timeline degrades
+ * gracefully instead of going black.
+ */
+function buildStages(brandStory) {
+  const fallbackVideo = brandStory?.video || DEFAULT_VIDEO;
+  const fallbackImages = brandStory?.images?.length ? brandStory.images : null;
+
+  const toImages = (urls, monthLabel) =>
+    (urls && urls.length ? urls : null)?.map((src, i) => ({
+      id: `${monthLabel}-${i}`,
+      src,
+      alt: `Kiwano ${monthLabel} moment ${i + 1}`,
+    })) || null;
+
+  const months = Array.isArray(brandStory?.months) ? brandStory.months : [];
+
+  if (months.length) {
+    return months.map((month, i) => {
+      const label = month?.label?.trim() || `MONTH ${i + 1}`;
+      return {
+        label,
+        date: month?.date?.trim() || brandStory?.date || "",
+        video: month?.video || fallbackVideo,
+        images:
+          toImages(month?.images, label) ||
+          toImages(fallbackImages, label) ||
+          DEFAULT_IMAGES,
+      };
+    });
+  }
+
+  /* No months saved — fall back to the legacy single-stage fields, repeated
+     across the placeholder labels so the timeline still reads as a timeline. */
+  return DEFAULT_MONTHS.map((label) => ({
+    label,
+    date: brandStory?.date || "May 2026",
+    video: fallbackVideo,
+    images: toImages(fallbackImages, label) || DEFAULT_IMAGES,
+  }));
+}
+
 export default function KiwanoBrandStory({ brandStory }) {
   const heading = brandStory?.heading || "Creating spaces that elevate life";
   const subheading =
     brandStory?.subheading ||
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim.";
-  const videoSrc = brandStory?.video || "/videos/kiwano-hero.mp4";
-  const images = brandStory?.images?.length
-    ? brandStory.images.map((src, i) => ({ id: i + 1, src, alt: `Kiwano villa moment ${i + 1}` }))
-    : DEFAULT_IMAGES;
+
+  const stages = buildStages(brandStory);
+  const months = stages.map((s) => s.label);
 
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [activeMonth, setActiveMonth] = useState(0);
+
+  /* Lightbox: a clicked thumbnail opens full-size over the page, dismissed by
+     clicking anywhere or pressing Escape. `src` outlives `visible` so closing
+     can animate out — unmounting on close would just pop. */
+  const [lightboxSrc, setLightboxSrc] = useState(null);
+  const [lightboxVisible, setLightboxVisible] = useState(false);
+
+  /* The active stage drives every piece of media on screen — large video,
+     thumb strip and date badge all come from this one object, so moving the
+     timeline swaps them together. */
+  const activeStage = stages[Math.min(activeMonth, stages.length - 1)] || stages[0];
+  const monthImages = activeStage?.images || [];
+  const videoSrc = activeStage?.video || DEFAULT_VIDEO;
 
   const handlePlayClick = () => {
     const el = videoRef.current;
@@ -48,6 +150,81 @@ export default function KiwanoBrandStory({ brandStory }) {
     el.muted = false;
     el.play().catch(() => {});
   };
+
+  const handleThumbClick = (src) => {
+    /* Pause rather than keep playing behind the lightbox — audio continuing
+       under a full-screen still would read as a bug. */
+    if (isPlaying) videoRef.current?.pause();
+    setLightboxSrc(src);
+    setLightboxVisible(true);
+  };
+
+  const closeLightbox = () => setLightboxVisible(false);
+
+  /* One entry point for every way of changing month (labels + both arrows):
+     moving the timeline returns the large display to the video, so each
+     stage starts from the same state. */
+  const selectMonth = (i) => {
+    setActiveMonth(Math.max(0, Math.min(months.length - 1, i)));
+    setLightboxVisible(false);
+    /* The new stage's video mounts paused, so the play button has to come
+       back — the remounted element fires no `pause` event to do it for us. */
+    setIsPlaying(false);
+  };
+  const goPrev = () => selectMonth(activeMonth - 1);
+  const goNext = () => selectMonth(activeMonth + 1);
+
+  /* Escape closes the lightbox, and the page behind it is frozen while it is
+     open so a scroll gesture doesn't drift the content under the image.
+     The previous `overflow` is restored rather than assumed to be "" — Lenis
+     smooth scroll also writes to it. */
+  useEffect(() => {
+    if (!lightboxVisible) return;
+
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") closeLightbox();
+    };
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [lightboxVisible]);
+
+  /* 0..1 position along the timeline, driving the waveform fill. */
+  const progress = months.length > 1 ? activeMonth / (months.length - 1) : 0;
+
+  /* ── Cone peak: MEASURED from the active label, not estimated ──────────
+     The month row is space-between with unequal label widths plus arrow
+     gutters, so no linear formula lands the peak under every label. Instead
+     the effect reads the active label's centre and the waveform strip's box
+     from the DOM and converts that into a bar index. Re-measured on month
+     change and on resize; the linear fallback only covers the first paint
+     (SSR has no boxes to measure). */
+  const monthRefs = useRef([]);
+  const waveRef = useRef(null);
+  const [peakIndex, setPeakIndex] = useState(waveConePeak(0));
+
+  useEffect(() => {
+    const measure = () => {
+      const wave = waveRef.current?.getBoundingClientRect();
+      const label = monthRefs.current[activeMonth]?.getBoundingClientRect();
+      if (!wave || !label || wave.width === 0) {
+        setPeakIndex(waveConePeak(progress));
+        return;
+      }
+      const frac = (label.left + label.width / 2 - wave.left) / wave.width;
+      const raw = Math.round(frac * (WAVE_BAR_COUNT - 1));
+      /* Clamp so the cone is never clipped by either end of the strip. */
+      setPeakIndex(Math.max(WAVE_CONE_HALF, Math.min(WAVE_BAR_COUNT - 1 - WAVE_CONE_HALF, raw)));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [activeMonth, progress, months.length]);
 
   return (
     <div className="hidden md:block">
@@ -137,25 +314,29 @@ export default function KiwanoBrandStory({ brandStory }) {
               boxSizing: "border-box",
             }}
           >
-            {/* BORDER FRAME — Figma: w:1287 h:849.1965 border:1.02px solid #000 */}
+            {/* BORDER FRAME — Figma: w:1287 h:968 border:1.02px solid #000
+                (was 849.1965 tall; the extra height carries the month
+                navigator and waveform rows added below the thumb strip) */}
             <div
               style={{
                 position: "relative",
                 width: "100%",
                 maxWidth: "clamp(100%,100%,100%)",
-                aspectRatio: "1287 / 849.1965",
+                aspectRatio: "1287 / 968",
                 border: "1.02px solid #000000",
                 boxSizing: "border-box",
               }}
             >
-              {/* INNER FRAME — Figma: w:1225.037 h:780.266 top:34.47 left:31.49 gap:9.14 */}
+              {/* INNER FRAME — Figma: w:1225.037 h:780.266 top:34.47 left:31.49 gap:9.14
+                  Heights re-derived against the taller 968 frame: the block
+                  keeps its original pixel size, so its percentages shrink. */}
               <div
                 style={{
                   position: "absolute",
-                  top: "4.06%",
+                  top: "3.562%",
                   left: "2.446%",
                   width: "95.19%",
-                  height: "91.89%",
+                  height: "80.612%",
                   display: "flex",
                   flexDirection: "column",
                   gap: "clamp(6px, 0.635vw, 9.14px)",
@@ -171,7 +352,11 @@ export default function KiwanoBrandStory({ brandStory }) {
                     background: "#000",
                   }}
                 >
+                  {/* key={videoSrc} — swapping `src` alone leaves the already
+                      buffered stream playing in some browsers, so the element
+                      is remounted when the month's video changes. */}
                   <video
+                    key={videoSrc}
                     ref={videoRef}
                     src={videoSrc}
                     loop
@@ -229,12 +414,17 @@ export default function KiwanoBrandStory({ brandStory }) {
                       pointerEvents: "none",
                     }}
                   >
-                    {brandStory?.date || "May 2026"}
+                    {activeStage?.date || "May 2026"}
                   </span>
                 </div>
 
-                {/* THUMB STRIP — Figma: w:1225.037 h:195.1736 justify-content:space-between */}
+                {/* THUMB STRIP — Figma: w:1225.037 h:195.1736 justify-content:space-between
+                    key={activeMonth} remounts the strip when the timeline
+                    moves, replaying the fade/lift entrance so the stage
+                    change reads as a transition, not a swap. */}
                 <div
+                  key={activeMonth}
+                  className="timeline-fade"
                   style={{
                     width: "100%",
                     height: "25.01%",
@@ -242,14 +432,21 @@ export default function KiwanoBrandStory({ brandStory }) {
                     justifyContent: "space-between",
                   }}
                 >
-                  {images.slice(0, 4).map((img) => (
-                    <div
+                  {monthImages.slice(0, 4).map((img) => (
+                    <button
                       key={img.id}
+                      type="button"
+                      aria-label={`Show ${img.alt} in the main display`}
+                      onClick={() => handleThumbClick(img.src)}
                       style={{
                         position: "relative",
                         width: "24.28%",
                         height: "100%",
                         overflow: "hidden",
+                        border: "none",
+                        background: "transparent",
+                        padding: 0,
+                        cursor: "pointer",
                       }}
                     >
                       <Image
@@ -259,14 +456,264 @@ export default function KiwanoBrandStory({ brandStory }) {
                         sizes="(max-width: 1440px) 25vw, 300px"
                         style={{ objectFit: "cover" }}
                       />
-                    </div>
+                    </button>
                   ))}
                 </div>
+              </div>
+
+              {/* ══════════════════════════════════════════════════════════
+                  MONTH NAVIGATOR — Figma: w:1213 h:20 top:850 left:37
+                  justify-content:space-between
+                  Arrows sit at the row's outer edges; the months are a
+                  1038-wide (85.573% of this row) space-between group
+                  between them.
+              ══════════════════════════════════════════════════════════ */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "87.810%",
+                  left: "2.875%",
+                  width: "94.250%",
+                  height: "2.066%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                {/* Left arrow — Figma: 20×20, the same chevron rotated 180° */}
+                <button
+                  type="button"
+                  aria-label="Previous month"
+                  onClick={goPrev}
+                  disabled={activeMonth === 0}
+                  style={{
+                    position: "relative",
+                    width: "clamp(14px, 1.389vw, 20px)",
+                    height: "clamp(14px, 1.389vw, 20px)",
+                    flexShrink: 0,
+                    border: "none",
+                    background: "transparent",
+                    padding: 0,
+                    cursor: activeMonth === 0 ? "default" : "pointer",
+                    opacity: activeMonth === 0 ? 0.35 : 1,
+                    transition: "opacity 0.2s ease",
+                  }}
+                >
+                  <Image
+                    src="/icons/Vector (8).png"
+                    alt=""
+                    fill
+                    sizes="20px"
+                    style={{ objectFit: "contain", transform: "rotate(0deg)" }}
+                  />
+                </button>
+
+                {/* MONTHS — Figma: w:1038 h:20 justify-content:space-between */}
+                <div
+                  style={{
+                    width: "85.573%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  {months.map((month, i) => (
+                    <button
+                      key={`${month}-${i}`}
+                      ref={(el) => { monthRefs.current[i] = el; }}
+                      type="button"
+                      onClick={() => selectMonth(i)}
+                      aria-current={i === activeMonth ? "true" : undefined}
+                      style={{
+                        /* Figma: Geist 400 20px / 19.6px ls:-0.06px, centred,
+                           #334454. The active month is weighted rather than
+                           recoloured, so the row keeps one colour; opacity is
+                           what transitions, since font-weight can't animate. */
+                        fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
+                        fontWeight: i === activeMonth ? 600 : 400,
+                        fontSize: "clamp(13px, 1.389vw, 20px)",
+                        lineHeight: "19.6px",
+                        letterSpacing: "-0.06px",
+                        textAlign: "center",
+                        verticalAlign: "middle",
+                        color: "#334454",
+                        opacity: i === activeMonth ? 1 : 0.7,
+                        transition: "opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1)",
+                        whiteSpace: "nowrap",
+                        border: "none",
+                        background: "transparent",
+                        padding: 0,
+                        cursor: "pointer",
+                      }}
+                    >
+                      {month}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Right arrow — Figma: 20×20, 0° */}
+                <button
+                  type="button"
+                  aria-label="Next month"
+                  onClick={goNext}
+                  disabled={activeMonth === months.length - 1}
+                  style={{
+                    position: "relative",
+                    width: "clamp(14px, 1.389vw, 20px)",
+                    height: "clamp(14px, 1.389vw, 20px)",
+                    flexShrink: 0,
+                    border: "none",
+                    background: "transparent",
+                    padding: 0,
+                    cursor: activeMonth === months.length - 1 ? "default" : "pointer",
+                    opacity: activeMonth === months.length - 1 ? 0.35 : 1,
+                    transition: "opacity 0.2s ease",
+                  }}
+                >
+                  <Image
+                    src="/icons/Vector (9).png"
+                    alt=""
+                    fill
+                    sizes="20px"
+                    style={{ objectFit: "contain" }}
+                  />
+                </button>
+              </div>
+
+              {/* ══════════════════════════════════════════════════════════
+                  AUDIO WAVEFORM — Figma: w:1156 h:38 top:900 left:66
+                  justify-content:space-between
+                  Decorative, so aria-hidden: it conveys nothing a screen
+                  reader needs and would otherwise read as 140 empty nodes.
+              ══════════════════════════════════════════════════════════ */}
+              <div
+                ref={waveRef}
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  top: "92.975%",
+                  left: "5.128%",
+                  width: "89.821%",
+                  height: "3.926%",
+                  display: "flex",
+                  /* flex-end, not center: every bar sits on one shared bottom
+                     baseline and grows upward only, so the cone points up —
+                     centring mirrors the tall bars downward and reads as a
+                     two-sided waveform, which the design doesn't have. */
+                  alignItems: "flex-end",
+                  justifyContent: "space-between",
+                }}
+              >
+                {Array.from({ length: WAVE_BAR_COUNT }, (_, i) => (
+                  <span
+                    key={i}
+                    style={{
+                      /* Bars are 1px hairlines — the row's space-between
+                         distributes the gaps, so the strip fills any width
+                         without re-tuning the count. Each bar keeps its key
+                         across renders, so the height transition below is
+                         what animates the cone gliding to the new month. */
+                      width: "1px",
+                      /* toFixed keeps float noise (53.300000000000004%) out
+                         of the rendered style attribute. */
+                      height: `${(waveBarHeight(i, peakIndex) * 100).toFixed(1)}%`,
+                      /* One colour at full opacity for every bar — the cone's
+                         position alone indicates the month. An opacity-based
+                         progress fill used to sit here, but it left the
+                         active month's own cone faded (everything "ahead" of
+                         MAY is the whole strip), which read as a bug. */
+                      background: "#334454",
+                      transition: "height 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+                      flexShrink: 0,
+                    }}
+                  />
+                ))}
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* ══════════════════════════════════════════════════════════════════
+          LIGHTBOX — a clicked thumbnail opens full-size over the page.
+          Clicking anywhere (backdrop or the image itself) closes it, as does
+          Escape. Kept mounted once opened so the close can animate out, and
+          made inert while hidden so it never swallows clicks on the page. */}
+      {lightboxSrc && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Enlarged project image"
+          onClick={closeLightbox}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 1000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "clamp(20px, 4vw, 64px)",
+            background: "rgba(0, 0, 0, 0.88)",
+            opacity: lightboxVisible ? 1 : 0,
+            transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+            /* `visibility` (not `display`) so the fade-out actually runs;
+               once hidden the layer stops intercepting pointer events. */
+            visibility: lightboxVisible ? "visible" : "hidden",
+            pointerEvents: lightboxVisible ? "auto" : "none",
+            cursor: "zoom-out",
+          }}
+        >
+          {/* Close affordance — the whole backdrop already closes, so this is
+              a visual cue rather than the only way out. */}
+          <button
+            type="button"
+            aria-label="Close enlarged image"
+            onClick={closeLightbox}
+            style={{
+              position: "absolute",
+              top: "clamp(16px, 2.5vw, 32px)",
+              right: "clamp(16px, 2.5vw, 32px)",
+              width: "44px",
+              height: "44px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              border: "none",
+              borderRadius: "50%",
+              background: "rgba(255, 255, 255, 0.12)",
+              color: "#FFFFFF",
+              fontSize: "26px",
+              lineHeight: 1,
+              cursor: "pointer",
+              transition: "background 0.25s ease",
+            }}
+          >
+            &times;
+          </button>
+
+          {/* The image scales to fit inside the padded viewport, so tall and
+              wide shots are both fully visible — no cropping in the popup. */}
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              height: "100%",
+              transform: lightboxVisible ? "scale(1)" : "scale(0.96)",
+              transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+            }}
+          >
+            <Image
+              src={lightboxSrc}
+              alt="Enlarged project moment"
+              fill
+              sizes="100vw"
+              style={{ objectFit: "contain" }}
+              priority
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

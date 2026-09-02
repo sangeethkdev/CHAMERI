@@ -84,6 +84,32 @@ body {
   }
 }
 
+/* ── Kiwano brand-story timeline (KiwanoBrandStory.jsx) ─────────────────────
+   Entrance played whenever the timeline's content swaps (month change remounts
+   the keyed strip): a fade with a slight lift and scale, so stages read as one
+   continuous timeline rather than separate slides. */
+@keyframes timelineFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.timeline-fade {
+  animation: timelineFadeIn 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline-fade {
+    animation: none;
+  }
+}
+
 /* ── react-phone-number-input custom styles for ContactSection ──────── */
 .contact-phone-input {
   width: 100%;
