@@ -61,6 +61,29 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ── Brochure enquiry popup (BrochureFormModal.jsx) ─────────────────────────
+   Used through Tailwind's arbitrary-animation syntax, animate-[brochureModalIn_…],
+   for both the card's entrance and the 2-second success note. Motion is dropped
+   entirely for anyone who has asked to reduce it. */
+@keyframes brochureModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-\[brochureModalIn_0\.25s_ease\],
+  .animate-\[brochureModalIn_0\.2s_ease\] {
+    animation: none;
+  }
+}
+
 /* ── react-phone-number-input custom styles for ContactSection ──────── */
 .contact-phone-input {
   width: 100%;

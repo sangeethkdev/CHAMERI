@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback, cloneElement } from "react";
-import Link from "next/link";
+import BrochureFormModal from "@/components/common/BrochureFormModal";
 
 // ─── Spec icons ───────────────────────────────────────────────────────────────
 
@@ -399,6 +399,9 @@ function ZoomableSitePlan() {
 
 export default function KiwanoLuxuryVillas({ luxuryVillas }) {
   const [brochureHovered, setBrochureHovered] = useState(false);
+  /* The mobile and desktop layouts each render their own brochure trigger,
+     but only one is ever visible, so a single flag drives the one popup. */
+  const [brochureOpen, setBrochureOpen] = useState(false);
 
   return (
     <section
@@ -572,19 +575,28 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
               {luxuryVillas?.subheading || 'Lorem ipsum dolor sit amet, consectetur'}
             </p>
 
-            <Link
-              href="/contact"
+            {/* Opens the enquiry popup rather than navigating to /contact —
+                the brochure is handed over after the visitor identifies
+                themselves. */}
+            <button
+              type="button"
+              onClick={() => setBrochureOpen(true)}
               onMouseEnter={() => setBrochureHovered(true)}
               onMouseLeave={() => setBrochureHovered(false)}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "6px",
-                borderBottom: "1px solid #000000",
-                paddingBottom: "2px",
                 cursor: "pointer",
                 width: "fit-content",
                 textDecoration: "none",
+                background: "transparent",
+                border: "none",
+                borderBottomWidth: "1px",
+                borderBottomStyle: "solid",
+                borderBottomColor: "#000000",
+                padding: "0 0 2px",
+                font: "inherit",
               }}
             >
               <span
@@ -615,7 +627,7 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
                 <line x1="2" y1="10" x2="16" y2="10" stroke="#041D35" strokeWidth="1.8" strokeLinecap="round" />
                 <polyline points="10,4 16,10 10,16" stroke="#041D35" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
               </svg>
-            </Link>
+            </button>
           </div>
         </div>
 
@@ -820,19 +832,28 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
               {luxuryVillas?.subheading || 'Lorem ipsum dolor sit amet, consectetur'}
             </p>
 
-            <Link
-              href="/contact"
+            {/* Opens the enquiry popup rather than navigating to /contact —
+                the brochure is handed over after the visitor identifies
+                themselves. */}
+            <button
+              type="button"
+              onClick={() => setBrochureOpen(true)}
               onMouseEnter={() => setBrochureHovered(true)}
               onMouseLeave={() => setBrochureHovered(false)}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "6px",
-                borderBottom: "1px solid #000000",
-                paddingBottom: "2px",
                 cursor: "pointer",
                 width: "fit-content",
                 textDecoration: "none",
+                background: "transparent",
+                border: "none",
+                borderBottomWidth: "1px",
+                borderBottomStyle: "solid",
+                borderBottomColor: "#000000",
+                padding: "0 0 2px",
+                font: "inherit",
               }}
             >
               <span
@@ -862,7 +883,7 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
                 <line x1="2" y1="10" x2="16" y2="10" stroke="#000000" strokeWidth="1.8" strokeLinecap="round" />
                 <polyline points="10,4 16,10 10,16" stroke="#000000" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
               </svg>
-            </Link>
+            </button>
           </div>
         </div>
 
@@ -1031,6 +1052,13 @@ export default function KiwanoLuxuryVillas({ luxuryVillas }) {
         </div>
       </div>
       </div>
+
+      {/* Enquiry popup — opened by either brochure trigger above. */}
+      <BrochureFormModal
+        isOpen={brochureOpen}
+        onClose={() => setBrochureOpen(false)}
+        source="Kiwano — Download Master Plan"
+      />
     </section>
   );
 }

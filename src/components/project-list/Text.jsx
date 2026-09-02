@@ -45,7 +45,7 @@ export default function Text({ project }) {
         style={{
           zIndex: 10,
           top: 'clamp(56px, 6.794vw, 97.84px)',
-          left: 'clamp(30px, 22.779vw, 396.81px)',
+          left: 'clamp(20px, 16.779vw, 316.81px)',
           width: 'clamp(240px, 69vw, 1135px)',
           gap: 'clamp(10px, 1.181vw, 17px)',
         }}

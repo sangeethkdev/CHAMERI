@@ -833,12 +833,35 @@ export default function HeroSection({ hero }) {
               transformOrigin: "center bottom",
             }}
           >
+            {/*
+             * Two crops of the same villa, one per orientation. A single
+             * landscape source object-cover'd into a tall phone viewport
+             * crops to the middle of the house and loses the framing, so
+             * mobile gets a portrait crop composed for that shape.
+             *
+             * Both are rendered and toggled with CSS rather than swapped on a
+             * JS breakpoint: this is the LCP image, so the correct one has to
+             * be in the initial HTML for the preloader to fetch it. `sizes`
+             * is what keeps that from costing anything — the hidden one
+             * matches no media condition, so the browser never downloads it.
+             */}
             <Image
-              src="/dummyimages/Frame 2121454280.png"
+              src="/images/iPhone 13 & 14 - 10.png"
               alt="Chameri villa exterior"
               fill
-              sizes="100vw"
-              className="object-cover object-[center_top]"
+              sizes="(max-width: 767px) 100vw, 0px"
+              className="object-cover object-[center_top] md:hidden"
+              priority
+            />
+            {/* alt="" — the mobile copy above already carries the description,
+                so this one is decorative to avoid a duplicate announcement. */}
+            <Image
+              src="/dummyimages/Frame 2121454280.png"
+              alt=""
+              aria-hidden="true"
+              fill
+              sizes="(max-width: 767px) 0px, 100vw"
+              className="object-cover object-[center_top] hidden md:block"
               priority
             />
           </div>

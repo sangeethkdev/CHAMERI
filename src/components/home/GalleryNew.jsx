@@ -63,14 +63,36 @@ const projectHref = (project) => {
  * 390px design width, i.e. a healthy visible gap after every caption) and
  * re-normalized against the taller MOBILE_FRAME_HEIGHT below — see the
  * aspect-ratio wrapper that consumes these two together. */
-const MOBILE_FRAME_HEIGHT = 1584;
+/* Card widths are driven by the CAPTION, not the image. Every name comes from
+ * admin data (see the VILLAS mapping below), so any card can hold any name —
+ * sizing a card to whatever name happens to sit in it today is what made the
+ * captions wrap and then overflow. Instead every card gets at least MIN_WIDTH
+ * below, which fits the longest caption the data currently holds:
+ *
+ *   "Kiwano Villament 01 — Thalassery, Kerala   2025"
+ *   ≈ 218px at the 11px clamp floor → 68.2% of a 320px viewport.
+ *
+ * 71% gives that a few points of margin. Cards already wider than that (v3,
+ * v5) keep their original Figma width. Widening changes height too (fixed
+ * aspect ratio), so tops are recomputed by stacking each card plus its caption
+ * plus a uniform ~27px gap, then normalising against the frame height that
+ * results — which is why these values no longer match the raw Figma frame. */
+const MIN_CARD_WIDTH = 71;
+const MOBILE_FRAME_HEIGHT = 1666;
 const MOBILE_CARDS = [
-  { key: 'v1', villaIndex: 1, top: 1.560,  left: 29.433, width: 64.778, ratio: 252.636 / 235.019 },
-  { key: 'v2', villaIndex: 0, top: 19.791, left: 4.774,  width: 67.835, ratio: 264.556 / 240.114 },
-  { key: 'v3', villaIndex: 2, top: 38.344, left: 12.108, width: 80.553, ratio: 314.156 / 266.170 },
-  { key: 'v4', villaIndex: 3, top: 58.541, left: 6.595,  width: 53.554, ratio: 208.862 / 194.297 },
-  { key: 'v5', villaIndex: 4, top: 74.199, left: 21.431, width: 72.983, ratio: 284.635 / 258.338 },
+  { key: 'v1', villaIndex: 1, top: 1.200,  left: 24.000, width: 71.000, ratio: 252.636 / 235.019 },
+  { key: 'v2', villaIndex: 0, top: 20.144, left: 3.500,  width: 71.000, ratio: 264.556 / 240.114 },
+  { key: 'v3', villaIndex: 2, top: 38.710, left: 12.108, width: 80.553, ratio: 314.156 / 266.170 },
+  { key: 'v4', villaIndex: 3, top: 58.168, left: 4.774,  width: 71.000, ratio: 208.862 / 194.297 },
+  { key: 'v5', villaIndex: 4, top: 77.111, left: 21.431, width: 72.983, ratio: 284.635 / 258.338 },
 ];
+
+/* The "Learn More" CTA is absolutely positioned in the same frame as the
+ * cards, so its top has to be derived from where the last caption ends —
+ * a hardcoded percentage silently lands on top of the final card whenever the
+ * cards above it change size. Sits 28px below v5's caption, centred on the
+ * 390px frame, with the frame height above extended to cover it. */
+const MOBILE_CTA = { top: 96.159, left: 32.564 };
 
 /* Purely decorative — the whole card (see ProjectCard below) is the actual
  * link, so this can't be an <a>/<Link> itself (anchors can't nest). */
@@ -141,17 +163,30 @@ const ViewProjectBtn = ({ position }) => (
   </div>
 );
 
-/** Reusable caption row under each project image */
-const Caption = ({ villa, gap = 3.31 }) => (
-  <div className="flex justify-between items-center" style={{ marginTop: clamp(10, 15) }}>
-    <div className="flex items-center" style={{ gap: clamp(2, gap) }}>
-      <span className="font-geist text-[#000000]" style={{ fontSize: clamp(11, 14), lineHeight: '1.42', letterSpacing: '-0.4px' }}>{villa.name}</span>
-      <span className="font-geist text-[#0A0A0A]" style={{ fontSize: clamp(11, 14), lineHeight: '1.42', letterSpacing: '-0.4px' }}>—</span>
-      <span className="font-geist text-[#737373]" style={{ fontSize: clamp(11, 14), lineHeight: '1.42', letterSpacing: '-0.4px' }}>{villa.location}</span>
+/**
+ * Reusable caption row under each project image.
+ *
+ * The card widths above are sized so this row fits on one line, but
+ * `whitespace-nowrap` is what guarantees it: without it a two-word value like
+ * "Thalassery, Kerala" breaks inside itself the moment the text is even a
+ * pixel wider than its card — which is exactly how this row used to wrap. A
+ * longer name than today's would now overflow the card rather than silently
+ * stacking, which is the visible failure you want.
+ */
+const Caption = ({ villa, gap = 3.31 }) => {
+  const textStyle = { fontSize: clamp(11, 14), lineHeight: '1.42', letterSpacing: '-0.4px' };
+
+  return (
+    <div className="flex justify-between items-center" style={{ marginTop: clamp(10, 15) }}>
+      <div className="flex items-center" style={{ gap: clamp(2, gap) }}>
+        <span className="font-geist text-[#000000] whitespace-nowrap" style={textStyle}>{villa.name}</span>
+        <span className="font-geist text-[#0A0A0A] whitespace-nowrap" style={textStyle}>—</span>
+        <span className="font-geist text-[#737373] whitespace-nowrap" style={textStyle}>{villa.location}</span>
+      </div>
+      <span className="font-geist text-[#000000] whitespace-nowrap" style={textStyle}>{villa.year}</span>
     </div>
-    <span className="font-geist text-[#000000]" style={{ fontSize: clamp(11, 14), lineHeight: '1.42', letterSpacing: '-0.4px' }}>{villa.year}</span>
-  </div>
-);
+  );
+};
 
 /** Reusable project image card */
 const ProjectCard = ({ villa, height }) => {
@@ -356,7 +391,7 @@ const GalleryNew = ({ gallery }) => {
               className="flex flex-col md:flex-row md:justify-between w-full gap-6 md:gap-0"
             >
               {/* Item 4 — left, sits at top */}
-              <div className="w-full md:w-[41%]">
+              <div className="w-full md:w-[45%]">
                 <ProjectCard villa={VILLAS[3]} height={clamp(220, 476.05)} />
                 <Caption villa={VILLAS[3]} gap={3.63} />
               </div>
@@ -505,7 +540,10 @@ const GalleryNew = ({ gallery }) => {
               <div
                 key={card.key}
                 className="absolute"
-                style={{ top: `${card.top}%`, left: `${card.left}%`, width: `${card.width}%` }}
+                /* Width floored at MIN_CARD_WIDTH so a card can never be
+                   narrower than its caption needs, whatever name the admin
+                   data puts in it. */
+                style={{ top: `${card.top}%`, left: `${card.left}%`, width: `${Math.max(card.width, MIN_CARD_WIDTH)}%` }}
               >
                 <Link href={projectHref(villa.project)} className="relative block w-full overflow-hidden" style={{ aspectRatio: card.ratio }}>
                   <Image src={villa.img} alt={villa.name} fill className="object-cover" />
@@ -520,7 +558,7 @@ const GalleryNew = ({ gallery }) => {
             href="/gallery"
             aria-label="View the full gallery"
             className="group absolute no-underline flex items-center border-none cursor-pointer overflow-hidden transition-colors duration-500 bg-[#6B859E] hover:bg-[#4a6074]"
-            style={{ top: '93.9%', left: '31.8%', width: '136px', height: '40px', borderRadius: '12px' }}
+            style={{ top: `${MOBILE_CTA.top}%`, left: `${MOBILE_CTA.left}%`, width: '136px', height: '40px', borderRadius: '12px' }}
           >
             {/* Sliding text */}
             <div
