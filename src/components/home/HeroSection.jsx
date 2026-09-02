@@ -845,8 +845,13 @@ export default function HeroSection({ hero }) {
              * is what keeps that from costing anything — the hidden one
              * matches no media condition, so the browser never downloads it.
              */}
+            {/* hero-mobile.png is a renamed copy of "iPhone 13 & 14 - 10.png"
+                — the original name's spaces and "&" broke the image URL on
+                the production host (the & reads as a query-string separator
+                unless every proxy in front encodes it), so the served file
+                carries a URL-safe name. */}
             <Image
-              src="/images/iPhone 13 & 14 - 10.png"
+              src="/images/hero-mobile.png"
               alt="Chameri villa exterior"
               fill
               sizes="(max-width: 767px) 100vw, 0px"
