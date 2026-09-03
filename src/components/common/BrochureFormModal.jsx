@@ -230,7 +230,12 @@ export default function BrochureFormModal({
          * pushing it off-screen.
          */}
         <div
-          className="relative bg-[#EDE7DE] w-full flex flex-col lg:flex-row lg:justify-between overflow-y-auto animate-[brochureModalIn_0.25s_ease] pointer-events-auto"
+          /* Below lg the three blocks (heading, form, contact details) flow
+             in ONE column — the column wrappers become `display: contents` —
+             ordered heading → form → details via `order-*`, mirroring the
+             Contact page. 28px row gap matches that page; lg+ keeps the 20px
+             column gap it always had. */
+          className="relative bg-[#EDE7DE] w-full flex flex-col lg:flex-row lg:justify-between gap-[28px] lg:gap-[20px] overflow-y-auto animate-[brochureModalIn_0.25s_ease] pointer-events-auto"
           style={{
             minHeight:     'clamp(0px, 42.014vw, 605px)',
             maxHeight:     'calc(100vh - clamp(24px, 3vw, 48px) - clamp(28px, 2.222vw, 32px) - clamp(6px, 0.694vw, 10px))',
@@ -240,7 +245,6 @@ export default function BrochureFormModal({
             paddingRight:  'clamp(20px, 3.264vw, 47px)',
             paddingBottom: 'clamp(20px, 1.389vw, 20px)',
             paddingLeft:   'clamp(20px, 2.361vw, 34px)',
-            gap:           'clamp(20px, 0vw, 0px)',
             boxShadow:     '0 24px 64px rgba(0, 0, 0, 0.28)',
           }}
         >
@@ -249,8 +253,11 @@ export default function BrochureFormModal({
          * LEFT COLUMN — heading (top) + contact details and socials (bottom)
          * w 465 → 32.292vw   h 579 → 40.208vw   justify-content space-between
          * ══════════════════════════════════════════════════════════════════ */}
+        {/* `contents` on mobile: this box vanishes so TOP and BOTTOM promote
+            into the card's flex flow and can be ordered around the form. The
+            inline sizing only takes effect at lg+, where the box returns. */}
         <div
-          className="flex flex-col justify-between flex-shrink-0 w-full"
+          className="contents lg:flex lg:flex-col lg:justify-between flex-shrink-0 w-full"
           style={{
             width:      'clamp(280px, 32.292vw, 465px)',
             minHeight:  'clamp(0px, 40.208vw, 579px)',
@@ -258,8 +265,10 @@ export default function BrochureFormModal({
           }}
         >
 
-          {/* ── TOP: badge + heading ─────────────────────────────────────── */}
-          <div className="flex flex-col" style={{ gap: 'clamp(8px, 1.111vw, 16px)' }}>
+          {/* ── TOP: badge + heading — order-1 on mobile ─────────────────── */}
+          <div
+            className="order-1 lg:order-none w-full pb-[6px] lg:pb-0 flex flex-col gap-[7px] lg:gap-[clamp(8px,1.111vw,16px)]"
+          >
 
             {/* Badge — square mark + "GET IN TOUCH" */}
             <div
@@ -310,14 +319,15 @@ export default function BrochureFormModal({
             </div>
           </div>
 
-          {/* ── BOTTOM: phone, email, socials ────────────────────────────── */}
+          {/* ── BOTTOM: phone, email, socials — order-3 on mobile, so it
+              renders AFTER the form, as on the Contact page.
+              The top margin and bottom padding exist only on the lg+
+              side-by-side layout (spacing under the heading, and keeping the
+              socials clear of the card's bottom edge). Stacked, the card's
+              28px row gap is the only separation, so neither stacks on top
+              of it as dead space. */}
           <div
-            className="flex flex-col"
-            style={{
-              gap:       'clamp(12px, 1.250vw, 18px)',
-              marginTop: 'clamp(20px, 2vw, 28px)',
-              paddingBottom:"clamp(60px, 5vw, 78px)",
-            }}
+            className="order-3 lg:order-none flex flex-col gap-[16px] lg:gap-[clamp(12px,1.250vw,18px)] mt-0 lg:mt-[clamp(20px,2vw,28px)] pb-0 lg:pb-[clamp(60px,5vw,78px)]"
           >
 
             {/* Phone + Email */}
@@ -426,11 +436,12 @@ export default function BrochureFormModal({
         <form
           noValidate
           onSubmit={onSubmit}
-          className="flex flex-col flex-shrink-0 w-full"
+          /* order-2 on mobile: sits between the heading and the contact
+             details, as on the Contact page. Full width there; the fixed
+             column width and the heading-aligning paddingTop are lg+ only. */
+          className="order-2 lg:order-none flex flex-col flex-shrink-0 w-full lg:w-[clamp(280px,44.097vw,635px)] pt-0 lg:pt-[clamp(12px,5.944vw,108px)]"
           style={{
-            width:      'clamp(280px, 44.097vw, 635px)',
             minHeight:  'clamp(0px, 39.028vw, 562px)',
-            paddingTop: 'clamp(12px, 5.944vw, 108px)',
             gap:        'clamp(14px, 1.528vw, 22px)',
           }}
         >

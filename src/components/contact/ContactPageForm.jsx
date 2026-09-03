@@ -548,7 +548,7 @@ export default function ContactPageForm() {
               <div
                 className="flex items-center"
                 style={{
-                  width:         'clamp(90px, 9.139vw, 130.2px)',
+                  width:         'clamp(140px, 9.139vw, 130.2px)',
                   height:        'clamp(24px, 2.139vw, 30.8px)',
                   gap:           'clamp(4px, 0.500vw, 7.2px)',
                   paddingTop:    'clamp(3px, 0.375vw, 5.4px)',
