@@ -1116,7 +1116,16 @@ export default function HeroSection({ hero }) {
       <section
         id="hero"
         ref={sectionRef}
-        className={`relative w-full z-20 pointer-events-auto ${animState === "waiting" ? "cursor-pointer" : ""}`}
+        /* h-[100svh] on mobile, 85svh from sm up. The mobile content block is
+           anchored `bottom-0` of THIS section, but the sticky backdrop behind
+           it is a full 100svh — so at 85svh the section ended 15svh above the
+           backdrop's bottom edge and the last paragraph spilled past the
+           artwork onto bare page, which is the white band. Matching the
+           backdrop's height on mobile makes the section end exactly where the
+           background does. Desktop keeps 85svh: there the content is
+           positioned independently and that height is what paces the
+           scroll-driven reveal. */
+        className={`relative w-full z-20 pointer-events-auto h-[100svh] sm:h-[85svh] ${animState === "waiting" ? "cursor-pointer" : ""}`}
         /* svh, not vh. On a real phone `vh` resolves against the LAYOUT
            viewport (address bar collapsed), while the sticky background above
            is sized in dynamic units — so the section was taller than the
@@ -1124,7 +1133,7 @@ export default function HeroSection({ hero }) {
            `svh` is the *stable* small-viewport unit: it assumes the address
            bar is visible and, unlike `dvh`, does not re-resolve while that bar
            animates, which is what made the hero jerk mid-scroll. */
-        style={{ marginTop: "-60svh", height: "85svh" }}
+        style={{ marginTop: "-60svh" }}
         onClick={requestReveal}
       >
 
