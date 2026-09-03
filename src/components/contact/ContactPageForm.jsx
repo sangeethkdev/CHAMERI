@@ -694,7 +694,7 @@ export default function ContactPageForm() {
                     <span
                       className="font-geist font-normal text-[#000000]"
                       style={{
-                        fontSize:      'clampclamp(15px, 1.39vw, 20px)',
+                        fontSize:      'clampclamp(15px, 1.39vw, 22px)',
                         letterSpacing: '-1px',
                       }}
                     >
