@@ -1010,7 +1010,7 @@ export default function HeroSection({ hero }) {
                    tagline sitting lower than the links. */
               }}
             >
-              Premium residences for those.
+              Premium residences for those
             </p>
 
             {/* Quick links — Figma: w:200 h:21 gap:16 */}
