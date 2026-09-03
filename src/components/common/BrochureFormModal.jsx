@@ -106,12 +106,45 @@ export default function BrochureFormModal({
   const [showSuccess, setShowSuccess] = useState(false);
   const timerRef = useRef(null);
 
-  /* Lock body scroll while open. */
+  /* Lock page scroll while open.
+   *
+   * `overflow: hidden` on <body> alone does NOT stop touch scrolling in iOS
+   * Safari — the page kept scrolling behind the popup on iPhone. The reliable
+   * cross-browser lock is to take the body out of flow (`position: fixed`)
+   * and hold it at its current offset with a negative `top`, then restore
+   * both the styles and the scroll position on close.
+   *
+   * `right: 0` (rather than a width) keeps the body at viewport width once
+   * fixed, so the layout doesn't reflow as the lock engages. */
   useEffect(() => {
     if (!isOpen) return undefined;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = previous; };
+
+    const { body } = document;
+    const scrollY = window.scrollY;
+    const previous = {
+      overflow: body.style.overflow,
+      position: body.style.position,
+      top:      body.style.top,
+      left:     body.style.left,
+      right:    body.style.right,
+    };
+
+    body.style.overflow = 'hidden';
+    body.style.position = 'fixed';
+    body.style.top      = `-${scrollY}px`;
+    body.style.left     = '0';
+    body.style.right    = '0';
+
+    return () => {
+      body.style.overflow = previous.overflow;
+      body.style.position = previous.position;
+      body.style.top      = previous.top;
+      body.style.left     = previous.left;
+      body.style.right    = previous.right;
+      /* Jump back to where the user was. `instant` matters: a smooth scroll
+         here would visibly rewind the page after the popup closes. */
+      window.scrollTo({ top: scrollY, behavior: 'instant' });
+    };
   }, [isOpen]);
 
   /* Close on Escape — bound only while open, so a closed modal never swallows
