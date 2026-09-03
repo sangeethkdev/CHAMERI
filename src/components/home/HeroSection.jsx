@@ -1116,16 +1116,18 @@ export default function HeroSection({ hero }) {
       <section
         id="hero"
         ref={sectionRef}
-        /* h-[100svh] on mobile, 85svh from sm up. The mobile content block is
-           anchored `bottom-0` of THIS section, but the sticky backdrop behind
-           it is a full 100svh — so at 85svh the section ended 15svh above the
-           backdrop's bottom edge and the last paragraph spilled past the
-           artwork onto bare page, which is the white band. Matching the
-           backdrop's height on mobile makes the section end exactly where the
-           background does. Desktop keeps 85svh: there the content is
-           positioned independently and that height is what paces the
-           scroll-driven reveal. */
-        className={`relative w-full z-20 pointer-events-auto h-[100svh] sm:h-[85svh] ${animState === "waiting" ? "cursor-pointer" : ""}`}
+        /* 60svh on mobile — the largest height that stays backed by the
+           artwork. A `sticky` element only paints while its own FLOW box is
+           on screen; it does not stretch. The backdrop's flow box occupies
+           0..100svh, and this section starts at 40svh (100 minus the -60svh
+           pull below), so the backdrop can cover it for exactly 60svh. Any
+           taller and the tail runs past where the sticky backdrop can follow,
+           leaving bare page behind the content — the white band. (85svh left
+           25svh of it; 100svh made it worse at 40svh.)
+
+           Desktop keeps 85svh: there the trailing region is scrolled through
+           rather than sat on, and that height paces the reveal. */
+        className={`relative w-full z-20 pointer-events-auto h-[60svh] sm:h-[85svh] ${animState === "waiting" ? "cursor-pointer" : ""}`}
         /* svh, not vh. On a real phone `vh` resolves against the LAYOUT
            viewport (address bar collapsed), while the sticky background above
            is sized in dynamic units — so the section was taller than the
@@ -1321,7 +1323,13 @@ export default function HeroSection({ hero }) {
           className="sm:hidden absolute inset-x-0 bottom-0 flex flex-col items-center pointer-events-none"
           style={{
             paddingBottom: "clamp(32px, 10.256vw, 40px)",  /* 40/390 */
-            gap: "clamp(110px, 38.205vw, 149px)",            /* 149/390 */
+            /* Ceiling trimmed 149 → 120. The stack (title 147 + gap + info 113
+               + 40 padding) has to fit the section's 60svh, which is the most
+               the sticky backdrop can cover; at the Figma 149 it overflowed by
+               a few px on a 390px-wide phone and pushed the last lines past
+               the artwork. The gap is the one slack value here, so it absorbs
+               the difference rather than the type or padding changing. */
+            gap: "clamp(90px, 30.769vw, 120px)",            /* 120/390 */
           }}
         >
           {/* ── Title: "Every Home Begins as Dream, brick by brick into reality"
