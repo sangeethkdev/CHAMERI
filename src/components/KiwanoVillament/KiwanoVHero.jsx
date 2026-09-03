@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import NewNavbar from "../common/NewNavbar";
@@ -9,6 +9,24 @@ gsap.registerPlugin(ScrollTrigger);
 
 // Total frames extracted by FFmpeg (24 fps × 9.04 s = 217)
 const FRAME_COUNT = 217;
+
+/* Two extractions of the same 217 frames, chosen by viewport orientation.
+ *
+ * landscape — the original 1920×1208 JPEGs. Fine on desktop, where the frame
+ *   is shown close to 1:1.
+ * portrait  — a 9:16 centre crop at 1170×2080 (WebP) taken from the ~3600px
+ *   source video. A phone held upright only ever displays a narrow vertical
+ *   slice of the landscape frame — roughly 560 source pixels stretched across
+ *   1179 physical pixels on an iPhone — which is why the hero looked soft on
+ *   real phones. The portrait set hands the phone the pixels it actually
+ *   shows, at about 1:1. It is also the smaller download of the two.
+ */
+const FRAME_BASE = "/frames/kiwano-villament";
+const FRAME_SETS = {
+  landscape: { dir: FRAME_BASE,               ext: "jpg"  },
+  portrait:  { dir: `${FRAME_BASE}/portrait`, ext: "webp" },
+};
+const PORTRAIT_QUERY = "(orientation: portrait)";
 
 // Lerp factor — how fast smoothProgress chases raw scroll.
 // 0.06 = cinematic/floaty  |  0.10 = balanced  |  0.16 = snappy
@@ -28,12 +46,23 @@ function drawCover(ctx, img, cw, ch) {
   ctx.drawImage(img, dx, dy, dw, dh);
 }
 
-export default function KiwanoHero({ hero }) {
+export default function KiwanoVHero({ hero }) {
   const wrapperRef     = useRef(null);
   const canvasRef      = useRef(null);
   const textRef        = useRef(null);
   const framesRef      = useRef([]);      // Image[]
   const drawnFrameRef  = useRef(-1);      // last frame index drawn
+
+  /* Bumped when the viewport flips between portrait and landscape (a phone
+     rotating), which re-runs the frame effect below so it reloads the frame
+     set that matches the new orientation. */
+  const [orientationKey, setOrientationKey] = useState(0);
+  useEffect(() => {
+    const mq = window.matchMedia(PORTRAIT_QUERY);
+    const onChange = () => setOrientationKey((k) => k + 1);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
 
   // Draw a specific frame index to the canvas
   const drawFrame = useCallback((index) => {
@@ -56,16 +85,19 @@ export default function KiwanoHero({ hero }) {
      Phones report devicePixelRatio 2–3, so a canvas sized in CSS pixels holds
      a third of the detail the screen can show and the browser upscales it —
      which is why the hero looked soft on mobile but sharp on desktop (DPR 1).
-     The source frames are 1920px wide, so there is real detail to recover.
-     Capped at 2: beyond that the pixel count (and per-frame draw cost) grows
-     faster than the visible gain on a phone-sized hero. */
+     The portrait frames are 1170px wide, so there is real detail to recover.
+     The DPR cap depends on the viewport: phones (DPR 3) get the full 3 —
+     their CSS area is small, so even at 3× the canvas is ~3M pixels, no more
+     than a 1080p desktop at 2×. Wider viewports stay capped at 2, where a
+     4K-class canvas would make every scroll-tick redraw noticeably costly. */
   const resizeCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const cssW = canvas.offsetWidth;
     const cssH = canvas.offsetHeight;
+    const dprCap = cssW <= 900 ? 3 : 2;
+    const dpr = Math.min(window.devicePixelRatio || 1, dprCap);
     const nextW = Math.round(cssW * dpr);
     const nextH = Math.round(cssH * dpr);
 
@@ -88,6 +120,17 @@ export default function KiwanoHero({ hero }) {
     const textEl  = textRef.current;
     if (!wrapper || !canvas) return;
 
+    /* Read the orientation synchronously here rather than from state, so a
+       phone picks the portrait set on its very first run and never starts
+       downloading the landscape set only to throw it away. On a re-run after
+       rotation, frames from the previous set are dropped and the drawn index
+       reset so the first frame of the new set actually paints. */
+    const frameSet = window.matchMedia(PORTRAIT_QUERY).matches
+      ? FRAME_SETS.portrait
+      : FRAME_SETS.landscape;
+    framesRef.current = [];
+    drawnFrameRef.current = -1;
+
     // ── 1. Size canvas ───────────────────────────────────────────────────
     resizeCanvas();
     const ro = new ResizeObserver(resizeCanvas);
@@ -100,7 +143,7 @@ export default function KiwanoHero({ hero }) {
     const makeImg = (i) => {
       const img = new Image();
       const n   = String(i + 1).padStart(4, "0");
-      img.src   = `/frames/kiwano-villament/frame_${n}.jpg`;
+      img.src   = `${frameSet.dir}/frame_${n}.${frameSet.ext}`;
       framesRef.current[i] = img;
       return img;
     };
@@ -160,7 +203,7 @@ export default function KiwanoHero({ hero }) {
       st.kill();
       gsap.ticker.remove(onTick);
     };
-  }, [drawFrame, resizeCanvas]);
+  }, [drawFrame, resizeCanvas, orientationKey]);
 
   return (
     <>
@@ -171,16 +214,18 @@ export default function KiwanoHero({ hero }) {
         ref={wrapperRef}
         style={{ position: "relative", width: "100%", height: "300vh" }}
       >
+        {/* Poster (first frame) shown until the canvas paints. Served per
+            orientation through Tailwind's `portrait:` variant so a phone's
+            very first paint is already the sharp portrait crop — no flash of
+            the soft landscape frame while JS decides which set to load. */}
         <div
+          className="bg-cover bg-center bg-[url('/frames/kiwano-villament/frame_0001.jpg')] portrait:bg-[url('/frames/kiwano-villament/portrait/frame_0001.webp')]"
           style={{
             position:            "sticky",
             top:                 0,
             width:               "100%",
             height:              "100vh",
             overflow:            "hidden",
-            backgroundImage:     "url('/frames/kiwano-villament/frame_0001.jpg')",
-            backgroundSize:      "cover",
-            backgroundPosition:  "center",
           }}
         >
           {/* Dark tint */}
