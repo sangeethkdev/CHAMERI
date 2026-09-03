@@ -180,9 +180,11 @@ export default function BrochureFormModal({
   const inputBase =
     'font-geist font-regular text-[#333333CC] bg-transparent border-0 border-b border-[#000000] outline-none w-full placeholder-[#000000]/40 focus:border-[#000000] transition-colors';
 
-  /* Mirrors ContactPageForm's field metric exactly so both forms read as one. */
+  /* Mirrors ContactPageForm's field metric exactly so both forms read as one.
+     The 16px floor also stops iOS Safari zooming the page when a field is
+     focused, which it does for any input below 16px. */
   const inputStyle = {
-    fontSize:      'clamp(15px, 1.11vw, 16px)',
+    fontSize:      'clamp(16px, 1.11vw, 18px)',
     height:        'clamp(33.75px, 3.75vw, 54px)',
     paddingBottom: 'clamp(4px, 0.4vw, 6px)',
     paddingLeft:   'clamp(10px, 0.4vw, 12px)',
@@ -466,16 +468,24 @@ export default function BrochureFormModal({
          * w 635 → 44.097vw   h 562 → 39.028vw
          * paddingTop 28 → 1.944vw   gap 22 → 1.528vw
          * ══════════════════════════════════════════════════════════════════ */}
+        {/* order-2 on mobile: sits between the heading and the contact details,
+            as on the Contact page. Full width there; the fixed column width is
+            lg+ only.
+            `lg:justify-center` vertically centres the fields in the column
+            instead of pinning them to the top — that top-pin plus a tight field
+            gap is what left the large empty band under the submit button. The
+            padding and gap below now mirror ContactPageForm exactly. */}
         <form
           noValidate
           onSubmit={onSubmit}
-          /* order-2 on mobile: sits between the heading and the contact
-             details, as on the Contact page. Full width there; the fixed
-             column width and the heading-aligning paddingTop are lg+ only. */
-          className="order-2 lg:order-none flex flex-col flex-shrink-0 w-full lg:w-[clamp(280px,44.097vw,635px)] pt-0 lg:pt-[clamp(12px,5.944vw,108px)]"
+          className="order-2 lg:order-none flex flex-col lg:justify-center flex-shrink-0 w-full lg:w-[clamp(280px,44.097vw,635px)]"
           style={{
-            minHeight:  'clamp(0px, 39.028vw, 562px)',
-            gap:        'clamp(14px, 1.528vw, 22px)',
+            minHeight:     'clamp(0px, 39.028vw, 562px)',
+            paddingTop:    'clamp(4px, 1.875vw, 27px)',
+            paddingBottom: 'clamp(4px, 1.875vw, 27px)',
+            paddingLeft:   'clamp(0px, 2.519vw, 55px)',
+            paddingRight:  'clamp(0px, 2.519vw, 55px)',
+            gap:           'clamp(20px, 2.778vw, 40px)',
           }}
         >
 

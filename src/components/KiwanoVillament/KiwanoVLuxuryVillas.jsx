@@ -1117,7 +1117,8 @@ export default function KiwanoVLuxuryVillas({ luxuryVillas }) {
                 whiteSpace: "pre-line",
               }}
             >
-              {luxuryVillas?.reraDetails || "rera.kerala.gov.in"}
+              {luxuryVillas?.reraDetails ||
+                "K-RERA Registration Number: K-RERA/PRJ/KNR/075/2025\nrera.kerala.gov.in"}
             </p>
           </div>
         </div>
