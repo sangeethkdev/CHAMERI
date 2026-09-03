@@ -44,16 +44,41 @@ export default function KiwanoHero({ hero }) {
     if (drawnFrameRef.current === index) return; // skip redraw of same frame
 
     const ctx = canvas.getContext("2d");
+    /* The 1920px frames are scaled DOWN into the canvas; the high-quality
+       resampler keeps fine detail (railings, roof slats) from aliasing. */
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
     drawCover(ctx, img, canvas.width, canvas.height);
     drawnFrameRef.current = index;
   }, []);
 
-  // Resize canvas to match CSS pixel dimensions
+  /* Size the canvas backing store in DEVICE pixels, not CSS pixels.
+     Phones report devicePixelRatio 2–3, so a canvas sized in CSS pixels holds
+     a third of the detail the screen can show and the browser upscales it —
+     which is why the hero looked soft on mobile but sharp on desktop (DPR 1).
+     The source frames are 1920px wide, so there is real detail to recover.
+     Capped at 2: beyond that the pixel count (and per-frame draw cost) grows
+     faster than the visible gain on a phone-sized hero. */
   const resizeCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    canvas.width  = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const cssW = canvas.offsetWidth;
+    const cssH = canvas.offsetHeight;
+    const nextW = Math.round(cssW * dpr);
+    const nextH = Math.round(cssH * dpr);
+
+    /* Writing width/height clears the canvas, so only touch them on a real
+       size change — otherwise every ResizeObserver tick would blank the
+       frame. The drawnFrame reset forces the redraw below to actually run,
+       since drawFrame() skips repeats of the same index. */
+    if (canvas.width !== nextW || canvas.height !== nextH) {
+      canvas.width  = nextW;
+      canvas.height = nextH;
+      drawnFrameRef.current = -1;
+    }
+
     drawFrame(Math.max(drawnFrameRef.current, 0));
   }, [drawFrame]);
 
