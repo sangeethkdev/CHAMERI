@@ -401,19 +401,22 @@ export default function KiwanoVBrandStory({ brandStory }) {
                     </button>
                   )}
 
-                  {/* Date badge — Figma: w:96 h:20 top:542.98 left:12.51 (of the 1225.037×575.9502 video) */}
+                  {/* Date badge — Figma: w:96 h:20 top:542.98 left:12.51 (of the 1225.037×575.9502 video)
+                      No fixed width: the Figma 96px fits "MAY 2026" but not a
+                      longer month, so "MARCH 2026" wrapped onto two lines. The
+                      badge is absolutely positioned, so it can size to its own
+                      text; `nowrap` keeps any month on one line. */}
                   <span
                     style={{
                       position: "absolute",
                       left: "1.02%",
                       bottom: "2.25%",
-                      width: "clamp(60px, 6.667vw, 96px)",
+                      whiteSpace: "nowrap",
                       fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
                       fontWeight: 400,
                       fontSize: "clamp(14px, 1.389vw, 20px)",
                       lineHeight: "19.6px",
                       letterSpacing: "-0.06px",
-                      textAlign: "center",
                       textTransform: "uppercase",
                       color: "#FFFFFF",
                       pointerEvents: "none",
