@@ -509,18 +509,36 @@ export default function HeroSection({ hero }) {
   // address bar animates) while desktop keeps using `window.innerHeight`.
   useEffect(() => {
     const updateViewport = () => {
-      const vv = window.visualViewport;
-      const isMobileWidth = window.innerWidth < 640;
-      const vh = isMobileWidth && vv ? vv.height : window.innerHeight;
-      setViewport({ vw: window.innerWidth, vh });
+      /* Must resolve to the SAME height the hero's containers are sized with,
+         which is `svh` (see the <section> and the sticky layers). Measuring a
+         different height than the boxes it fills is what left a white strip
+         under the curtain on a real phone, and re-measuring on every
+         address-bar animation frame is what made it jerk.
+
+         `svh` has no JS accessor, so measure it directly: one off-screen
+         probe element sized in svh, read once per resize. Falls back to
+         innerHeight where the unit is unsupported. */
+      const probe = document.createElement("div");
+      probe.style.cssText =
+        "position:absolute;top:-9999px;left:-9999px;width:0;height:100svh;pointer-events:none;visibility:hidden";
+      document.body.appendChild(probe);
+      const svh = probe.getBoundingClientRect().height;
+      probe.remove();
+
+      setViewport({
+        vw: window.innerWidth,
+        vh: svh > 0 ? svh : window.innerHeight,
+      });
     };
     updateViewport();
+    /* `resize` only. The visualViewport listener that used to be here fired on
+       every frame of the address bar's show/hide animation — with `svh` the
+       measured height is deliberately unaffected by that bar, so those events
+       could only re-render the hero mid-scroll for no change in value, which
+       is precisely the jerk being fixed. Orientation changes and real window
+       resizes still come through `resize`. */
     window.addEventListener("resize", updateViewport);
-    window.visualViewport?.addEventListener("resize", updateViewport);
-    return () => {
-      window.removeEventListener("resize", updateViewport);
-      window.visualViewport?.removeEventListener("resize", updateViewport);
-    };
+    return () => window.removeEventListener("resize", updateViewport);
   }, []);
 
   // The reveal is user-driven. These are refs, not state, because the gesture
@@ -682,7 +700,9 @@ export default function HeroSection({ hero }) {
   // 0–100% counter instead, so it reads 100% once settled and stays there
   // through the outro (rather than resuming a live 60→100% count on scroll,
   // which would contradict having just shown 100%).
-  const pct = Math.min(100, Math.round((progress / 0.6) * 100));
+  // Counts DOWN: starts at 100% and reaches 0% as the intro settles, so it
+  // reads as a loader draining rather than filling.
+  const pct = 100 - Math.min(100, Math.round((progress / 0.6) * 100));
 
   const phase1T = easeOutCubic(mapRange(progress, 0.00, 0.40, 0, 1));
   const phase2T = easeInOutCubic(mapRange(progress, 0.40, 0.60, 0, 1));
@@ -804,7 +824,7 @@ export default function HeroSection({ hero }) {
   return (
     <>
       {/* ── Sticky Background ─────────────────────────────────────────────── */}
-      <div className="sticky top-0 left-0 w-full h-dvh overflow-hidden pointer-events-none -z-10">
+      <div className="sticky top-0 left-0 w-full h-svh overflow-hidden pointer-events-none -z-10">
 
         {/* Layer 0: Dark blue + waves */}
         <div className="absolute inset-0 w-full h-full -z-30 overflow-hidden pointer-events-none bg-[#2A3A4A]">
@@ -875,10 +895,10 @@ export default function HeroSection({ hero }) {
 
       {/* ── Sticky Header (Logo & Navbar) ─────────────────────────────────── */}
       <div
-        className="sticky top-0 left-0 w-full h-dvh pointer-events-none z-50 overflow-visible"
-        style={{ marginTop: "-100dvh" }}
+        className="sticky top-0 left-0 w-full h-svh pointer-events-none z-50 overflow-visible"
+        style={{ marginTop: "-100svh" }}
       >
-        <div className="absolute top-[1%]  left-0 w-full h-dvh pointer-events-none">
+        <div className="absolute top-[1%]  left-0 w-full h-svh pointer-events-none">
 
           {/* Layer 2: Animated logo group — fades out once the reveal is
               done, handing off to NewNavbar's own logo below */}
@@ -940,10 +960,17 @@ export default function HeroSection({ hero }) {
         <div
           className="hidden sm:block absolute pointer-events-auto"
           style={{
-            top: "clamp(90px, 13.44vh, 155px)",
+            top: "clamp(90px, 13.44svh, 175px)",
             left: "clamp(20px, 2.78vw, 40px)",
             right: "clamp(20px, 2.78vw, 40px)",
-            opacity: infoRowT * counterOpacity,
+            /* `infoRowT` only — this row stays fully opaque once revealed.
+               `counterOpacity` was multiplied in here as well, but it exists
+               to fade out the "100%" scroll counter over progress 0.95→1
+               (see the bottom info row, where it still applies). Applying it
+               here left the tagline and links permanently semi-transparent
+               after the intro, so the #000000 both elements declare rendered
+               as washed-out grey against the beige. */
+            opacity: infoRowT,
             overflow: "hidden",
           }}
           onClick={(e) => e.stopPropagation()}
@@ -957,12 +984,39 @@ export default function HeroSection({ hero }) {
             style={{
               transform: `translateY(calc(${20 * (1 - infoRowT)}px + ${topRowLiftPct}%))`,
               willChange: "transform",
+              height:"50px"
             }}
           >
+            {/* Tagline heading — Figma: w:346 h:58, Roundo 500 24px.
+                Sits on the LEFT with the quick links opposite it; `justify-between`
+                on the row above puts each at its own edge, so the swap is the
+                source order plus the text-align flip below. */}
+            <p
+              style={{
+                width: "clamp(220px, 26.43vw, 396px)",
+                margin: 0,
+                fontFamily: "var(--font-roundo), 'Roundo', var(--font-outfit), system-ui, sans-serif",
+                fontWeight: 500,
+                fontSize: "clamp(18px, 1.667vw, 24px)",
+                lineHeight: "100%",
+                letterSpacing: "0",
+                textAlign: "left",
+                textTransform: "capitalize",
+                color: "#000000",
+                /* No vertical padding here, and none on the nav opposite:
+                   the row is `items-center`, so any padding/margin on one
+                   side alone shifts it off the other's centre line. Both
+                   used to carry an offsetting 20px, which is what left the
+                   tagline sitting lower than the links. */
+              }}
+            >
+              Premium residences for those.
+            </p>
+
             {/* Quick links — Figma: w:200 h:21 gap:16 */}
             <nav
               className="flex items-center"
-              style={{ gap: "clamp(10px, 1.11vw, 16px)", marginBottom: "20px" }}
+              style={{ gap: "clamp(10px, 1.11vw, 16px)" }}
             >
               {[
                 { label: "Projects", href: "/project-list" },
@@ -990,25 +1044,6 @@ export default function HeroSection({ hero }) {
                 </Link>
               ))}
             </nav>
-
-            {/* Tagline heading — Figma: w:346 h:58, Roundo 500 24px, right-aligned */}
-            <p
-              style={{
-                width: "clamp(220px, 26.43vw, 396px)",
-                margin: 0,
-                fontFamily: "var(--font-roundo), 'Roundo', var(--font-outfit), system-ui, sans-serif",
-                fontWeight: 500,
-                fontSize: "clamp(18px, 1.667vw, 24px)",
-                lineHeight: "100%",
-                letterSpacing: "0",
-                textAlign: "right",
-                textTransform: "capitalize",
-                color: "#000000",
-                paddingTop:'20px',
-              }}
-            >
-              Premium residences for those who seek refined living.
-            </p>
           </div>
         </div>
 
@@ -1017,16 +1052,14 @@ export default function HeroSection({ hero }) {
             Figma canvas: 1440 × 900px
             Row: w:1375  h:41  top:694  left:32  justify-content:space-between
             Converted → top: 694/900 = 77.11vh   left/right: 32/1440 ≈ 2.22vw
-            Figma calls for #00000080 (black/50%) text, but early in the
-            animation this row sits over the still-navy intro background
-            (before the curtain has risen this far down), and later over the
-            photo — black text isn't reliably readable against either, so it
-            keeps the same translucent-white treatment the rest of the hero
-            uses over dark/photo backdrops. */}
+            All three elements here — the label, the chevron and the counter —
+            are solid #000000. Figma's #00000080 (black/50%) rendered as grey
+            against the beige, and mixing the two values left the counter a
+            different shade from its own row. */}
         <div
           className="hidden sm:flex absolute items-center justify-between pointer-events-none"
           style={{
-            top: "clamp(340px, 95.11vh, 994px)",
+            top: "clamp(340px, 95.11svh, 994px)",
             left: "clamp(16px, 2.22vw, 32px)",
             right: "clamp(16px, 2.29vw, 33px)",
             opacity: infoRowT * counterOpacity,
@@ -1047,7 +1080,7 @@ export default function HeroSection({ hero }) {
                 lineHeight: "100%",
                 letterSpacing: "0",
                 textAlign: "center",
-                color: "#00000080",
+                color: "#000000",
               }}
             >
               Scroll down
@@ -1057,7 +1090,7 @@ export default function HeroSection({ hero }) {
               fill="none"
               style={{ width: "clamp(14px, 1.32vw, 19px)", height: "clamp(6px, 0.577vw, 8.3125px)" }}
             >
-              <path d="M1 1L9.5 7.3125L18 1" stroke="#00000080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M1 1L9.5 7.3125L18 1" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
 
@@ -1071,7 +1104,7 @@ export default function HeroSection({ hero }) {
               lineHeight: "100%",
               letterSpacing: "0",
               textAlign: "center",
-              color: "#00000080",
+              color: "#000000",
             }}
           >
             {pct}%
@@ -1084,7 +1117,14 @@ export default function HeroSection({ hero }) {
         id="hero"
         ref={sectionRef}
         className={`relative w-full z-20 pointer-events-auto ${animState === "waiting" ? "cursor-pointer" : ""}`}
-        style={{ marginTop: "-60vh", height: "85vh" }}
+        /* svh, not vh. On a real phone `vh` resolves against the LAYOUT
+           viewport (address bar collapsed), while the sticky background above
+           is sized in dynamic units — so the section was taller than the
+           backdrop actually covering it, leaving a white strip at the bottom.
+           `svh` is the *stable* small-viewport unit: it assumes the address
+           bar is visible and, unlike `dvh`, does not re-resolve while that bar
+           animates, which is what made the hero jerk mid-scroll. */
+        style={{ marginTop: "-60svh", height: "85svh" }}
         onClick={requestReveal}
       >
 
@@ -1245,7 +1285,7 @@ export default function HeroSection({ hero }) {
             <p
               style={{
                 width: "clamp(50px, 21.78vw, 660px)",  /* 256/1440 */
-                height: "clamp(80px, 12.55vh, 250px)",
+                height: "clamp(80px, 12.55svh, 250px)",
                 fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
                 fontWeight: 300,
                 fontSize: "clamp(11px, 1.169vw, 20.4px)",

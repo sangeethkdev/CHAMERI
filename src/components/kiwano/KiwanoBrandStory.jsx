@@ -29,8 +29,13 @@ const DEFAULT_IMAGES = [
   { id: 4, src: "/dummyimages/af18e0d9d8fdfe4f4a5d97f4fbf9edd12b1ff9df.png", alt: "Kiwano villa moment 4" },
 ];
 
-/** The construction-timeline months shown under the thumb strip. */
-const DEFAULT_MONTHS = ["MAY", "JUNE", "JULY", "AUGST", "SETPTEMBER"];
+/** The construction-timeline months shown under the thumb strip — the full
+ *  twelve, so the placeholder timeline covers a whole year. Used only when the
+ *  admin data carries no months of its own. */
+const DEFAULT_MONTHS = [
+  "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
+  "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER",
+];
 
 /**
  * Audio-waveform strip: 140 bars, heights 0-1, derived per render.
@@ -533,13 +538,16 @@ export default function KiwanoBrandStory({ brandStory }) {
                       onClick={() => selectMonth(i)}
                       aria-current={i === activeMonth ? "true" : undefined}
                       style={{
-                        /* Figma: Geist 400 20px / 19.6px ls:-0.06px, centred,
-                           #334454. The active month is weighted rather than
-                           recoloured, so the row keeps one colour; opacity is
-                           what transitions, since font-weight can't animate. */
+                        /* Figma: Geist 400 20px / 19.6px ls:-0.06px, centred, #334454.
+                              Scaled down from 20px: twelve month labels across the
+                              1038px row leave only ~7px between words at 20px, where
+                              14px keeps a comfortable gap. The active month is
+                              weighted rather than recoloured, so the row keeps one
+                              colour; opacity is what transitions, since font-weight
+                              cannot animate. */
                         fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
                         fontWeight: i === activeMonth ? 600 : 400,
-                        fontSize: "clamp(13px, 1.389vw, 20px)",
+                        fontSize: "clamp(11px, 0.972vw, 14px)",
                         lineHeight: "19.6px",
                         letterSpacing: "-0.06px",
                         textAlign: "center",
