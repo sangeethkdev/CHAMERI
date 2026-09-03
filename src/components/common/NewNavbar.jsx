@@ -15,13 +15,9 @@ import MenuSection from './MenuSection';
  * Scroll behaviour:
  *   - Hidden (translated up) when the user scrolls DOWN
  *   - Visible (translated to 0) when the user scrolls UP
- *   - At the very top of the page, `hideAtTop` decides:
- *       false (default) — stays visible, for pages whose content starts
- *         immediately below it (About, Contact, Gallery, …)
- *       true — retracts, for the homepage hero, which owns the top of the
- *         screen with its own large logo. Scrolling back up to the top hides
- *         the bar again, the way an iOS navigation bar collapses once the
- *         content it belongs to is back in view.
+ *   - Always visible at the very top of the page (scrollY <= TOP_ZONE),
+ *     whatever the last movement was. scrollY is clamped at 0 so iOS
+ *     Safari's rubber-band overscroll can't register as a downward scroll.
  *
  * clamp() formula:
  *   vw_value = (DESIGN_PX / 1440) × 100
@@ -68,36 +64,36 @@ import MenuSection from './MenuSection';
  *   whose hero is a light flat colour (about, services) would otherwise show
  *   white-on-cream and the logo would be invisible.
  */
-export default function NewNavbar({ opacity = 1, showLogo = true, darkLogo = false, hideAtTop = false }) {
+export default function NewNavbar({ opacity = 1, showLogo = true, darkLogo = false }) {
   const logoMark     = darkLogo ? '/icons/logo-mark-dark.svg'     : '/icons/logo (6).svg';
   const logoWordmark = darkLogo ? '/icons/logo-wordmark-dark.svg' : '/icons/logo (7).svg';
 
-  /* Starts hidden when the page wants a bare top (the homepage hero owns that
-     area with its own large logo), so the first paint never flashes a navbar
-     that the scroll handler is about to retract. */
-  const [visible, setVisible] = useState(!hideAtTop);
+  const [visible, setVisible] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
 
   useEffect(() => {
     const SCROLL_THRESHOLD = 8; // px — ignore tiny jitter
-    /* Below this the page counts as "at the top". Larger than the jitter
-       threshold so the navbar is gone before the hero's own logo is reached,
-       rather than overlapping it for the last few pixels. */
-    const TOP_ZONE = 80;
+    /* Within this distance of the top the navbar is always shown, whatever
+       direction the last movement was. */
+    const TOP_ZONE = 40;
 
     const handleScroll = () => {
-      const currentY = window.scrollY;
+      /* Clamped at 0: iOS Safari's rubber-band overscroll reports NEGATIVE
+         scrollY while the page is pulled past the top, and the spring back to
+         0 then reads as a downward scroll — which used to hide the navbar at
+         the exact moment the user arrived at the top. Android never reports
+         negative values, so it never hit this. Clamping makes both platforms
+         see the same numbers. */
+      const currentY = Math.max(0, window.scrollY);
       const diff = currentY - lastScrollY.current;
 
-      /* The top rule outranks scroll direction: scrolling UP normally reveals
-         the navbar, but arriving back at the top of a `hideAtTop` page must
-         still hide it — that's the iOS-style behaviour, where the bar retracts
-         once the content it belongs to is off screen. Checked before the
-         jitter guard so a scroll that ENDS in the top zone still hides it even
-         when the final delta is tiny. */
-      if (hideAtTop && currentY <= TOP_ZONE) {
-        setVisible(false);
+      /* At the top the bar is always visible, regardless of direction. This
+         runs BEFORE the jitter guard on purpose: a bounce or address-bar
+         resize can end at the top with a tiny delta, and returning early
+         there would leave a hidden navbar stuck hidden. */
+      if (currentY <= TOP_ZONE) {
+        setVisible(true);
         lastScrollY.current = currentY;
         return;
       }
@@ -117,12 +113,12 @@ export default function NewNavbar({ opacity = 1, showLogo = true, darkLogo = fal
 
     /* Run once on mount so a page restored mid-scroll (refresh, back button)
        starts in the right state instead of waiting for the first scroll. */
-    lastScrollY.current = window.scrollY;
+    lastScrollY.current = Math.max(0, window.scrollY);
     handleScroll();
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [hideAtTop]);
+  }, []);
 
   return (
     <>
