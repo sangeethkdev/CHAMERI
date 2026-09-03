@@ -938,8 +938,11 @@ export default function HeroSection({ hero }) {
         </div>
 
         {/* Layer 3: Navbar — only fades in (with its own logo) once the
-            animated logo above has fully hidden itself */}
-        <NewNavbar opacity={isDone ? 1 : 0}  />
+            animated logo above has fully hidden itself.
+            `hideAtTop` because this hero owns the top of the screen: scrolling
+            back up to the very top retracts the bar rather than leaving it
+            over the hero, matching how an iOS navigation bar collapses. */}
+        <NewNavbar opacity={isDone ? 1 : 0} hideAtTop />
 
         {/* ══════════════════════════════════════════════════════════════════════
             TOP INFO ROW — quick links (left) + tagline heading (right)

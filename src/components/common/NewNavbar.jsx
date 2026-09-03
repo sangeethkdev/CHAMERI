@@ -15,7 +15,13 @@ import MenuSection from './MenuSection';
  * Scroll behaviour:
  *   - Hidden (translated up) when the user scrolls DOWN
  *   - Visible (translated to 0) when the user scrolls UP
- *   - Always visible at the very top of the page (scrollY < threshold)
+ *   - At the very top of the page, `hideAtTop` decides:
+ *       false (default) — stays visible, for pages whose content starts
+ *         immediately below it (About, Contact, Gallery, …)
+ *       true — retracts, for the homepage hero, which owns the top of the
+ *         screen with its own large logo. Scrolling back up to the top hides
+ *         the bar again, the way an iOS navigation bar collapses once the
+ *         content it belongs to is back in view.
  *
  * clamp() formula:
  *   vw_value = (DESIGN_PX / 1440) × 100
@@ -62,20 +68,39 @@ import MenuSection from './MenuSection';
  *   whose hero is a light flat colour (about, services) would otherwise show
  *   white-on-cream and the logo would be invisible.
  */
-export default function NewNavbar({ opacity = 1, showLogo = true, darkLogo = false }) {
+export default function NewNavbar({ opacity = 1, showLogo = true, darkLogo = false, hideAtTop = false }) {
   const logoMark     = darkLogo ? '/icons/logo-mark-dark.svg'     : '/icons/logo (6).svg';
   const logoWordmark = darkLogo ? '/icons/logo-wordmark-dark.svg' : '/icons/logo (7).svg';
 
-  const [visible, setVisible] = useState(true);
+  /* Starts hidden when the page wants a bare top (the homepage hero owns that
+     area with its own large logo), so the first paint never flashes a navbar
+     that the scroll handler is about to retract. */
+  const [visible, setVisible] = useState(!hideAtTop);
   const [menuOpen, setMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
 
   useEffect(() => {
     const SCROLL_THRESHOLD = 8; // px — ignore tiny jitter
+    /* Below this the page counts as "at the top". Larger than the jitter
+       threshold so the navbar is gone before the hero's own logo is reached,
+       rather than overlapping it for the last few pixels. */
+    const TOP_ZONE = 80;
 
     const handleScroll = () => {
       const currentY = window.scrollY;
       const diff = currentY - lastScrollY.current;
+
+      /* The top rule outranks scroll direction: scrolling UP normally reveals
+         the navbar, but arriving back at the top of a `hideAtTop` page must
+         still hide it — that's the iOS-style behaviour, where the bar retracts
+         once the content it belongs to is off screen. Checked before the
+         jitter guard so a scroll that ENDS in the top zone still hides it even
+         when the final delta is tiny. */
+      if (hideAtTop && currentY <= TOP_ZONE) {
+        setVisible(false);
+        lastScrollY.current = currentY;
+        return;
+      }
 
       if (Math.abs(diff) < SCROLL_THRESHOLD) return; // ignore tiny movements
 
@@ -90,9 +115,14 @@ export default function NewNavbar({ opacity = 1, showLogo = true, darkLogo = fal
       lastScrollY.current = currentY;
     };
 
+    /* Run once on mount so a page restored mid-scroll (refresh, back button)
+       starts in the right state instead of waiting for the first scroll. */
+    lastScrollY.current = window.scrollY;
+    handleScroll();
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [hideAtTop]);
 
   return (
     <>
