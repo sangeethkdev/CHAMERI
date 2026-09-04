@@ -1,4 +1,5 @@
 import { Geist, Outfit, Instrument_Sans } from "next/font/google";
+import Script from "next/script";
 import localFont from "next/font/local";
 import FloatingContactButtons from "@/components/common/FloatingContactButtons";
 import "./globals.css";
@@ -51,6 +52,20 @@ export default function RootLayout({ children }) {
       <body className="min-h-full flex flex-col">
         {children}
         <FloatingContactButtons />
+        {/* Google tag (gtag.js) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-Y29NJJ1WBV"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-Y29NJJ1WBV');
+          `}
+        </Script>
       </body>
     </html>
   );
