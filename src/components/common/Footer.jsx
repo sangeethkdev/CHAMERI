@@ -742,7 +742,7 @@ const Footer = () => {
                     maxWidth:   'clamp(261.6px, 13.82vw, 265.7px)',
                   }}
                 >
-                  #27/205, Madapeedika, Paral (PO), Thalasserry, Kannur, Kerala, 670601
+                  #27/205, Madapeedika, Paral (PO), Thalasserry, Kannur, Kerala, 670671
                 </a>
               </div>
 
