@@ -358,49 +358,47 @@ const ProjectContactUs = () => {
               <button
                 type="submit"
                 disabled={status === 'sending'}
-                className="group relative flex items-center justify-center bg-[#6B859E] hover:bg-[#4a6074] transition-colors duration-500 overflow-hidden cursor-pointer border-none w-[clamp(118.6px,11.6vw,167px)] h-[clamp(36.9px,3.61vw,52px)]"
+                className="group relative inline-flex items-center bg-[#6B859E] hover:bg-[#4a6074] transition-colors duration-500 overflow-hidden cursor-pointer border-none h-[clamp(42px,3.61vw,52px)]"
                 style={{
                   borderRadius: 'clamp(8.5px, 0.83vw, 12px)',
+                  paddingLeft:  'clamp(14px, 1.83vw, 22px)',
+                  paddingRight: 'clamp(8px, 0.83vw, 12px)',
+                  gap:          'clamp(10px, 1.2vw, 16px)',
+                  maxWidth:     '100%',
                 }}
               >
                 {/* Sliding text */}
-                <div
-                  className="absolute overflow-hidden"
-                  style={{
-                    top:    'clamp(10px, 1.01vw, 14.5px)',
-                    left:   'clamp(10px, 1.83vw, 22px)',
-                    width:  'clamp(70px, 6.74vw, 97px)',
-                    height: 'clamp(18px, 1.6vw, 23px)',
-                  }}
+                <span
+                  className="block overflow-hidden"
+                  style={{ height: 'clamp(20px, 1.6vw, 23px)' }}
                 >
-                  <div className="flex flex-col transition-transform duration-500 ease-in-out group-hover:-translate-y-1/2">
+                  <span className="flex flex-col transition-transform duration-500 ease-in-out group-hover:-translate-y-1/2">
                     {['Enquire now', 'Enquire now'].map((label, i) => (
                       <span
                         key={i}
-                        className="font-sans font-medium text-[#EDE7DE] whitespace-nowrap flex items-center"
+                        className="font-sans font-medium text-[#EDE7DE] whitespace-nowrap flex items-center shrink-0"
                         style={{
-                          height:   'clamp(18px, 1.6vw, 23px)',
+                          height:   'clamp(20px, 1.6vw, 23px)',
                           fontSize: 'clamp(13px, 1.04vw, 15px)',
                         }}
                       >
                         {label}
                       </span>
                     ))}
-                  </div>
-                </div>
+                  </span>
+                </span>
 
                 {/* Arrow box */}
-                <div
-                  className="absolute bg-[#EDE7DE] group-hover:bg-[#EDE7DE] transition-colors duration-500 overflow-hidden"
+                <span
+                  className="relative block shrink-0 bg-[#EDE7DE] group-hover:bg-[#EDE7DE] transition-colors duration-500 overflow-hidden"
                   style={{
-                    right:        'clamp(8px, 0.83vw, 12px)',
                     width:        'clamp(22px, 2.08vw, 30px)',
                     height:       'clamp(22px, 2.08vw, 30px)',
                     borderRadius: 'clamp(5px, 0.49vw, 7px)',
                   }}
                 >
                   {/* Arrow slide out */}
-                  <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out group-hover:translate-x-full">
+                  <span className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out group-hover:translate-x-full">
                     <svg
                       viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
                       className="text-[#000000]"
@@ -408,9 +406,9 @@ const ProjectContactUs = () => {
                     >
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
-                  </div>
+                  </span>
                   {/* Arrow slide in */}
-                  <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out -translate-x-full group-hover:translate-x-0">
+                  <span className="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out -translate-x-full group-hover:translate-x-0">
                     <svg
                       viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
                       className="text-[#000000]"
@@ -418,8 +416,8 @@ const ProjectContactUs = () => {
                     >
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
-                  </div>
-                </div>
+                  </span>
+                </span>
               </button>
               {statusMessage && (
                 <p
