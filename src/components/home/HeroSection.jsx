@@ -1010,7 +1010,7 @@ export default function HeroSection({ hero }) {
                    tagline sitting lower than the links. */
               }}
             >
-              Premium residences for those
+              Forty Years Building Trust
             </p>
 
             {/* Quick links — Figma: w:200 h:21 gap:16 */}

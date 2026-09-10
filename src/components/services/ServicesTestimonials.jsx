@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
+import TestimonialCardMedia, { toCardMedia } from '../common/TestimonialCardMedia';
 import { useSwipe } from '@/hooks/useSwipe';
 /* NOTE: the "Learn More" CTA further down is commented out. If you re-enable
    it, add back:  import Link from 'next/link';  — it already carries
@@ -116,7 +117,8 @@ const ServicesTestimonials = ({ testimonial }) => {
         quote: c.quote,
         name: c.name,
         role: c.designation,
-        img: c.cardImage || STATIC_TESTIMONIALS[i % STATIC_TESTIMONIALS.length]?.img,
+        // Spreads mediaType plus whichever of img/video/youtubeId applies.
+        ...toCardMedia(c, STATIC_TESTIMONIALS[i % STATIC_TESTIMONIALS.length]?.img),
         avatar: c.image || STATIC_TESTIMONIALS[i % STATIC_TESTIMONIALS.length]?.avatar,
       }))
     : STATIC_TESTIMONIALS;
@@ -316,17 +318,10 @@ const ServicesTestimonials = ({ testimonial }) => {
                   transition: transitionEnabled ? 'clip-path 900ms cubic-bezier(0.4,0,0.2,1), opacity 900ms ease' : 'none',
                 }}
               >
-                <Image
-                  src={item.img}
-                  alt={item.name}
-                  fill
-                  className="object-cover"
-                  style={{
-                    transform:  isCenter ? 'scale(1)' : 'scale(1.1)',
-                    transition: transitionEnabled
-                      ? 'transform 900ms cubic-bezier(0.4,0,0.2,1)'
-                      : 'none',
-                  }}
+                <TestimonialCardMedia
+                  item={item}
+                  isCenter={isCenter}
+                  transitionEnabled={transitionEnabled}
                 />
 
                 {isMobile ? (

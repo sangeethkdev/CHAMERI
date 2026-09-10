@@ -10,6 +10,11 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
       },
+      {
+        // YouTube testimonial thumbnails (see TestimonialCardMedia)
+        protocol: 'https',
+        hostname: 'img.youtube.com',
+      },
     ],
   },
 };

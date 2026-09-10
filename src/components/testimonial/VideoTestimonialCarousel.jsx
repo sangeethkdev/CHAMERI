@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { TESTIMONIALS as DEFAULT_TESTIMONIALS } from '@/data/testimonials';
+import { getYoutubeId } from '@/components/common/TestimonialCardMedia';
 
 /**
  * ─────────────────────────────────────────────────────────────────────────────
@@ -60,6 +61,12 @@ function VideoCard({ item }) {
   const videoRef = useRef(null);
   const [playing, setPlaying] = useState(false);
 
+  // Cards saved before the image/YouTube options existed carry no
+  // mediaType, so anything unrecognised falls back to video.
+  const isImage   = item.mediaType === 'image' && item.img;
+  const isYoutube = item.mediaType === 'youtube' && item.youtubeId;
+  const isVideo   = !isImage && !isYoutube;
+
   const togglePlay = () => {
     const video = videoRef.current;
     if (!video || !item.video) return;
@@ -81,21 +88,53 @@ function VideoCard({ item }) {
         scrollSnapAlign: 'start',
       }}
     >
-      {/* Background — the video itself, no poster: the card shows the video's
-          own first frame and plays in place on click. `item.video` always
+      {/* Background — an uploaded image, a YouTube embed, or (the default)
+          the video itself with no poster: the card shows the video's own
+          first frame and plays in place on click. `item.video` always
           resolves (backend value or the shared local fallback), so there is
           no case where dropping the poster leaves the card blank. */}
-      <video
-        ref={videoRef}
-        className="absolute inset-0 h-full w-full object-cover"
-        muted
-        loop
-        playsInline
-        preload="auto"
-        onEnded={() => setPlaying(false)}
-      >
-        <source src={item.video} type="video/mp4" />
-      </video>
+      {isImage && (
+        <Image
+          src={item.img}
+          alt={item.name || 'Testimonial'}
+          fill
+          className="object-cover"
+        />
+      )}
+
+      {isYoutube && (
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Oversized so YouTube's letterboxing is cropped away by the card */}
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${item.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${item.youtubeId}&controls=0&modestbranding=1&rel=0&playsinline=1`}
+            title={item.name ? `Testimonial from ${item.name}` : 'Testimonial video'}
+            allow="autoplay; encrypted-media; picture-in-picture"
+            allowFullScreen
+            className="pointer-events-none absolute left-1/2 top-1/2 border-0"
+            style={{
+              width:     '177.78vh',
+              height:    '56.25vw',
+              minWidth:  '100%',
+              minHeight: '100%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
+        </div>
+      )}
+
+      {isVideo && (
+        <video
+          ref={videoRef}
+          className="absolute inset-0 h-full w-full object-cover"
+          muted
+          loop
+          playsInline
+          preload="auto"
+          onEnded={() => setPlaying(false)}
+        >
+          <source src={item.video} type="video/mp4" />
+        </video>
+      )}
 
       <div
         className="absolute inset-0"
@@ -105,6 +144,9 @@ function VideoCard({ item }) {
         }}
       />
 
+      {/* Only the uploaded-video case is click-to-play; an image has nothing
+          to play and the YouTube embed drives itself. */}
+      {isVideo && (
       <button
         type="button"
         onClick={togglePlay}
@@ -121,6 +163,7 @@ function VideoCard({ item }) {
       >
         <Image src="/icons/Vector (17).svg" alt="" fill />
       </button>
+      )}
 
       {/* Bottom content — quote glyph + stars, quote text, avatar row */}
       <div
@@ -210,8 +253,12 @@ export default function VideoTestimonialCarousel({ reviews }) {
   const DATA = reviews?.cards?.length
     ? reviews.cards.map((c, i) => ({
         id: i + 1,
-        img: c.image || DEFAULT_TESTIMONIALS[i % DEFAULT_TESTIMONIALS.length]?.img,
+        // The card background: cardImage for image cards, else the client
+        // photo / static fallback that the avatar also uses.
+        img: c.cardImage || c.image || DEFAULT_TESTIMONIALS[i % DEFAULT_TESTIMONIALS.length]?.img,
         video: c.video || FALLBACK_VIDEO,
+        mediaType: c.mediaType || 'video',
+        youtubeId: getYoutubeId(c.youtubeUrl),
         avatar: c.image || DEFAULT_TESTIMONIALS[i % DEFAULT_TESTIMONIALS.length]?.avatar,
         name: c.name,
         quote: c.quote,
