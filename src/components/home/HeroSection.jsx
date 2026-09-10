@@ -619,6 +619,12 @@ export default function HeroSection({ hero }) {
     return () => {
       cancelAnimationFrame(rafId);
       document.body.style.overflow = "";
+      // scrollRestoration is a global, session-long browser setting. Leaving
+      // it on "manual" after navigating away meant every later route kept the
+      // previous page's scroll offset instead of opening at the top.
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "auto";
+      }
     };
   }, [startReveal]);
 
