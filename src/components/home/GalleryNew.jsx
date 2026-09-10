@@ -570,7 +570,7 @@ const GalleryNew = ({ gallery }) => {
                   <span
                     key={i}
                     className="font-sans font-medium text-[#EDE7DE] whitespace-nowrap flex items-center"
-                    style={{ height: '17px', fontSize: '14px' }}
+                    style={{ height: '17px', fontSize: '13px' }}
                   >
                     {label}
                   </span>
