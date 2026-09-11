@@ -101,7 +101,14 @@ function MobileProjectCard({ project }) {
       >
         <div className="fixed left-0 w-full" style={{ top: '-10vh', height: '120vh', zIndex: 0 }}>
           <motion.div style={{ y }} className="relative w-full h-full">
-            <Image src={project.image} alt="" fill priority sizes="100vw" className="object-cover" />
+            <Image
+              src={project.mobileImage || project.image}
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
+            />
           </motion.div>
         </div>
 
@@ -183,6 +190,9 @@ export default function ProjectsShowcase({ cardsSection, projects }) {
           title: c.heading || PROJECTS[i % PROJECTS.length]?.title,
           description: c.subheading || PROJECTS[i % PROJECTS.length]?.description,
           image: c.image || PROJECTS[i % PROJECTS.length]?.image,
+          // Optional portrait crop for the stacked mobile cards; the mobile
+          // card falls back to `image` when an editor has not set one.
+          mobileImage: c.mobileImage || "",
           href: resolveHref(tag),
         };
       })
