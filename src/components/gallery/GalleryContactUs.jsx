@@ -213,7 +213,7 @@ const GalleryContactUs = () => {
                 </span>
               </div>
               <a
-                href="tel:+919876543210"
+                href="tel:+919188913114"
                 className="font-sans font-normal text-[#6B859E] underline hover:text-[#000000] transition-all"
                 style={{
                   fontSize:    'clamp(14px, 1.18vw, 28px)',
@@ -248,7 +248,7 @@ const GalleryContactUs = () => {
                 </span>
               </div>
               <a
-                href="mailto:Chameri@gmail.com"
+                href="mailto:info@chameribuilders.com"
                 className="font-sans font-normal text-[#6B859E] underline hover:text-[#000000] transition-all"
                 style={{
                   fontSize:    'clamp(14px, 1.14vw, 28.3px)',

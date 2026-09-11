@@ -661,7 +661,7 @@ export default function ContactPageForm() {
                     </span>
                   </div>
                   <a
-                    href="tel:+91987654321"
+                    href="tel:+919188913114"
                     className="font-geist font-medium text-[#6B859E] underline hover:text-[#000000] transition-colors"
                     style={{ fontSize: 'clamp(14px, 1.18vw, 28px)' }}
                   >
@@ -702,7 +702,7 @@ export default function ContactPageForm() {
                     </span>
                   </div>
                   <a
-                    href="mailto:Chameri@gmail.com"
+                    href="mailto:info@chameribuilders.com"
                     className="font-geist font-medium text-[#6B859E] underline hover:text-[#000000] transition-colors"
                     style={{ fontSize: 'clamp(15px, 1.14vw, 28.3px)' }}
                   >
