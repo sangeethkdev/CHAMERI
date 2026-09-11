@@ -14,10 +14,17 @@ import { usePathname } from 'next/navigation';
  * offset the previous page had — most visibly when jumping from a footer link
  * (bottom of the page) to a new route, which then opened part-way down.
  *
- * iOS Safari surfaced this the most: it restores scroll asynchronously after
- * paint, so a single synchronous scrollTo during the render pass can be
- * overwritten. The rAF below re-applies the reset on the next frame, after
- * that restore has landed.
+ * Two details this has to work around:
+ *
+ * 1. `globals.css` sets `html { scroll-behavior: smooth }`, which turns a
+ *    plain scrollTo into an *animated* scroll. Travelling the full height of
+ *    a long page (About, Project List) takes long enough that the route
+ *    swap interrupts it mid-flight, stranding the next page part-way down.
+ *    Passing `behavior: 'instant'` opts this one call out of that.
+ *
+ * 2. iOS Safari restores scroll asynchronously after paint, so a single
+ *    synchronous reset during the render pass can still be overwritten. The
+ *    rAF below re-applies it on the next frame, after that restore lands.
  */
 export default function ScrollToTop() {
   const pathname = usePathname();
@@ -27,9 +34,18 @@ export default function ScrollToTop() {
     // somewhere other than the top — leave those alone.
     if (window.location.hash) return;
 
-    window.scrollTo(0, 0);
+    // `behavior: 'instant'` is what defeats the global smooth-scroll; the
+    // documentElement/body writes are a fallback for older iOS Safari, which
+    // ignores the options object on window.scrollTo entirely.
+    const jump = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
 
-    const rafId = requestAnimationFrame(() => window.scrollTo(0, 0));
+    jump();
+
+    const rafId = requestAnimationFrame(jump);
     return () => cancelAnimationFrame(rafId);
   }, [pathname]);
 
