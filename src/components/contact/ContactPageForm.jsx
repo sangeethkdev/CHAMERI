@@ -657,7 +657,7 @@ export default function ContactPageForm() {
                         letterSpacing: '-1px',
                       }}
                     >
-                      Phone Number:
+                      Phone number
                     </span>
                   </div>
                   <a
@@ -698,7 +698,7 @@ export default function ContactPageForm() {
                         letterSpacing: '-1px',
                       }}
                     >
-                      Drop us an email at:
+                      Drop us an email at
                     </span>
                   </div>
                   <a
