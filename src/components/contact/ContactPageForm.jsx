@@ -461,14 +461,16 @@ export default function ContactPageForm() {
     'font-geist font-regular text-[#333333CC] bg-transparent border-0 border-b border-[#000000] outline-none w-full placeholder-[#000000]/40 focus:border-[#000000] transition-colors';
 
   /* Shared input inline style — mirrors the home ContactSection form exactly,
-     so both contact forms share one field metric. paddingLeft is what insets
-     the placeholder from the underline's left edge; it was missing here, so
-     the placeholders sat flush against the border. */
+     so both contact forms share one field metric.
+
+     No paddingLeft: the placeholder text must start on the same left edge as
+     the "Get in touch" badge and the "Connect with us" heading. The form box
+     already sits on that edge, so any inset here pushes the placeholders off
+     it (a flat 12px did exactly that, at every width). */
   const inputStyle = {
     fontSize:      'clamp(16px, 1.11vw, 18px)',
     height:        'clamp(33.75px, 3.75vw, 54px)',
     paddingBottom: 'clamp(4px, 0.4vw, 6px)',
-    paddingLeft:   'clamp(12px, 0.4vw, 12px)',
   };
 
   return (
@@ -777,8 +779,13 @@ export default function ContactPageForm() {
                  field. At lg+ this still resolves to the same 27px. */
               paddingTop:    'clamp(4px, 1.875vw, 27px)',
               paddingBottom: 'clamp(4px, 1.875vw, 27px)',
-              paddingLeft:   'clamp(0px, 2.519vw, 55px)',
-              paddingRight:  'clamp(0px, 2.519vw, 55px)',
+              /* Mobile floor 12px matches the left column's inner
+                 clamp(12px, 1.250vw, 18px), so the form box sits on the same
+                 left edge as the badge and heading. Both columns are `contents`
+                 on mobile and share the outer row's padding, so these inner
+                 values alone decide that edge. At lg+ this resolves to 55px. */
+              paddingLeft:   'clamp(12px, 2.519vw, 55px)',
+              paddingRight:  'clamp(12px, 2.519vw, 55px)',
               gap:           'clamp(20px, 2.778vw, 40px)',
               borderRadius:  'clamp(4px, 0.417vw, 6px)',
             }}
@@ -837,7 +844,6 @@ export default function ContactPageForm() {
                 style={{ borderBottomColor: errors.phone ? FIELD_ERROR_COLOR : '#000000',
                   height:        'clamp(33.75px, 3.75vw, 54px)',
                   paddingBottom: 'clamp(4px, 0.4vw, 6px)',
-                  paddingLeft:   'clamp(12px, 0.4vw, 12px)',
                 }}
               >
                 <PhoneInput

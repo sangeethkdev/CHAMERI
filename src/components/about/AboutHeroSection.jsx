@@ -144,8 +144,12 @@ export default function AboutHeroSection({ hero }) {
           {/* Background image (sketch) */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/image 9.svg"
+            src="/images/about-hero-sketch.webp"
             alt="Chameri architectural villa sketch"
+            width={2878}
+            height={2536}
+            loading="eager"
+            fetchPriority="high"
             style={{
               position: 'absolute',
               // top: 0,
@@ -169,8 +173,10 @@ export default function AboutHeroSection({ hero }) {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/ad2b2e784dade57173773fcdb50ec2a988877826 (1).png"
+              src="/images/about-hero-render.webp"
               alt="Chameri fully rendered villa"
+              width={1600}
+              height={1388}
               style={{
                 width: '100%',
                 height: '100%',
@@ -206,8 +212,12 @@ export default function AboutHeroSection({ hero }) {
         {/* Background image (sketch) */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/image 9.svg"
+          src="/images/about-hero-sketch.webp"
           alt="Chameri architectural villa sketch"
+          width={2878}
+          height={2536}
+          loading="eager"
+          fetchPriority="high"
           style={{
             position: 'absolute',
             top: 0,
@@ -230,8 +240,10 @@ export default function AboutHeroSection({ hero }) {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/ad2b2e784dade57173773fcdb50ec2a988877826 (1).png"
+            src="/images/about-hero-render.webp"
             alt="Chameri fully rendered villa"
+            width={1600}
+            height={1388}
             style={{
               width: '100%',
               height: '100%',
