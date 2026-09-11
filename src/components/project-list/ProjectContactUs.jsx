@@ -239,7 +239,7 @@ const ProjectContactUs = () => {
                     letterSpacing: 'clamp(-0.5px, -0.07vw, -1px)',
                   }}
                 >
-                  Drop us an Email at
+                  Drop us an email at
                 </span>
               </div>
               <a
@@ -373,7 +373,7 @@ const ProjectContactUs = () => {
                   style={{ height: 'clamp(20px, 1.6vw, 23px)' }}
                 >
                   <span className="flex flex-col transition-transform duration-500 ease-in-out group-hover:-translate-y-1/2">
-                    {['Enquire now', 'Enquire now'].map((label, i) => (
+                    {['Enquire Now', 'Enquire Now'].map((label, i) => (
                       <span
                         key={i}
                         className="font-sans font-medium text-[#EDE7DE] whitespace-nowrap flex items-center shrink-0"

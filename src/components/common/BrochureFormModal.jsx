@@ -419,7 +419,7 @@ export default function BrochureFormModal({
                     className="font-geist font-normal text-[#000000]"
                     style={{ fontSize: 'clamp(13px, 1.11vw, 16px)', letterSpacing: '-0.5px' }}
                   >
-                    Drop us an Email at
+                    Drop us an email at
                   </span>
                 </div>
                 <a
