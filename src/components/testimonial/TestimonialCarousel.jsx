@@ -59,15 +59,23 @@ function useMeasuredLines(text, maxLines) {
   return { measureRef, lines };
 }
 
-/* Renders the quote as `maxLines` fixed-height, overflow-hidden slots (so
- * the block's total height never changes) and reveals each line
- * independently: when `current` changes, line i of the outgoing quote and
- * line i of the incoming quote swap in the same slot, at the same time,
- * with the same translateY reveal used elsewhere. A quote shorter than
- * maxLines just leaves its trailing slots empty rather than resizing the
- * block. */
-function AnimatedQuoteLines({ text, current, maxLines, textStyle }) {
+/* Renders the quote as fixed-height, overflow-hidden slots and reveals each
+ * line independently: when `current` changes, line i of the outgoing quote
+ * and line i of the incoming quote swap in the same slot, at the same time,
+ * with the same translateY reveal used elsewhere.
+ *
+ * `maxLines` caps how many lines are rendered. `fixedHeight` decides what
+ * happens below that cap: when true the block always renders maxLines slots
+ * so its height never changes (needed where the block is absolutely
+ * positioned and the content beneath it sits at a fixed offset); when false
+ * it renders only the lines the quote actually uses, so a long quote is not
+ * cut off and a short one leaves no gap. */
+function AnimatedQuoteLines({ text, current, maxLines, textStyle, fixedHeight = true }) {
   const { measureRef, lines } = useMeasuredLines(text, maxLines);
+
+  // Until the hidden clone has been measured, `lines` is empty — fall back to
+  // one slot so the block doesn't collapse to zero height on first paint.
+  const slotCount = fixedHeight ? maxLines : Math.min(maxLines, Math.max(lines.length, 1));
 
   return (
     <div style={{ position: 'relative', width: '100%' }}>
@@ -92,7 +100,7 @@ function AnimatedQuoteLines({ text, current, maxLines, textStyle }) {
         ))}
       </p>
 
-      {Array.from({ length: maxLines }).map((_, i) => (
+      {Array.from({ length: slotCount }).map((_, i) => (
         <div key={i} style={{ position: 'relative', overflow: 'hidden', height: textStyle.lineHeight }}>
           <AnimatePresence>
             <motion.p
@@ -293,10 +301,13 @@ export default function TestimonialCarousel({ reviews }) {
           />
         </div>
 
-        {/* Name / designation — pure fade, aligned with the quote text's left edge */}
+        {/* Name / designation — pure fade, aligned with the quote text's left edge.
+            The box is only as wide as its content (the designation sits on one
+            line) rather than a fixed 181.42px that wrapped longer titles onto
+            three. maxWidth stops it running under the Google score at 73.79%. */}
         <div
           className="absolute"
-          style={{ top: '77.462%', left: '25.278%', width: 'clamp(140px, 12.599vw, 181.42px)' }}
+          style={{ top: '77.462%', left: '25.278%', maxWidth: '46%' }}
         >
           <AnimatePresence mode="wait">
             <motion.div
@@ -327,6 +338,12 @@ export default function TestimonialCarousel({ reviews }) {
                   fontSize:      'clamp(9px, 0.75vw, 10.8px)',
                   lineHeight:    '14px',
                   letterSpacing: 'clamp(0.6px, 0.0597vw, 0.86px)',
+                  // Desktop keeps the designation on one line; the ellipsis is
+                  // only a backstop for a title longer than the space up to the
+                  // Google review score.
+                  whiteSpace:    'nowrap',
+                  overflow:      'hidden',
+                  textOverflow:  'ellipsis',
                 }}
               >
                 {item.role}
@@ -522,7 +539,12 @@ export default function TestimonialCarousel({ reviews }) {
             <AnimatedQuoteLines
               text={item.quote}
               current={current}
-              maxLines={4}
+              // This block is in normal flow on mobile, so it can grow to fit
+              // the quote — the photo row below just moves down. Quotes come
+              // from the admin panel and have no length limit, so 4 fixed
+              // slots silently cut real testimonials off mid-sentence.
+              maxLines={12}
+              fixedHeight={false}
               textStyle={{
                 fontFamily:    'var(--font-roundo), "Roundo", system-ui, sans-serif',
                 color:         '#000000',
@@ -534,8 +556,11 @@ export default function TestimonialCarousel({ reviews }) {
             />
           </div>
 
-          {/* Photo + name/designation row */}
-          <div className="flex items-center" style={{ paddingTop: '42px', gap: '10px' }}>
+          {/* Photo + name/designation row. Top-aligned rather than centred:
+              the designation wraps to a variable number of lines, and centring
+              a growing text block against the fixed-height photo drifts it off
+              the photo entirely once it is taller. */}
+          <div className="flex items-start" style={{ paddingTop: '42px', gap: '10px' }}>
             <div className="relative overflow-hidden flex-shrink-0" style={{ width: '62px', height: '85px', borderRadius: '4.81px' }}>
               <AnimatePresence>
                 <motion.div
@@ -552,7 +577,11 @@ export default function TestimonialCarousel({ reviews }) {
               </AnimatePresence>
             </div>
 
-            <div className="flex-shrink-0" style={{ minWidth: '209.51px' ,marginTop:'18px'}}>
+            {/* Takes the width left over by the photo and is allowed to shrink
+                below its content size (min-w-0) — otherwise a long designation
+                keeps this block at its intrinsic width and runs off the side of
+                a 375px screen instead of wrapping. */}
+            <div className="flex-1 min-w-0">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={current}
@@ -562,12 +591,35 @@ export default function TestimonialCarousel({ reviews }) {
                   exit="exit"
                   className="flex flex-col"
                 >
-                  <p className="font-sans m-0" style={{ color: '#212325', fontWeight: 400, fontSize: '19.9px', lineHeight: '25.92px' }}>
+                  <p
+                    className="font-sans m-0"
+                    style={{
+                      color: '#212325',
+                      fontWeight: 400,
+                      fontSize: '19.9px',
+                      lineHeight: '25.92px',
+                      overflowWrap: 'anywhere',
+                    }}
+                  >
                     {item.name}
                   </p>
                   <p
                     className="font-sans uppercase m-0"
-                    style={{ color: '#21232599', fontWeight: 500, fontSize: '14.8px', lineHeight: '14px', letterSpacing: '0.86px', paddingTop: '4.2px' }}
+                    style={{
+                      color:         '#21232599',
+                      fontWeight:    500,
+                      fontSize:      '14.8px',
+                      // Roomier than the single-line 14px it had: once this
+                      // wraps, a line-height below the font size makes the
+                      // rows collide.
+                      lineHeight:    '18px',
+                      letterSpacing: '0.86px',
+                      paddingTop:    '4.2px',
+                      // No line clamp — designations come from the admin panel
+                      // and are shown in full, wrapping onto as many lines as
+                      // they need. The row below simply moves down.
+                      overflowWrap:  'anywhere',
+                    }}
                   >
                     {item.role}
                   </p>
