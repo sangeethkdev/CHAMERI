@@ -1,9 +1,10 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { TESTIMONIALS as DEFAULT_TESTIMONIALS } from '@/data/testimonials';
 import { getYoutubeId } from '@/components/common/TestimonialCardMedia';
+import MuteToggleButton from '@/components/common/MuteToggleButton';
 
 /**
  * ─────────────────────────────────────────────────────────────────────────────
@@ -59,13 +60,34 @@ const StarIcon = ({ size, filled = true }) => (
 
 function VideoCard({ item }) {
   const videoRef = useRef(null);
+  const youtubeRef = useRef(null);
   const [playing, setPlaying] = useState(false);
+  // Autoplay is only permitted while muted, so cards start silent and the
+  // viewer opts into sound via the speaker button.
+  const [muted, setMuted] = useState(true);
 
   // Cards saved before the image/YouTube options existed carry no
   // mediaType, so anything unrecognised falls back to video.
   const isImage   = item.mediaType === 'image' && item.img;
   const isYoutube = item.mediaType === 'youtube' && item.youtubeId;
   const isVideo   = !isImage && !isYoutube;
+
+  // Keep the <video> element in sync with the mute state.
+  useEffect(() => {
+    if (videoRef.current) videoRef.current.muted = muted;
+  }, [muted]);
+
+  // YouTube embeds can't be muted through the DOM — the player is driven via
+  // the IFrame API's postMessage channel, which needs no extra script as long
+  // as the embed URL carries enablejsapi=1.
+  useEffect(() => {
+    const frame = youtubeRef.current;
+    if (!frame?.contentWindow) return;
+    frame.contentWindow.postMessage(
+      JSON.stringify({ event: 'command', func: muted ? 'mute' : 'unMute', args: [] }),
+      '*'
+    );
+  }, [muted]);
 
   const togglePlay = () => {
     const video = videoRef.current;
@@ -106,7 +128,9 @@ function VideoCard({ item }) {
         <div className="absolute inset-0 overflow-hidden">
           {/* Oversized so YouTube's letterboxing is cropped away by the card */}
           <iframe
-            src={`https://www.youtube-nocookie.com/embed/${item.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${item.youtubeId}&controls=0&modestbranding=1&rel=0&playsinline=1`}
+            ref={youtubeRef}
+            // enablejsapi=1 is what allows the mute/unMute postMessage commands
+            src={`https://www.youtube-nocookie.com/embed/${item.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${item.youtubeId}&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1`}
             title={item.name ? `Testimonial from ${item.name}` : 'Testimonial video'}
             allow="autoplay; encrypted-media; picture-in-picture"
             allowFullScreen
@@ -163,6 +187,19 @@ function VideoCard({ item }) {
       >
         <Image src="/icons/Vector (17).svg" alt="" fill />
       </button>
+      )}
+
+      {/* Sound control. The uploaded video is click-to-play, so it only offers
+          sound once it is actually running; the YouTube embed autoplays and so
+          can be unmuted at any time. An image card has no audio at all. */}
+      {((isVideo && playing) || isYoutube) && (
+        <MuteToggleButton
+          muted={muted}
+          onToggle={() => setMuted((m) => !m)}
+          size="clamp(28px, 2.222vw, 32px)"
+          iconSize="clamp(14px, 1.111vw, 16px)"
+          style={{ right: 'clamp(8px, 0.833vw, 12px)', top: 'clamp(8px, 0.833vw, 12px)' }}
+        />
       )}
 
       {/* Bottom content — quote glyph + stars, quote text, avatar row */}
