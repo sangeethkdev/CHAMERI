@@ -159,6 +159,12 @@ export default function TestimonialCardMedia({
       rel: '0',
       playsinline: '1',
       enablejsapi: '1', // required for the mute/unMute postMessage commands
+      // enablejsapi makes the player treat itself as interactive, which brings
+      // back the centre play/pause/skip overlay that controls=0 alone hides.
+      // These strip the remaining chrome so only the card's own button shows.
+      disablekb: '1',
+      fs: '0',
+      iv_load_policy: '3',
     });
 
     return (
@@ -180,6 +186,11 @@ export default function TestimonialCardMedia({
               transform: 'translate(-50%, -50%)',
             }}
           />
+          {/* Transparent shield over the player. enablejsapi=1 keeps the embed
+              interactive, so without this YouTube shows its own play/pause/skip
+              overlay on hover — the card is decorative and drives playback
+              itself, so no pointer event should ever reach the iframe. */}
+          <div className="absolute inset-0" aria-hidden="true" />
         </div>
         {/* Sits outside the oversized wrapper so it anchors to the card frame
             rather than the cropped-away iframe bounds. */}

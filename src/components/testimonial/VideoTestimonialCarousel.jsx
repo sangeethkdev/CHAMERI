@@ -129,8 +129,9 @@ function VideoCard({ item }) {
           {/* Oversized so YouTube's letterboxing is cropped away by the card */}
           <iframe
             ref={youtubeRef}
-            // enablejsapi=1 is what allows the mute/unMute postMessage commands
-            src={`https://www.youtube-nocookie.com/embed/${item.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${item.youtubeId}&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1`}
+            // enablejsapi=1 is what allows the mute/unMute postMessage commands;
+            // disablekb/fs/iv_load_policy strip the player chrome it re-enables.
+            src={`https://www.youtube-nocookie.com/embed/${item.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${item.youtubeId}&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&disablekb=1&fs=0&iv_load_policy=3`}
             title={item.name ? `Testimonial from ${item.name}` : 'Testimonial video'}
             allow="autoplay; encrypted-media; picture-in-picture"
             allowFullScreen
@@ -143,6 +144,10 @@ function VideoCard({ item }) {
               transform: 'translate(-50%, -50%)',
             }}
           />
+          {/* Transparent shield — enablejsapi=1 keeps the embed interactive, so
+              without this YouTube shows its own play/pause/skip overlay on
+              hover. The card drives playback itself. */}
+          <div className="absolute inset-0" aria-hidden="true" />
         </div>
       )}
 
