@@ -35,6 +35,7 @@ const LogoMarquee = ({ logos: apiLogos }) => {
                 src={logo}
                 alt={`Client Logo ${index}`}
                 fill
+                sizes="160px"
                 className="object-contain grayscale opacity-100"
               />
             </div>

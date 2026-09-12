@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import MuteToggleButton from './MuteToggleButton';
+import useExclusiveAudio from '@/hooks/useExclusiveAudio';
 
 /**
  * Renders a testimonial card's background media, which the admin panel lets
@@ -57,9 +58,11 @@ export default function TestimonialCardMedia({
 }) {
   const videoRef = useRef(null);
   const youtubeRef = useRef(null);
-  // Autoplay is only permitted while muted, so every card starts muted and
-  // the viewer opts into sound via the speaker button.
-  const [soundOn, setSoundOn] = useState(false);
+  /* Autoplay is only permitted while muted, so every card starts muted and the
+     viewer opts into sound via the speaker button. The slot is page-wide, so
+     unmuting this card silences whichever one had sound before — two
+     testimonials never talk over each other. */
+  const [soundOn, toggleSound, releaseSound] = useExclusiveAudio();
 
   // Sound is derived rather than stored, so a card that scrolls away from the
   // centre goes silent on its own — otherwise an unmuted card would keep
@@ -86,6 +89,13 @@ export default function TestimonialCardMedia({
       el.currentTime = 0;
     }
   }, [isCenter, item?.video]);
+
+  /* Scrolling a card away from the centre hands the audio slot back, rather
+     than leaving it held by a card that is no longer visible or playing —
+     otherwise the next card could not take sound without two clicks. */
+  useEffect(() => {
+    if (!isCenter && soundOn) releaseSound();
+  }, [isCenter, soundOn, releaseSound]);
 
   // Keep the <video> element in sync with the mute state.
   useEffect(() => {
@@ -125,7 +135,7 @@ export default function TestimonialCardMedia({
         {isCenter && (
           <MuteToggleButton
             muted={muted}
-            onToggle={() => setSoundOn((s) => !s)}
+            onToggle={toggleSound}
             style={{ right: '5%', bottom: '5%' }}
           />
         )}
@@ -142,7 +152,11 @@ export default function TestimonialCardMedia({
           src={`https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg`}
           alt={item.name || 'Testimonial'}
           fill
+          sizes="(max-width: 768px) 90vw, 800px"
           className={className}
+          // YouTube already serves this thumbnail at a fixed 480x360, so
+          // routing it through the optimizer would add a round trip without
+          // shrinking it.
           unoptimized
           style={{ transform, transition }}
         />
@@ -197,7 +211,7 @@ export default function TestimonialCardMedia({
         {isCenter && (
           <MuteToggleButton
             muted={muted}
-            onToggle={() => setSoundOn((s) => !s)}
+            onToggle={toggleSound}
             style={{ right: '5%', bottom: '5%' }}
           />
         )}
@@ -210,6 +224,9 @@ export default function TestimonialCardMedia({
       src={item.img}
       alt={item.name}
       fill
+      // Without this, `fill` defaults to 100vw and Next serves the 3840px
+      // variant to every device — many times the bytes this card can show.
+      sizes="(max-width: 768px) 90vw, 800px"
       className={className}
       style={{ transform, transition }}
     />

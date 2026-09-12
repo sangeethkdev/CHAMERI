@@ -310,6 +310,7 @@ const WhyChooseUs = ({ chooseUs }) => {
                 src={card.img}
                 alt={card.title}
                 fill
+                sizes="(max-width: 768px) 90vw, 600px"
                 className={`object-cover transition-transform duration-700 ${isActive ? 'scale-105' : 'scale-100'}`}
               />
 
@@ -417,6 +418,7 @@ const WhyChooseUs = ({ chooseUs }) => {
                 src={card.img}
                 alt={card.title}
                 fill
+                sizes="(max-width: 768px) 90vw, 600px"
                 className={`object-cover transition-transform duration-700 ${isActive ? 'scale-105' : 'scale-100'}`}
               />
 

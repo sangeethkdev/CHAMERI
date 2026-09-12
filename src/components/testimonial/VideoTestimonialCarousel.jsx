@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { TESTIMONIALS as DEFAULT_TESTIMONIALS } from '@/data/testimonials';
 import { getYoutubeId } from '@/components/common/TestimonialCardMedia';
 import MuteToggleButton from '@/components/common/MuteToggleButton';
+import useExclusiveAudio from '@/hooks/useExclusiveAudio';
 
 /**
  * ─────────────────────────────────────────────────────────────────────────────
@@ -62,9 +63,12 @@ function VideoCard({ item }) {
   const videoRef = useRef(null);
   const youtubeRef = useRef(null);
   const [playing, setPlaying] = useState(false);
-  // Autoplay is only permitted while muted, so cards start silent and the
-  // viewer opts into sound via the speaker button.
-  const [muted, setMuted] = useState(true);
+  /* Autoplay is only permitted while muted, so cards start silent and the
+     viewer opts into sound via the speaker button. Every card in this row is
+     on screen at once, so the slot is page-wide: unmuting one silences
+     whichever card had sound before. */
+  const [soundOn, toggleSound, releaseSound] = useExclusiveAudio();
+  const muted = !soundOn;
 
   // Cards saved before the image/YouTube options existed carry no
   // mediaType, so anything unrecognised falls back to video.
@@ -95,6 +99,9 @@ function VideoCard({ item }) {
     if (playing) {
       video.pause();
       setPlaying(false);
+      /* Pausing hides this card's speaker button, so hand the slot back —
+         otherwise a paused card would hold audio no one could reclaim. */
+      releaseSound();
     } else {
       video.play().then(() => setPlaying(true)).catch(() => {});
     }
@@ -102,12 +109,14 @@ function VideoCard({ item }) {
 
   return (
     <div
-      className="relative overflow-hidden"
+      /* snap-center below lg pairs with the row's side padding so the active
+         card lands in the middle of the screen; snap-start at lg+ keeps the
+         original multi-card row, where centring one card is meaningless. */
+      className="relative overflow-hidden snap-center lg:snap-start"
       style={{
         flex:   '0 0 clamp(220px, 20.972vw, 302px)',
         width:  'clamp(220px, 20.972vw, 302px)',
         height: 'clamp(360px, 34.583vw, 498px)',
-        scrollSnapAlign: 'start',
       }}
     >
       {/* Background — an uploaded image, a YouTube embed, or (the default)
@@ -120,6 +129,7 @@ function VideoCard({ item }) {
           src={item.img}
           alt={item.name || 'Testimonial'}
           fill
+          sizes="(max-width: 768px) 60vw, 302px"
           className="object-cover"
         />
       )}
@@ -159,7 +169,7 @@ function VideoCard({ item }) {
           loop
           playsInline
           preload="auto"
-          onEnded={() => setPlaying(false)}
+          onEnded={() => { setPlaying(false); releaseSound(); }}
         >
           <source src={item.video} type="video/mp4" />
         </video>
@@ -190,7 +200,7 @@ function VideoCard({ item }) {
           opacity:        playing ? 0 : 1,
         }}
       >
-        <Image src="/icons/Vector (17).svg" alt="" fill />
+        <Image src="/icons/Vector (17).svg" alt="" fill sizes="56px" />
       </button>
       )}
 
@@ -200,7 +210,7 @@ function VideoCard({ item }) {
       {((isVideo && playing) || isYoutube) && (
         <MuteToggleButton
           muted={muted}
-          onToggle={() => setMuted((m) => !m)}
+          onToggle={toggleSound}
           size="clamp(28px, 2.222vw, 32px)"
           iconSize="clamp(14px, 1.111vw, 16px)"
           style={{ right: 'clamp(8px, 0.833vw, 12px)', top: 'clamp(8px, 0.833vw, 12px)' }}
@@ -252,7 +262,7 @@ function VideoCard({ item }) {
               className="relative flex-shrink-0 overflow-hidden rounded-full"
               style={{ width: 'clamp(20px, 1.901vw, 27.38px)', height: 'clamp(20px, 1.901vw, 27.38px)' }}
             >
-              <Image src={item.avatar} alt={item.name} fill className="object-cover" />
+              <Image src={item.avatar} alt={item.name} fill sizes="56px" className="object-cover" />
             </div>
             <div className="flex flex-col">
               <p
@@ -314,8 +324,15 @@ export default function VideoTestimonialCarousel({ reviews }) {
       className="relative w-full"
       style={{ background: '#EDE7DE' }}
     >
+      {/* Below lg the row shows one card at a time, so it snaps to CENTRE and
+          carries side padding of half the leftover width — that gutter is what
+          lets the first and last cards reach the middle instead of stopping at
+          the scroll extents, and it leaves the neighbours peeking in on both
+          sides. At lg+ the card is only ~20% of the screen, so several are
+          visible at once and centring one would strand it between two huge
+          gutters; there the row keeps its original edge-to-edge bleed. */}
       <div
-        className="flex overflow-x-auto scrollbar-hide"
+        className="flex overflow-x-auto scrollbar-hide px-[calc((100%-clamp(220px,20.972vw,302px))/2)] lg:px-0"
         style={{
           paddingTop:    'clamp(40px, 5.795vw, 83.45px)',
           paddingBottom: 'clamp(40px, 5.795vw, 83.45px)',

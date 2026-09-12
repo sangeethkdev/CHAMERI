@@ -229,6 +229,7 @@ export default function AboutVisionMissionSection({ vision, mission }) {
             src={cards[0].image}
             alt={cards[0].label}
             fill
+            sizes="(max-width: 768px) 90vw, 700px"
             style={{ objectFit: 'cover', objectPosition: 'center' }}
             priority
           />
@@ -269,6 +270,7 @@ export default function AboutVisionMissionSection({ vision, mission }) {
             src={cards[1].image}
             alt={cards[1].label}
             fill
+            sizes="(max-width: 768px) 90vw, 700px"
             style={{ objectFit: 'cover', objectPosition: 'center' }}
             priority
           />
@@ -449,6 +451,7 @@ function MobileVisionMissionSection({ cards }) {
             src={cards[0].image}
             alt={cards[0].label}
             fill
+            sizes="(max-width: 768px) 90vw, 700px"
             style={{ objectFit: 'cover', objectPosition: 'center' }}
             priority
           />
@@ -487,6 +490,7 @@ function MobileVisionMissionSection({ cards }) {
             src={cards[1].image}
             alt={cards[1].label}
             fill
+            sizes="(max-width: 768px) 90vw, 700px"
             style={{ objectFit: 'cover', objectPosition: 'center' }}
             priority
           />

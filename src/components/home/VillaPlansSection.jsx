@@ -159,6 +159,7 @@ const VillaPlansSection = ({ villaPlan }) => {
             src={activeTab === 'villas' ? tab1Image : tab2Image}
             alt="Luxury Villa Plan"
             fill
+            sizes="(max-width: 768px) 100vw, 1200px"
             className="object-cover transition-all duration-700"
           />
 

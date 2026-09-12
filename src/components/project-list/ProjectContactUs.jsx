@@ -97,10 +97,10 @@ const ProjectContactUs = () => {
 
   /* shared input inline style — reused for name, email, phone height, textarea */
   const inputStyle = {
-    fontSize:      'clamp(14px, 1.11vw, 16px)',
+    fontSize:      'clamp(14px, 1.11vw, 18px)',
     height:        'clamp(33.75px, 3.75vw, 54px)',
     paddingBottom: 'clamp(4px, 0.4vw, 6px)',
-    paddingLeft: 'clamp(8px, 2.56vw, 15px)',
+    paddingLeft:   'clamp(12px, 0.4vw, 12px)',
   };
 
   return (
@@ -212,7 +212,7 @@ const ProjectContactUs = () => {
                 className="font-sans font-normal text-[#6B859E] underline hover:text-[#000000] transition-all"
                 style={{
                   fontSize:    'clamp(13.3px, 1.18vw, 28px)',
-                  paddingLeft: 'clamp(0px, 0.25vw, 34.6px)',
+                  paddingLeft: 'clamp(6px, 0.55vw, 34.6px)',
                 }}
               >
                 +91 9188913114
@@ -247,7 +247,7 @@ const ProjectContactUs = () => {
                 className="font-sans font-normal text-[#6B859E] underline hover:text-[#000000] transition-all"
                 style={{
                   fontSize:    'clamp(14px, 1.14vw, 28.3px)',
-                  paddingLeft: 'clamp(0px, 0.25vw, 34.6px)',
+                  paddingLeft: 'clamp(6px, 0.55vw, 34.6px)',
                 }}
               >
                 info@chameribuilders.com
@@ -282,9 +282,7 @@ const ProjectContactUs = () => {
             className="order-2 lg:order-none flex flex-col bg-[#EDE7DE] w-full lg:w-[clamp(400px,48.097vw,1240px)] lg:max-w-[clamp(300px,50.097vw,1140px)] gap-[20px] lg:gap-[clamp(25px,2.78vw,40px)] px-0 lg:px-[clamp(34px,3.82vw,55px)]"
             style={{
               paddingTop:    'clamp(17px, 1.88vw, 27px)',
-              paddingBottom: 'clamp(17px, 1.88vw, 27px)',
-              paddingRight:  'clamp(7px, 1.88vw, 37px)',
-              // paddingLeft:   'clamp(7px, 3.88vw, 17px)',
+              paddingBottom: 'clamp(17px, 1.88vw, 27px)',
               borderRadius:  'clamp(4px, 0.42vw, 6px)',
             }}
           >

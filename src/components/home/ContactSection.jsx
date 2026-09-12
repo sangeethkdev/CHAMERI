@@ -1,8 +1,3 @@
-
-
-
-// --------copied correct one from gallery --------------------
-
 'use client';
 
 import React from 'react';
@@ -294,9 +289,7 @@ every step of the way.
             className="order-2 lg:order-none flex flex-col bg-[#EDE7DE] w-full lg:w-[clamp(400px,48.097vw,1240px)] lg:max-w-[clamp(300px,50.097vw,1140px)] gap-[20px] lg:gap-[clamp(25px,2.78vw,40px)] px-0 lg:px-[clamp(34px,3.82vw,55px)]"
             style={{
               paddingTop:    'clamp(17px, 1.88vw, 27px)',
-              paddingBottom: 'clamp(17px, 1.88vw, 27px)',
-              paddingRight:  'clamp(7px, 1.88vw, 37px)',
-              // paddingLeft:   'clamp(7px, 3.88vw, 17px)',
+              paddingBottom: 'clamp(17px, 1.88vw, 27px)',
               borderRadius:  'clamp(4px, 0.42vw, 6px)',
             }}
           >

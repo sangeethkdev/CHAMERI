@@ -270,7 +270,7 @@ export default function TestimonialCarousel({ reviews }) {
               exit="exit"
               className="absolute inset-0"
             >
-              <Image src={item.avatar} alt={item.name} fill className="object-cover" />
+              <Image src={item.avatar} alt={item.name} fill sizes="(max-width: 768px) 96px, 256px" className="object-cover" />
               <div
                 className="absolute inset-0"
                 style={{ background: 'linear-gradient(0deg, #000000 0%, rgba(0,0,0,0) 39%)' }}
@@ -571,7 +571,7 @@ export default function TestimonialCarousel({ reviews }) {
                   exit="exit"
                   className="absolute inset-0"
                 >
-                  <Image src={item.avatar} alt={item.name} fill className="object-cover" />
+                  <Image src={item.avatar} alt={item.name} fill sizes="(max-width: 768px) 96px, 256px" className="object-cover" />
                   <div className="absolute inset-0" style={{ background: 'linear-gradient(0deg, #000000 0%, rgba(0,0,0,0) 39%)' }} />
                 </motion.div>
               </AnimatePresence>

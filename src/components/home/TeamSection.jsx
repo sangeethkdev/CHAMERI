@@ -111,6 +111,7 @@ const TeamCard = ({ member }) => (
       src={member.img}
       alt={member.name}
       fill
+      sizes="(max-width: 768px) 50vw, 400px"
       className="object-cover object-top transition-transform duration-700 group-hover:scale-105 bg-[#6b7280]"
     />
     <div className="absolute inset-0" style={{ background: 'linear-gradient(0deg, #000000 0%, rgba(0, 0, 0, 0) 39%)' }} />
@@ -164,6 +165,7 @@ const ContactCard = ({ heading }) => (
       src="/images/Group%20(5).png"
       alt=""
       fill
+      sizes="(max-width: 768px) 50vw, 400px"
       className="object-cover"
     />
 

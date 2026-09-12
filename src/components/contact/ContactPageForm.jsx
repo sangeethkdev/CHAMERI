@@ -772,20 +772,22 @@ export default function ContactPageForm() {
           <form
             noValidate
             onSubmit={handleSubmit}
-            className="order-2 lg:order-none flex flex-col w-full"
+            /* No horizontal padding below lg: the fields must start on the
+               outer row's padding edge, the same line as the badge and
+               heading. The left column's inner box is `display: contents`
+               on mobile so its padding is dropped and the heading gets only
+               the outer row's — any padding here pushed the form that much
+               further right (it read as an indent). At lg+ that inner box is
+               a real element again, so the designed 55px returns. */
+            className="order-2 lg:order-none flex flex-col w-full lg:px-[clamp(12px,2.519vw,55px)]"
             style={{
               /* Floor dropped 16px → 4px: on mobile the 16px floor stacked on
                  top of the row gap and read as dead space above the first
                  field. At lg+ this still resolves to the same 27px. */
               paddingTop:    'clamp(4px, 1.875vw, 27px)',
               paddingBottom: 'clamp(4px, 1.875vw, 27px)',
-              /* Mobile floor 12px matches the left column's inner
-                 clamp(12px, 1.250vw, 18px), so the form box sits on the same
-                 left edge as the badge and heading. Both columns are `contents`
-                 on mobile and share the outer row's padding, so these inner
-                 values alone decide that edge. At lg+ this resolves to 55px. */
-              paddingLeft:   'clamp(12px, 2.519vw, 55px)',
-              paddingRight:  'clamp(12px, 2.519vw, 55px)',
+              /* Horizontal padding is set via the `lg:px-[...]` class instead
+                 of here, so it is genuinely 0 below lg — see the className. */
               gap:           'clamp(20px, 2.778vw, 40px)',
               borderRadius:  'clamp(4px, 0.417vw, 6px)',
             }}

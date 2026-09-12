@@ -466,6 +466,7 @@ export default function AboutBoardSection({ boardSection }) {
               src={member.image}
               alt={member.name}
               fill
+              sizes="(max-width: 768px) 50vw, 400px"
               className="transition-transform duration-700 ease-in-out group-hover:scale-105"
               style={{
                 objectFit: 'cover',
@@ -698,6 +699,7 @@ function MobileBoardSection({ boardMembers, title }) {
                 src={member.image}
                 alt={member.name}
                 fill
+                sizes="(max-width: 768px) 50vw, 400px"
                 style={{ objectFit: 'cover', objectPosition: 'center top' }}
               />
 

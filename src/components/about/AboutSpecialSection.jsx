@@ -265,6 +265,7 @@ function MobileSpecialSection({ features, title }) {
                           src={feature.image}
                           alt={feature.title}
                           fill
+                          sizes="(max-width: 768px) 90vw, 700px"
                           style={{ objectFit: 'cover' }}
                         />
                       </motion.div>
@@ -491,6 +492,7 @@ export default function AboutSpecialSection({ specialSection }) {
                         src={feature.image}
                         alt={feature.title}
                         fill
+                        sizes="(max-width: 768px) 90vw, 700px"
                         style={{ objectFit: 'cover' }}
                       />
                     </motion.div>

@@ -30,6 +30,7 @@ const Card = ({
           src={img}
           alt={alt || title}
           fill
+          sizes="(max-width: 768px) 90vw, 600px"
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
         {/* Hover overlay */}
