@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
  * ─────────────────────────────────────────────────────────────────────────
  * Figma layout (1440px baseline, positioned relative to the section):
  *   Info block   : top:67.84  left:346.81  w:915  h:177.45  gap:17
- *   Divider      : w:915 h:1  bg:#00000099
+ *   Divider      : w:915 h:1  bg:#fafafa (light — it sits on project imagery)
  *   Row          : w:886 gap:124  →  [tag pill] [heading + description]
  *   Tag pill     : w:142.6 h:20  gap:7.2  radius:90
  *     square 14×14 bg:#334454 + "KIWANO VILLA" 16.2px uppercase
@@ -50,7 +50,7 @@ export default function Text({ project }) {
           gap: 'clamp(10px, 1.181vw, 17px)',
         }}
       >
-        <div style={{ width: '103%', height: '1px', background: '#00000099' }} />
+        <div style={{ width: '103%', height: '1px', background: '#fafafa' }} />
 
         <div className="ptext-row flex items-start" style={{ gap: 'clamp(20px, 8.611vw, 124px)' }}>
           {/* Tag pill — fixed width (Figma: 142.6px) so a longer project tag
@@ -79,7 +79,7 @@ export default function Text({ project }) {
                 fontSize: 'clamp(12px, 1.125vw, 16.2px)',
                 lineHeight: 'clamp(14px, 1.35vw, 19.44px)',
                 letterSpacing: '-0.32px',
-                color: '#000000',
+                color: '#fafafa',
               }}
             >
               {project.tag}
@@ -99,7 +99,7 @@ export default function Text({ project }) {
                   fontSize: 'clamp(13px, 1.389vw, 20px)',
                   lineHeight: 'clamp(15px, 1.514vw, 21.8px)',
                   letterSpacing: '-0.44px',
-                  color: '#222F30CC',
+                  color: '#fafafa',
                 }}
               >
                 {project.description}
@@ -118,7 +118,7 @@ export default function Text({ project }) {
                       fontWeight: 600,
                       fontSize: 'clamp(9px, 0.729vw, 10.5px)',
                       lineHeight: 'clamp(10px, 0.795vw, 11.45px)',
-                      color: '#31444C',
+                      color: '#ffffff',
                     }}
                   >
                     Learn more
@@ -131,7 +131,7 @@ export default function Text({ project }) {
                     style={{ width: 'clamp(6px, 0.53vw, 7.63px)', height: 'auto' }}
                   />
                 </span>
-                <div style={{ width: '95%', height: '1px', background: '#31444C' }} />
+                <div style={{ width: '95%', height: '1px', background: '#ffffff' }} />
               </div>
             </div>
 
@@ -142,7 +142,7 @@ export default function Text({ project }) {
                 fontSize: 'clamp(26px, 3.333vw, 48px)',
                 lineHeight: '102%',
                 letterSpacing: 'clamp(-1.4px, -0.139vw, -2px)',
-                color: ' #212325',
+                color: ' #ffffff',
                 width: 'clamp(180px, 20.278vw, 292px)',
               }}
             >

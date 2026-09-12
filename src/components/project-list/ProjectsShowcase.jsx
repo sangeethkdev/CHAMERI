@@ -120,7 +120,7 @@ function MobileProjectCard({ project }) {
           className="absolute flex flex-col"
           style={{ zIndex: 2, top: '19px', left: '24.14px', width: 'calc(100% - 48.28px)', maxWidth: '269px', gap: '17px' }}
         >
-          <div style={{ width: '100%', height: '1px', background: '#00000099' }} />
+          <div style={{ width: '100%', height: '1px', background: '#fafafa' }} />
 
           <div className="flex flex-col" style={{ gap: '8px' }}>
             {/* Tag pill */}
@@ -128,10 +128,10 @@ function MobileProjectCard({ project }) {
               className="flex items-center flex-shrink-0"
               style={{ gap: '7.2px', borderRadius: '90px', paddingLeft: '2px', paddingRight: '2px', width: 'fit-content' }}
             >
-              <span className="inline-block flex-shrink-0" style={{ width: '10px', height: '10px', background: '#334454', borderRadius: '2px' }} />
+              <span className="inline-block flex-shrink-0" style={{ width: '10px', height: '10px', background: '#fafafa', borderRadius: '2px' }} />
               <span
                 className="font-sans uppercase whitespace-nowrap"
-                style={{ fontWeight: 400, fontSize: '12px', lineHeight: '19.44px', letterSpacing: '-0.32px', color: '#000000' }}
+                style={{ fontWeight: 400, fontSize: '12px', lineHeight: '19.44px', letterSpacing: '-0.32px', color: '#fafafa' }}
               >
                 {project.tag}
               </span>
@@ -141,7 +141,7 @@ function MobileProjectCard({ project }) {
             <div className="flex flex-col" style={{ gap: '5px' }}>
               <h2
                 className="font-roundo m-0"
-                style={{ fontWeight: 500, fontSize: '32px', lineHeight: '36.6px', letterSpacing: '-0.73px', color: '#000000' }}
+                style={{ fontWeight: 500, fontSize: '32px', lineHeight: '36.6px', letterSpacing: '-0.73px', color: '#fafafa' }}
               >
                 {project.title}
               </h2>
@@ -149,7 +149,7 @@ function MobileProjectCard({ project }) {
               <div className="flex flex-col" style={{ gap: '12px' }}>
                 <p
                   className="font-sans m-0"
-                  style={{ fontWeight: 400, fontSize: '14px', lineHeight: '21px', letterSpacing: 0, color: '#000000CC' }}
+                  style={{ fontWeight: 400, fontSize: '14px', lineHeight: '21px', letterSpacing: 0, color: '#fafafa' }}
                 >
                   {project.description}
                 </p>
@@ -159,12 +159,12 @@ function MobileProjectCard({ project }) {
                 <div className="flex flex-col" style={{ gap: '4px', width: '92px' }}>
                   <span
                     className="font-sans uppercase whitespace-nowrap flex items-center"
-                    style={{ gap: '6px', fontWeight: 600, fontSize: '10.5px', lineHeight: '11.45px', color: '#31444C' }}
+                    style={{ gap: '6px', fontWeight: 600, fontSize: '10.5px', lineHeight: '11.45px', color: '#fafafa' }}
                   >
                     Learn more
                     <Image src="/icons/SVG.svg" alt="" width={8} height={8} style={{ width: '7.63px', height: 'auto' }} />
                   </span>
-                  <div style={{ width: '100%', height: '1px', background: '#31444C' }} />
+                  <div style={{ width: '100%', height: '1px', background: '#fafafa' }} />
                 </div>
               </div>
             </div>
