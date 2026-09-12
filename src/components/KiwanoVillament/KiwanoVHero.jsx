@@ -32,6 +32,12 @@ const PORTRAIT_QUERY = "(orientation: portrait)";
 // 0.06 = cinematic/floaty  |  0.10 = balanced  |  0.16 = snappy
 const LERP = 0.08;
 
+/* How many frame requests may be in flight at once. The sequence is tens of
+ * MB, so firing all 217 at once saturates the connection and makes every
+ * frame — including the first — arrive late. A small window keeps them
+ * arriving in scroll order while still using the connection fully. */
+const FRAME_CONCURRENCY = 6;
+
 // Draw image with object-fit:cover behaviour on the canvas
 function drawCover(ctx, img, cw, ch) {
   const iw = img.naturalWidth  || img.width;
@@ -68,9 +74,21 @@ export default function KiwanoVHero({ hero }) {
   const drawFrame = useCallback((index) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const img = framesRef.current[index];
+
+    /* Fall back to the nearest earlier frame that has actually loaded. While
+       the sequence is still downloading, the exact frame for the current
+       scroll position may not be there yet; holding the last good frame keeps
+       the motion continuous instead of freezing until it arrives. */
+    let i = index;
+    let img = framesRef.current[i];
+    while (i > 0 && (!img?.complete || img.naturalWidth === 0)) {
+      i -= 1;
+      img = framesRef.current[i];
+    }
+
     if (!img?.complete || img.naturalWidth === 0) return;
-    if (drawnFrameRef.current === index) return; // skip redraw of same frame
+    if (drawnFrameRef.current === i) return; // skip redraw of same frame
+    index = i;
 
     const ctx = canvas.getContext("2d");
     /* The 1920px frames are scaled DOWN into the canvas; the high-quality
@@ -136,29 +154,56 @@ export default function KiwanoVHero({ hero }) {
     const ro = new ResizeObserver(resizeCanvas);
     ro.observe(canvas);
 
-    // ── 2. Preload frames — frame 0 first (high priority), then the rest ─
-    //   Loading all 217 at once floods the browser queue and delays frame 0.
-    //   We load frame 0 with fetchPriority "high", draw it immediately, then
-    //   kick off the remaining 216 in parallel.
-    const makeImg = (i) => {
+    /* ── 2. Preload frames — frame 0 first, then the rest in order ────────
+     *
+     * The whole sequence is tens of MB. Creating all 217 Images in one loop
+     * hands the browser 217 simultaneous requests: they compete for the same
+     * bandwidth, so *every* frame arrives late and the early frames — the
+     * only ones needed to start scrolling — are not prioritised at all. That
+     * is what made the hero sit blank and then lurch.
+     *
+     * Instead a small window of requests is kept in flight and refilled as
+     * each completes, so frames arrive in the order they are actually
+     * scrolled through, and the first screenful is ready almost immediately.
+     */
+    let cancelled = false;
+    let inFlight = 0;
+    let nextToLoad = 1;
+
+    const makeImg = (i, onDone) => {
       const img = new Image();
       const n   = String(i + 1).padStart(4, "0");
-      img.src   = `${frameSet.dir}/frame_${n}.${frameSet.ext}`;
+      // decoding=async keeps image decode off the scroll path.
+      img.decoding = "async";
+      if (onDone) {
+        img.onload = onDone;
+        // A failed frame must not stall the queue — the draw step falls back
+        // to the nearest loaded frame anyway.
+        img.onerror = onDone;
+      }
+      img.src = `${frameSet.dir}/frame_${n}.${frameSet.ext}`;
       framesRef.current[i] = img;
       return img;
     };
 
-    // Frame 0 — highest priority, draw as soon as it arrives
+    // Frame 0 — highest priority, draw as soon as it arrives.
     const first = makeImg(0);
     first.fetchPriority = "high";
     first.onload = () => drawFrame(0);
 
-    // Remaining frames — load in parallel after a short yield so frame 0
-    // gets a head-start in the network queue
-    let restRAF = 0;
-    restRAF = requestAnimationFrame(() => {
-      for (let i = 1; i < FRAME_COUNT; i++) makeImg(i);
-    });
+    const pump = () => {
+      while (!cancelled && inFlight < FRAME_CONCURRENCY && nextToLoad < FRAME_COUNT) {
+        inFlight += 1;
+        makeImg(nextToLoad, () => {
+          inFlight -= 1;
+          pump();
+        });
+        nextToLoad += 1;
+      }
+    };
+
+    // Yield once so frame 0 gets a clear run at the network first.
+    const restRAF = requestAnimationFrame(pump);
 
     // ── 3. Scroll tracking + lerp loop ──────────────────────────────────
     let rawProgress    = 0;
@@ -198,6 +243,10 @@ export default function KiwanoVHero({ hero }) {
     gsap.ticker.fps(60);
 
     return () => {
+      // Stops the loader refilling after unmount or an orientation flip, so a
+      // rotation doesn't leave the previous set's queue competing for
+      // bandwidth with the new one.
+      cancelled = true;
       cancelAnimationFrame(restRAF);
       ro.disconnect();
       st.kill();
@@ -219,7 +268,7 @@ export default function KiwanoVHero({ hero }) {
             very first paint is already the sharp portrait crop — no flash of
             the soft landscape frame while JS decides which set to load. */}
         <div
-          className="bg-cover bg-center bg-[url('/frames/kiwano-villament/frame_0001.jpg')] portrait:bg-[url('/frames/kiwano-villament/portrait/frame_0001.webp')]"
+          className="bg-cover bg-center bg-[url('/frames/kiwano/frame_0001.jpg')] portrait:bg-[url('/frames/kiwano/portrait/frame_0001.webp')]"
           style={{
             position:            "sticky",
             top:                 0,
