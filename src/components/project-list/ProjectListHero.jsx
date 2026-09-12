@@ -21,6 +21,9 @@ import NewNavbar from '@/components/common/NewNavbar';
 export default function ProjectListHero({ hero }) {
   const heading = hero?.heading || "Let's Build Your Dream\nSomething More Exceptional.";
   const image = hero?.image || '/dummyimages/e273958d502607f06d62edd61792f48b69b84f3e.jpg';
+  /* Optional portrait crop for phones; falls back to the landscape image,
+     so pages saved before this field existed are unaffected. */
+  const mobileImage = hero?.mobileImage || image;
 
   return (
     <>
@@ -36,7 +39,7 @@ export default function ProjectListHero({ hero }) {
       >
         {/* ── BACKGROUND IMAGE ───────────────────────────────────────────── */}
         <Image
-          src={image}
+          src={mobileImage}
           alt=""
           fill
           priority

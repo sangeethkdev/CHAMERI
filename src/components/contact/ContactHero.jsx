@@ -122,6 +122,9 @@ import Link from 'next/link';
 export default function ContactHero({ hero }) {
   const heading = hero?.heading || "Let's Build\nThe Perfect Home Together";
   const image = hero?.image || "/dummyimages/ChatGPT Image Jun 12, 2026, 11_00_29 AM 1.svg";
+  /* Optional portrait crop for phones; falls back to the landscape image, so
+     a page saved before this field existed is unaffected. */
+  const mobileImage = hero?.mobileImage || image;
 
   return (
     <>
@@ -135,7 +138,7 @@ export default function ContactHero({ hero }) {
       >
         {/* ── BACKGROUND IMAGE ───────────────────────────────────────────── */}
         <Image
-          src={image}
+          src={mobileImage}
           alt="Contact Hero Background"
           fill
           priority

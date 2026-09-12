@@ -33,6 +33,10 @@ export default function GalleryHero({ heroSection }) {
     ? apiSlides.map((s, i) => ({
         id: i + 1,
         image: s?.image || STATIC_GALLERY_DATA[i].image,
+        /* Optional portrait crop for phones. Empty (or a slide saved before
+           the field existed) falls back to the landscape image, so nothing
+           changes for slides that have no mobile art. */
+        mobileImage: s?.mobileImage || '',
         text: s?.text || STATIC_GALLERY_DATA[i].text,
       }))
     : STATIC_GALLERY_DATA;
@@ -117,12 +121,29 @@ export default function GalleryHero({ heroSection }) {
                 transition: { duration: 0.6, ease: 'easeIn' },
               }}
             >
+              {/* Two <Image>s toggled by breakpoint rather than one with a
+                  swapped src: each keeps its own optimised variant, and the
+                  hidden one is never fetched because `sizes` resolves to 0 at
+                  the width where it is display:none. Slides with no mobile
+                  crop render only the landscape image, exactly as before. */}
+              {galleryData[activeIndex].mobileImage && (
+                <Image
+                  src={galleryData[activeIndex].mobileImage}
+                  alt={`Gallery Slide ${activeIndex + 1}`}
+                  fill
+                  sizes="(max-width: 767px) 100vw, 0px"
+                  className="object-cover object-center md:hidden"
+                  priority={activeIndex === 0}
+                />
+              )}
               <Image
                 src={galleryData[activeIndex].image}
                 alt={`Gallery Slide ${activeIndex + 1}`}
                 fill
-                sizes="100vw"
-                className="object-cover object-center"
+                sizes={galleryData[activeIndex].mobileImage ? '(max-width: 767px) 0px, 100vw' : '100vw'}
+                className={`object-cover object-center ${
+                  galleryData[activeIndex].mobileImage ? 'hidden md:block' : ''
+                }`}
                 priority={activeIndex === 0}
               />
             </motion.div>
