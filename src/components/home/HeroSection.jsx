@@ -569,6 +569,10 @@ export default function HeroSection({ hero }) {
         requestAnimationFrame(step);
       } else {
         setAnimState("done");
+        // Both elements are locked during the intro (mobile browsers scroll
+        // the documentElement, not <body>), so both have to be released —
+        // clearing only <body> left the page unscrollable on mobile.
+        document.documentElement.style.overflow = "";
         document.body.style.overflow = "";
       }
     };
@@ -592,7 +596,45 @@ export default function HeroSection({ hero }) {
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }
-    window.scrollTo(0, 0);
+
+    /* The intro is designed to play from the top of the page, and on a
+       client-side return to this route it does not start there by itself —
+       see `introCovers` for the full explanation. `fixed` layers mean a
+       stray offset can no longer BREAK the animation visually, but the page
+       would still be scroll-locked part-way down and would jump when the
+       lock lifts, so the offset is reset here as well.
+
+       One synchronous write is not enough: <Link> resolves its own scroll
+       position around this render, and mobile browsers restore scroll
+       asynchronously a frame or more later. Both can land after this effect
+       runs. So re-apply for a short window instead of once.
+
+       `behavior: "instant"` opts out of the global `scroll-behavior: smooth`
+       in globals.css (an animated scroll here would be visible and could be
+       interrupted); the documentElement/body writes are the fallback for
+       older iOS Safari, which ignores scrollTo's options object. */
+    const pinToTop = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+    pinToTop();
+
+    let pinFrames = 0;
+    let pinId = requestAnimationFrame(function pinStep() {
+      pinToTop();
+      // ~20 frames (≈300ms) covers the late restore without running for long
+      // enough to fight a deliberate scroll — and the gesture listeners start
+      // the reveal rather than scrolling anyway, since the page is locked.
+      if (++pinFrames < 20) pinId = requestAnimationFrame(pinStep);
+    });
+
+    /* Locking <body> alone is not reliable on mobile: Safari and Chrome scroll
+       the documentElement, which an overflow on <body> does not govern, so the
+       page could still drift during the intro. Lock both. */
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    const prevBodyOverflow = document.body.style.overflow;
+    document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
 
     let start;
@@ -618,7 +660,11 @@ export default function HeroSection({ hero }) {
     rafId = requestAnimationFrame(step);
     return () => {
       cancelAnimationFrame(rafId);
-      document.body.style.overflow = "";
+      // Navigating away mid-intro must not leave the page pinned to the top
+      // or scroll-locked on the next route.
+      cancelAnimationFrame(pinId);
+      document.documentElement.style.overflow = prevHtmlOverflow;
+      document.body.style.overflow = prevBodyOverflow;
       // scrollRestoration is a global, session-long browser setting. Leaving
       // it on "manual" after navigating away meant every later route kept the
       // previous page's scroll offset instead of opening at the top.
@@ -827,10 +873,56 @@ export default function HeroSection({ hero }) {
   // the navbar (with its own logo) fade in — they're never both visible.
   const isDone = animState === "done";
 
+  // ── Full-viewport coverage during the intro ────────────────────────────────
+  // The two covering layers below are `sticky`, which means their coverage is
+  // only ever as good as the page's scroll offset being 0: a sticky element
+  // paints within its own flow box, so at any offset > 0 the bottom of the
+  // "full screen" intro slides away and whatever follows in the document
+  // (AboutSection) shows through underneath it.
+  //
+  // On a first load that is fine — the page opens at the top. On a CLIENT-SIDE
+  // RETURN to this route (Home → another page → Home via <Link href="/">) it
+  // is not, and this is what left the intro rendering as a partial band with
+  // "ABOUT US" visible below it:
+  //
+  //   * <Link> "maintains scroll position" by default rather than always
+  //     resetting it, and when it does pick an element to align to it
+  //     explicitly SKIPS sticky/fixed elements — so it bypasses both hero
+  //     layers and aligns on the first ordinary block instead, which is the
+  //     AboutSection wrapper. The intro is then already scrolled past before
+  //     a single frame of it has played.
+  //   * Mobile browsers additionally restore scroll asynchronously, a frame or
+  //     more after this component's effects run, so one synchronous
+  //     `scrollTo(0, 0)` at mount can be overwritten straight afterwards.
+  //   * `overflow: hidden` on <body> then FREEZES the page at that offset,
+  //     which is why it stays broken for the whole animation rather than
+  //     self-correcting.
+  //
+  // Switching the covering layers to `fixed` for the duration of the animation
+  // removes the dependency on scroll offset entirely: they are positioned
+  // against the viewport, so they cover it completely no matter where the page
+  // sits or when a late scroll restore lands. Once the reveal finishes they go
+  // back to `sticky`, which is what the scroll-driven layout below them needs
+  // (a fixed backdrop would not scroll away with the content).
+  const introCovers = !isDone;
+
   return (
     <>
+      {/* Going `fixed` takes both layers out of normal flow, and the flow box
+          they vacate is load-bearing: the background occupies 0..100svh, the
+          header cancels itself out with -100svh, and the <section> below pulls
+          itself up by -60svh relative to that. Losing 100svh of flow would
+          therefore move the section — and shift the whole page at the moment
+          the layers hand back to `sticky`. This spacer stands in for exactly
+          the box the background layer would have occupied, so the document's
+          geometry is identical in both modes and the handoff is invisible. */}
+      {introCovers && <div aria-hidden="true" className="w-full h-svh pointer-events-none" />}
+
       {/* ── Sticky Background ─────────────────────────────────────────────── */}
-      <div className="sticky top-0 left-0 w-full h-svh overflow-hidden pointer-events-none -z-10">
+      {/* `fixed` until the reveal finishes — see `introCovers` above. */}
+      <div
+        className={`${introCovers ? "fixed" : "sticky"} top-0 left-0 w-full h-svh overflow-hidden pointer-events-none -z-10`}
+      >
 
         {/* Layer 0: Dark blue + waves */}
         <div className="absolute inset-0 w-full h-full -z-30 overflow-hidden pointer-events-none bg-[#2A3A4A]">
@@ -901,8 +993,12 @@ export default function HeroSection({ hero }) {
 
       {/* ── Sticky Header (Logo & Navbar) ─────────────────────────────────── */}
       <div
-        className="sticky top-0 left-0 w-full h-svh pointer-events-none z-50 overflow-visible"
-        style={{ marginTop: "-100svh" }}
+        className={`${introCovers ? "fixed" : "sticky"} top-0 left-0 w-full h-svh pointer-events-none z-50 overflow-visible`}
+        /* The -100svh pull exists to lift this layer back over the background
+           layer it follows in the document. That is a flow-layout correction,
+           so it applies to the sticky case only — a fixed element is already
+           positioned against the viewport and margin would just push it off. */
+        style={introCovers ? undefined : { marginTop: "-100svh" }}
       >
         <div className="absolute top-[1%]  left-0 w-full h-svh pointer-events-none">
 
