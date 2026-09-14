@@ -924,8 +924,16 @@ export default function HeroSection({ hero }) {
         className={`${introCovers ? "fixed" : "sticky"} top-0 left-0 w-full h-svh overflow-hidden pointer-events-none -z-10`}
       >
 
-        {/* Layer 0: Dark blue + waves */}
-        <div className="absolute inset-0 w-full h-full -z-30 overflow-hidden pointer-events-none bg-[#2A3A4A]">
+        {/* Layer 0: Dark blue + waves.
+            The navy is set INLINE as well as via the class. `body` resolves to
+            white, and a class-driven background cannot paint until the 69KB
+            stylesheet has loaded — so the first frames of the intro rendered
+            as a white flash before the backdrop appeared. An inline style is
+            part of the HTML itself, so this paints on the very first frame. */}
+        <div
+          className="absolute inset-0 w-full h-full -z-30 overflow-hidden pointer-events-none bg-[#2A3A4A]"
+          style={{ backgroundColor: "#2A3A4A" }}
+        >
           <svg
             viewBox="0 0 1440 1110"
             preserveAspectRatio="xMidYMid slice"
