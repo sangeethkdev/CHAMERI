@@ -366,6 +366,10 @@ export default function KiwanoVBrandStory({ brandStory }) {
                     src={videoSrc}
                     loop
                     playsInline
+                    /* Click-to-play, so nothing needs buffering up front — the
+                       default clip is 14.6MB and without this the browser may
+                       still fetch the body during initial load. */
+                    preload="none"
                     controls={isPlaying}
                     onPlay={() => setIsPlaying(true)}
                     onPause={() => setIsPlaying(false)}

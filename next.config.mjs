@@ -52,6 +52,18 @@ const nextConfig = {
           },
         ],
       },
+      {
+        /* Same reasoning for the hero/tour clips (~72MB of MP4): they are
+           build assets that never change in place, but without an explicit
+           header the browser revalidates them on every visit. */
+        source: "/videos/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
     ];
   },
 };

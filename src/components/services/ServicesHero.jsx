@@ -50,6 +50,13 @@ export default function ServicesHero({ hero }) {
           muted
           loop
           playsInline
+          /* metadata, not the browser's autoplay default of "auto": without
+             this the full MP4 is pulled before first paint and competes with
+             the LCP text for bandwidth on mobile. The poster is a 91KB WebP of
+             the clip's own first frame, so the hero paints immediately instead
+             of sitting blank until enough video has buffered. */
+          preload="metadata"
+          poster="/videos/services-hero-poster.webp"
           className="absolute inset-0 w-full h-full object-cover"
         >
           <source src={videoSrc} type="video/mp4" />
@@ -103,6 +110,13 @@ export default function ServicesHero({ hero }) {
           muted
           loop
           playsInline
+          /* metadata, not the browser's autoplay default of "auto": without
+             this the full MP4 is pulled before first paint and competes with
+             the LCP text for bandwidth on mobile. The poster is a 91KB WebP of
+             the clip's own first frame, so the hero paints immediately instead
+             of sitting blank until enough video has buffered. */
+          preload="metadata"
+          poster="/videos/services-hero-poster.webp"
           className="absolute inset-0 w-full h-full object-cover"
         >
           <source src={videoSrc} type="video/mp4" />

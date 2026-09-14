@@ -457,17 +457,23 @@ function MobileServiceCard({ service }) {
     <div
       style={{
         width: "min(389px, 100vw)",
-        height: "489.44px",
+        /* auto, not a fixed 489.44px: the content stack only measures ~413px,
+           so the old fixed height left ~76px of dead space at the bottom of
+           every card — and because the divider below is a borderLeft on this
+           same box, it was drawn all the way down that empty band. Sizing to
+           content removes the gap and keeps the rule the height of the card
+           however the title wraps. */
+        height: "auto",
         flexShrink: 0,
         display: "flex",
         flexDirection: "column",
-        gap: "19.9px",
-        paddingTop: "39.8px",
+        gap: "14px",
+        paddingTop: "28px",
         /* Symmetric 22px, matching the section's own paddingLeft/Right, so the
            card's content column is centred and shares the header's edges. It
            was 21.71 / 11.76, which pushed everything ~5px right of centre. */
         paddingRight: "40px",
-        paddingBottom: "39.8px",
+        paddingBottom: "24px",
         paddingLeft: "40px",
         borderLeft: "0.9px solid #00000047",
         background: "#EDE7DE",
@@ -475,7 +481,7 @@ function MobileServiceCard({ service }) {
       }}
     >
       {/* Number + title (row) + description + Learn More */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "9.05px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "7px" }}>
         {/* Number + title */}
         <div
           style={{
@@ -507,7 +513,7 @@ function MobileServiceCard({ service }) {
               fontFamily: "var(--font-roundo), 'Roundo', system-ui, sans-serif",
               fontWeight: 500,
               fontSize: "29.85px",
-              lineHeight: "34.33px",
+              lineHeight: "32px",
               letterSpacing: "-0.6px",
               color: "#000000",
               margin: 0,
@@ -539,7 +545,7 @@ function MobileServiceCard({ service }) {
               fontFamily: "var(--font-geist-sans), 'Geist', system-ui, sans-serif",
               fontWeight: 400,
               fontSize: "13.57px",
-              lineHeight: "20.35px",
+              lineHeight: "18.5px",
               color: "#000000CC",
               margin: 0,
               display: "-webkit-box",

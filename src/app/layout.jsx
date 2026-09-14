@@ -1,5 +1,6 @@
 import { Geist, Outfit, Instrument_Sans } from "next/font/google";
 import localFont from "next/font/local";
+import Script from "next/script";
 import FloatingContactButtons from "@/components/common/FloatingContactButtons";
 import ScrollToTop from "@/components/common/ScrollToTop";
 import "./globals.css";
@@ -42,21 +43,25 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${geistSans.variable} ${outfit.variable} ${instrumentSans.variable} ${roundo.variable} h-full antialiased`}>
       <head>
-        {/* Google Tag Manager — inlined as high in <head> as possible so the
-            dataLayer exists before any other script runs. */}
-        <script
-          id="google-tag-manager"
-          dangerouslySetInnerHTML={{
-            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        {/* Warm up the GTM origins during first paint so the deferred loader
+            below doesn't pay DNS + TLS when it finally runs. */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+      </head>
+      <body className="min-h-full flex flex-col">
+        {/* Google Tag Manager — next/script with afterInteractive instead of a
+            raw inline <script> in <head>. The inline version executed before
+            first paint and injected gtm.js synchronously into the critical
+            path, which is a large part of the mobile blocking time; this runs
+            it once the page is interactive. dataLayer is seeded here so any
+            push that happens before gtm.js lands is still picked up. */}
+        <Script id="google-tag-manager" strategy="afterInteractive">
+          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-P93V5VC5');`,
-          }}
-        />
-        {/* End Google Tag Manager */}
-      </head>
-      <body className="min-h-full flex flex-col">
+})(window,document,'script','dataLayer','GTM-P93V5VC5');`}
+        </Script>
         {/* Google Tag Manager (noscript) — must be first thing in <body> */}
         <noscript>
           <iframe

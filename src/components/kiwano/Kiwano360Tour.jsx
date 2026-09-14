@@ -117,6 +117,10 @@ function Viewer360Inner({
           muted
           loop
           playsInline
+          /* The default tour clip is 14.6MB. Browsers treat autoplay as
+             preload="auto" and pull the whole body up front, which competes
+             with first paint on mobile; "metadata" fetches only the header. */
+          preload="metadata"
           style={{
             position:       "absolute",
             inset:          0,
