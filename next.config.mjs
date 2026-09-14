@@ -64,6 +64,20 @@ const nextConfig = {
           },
         ],
       },
+      {
+        /* The remaining static art (~74MB across these three folders) had no
+           cache policy at all, so every repeat visit revalidated it — which is
+           what PageSpeed reports as "Use efficient cache lifetimes". These are
+           checked-in build assets: a changed picture ships under a new name
+           rather than being edited in place. */
+        source: "/:dir(images|dummyimages|icons)/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
     ];
   },
 };

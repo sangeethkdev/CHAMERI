@@ -20,7 +20,7 @@ export default async function ProjectListPage() {
   const data = await getProjectsMainData();
 
   return (
-    <main className="min-h-screen bg-[#EFEDE7]">
+    <main className="min-h-screen bg-[#EFEDE7]" style={{ backgroundColor: "#EFEDE7" }}>
       <SmoothScroll />
       <ProjectListHero hero={data?.heroSection} />
       <ProjectsShowcase cardsSection={data?.cardsSection} />

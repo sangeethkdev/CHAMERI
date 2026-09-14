@@ -19,7 +19,7 @@ export default async function GalleryPage() {
   const gallery = await getGalleryData();
 
   return (
-    <main className="min-h-screen relative bg-[#EDE7DE]">
+    <main className="min-h-screen relative bg-[#EDE7DE]" style={{ backgroundColor: "#EDE7DE" }}>
       <NewNavbar />
       <GalleryHero heroSection={gallery?.heroSection} />
       <GalleryGrid galleryImages={gallery?.galleryImages} galleryEvents={gallery?.galleryEvents} />

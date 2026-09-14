@@ -20,7 +20,7 @@ export default async function ServicesPage() {
   const service = await getServiceMainData();
 
   return (
-    <main className="min-h-screen bg-[#EFEDE7]">
+    <main className="min-h-screen bg-[#EFEDE7]" style={{ backgroundColor: "#EFEDE7" }}>
       <NewNavbar />
       <ServicesHero hero={service?.heroSection} />
       <ServicesOffered cardsSection={service?.cardsSection} />

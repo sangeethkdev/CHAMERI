@@ -25,7 +25,7 @@ export default async function AboutPage() {
   const about = await getAboutData();
 
   return (
-    <main className="min-h-screen bg-[#EFEDE7] relative">
+    <main className="min-h-screen bg-[#EFEDE7] relative" style={{ backgroundColor: "#EFEDE7" }}>
       <NewNavbar />
       <AboutHeroSection hero={about?.hero} />
       <AboutOriginStory story={about?.story} />

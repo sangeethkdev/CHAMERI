@@ -19,7 +19,7 @@ export default async function TestimonialPage() {
   const data = await getTestimonialsMainData();
 
   return (
-    <main className="min-h-screen bg-[#EFEDE7]">
+    <main className="min-h-screen bg-[#EFEDE7]" style={{ backgroundColor: "#EFEDE7" }}>
       <TestimonialHero hero={data?.heroSection} />
       <TestimonialCarousel reviews={data?.reviewsSection} />
       <VideoTestimonialCarousel reviews={data?.reviewsSection} />
