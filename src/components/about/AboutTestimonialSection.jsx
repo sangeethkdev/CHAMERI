@@ -296,9 +296,12 @@ export default function AboutTestimonialSection({ testimonialSection }) {
                       {item.quote}
                     </p>
                     <div className="flex items-center" style={{ gap: `${10 * mobileScale}px` }}>
-                      <div className="flex-shrink-0 overflow-hidden" style={{ width: `${34 * mobileScale}px`, height: `${34 * mobileScale}px`, borderRadius: `${4 * mobileScale}px` }}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={item.avatar} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      {/* `relative` added so the <Image fill> below is
+                          positioned against this box rather than escaping it —
+                          the wrapper had no positioning when it held a raw
+                          <img>, which did not need one. */}
+                      <div className="relative flex-shrink-0 overflow-hidden" style={{ width: `${34 * mobileScale}px`, height: `${34 * mobileScale}px`, borderRadius: `${4 * mobileScale}px` }}>
+                        <Image src={item.avatar} alt={item.name} fill sizes="48px" style={{ objectFit: 'cover' }} />
                       </div>
                       <div>
                         <p className="m-0" style={{ fontFamily: "var(--font-geist, 'Geist'), system-ui, sans-serif", fontWeight: 400, fontSize: `${15.84 * mobileScale}px`, lineHeight: `${24.11 * mobileScale}px`, color: '#FFFFFF', letterSpacing: '0%' }}>
@@ -369,8 +372,9 @@ export default function AboutTestimonialSection({ testimonialSection }) {
                             flexShrink:   0,
                           }}
                         >
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={item.avatar} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          {/* Parent already carries position:relative, so fill
+                              resolves against it directly. */}
+                          <Image src={item.avatar} alt={item.name} fill sizes="64px" style={{ objectFit: 'cover' }} />
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                           <p style={{ fontFamily: "var(--font-geist,'Geist'),sans-serif", fontWeight: 600, fontSize: `${16 * scale}px`, lineHeight: 1.3, color: '#FFFFFF', margin: 0 }}>

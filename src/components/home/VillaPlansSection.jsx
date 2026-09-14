@@ -76,8 +76,8 @@ const VillaPlansSection = ({ villaPlan }) => {
   const tab2Label = villaPlan?.card2?.heading || 'Kiwano Villament';
   const tab1Description = villaPlan?.card1?.description || 'Discover crafted living spaces where modern design meets timeless comfort for every family with smart layouts bright views and premium details built to inspire daily today always now us';
   const tab2Description = villaPlan?.card2?.description || 'Discover crafted living spaces where modern design meets timeless comfort for every family with smart layouts bright views and premium details built to inspire daily today always now us';
-  const tab1Image = villaPlan?.card1?.image || '/dummyimages/Overlay.png';
-  const tab2Image = villaPlan?.card2?.image || '/dummyimages/Frame 2121454280.png';
+  const tab1Image = villaPlan?.card1?.image || '/dummyimages/Overlay.webp';
+  const tab2Image = villaPlan?.card2?.image || '/dummyimages/Frame 2121454280.webp';
   const sectionHeading = villaPlan?.heading || 'Luxury Villa Plans';
   const sectionSubheading = villaPlan?.subheading || 'Explore crafted villa spaces with modern comfort built beautifully';
 

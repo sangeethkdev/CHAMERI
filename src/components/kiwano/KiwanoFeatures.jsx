@@ -38,7 +38,7 @@ const STATIC_FEATURES = [
     title: "Clubhouse",
     description:
       "A premium social hub with world-class amenities designed for community living and relaxation.",
-    image: "/dummyimages/Frame 2121454280.png",
+    image: "/dummyimages/Frame 2121454280.webp",
   },
   {
     id: 2,
@@ -94,14 +94,14 @@ const STATIC_FEATURES = [
     title: "24×7 Power Backup",
     description:
       "Uninterrupted power supply round the clock, ensuring comfort and security at all times.",
-    image: "/dummyimages/Overlay.png",
+    image: "/dummyimages/Overlay.webp",
   },
   {
     id: 10,
     title: "Private Gardens",
     description:
       "Exclusive landscaped private gardens for each villa — your personal green sanctuary.",
-    image: "/dummyimages/Frame 2121454280.png",
+    image: "/dummyimages/Frame 2121454280.webp",
   },
 ];
 

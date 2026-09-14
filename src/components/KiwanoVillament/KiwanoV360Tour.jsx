@@ -138,7 +138,6 @@ function Viewer360Inner({
           src={src}
           alt="Explore Every Angle Of Luxury Living — Kiwano Villa"
           fill
-          priority
           sizes="(max-width: 768px) 100vw, 1285px"
           style={{
             objectFit:      "cover",
@@ -457,7 +456,7 @@ export default function Kiwano360Tour({ tour360 }) {
             }}
           >
             <Viewer360Inner
-              src={tour360?.media || "/dummyimages/allphoto-bangkok-imSqK_PD5R0-unsplash.jpg"}
+              src={tour360?.media || "/dummyimages/allphoto-bangkok.webp"}
               imgPosX={imgPosX}
               borderRadius="8px"
               pressedL={pressedL}
@@ -592,7 +591,7 @@ export default function Kiwano360Tour({ tour360 }) {
             {/* Viewer wrapper */}
             <div id="kiwano-360-viewer" style={{ width: "100%", height: "100%" }}>
               <Viewer360Inner
-                src={tour360?.media || "/dummyimages/allphoto-bangkok-imSqK_PD5R0-unsplash.jpg"}
+                src={tour360?.media || "/dummyimages/allphoto-bangkok.webp"}
                 imgPosX={imgPosX}
                 borderRadius="clamp(8px, 0.833vw, 12px)"
                 pressedL={pressedL}

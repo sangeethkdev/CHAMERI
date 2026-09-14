@@ -5,9 +5,9 @@ import Image from 'next/image';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 
 const STATIC_GALLERY_DATA = [
-  { id: 1, image: "/dummyimages/image 14 (3) 1.svg", text: "Crafting Timeless Villas &\nLandmark Spaces" },
-  { id: 2, image: "/dummyimages/image 14 (3) 3.svg", text: "Building Elegant Homes,\nDesigning Lasting Impressions" },
-  { id: 3, image: "/dummyimages/Overlay.png", text: "Crafting Timeless Villas &\nLandmark Spaces" },
+  { id: 1, image: "/dummyimages/gallery-slide-1.webp", text: "Crafting Timeless Villas &\nLandmark Spaces" },
+  { id: 2, image: "/dummyimages/gallery-slide-3.webp", text: "Building Elegant Homes,\nDesigning Lasting Impressions" },
+  { id: 3, image: "/dummyimages/Overlay.webp", text: "Crafting Timeless Villas &\nLandmark Spaces" },
 ];
 
 // dir: 1 = scroll down (enter from bottom, exit to top)

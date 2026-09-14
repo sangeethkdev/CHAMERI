@@ -631,7 +631,6 @@ export default function AboutNavbar() {
                 fill
                 sizes="40px"
                 style={{ objectFit: 'contain' }}
-                priority
               />
             </div>
             <div
@@ -647,7 +646,6 @@ export default function AboutNavbar() {
                 fill
                 sizes="120px"
                 style={{ objectFit: 'contain' }}
-                priority
               />
             </div>
           </Link>

@@ -25,7 +25,7 @@ import NewNavbar from "@/components/common/NewNavbar";
 
 export default function TestimonialHero({ hero }) {
   const heading = hero?.heading || "Let's Create \nSomething Exceptional.";
-  const image = hero?.image || "/dummyimages/93ea3b68dd0f3cef6bc8fd39cb67ca7fed7d3057.png";
+  const image = hero?.image || "/dummyimages/93ea3b68dd0f3cef6bc8fd39cb67ca7fed7d3057.webp";
   /* Optional portrait crop for phones; falls back to the landscape image,
      so pages saved before this field existed are unaffected. */
   const mobileImage = hero?.mobileImage || image;

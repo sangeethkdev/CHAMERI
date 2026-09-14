@@ -121,7 +121,7 @@ import Link from 'next/link';
 
 export default function ContactHero({ hero }) {
   const heading = hero?.heading || "Let's Build\nThe Perfect Home Together";
-  const image = hero?.image || "/dummyimages/ChatGPT Image Jun 12, 2026, 11_00_29 AM 1.svg";
+  const image = hero?.image || "/dummyimages/contact-hero.webp";
   /* Optional portrait crop for phones; falls back to the landscape image, so
      a page saved before this field existed is unaffected. */
   const mobileImage = hero?.mobileImage || image;

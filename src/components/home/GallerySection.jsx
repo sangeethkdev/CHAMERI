@@ -5,11 +5,11 @@
 
 // /* ─── Gallery data ───────────────────────────────────────────────────── */
 // const VILLAS = [
-//   { id: 1, name: 'VILLA 01', location: 'Calicut , Kerala', year: '2024', img: '/dummyimages/Frame 2121454280.png', alt: '/dummyimages/Container.png' },
-//   { id: 2, name: 'Villa 1', location: 'Calicut, Kerala', year: '2025', img: '/dummyimages/Container.png', alt: '/dummyimages/Frame 2121454280.png' },
-//   { id: 5, name: 'Villa No5', location: 'Lorum Ipsum sit', year: '2025', img: '/dummyimages/Overlay.png', alt: '/dummyimages/Frame 2121454280.png' },
-//   { id: 6, name: 'Villa No6', location: 'Lorum Ipsum sit consit', year: '2024', img: '/dummyimages/Frame 2121454280.png', alt: '/dummyimages/Overlay.png' },
-//   { id: 7, name: 'Villa No7', location: 'Lorum Ipsum consit', year: '2023', img: '/dummyimages/Container.png', alt: '/dummyimages/Frame 2121454280.png' },
+//   { id: 1, name: 'VILLA 01', location: 'Calicut , Kerala', year: '2024', img: '/dummyimages/Frame 2121454280.webp', alt: '/dummyimages/Container.png' },
+//   { id: 2, name: 'Villa 1', location: 'Calicut, Kerala', year: '2025', img: '/dummyimages/Container.png', alt: '/dummyimages/Frame 2121454280.webp' },
+//   { id: 5, name: 'Villa No5', location: 'Lorum Ipsum sit', year: '2025', img: '/dummyimages/Overlay.webp', alt: '/dummyimages/Frame 2121454280.webp' },
+//   { id: 6, name: 'Villa No6', location: 'Lorum Ipsum sit consit', year: '2024', img: '/dummyimages/Frame 2121454280.webp', alt: '/dummyimages/Overlay.webp' },
+//   { id: 7, name: 'Villa No7', location: 'Lorum Ipsum consit', year: '2023', img: '/dummyimages/Container.png', alt: '/dummyimages/Frame 2121454280.webp' },
 // ];
 
 // /* ─── Single Gallery Card ────────────────────────────────────────────── */
@@ -317,13 +317,13 @@
 // */
 
 // const VILLAS = [
-//   { id: 1, name: 'VILLA 01',  location: 'Calicut , Kerala',       year: '2024', img: '/dummyimages/Frame 2121454280.png', alt: '/dummyimages/Container.png',           side: 'left'  },
-//   { id: 2, name: 'Villa 1',   location: 'Calicut, Kerala',        year: '2025', img: '/dummyimages/Container.png',        alt: '/dummyimages/Frame 2121454280.png',    side: 'right' },
-//   { id: 3, name: 'Villa No3', location: 'Calicut, Kerala',        year: '2025', img: '/dummyimages/Overlay.png',          alt: '/dummyimages/Frame 2121454280.png',    side: 'left'  },
-//   { id: 4, name: 'Villa No4', location: 'Calicut, Kerala',        year: '2024', img: '/dummyimages/Container.png',        alt: '/dummyimages/Frame 2121454280.png',    side: 'right' },
-//   { id: 5, name: 'Villa No5', location: 'Lorum Ipsum sit',        year: '2025', img: '/dummyimages/Overlay.png',          alt: '/dummyimages/Frame 2121454280.png',    side: 'right' },
-//   { id: 6, name: 'Villa No6', location: 'Lorum Ipsum sit consit', year: '2024', img: '/dummyimages/Frame 2121454280.png', alt: '/dummyimages/Overlay.png',             side: 'left'  },
-//   { id: 7, name: 'Villa No7', location: 'Lorum Ipsum consit',     year: '2023', img: '/dummyimages/Container.png',        alt: '/dummyimages/Frame 2121454280.png',    side: 'right' },
+//   { id: 1, name: 'VILLA 01',  location: 'Calicut , Kerala',       year: '2024', img: '/dummyimages/Frame 2121454280.webp', alt: '/dummyimages/Container.png',           side: 'left'  },
+//   { id: 2, name: 'Villa 1',   location: 'Calicut, Kerala',        year: '2025', img: '/dummyimages/Container.png',        alt: '/dummyimages/Frame 2121454280.webp',    side: 'right' },
+//   { id: 3, name: 'Villa No3', location: 'Calicut, Kerala',        year: '2025', img: '/dummyimages/Overlay.webp',          alt: '/dummyimages/Frame 2121454280.webp',    side: 'left'  },
+//   { id: 4, name: 'Villa No4', location: 'Calicut, Kerala',        year: '2024', img: '/dummyimages/Container.png',        alt: '/dummyimages/Frame 2121454280.webp',    side: 'right' },
+//   { id: 5, name: 'Villa No5', location: 'Lorum Ipsum sit',        year: '2025', img: '/dummyimages/Overlay.webp',          alt: '/dummyimages/Frame 2121454280.webp',    side: 'right' },
+//   { id: 6, name: 'Villa No6', location: 'Lorum Ipsum sit consit', year: '2024', img: '/dummyimages/Frame 2121454280.webp', alt: '/dummyimages/Overlay.webp',             side: 'left'  },
+//   { id: 7, name: 'Villa No7', location: 'Lorum Ipsum consit',     year: '2023', img: '/dummyimages/Container.png',        alt: '/dummyimages/Frame 2121454280.webp',    side: 'right' },
 // ];
 
 // /* ─── Gallery Card ───────────────────────────────────────────────────── */

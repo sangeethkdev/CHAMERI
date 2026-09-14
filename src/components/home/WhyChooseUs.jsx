@@ -80,7 +80,7 @@ const STATIC_CARDS = [
     desc: 'With a portfolio of completed projects and collaborations with experienced architects, we bring proven expertise to every build. Our work speaks through real results, client satisfaction, and trusted industry partnerships.',
   },
   {
-    img: '/dummyimages/Overlay.png',
+    img: '/dummyimages/Overlay.webp',
     icon: <Image src="/icons/healthicons_people-outline.svg" alt="People icon" width={25} height={25} />,
     mobileIcon: <Image src="/images/healthicons_people-outline (1).svg" alt="People icon" width={25} height={25} />,
     title: 'Client-Centric, Seamless Experience',

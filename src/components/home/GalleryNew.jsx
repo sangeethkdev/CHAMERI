@@ -10,13 +10,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const STATIC_VILLAS = [
-  { id: 1, name: 'VILLA 01',  location: 'Calicut , Kerala',       year: '2024', img: '/dummyimages/Frame 2121454280.png', alt: '/dummyimages/Container.png',           side: 'left'  },
-  { id: 2, name: 'Villa 1',   location: 'Calicut, Kerala',        year: '2025', img: '/dummyimages/Container.png',        alt: '/dummyimages/Frame 2121454280.png',    side: 'right' },
-  { id: 3, name: 'Villa No3', location: 'Calicut, Kerala',        year: '2025', img: '/dummyimages/Overlay.png',          alt: '/dummyimages/Frame 2121454280.png',    side: 'left'  },
-  { id: 4, name: 'Villa No4', location: 'Calicut, Kerala',        year: '2024', img: '/dummyimages/Container.png',        alt: '/dummyimages/Frame 2121454280.png',    side: 'right' },
-  { id: 5, name: 'Villa No5', location: 'Lorum Ipsum sit',        year: '2025', img: '/dummyimages/Overlay.png',          alt: '/dummyimages/Frame 2121454280.png',    side: 'right' },
-  { id: 6, name: 'Villa No6', location: 'Lorum Ipsum sit consit', year: '2024', img: '/dummyimages/Frame 2121454280.png', alt: '/dummyimages/Overlay.png',             side: 'left'  },
-  { id: 7, name: 'Villa No7', location: 'Lorum Ipsum consit',     year: '2023', img: '/dummyimages/Container.png',        alt: '/dummyimages/Frame 2121454280.png',    side: 'right' },
+  { id: 1, name: 'VILLA 01',  location: 'Calicut , Kerala',       year: '2024', img: '/dummyimages/Frame 2121454280.webp', alt: '/dummyimages/Container.png',           side: 'left'  },
+  { id: 2, name: 'Villa 1',   location: 'Calicut, Kerala',        year: '2025', img: '/dummyimages/Container.png',        alt: '/dummyimages/Frame 2121454280.webp',    side: 'right' },
+  { id: 3, name: 'Villa No3', location: 'Calicut, Kerala',        year: '2025', img: '/dummyimages/Overlay.webp',          alt: '/dummyimages/Frame 2121454280.webp',    side: 'left'  },
+  { id: 4, name: 'Villa No4', location: 'Calicut, Kerala',        year: '2024', img: '/dummyimages/Container.png',        alt: '/dummyimages/Frame 2121454280.webp',    side: 'right' },
+  { id: 5, name: 'Villa No5', location: 'Lorum Ipsum sit',        year: '2025', img: '/dummyimages/Overlay.webp',          alt: '/dummyimages/Frame 2121454280.webp',    side: 'right' },
+  { id: 6, name: 'Villa No6', location: 'Lorum Ipsum sit consit', year: '2024', img: '/dummyimages/Frame 2121454280.webp', alt: '/dummyimages/Overlay.webp',             side: 'left'  },
+  { id: 7, name: 'Villa No7', location: 'Lorum Ipsum consit',     year: '2023', img: '/dummyimages/Container.png',        alt: '/dummyimages/Frame 2121454280.webp',    side: 'right' },
 ];
 
 /**
@@ -231,7 +231,7 @@ const GalleryNew = ({ gallery }) => {
             name: c.name || `Villa ${String(i + 1).padStart(2, '0')}`,
             location: c.place || '',
             year: c.date || '',
-            img: c.images?.[0] || STATIC_VILLAS[i]?.img || '/dummyimages/Frame 2121454280.png',
+            img: c.images?.[0] || STATIC_VILLAS[i]?.img || '/dummyimages/Frame 2121454280.webp',
             alt: c.images?.[1] || STATIC_VILLAS[i]?.alt || '/dummyimages/Container.png',
             project: c.project || '',
             side: i % 2 === 0 ? 'left' : 'right',

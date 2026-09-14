@@ -429,7 +429,6 @@ export default function NewNavbar({ opacity = 1, showLogo = true, darkLogo = fal
                     fill
                     sizes="40px"
                     style={{ objectFit: 'contain' }}
-                    priority
                   />
                 </div>
                 {/* Wordmark (CHAMERI text) */}
@@ -446,7 +445,6 @@ export default function NewNavbar({ opacity = 1, showLogo = true, darkLogo = fal
                     fill
                     sizes="120px"
                     style={{ objectFit: 'contain' }}
-                    priority
                   />
                 </div>
               </Link>
@@ -518,10 +516,10 @@ export default function NewNavbar({ opacity = 1, showLogo = true, darkLogo = fal
             }}
           >
             <div style={{ position: 'relative', width: '29.5px', height: '33.2px' }}>
-              <Image src={logoMark} alt="Chameri mark" fill sizes="40px" style={{ objectFit: 'contain' }} priority />
+              <Image src={logoMark} alt="Chameri mark" fill sizes="40px" style={{ objectFit: 'contain' }} />
             </div>
             <div style={{ position: 'relative', width: '85.93px', height: '11.08px' }}>
-              <Image src={logoWordmark} alt="CHAMERI" fill sizes="100px" style={{ objectFit: 'contain' }} priority />
+              <Image src={logoWordmark} alt="CHAMERI" fill sizes="100px" style={{ objectFit: 'contain' }} />
             </div>
           </Link>
         )}

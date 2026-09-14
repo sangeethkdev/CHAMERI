@@ -231,7 +231,6 @@ export default function AboutVisionMissionSection({ vision, mission }) {
             fill
             sizes="(max-width: 768px) 90vw, 700px"
             style={{ objectFit: 'cover', objectPosition: 'center' }}
-            priority
           />
           <Overlay />
           <CardTexts card={cards[0]} showTexts={card1Expanded} />
@@ -272,7 +271,6 @@ export default function AboutVisionMissionSection({ vision, mission }) {
             fill
             sizes="(max-width: 768px) 90vw, 700px"
             style={{ objectFit: 'cover', objectPosition: 'center' }}
-            priority
           />
           <Overlay />
           <CardTexts card={cards[1]} showTexts={true} />
@@ -453,7 +451,6 @@ function MobileVisionMissionSection({ cards }) {
             fill
             sizes="(max-width: 768px) 90vw, 700px"
             style={{ objectFit: 'cover', objectPosition: 'center' }}
-            priority
           />
           <Overlay />
           <MobileCardTexts card={cards[0]} showTexts={card1Expanded} />
@@ -492,7 +489,6 @@ function MobileVisionMissionSection({ cards }) {
             fill
             sizes="(max-width: 768px) 90vw, 700px"
             style={{ objectFit: 'cover', objectPosition: 'center' }}
-            priority
           />
           <Overlay />
           <MobileCardTexts card={cards[1]} showTexts={true} />

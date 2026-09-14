@@ -25,7 +25,7 @@ const STATIC_TESTIMONIALS = [
     quote: '"Lorem amet dolo elit nisi urna erat odio enim duis cras nunc orci ante quis arcu vero pede just urna."',
     name: 'Richard',
     role: 'Entrepreneur',
-    img: '/dummyimages/Frame 2121454280.png',
+    img: '/dummyimages/Frame 2121454280.webp',
     avatar: 'https://i.pravatar.cc/80?img=11',
   },
   {
@@ -41,7 +41,7 @@ const STATIC_TESTIMONIALS = [
     quote: '"Lorem amet dolo elit nisi urna erat odio enim duis cras nunc orci ante quis arcu vero pede just urna."',
     name: 'Priya Menon',
     role: 'Interior Designer',
-    img: '/dummyimages/Overlay.png',
+    img: '/dummyimages/Overlay.webp',
     avatar: 'https://i.pravatar.cc/80?img=47',
   },
   {
@@ -49,7 +49,7 @@ const STATIC_TESTIMONIALS = [
     quote: '"Lorem amet dolo elit nisi urna erat odio enim duis cras nunc orci ante quis arcu vero pede just urna."',
     name: 'James Keller',
     role: 'Real Estate Investor',
-    img: '/dummyimages/Frame 2121454280.png',
+    img: '/dummyimages/Frame 2121454280.webp',
     avatar: 'https://i.pravatar.cc/80?img=52',
   },
 ];

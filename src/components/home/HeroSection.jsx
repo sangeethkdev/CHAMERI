@@ -190,7 +190,7 @@
 //             style={{ transform: `scale3d(${bgScale}, ${bgScale}, 1)`, transformOrigin: "center bottom" }}
 //           >
 //             <Image
-//               src="/dummyimages/Frame 2121454280.png"
+//               src="/dummyimages/Frame 2121454280.webp"
 //               alt="Chameri villa exterior"
 //               fill
 //               sizes="100vw"
@@ -969,7 +969,7 @@ export default function HeroSection({ hero }) {
                 unless every proxy in front encodes it), so the served file
                 carries a URL-safe name. */}
             <Image
-              src="/images/hero-mobile.png"
+              src="/images/hero-mobile.webp"
               alt="Chameri villa exterior"
               fill
               sizes="(max-width: 767px) 100vw, 0px"
@@ -979,7 +979,7 @@ export default function HeroSection({ hero }) {
             {/* alt="" — the mobile copy above already carries the description,
                 so this one is decorative to avoid a duplicate announcement. */}
             <Image
-              src="/dummyimages/Frame 2121454280.png"
+              src="/dummyimages/Frame 2121454280.webp"
               alt=""
               aria-hidden="true"
               fill
