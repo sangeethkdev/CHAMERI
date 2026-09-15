@@ -10,9 +10,21 @@ import { getTestimonialsMainData } from "@/lib/api";
 export const revalidate = 60;
 
 export const metadata = {
-  title: "Chameri — Premium Villa Residences",
+  title: "Client Reviews & Video Testimonials | Chameri Builders",
   description:
-    "Let's create something exceptional — explore Chameri's premium villa residences.",
+    "Doctors, directors and families in Kannur explain why they chose Chameri. Six video testimonials and a 5.0 Google review score from real homeowners.",
+  alternates: { canonical: "/testimonial" },
+  openGraph: {
+    type: "website",
+    url: "/testimonial",
+    title: "Client Reviews & Video Testimonials | Chameri Builders",
+    description: "Doctors, directors and families in Kannur explain why they chose Chameri. Six video testimonials and a 5.0 Google review score from real homeowners.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Client Reviews & Video Testimonials | Chameri Builders",
+    description: "Doctors, directors and families in Kannur explain why they chose Chameri. Six video testimonials and a 5.0 Google review score from real homeowners.",
+  },
 };
 
 export default async function TestimonialPage() {

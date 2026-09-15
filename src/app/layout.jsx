@@ -1,6 +1,7 @@
 import { Geist, Outfit, Instrument_Sans } from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
+import { SITE_NAME, SITE_URL } from "@/lib/siteConfig";
 import FloatingContactButtons from "@/components/common/FloatingContactButtons";
 import ScrollToTop from "@/components/common/ScrollToTop";
 import "./globals.css";
@@ -33,10 +34,34 @@ const roundo = localFont({
   display: "swap",
 });
 
+/* metadataBase is what lets every page's `alternates.canonical: "/path"` and
+   relative OG image resolve to an absolute URL. Without it Next emits no
+   canonical at all, which is what the audit found on all nine pages.
+   The previous description referenced "bespoke glass systems" — leftover
+   boilerplate for a business Chameri is not in. */
 export const metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Chameri — Premium Villa Residences",
   description:
-    "Chameri offers premium villa residences for those who seek refined living. Bespoke glass systems for ambitious architectural projects.",
+    "Premium 3 & 4 BHK villas in Thalassery, built by a family firm since 1985. K-RERA registered, founder-led, with 10-year home insurance. Book a site visit.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    locale: "en_IN",
+    url: "/",
+    title: "Chameri — Premium Villa Residences",
+    description:
+      "Premium 3 & 4 BHK villas in Thalassery, built by a family firm since 1985. K-RERA registered, founder-led, with 10-year home insurance.",
+    images: [{ url: "/icon.png", width: 512, height: 512, alt: SITE_NAME }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Villa Builders in Thalassery, Kannur | Chameri Builders",
+    description:
+      "Premium 3 & 4 BHK villas in Thalassery, built by a family firm since 1985. K-RERA registered, founder-led, with 10-year home insurance.",
+    images: ["/icon.png"],
+  },
 };
 
 export default function RootLayout({ children }) {

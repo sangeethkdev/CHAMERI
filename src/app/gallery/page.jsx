@@ -11,8 +11,21 @@ import { getGalleryData } from "@/lib/api";
 export const revalidate = 60;
 
 export const metadata = {
-  title: "Gallery — Chameri Premium Villa Residences",
-  description: "Explore our collection of timeless villas and landmark spaces.",
+  title: "Project Gallery — Thalassery & Kannur | Chameri",
+  description:
+    "Photographs of Chameri villas, interiors, amenities and completed projects across Thalassery and Kannur. See the craftsmanship before you visit the site.",
+  alternates: { canonical: "/gallery" },
+  openGraph: {
+    type: "website",
+    url: "/gallery",
+    title: "Project Gallery — Thalassery & Kannur | Chameri",
+    description: "Photographs of Chameri villas, interiors, amenities and completed projects across Thalassery and Kannur. See the craftsmanship before you visit the site.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Villa Project Gallery — Thalassery & Kannur | Chameri",
+    description: "Photographs of Chameri villas, interiors, amenities and completed projects across Thalassery and Kannur. See the craftsmanship before you visit the site.",
+  },
 };
 
 export default async function GalleryPage() {

@@ -11,9 +11,21 @@ import { getProjectsMainData } from "@/lib/api";
 export const revalidate = 60;
 
 export const metadata = {
-  title: "Projects — Chameri Premium Villa Residences",
+  title: "Villa Projects in Thalassery, Kannur | Chameri Builders",
   description:
-    "Explore Chameri's premium villa residence projects.",
+    "Explore Kiwano Villas and Kiwano Villaments in Thalassery — 4 BHK villas and 3 BHK villaments, K-RERA registered, completing March 2027. See plans and specs.",
+  alternates: { canonical: "/project-list" },
+  openGraph: {
+    type: "website",
+    url: "/project-list",
+    title: "Villa Projects in Thalassery, Kannur | Chameri Builders",
+    description: "Explore Kiwano Villas and Kiwano Villaments in Thalassery — 4 BHK villas and 3 BHK villaments, K-RERA registered, completing March 2027. See plans and specs.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Villa Projects in Thalassery, Kannur | Chameri Builders",
+    description: "Explore Kiwano Villas and Kiwano Villaments in Thalassery — 4 BHK villas and 3 BHK villaments, K-RERA registered, completing March 2027. See plans and specs.",
+  },
 };
 
 export default async function ProjectListPage() {

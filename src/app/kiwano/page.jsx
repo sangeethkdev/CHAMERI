@@ -15,9 +15,21 @@ import { getKiwanoData } from '@/lib/api';
 export const revalidate = 60;
 
 export const metadata = {
-  title: 'Kiwano — Chameri Premium Villa Residences',
+  title: "Kiwano Villas — 4 BHK Villas in Thalassery | Chameri",
   description:
-    'Elegant spaces built for refined views. Experience Chameri Kiwano — a scroll-driven visual journey into premium living.',
+    "Nine 4 BHK villas of 2,806 sq ft on 6.59-7.01 cent plots, in Tropical Modernism style. Pool, gym, 24x7 security. K-RERA registered, ready March 2027.",
+  alternates: { canonical: "/kiwano" },
+  openGraph: {
+    type: "website",
+    url: "/kiwano",
+    title: "Kiwano Villas — 4 BHK Villas in Thalassery | Chameri",
+    description: "Nine 4 BHK villas of 2,806 sq ft on 6.59-7.01 cent plots, in Tropical Modernism style. Pool, gym, 24x7 security. K-RERA registered, ready March 2027.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kiwano Villas — 4 BHK Villas in Thalassery | Chameri",
+    description: "Nine 4 BHK villas of 2,806 sq ft on 6.59-7.01 cent plots, in Tropical Modernism style. Pool, gym, 24x7 security. K-RERA registered, ready March 2027.",
+  },
 };
 
 export default async function KiwanoPage() {

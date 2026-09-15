@@ -16,9 +16,21 @@ import { getAboutData } from '@/lib/api';
 export const revalidate = 60;
 
 export const metadata = {
-  title: 'About Us — Chameri Premium Villa Residences',
+  title: "Our Story — Building Homes in Kerala Since 1985 | Chameri",
   description:
-    'Learn about Chameri — our story, our values, and the people behind every premium villa we build. Crafting timeless villas and landmark spaces since 1985.',
+    "Forty years of founder-led construction in Thalassery. Meet Mr. Prakasan C, the family behind Chameri Builders, and the principles that shape every villa.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    type: "website",
+    url: "/about",
+    title: "Our Story — Building Homes in Kerala Since 1985 | Chameri",
+    description: "Forty years of founder-led construction in Thalassery. Meet Mr. Prakasan C, the family behind Chameri Builders, and the principles that shape every villa.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Our Story — Building Homes in Kerala Since 1985 | Chameri",
+    description: "Forty years of founder-led construction in Thalassery. Meet Mr. Prakasan C, the family behind Chameri Builders, and the principles that shape every villa.",
+  },
 };
 
 export default async function AboutPage() {

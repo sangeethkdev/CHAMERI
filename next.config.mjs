@@ -1,5 +1,26 @@
+/* Applied to every route. The audit found only
+   `Content-Security-Policy: upgrade-insecure-requests` present, with HSTS,
+   X-Content-Type-Options, Referrer-Policy, X-Frame-Options and
+   Permissions-Policy all missing. */
+const securityHeaders = [
+  {
+    key: "Strict-Transport-Security",
+    value: "max-age=63072000; includeSubDomains; preload",
+  },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=(), interest-cohort=()",
+  },
+];
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Stops advertising the framework/version in every response.
+  poweredByHeader: false,
+
   images: {
     /* AVIF first, then WebP. The source art is multi-MB PNG/JPEG; AVIF
        typically lands 30-50% under WebP for the same quality, and a browser
@@ -38,6 +59,11 @@ const nextConfig = {
   },
   async headers() {
     return [
+      {
+        // Baseline hardening on every response.
+        source: "/:path*",
+        headers: securityHeaders,
+      },
       {
         /* The scroll-driven hero sequences (/frames/**) are ~44MB and ~99MB of
            numbered stills. They are immutable build assets — a changed video

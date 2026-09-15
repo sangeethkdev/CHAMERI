@@ -15,9 +15,21 @@ import { getKiwanoVillamentData } from '@/lib/api';
 export const revalidate = 60;
 
 export const metadata = {
-  title: 'Kiwano Villament — Chameri Premium Villa Residences',
+  title: "Kiwano Villaments — 3 BHK Homes in Thalassery | Chameri",
   description:
-    'Elegant spaces built for refined views. Experience Chameri Kiwano Villament — a scroll-driven visual journey into premium living.',
+    "Twenty-four 3 BHK villaments up to 2,362 sq ft with private gardens and up to four balconies. Villa space, apartment ease. K-RERA registered, March 2027.",
+  alternates: { canonical: "/kiwano-villament" },
+  openGraph: {
+    type: "website",
+    url: "/kiwano-villament",
+    title: "Kiwano Villaments — 3 BHK Homes in Thalassery | Chameri",
+    description: "Twenty-four 3 BHK villaments up to 2,362 sq ft with private gardens and up to four balconies. Villa space, apartment ease. K-RERA registered, March 2027.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kiwano Villaments — 3 BHK Homes in Thalassery | Chameri",
+    description: "Twenty-four 3 BHK villaments up to 2,362 sq ft with private gardens and up to four balconies. Villa space, apartment ease. K-RERA registered, March 2027.",
+  },
 };
 
 export default async function KiwanoVillamentPage() {

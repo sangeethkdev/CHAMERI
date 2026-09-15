@@ -11,9 +11,21 @@ import { getServiceMainData } from "@/lib/api";
 export const revalidate = 60;
 
 export const metadata = {
-  title: "Services — Chameri Premium Villa Residences",
+  title: "Home Handover, Care & NRI Property Management | Chameri",
   description:
-    "Explore the full range of services Chameri offers — from bespoke villa design to turnkey construction and interior finishing.",
+    "Eight-part homeowner support: handover, maintenance, interiors, concierge, digital records, NRI property management and complimentary 10-year insurance.",
+  alternates: { canonical: "/services" },
+  openGraph: {
+    type: "website",
+    url: "/services",
+    title: "Home Handover, Care & NRI Property Management | Chameri",
+    description: "Eight-part homeowner support: handover, maintenance, interiors, concierge, digital records, NRI property management and complimentary 10-year insurance.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Home Handover, Care & NRI Property Management | Chameri",
+    description: "Eight-part homeowner support: handover, maintenance, interiors, concierge, digital records, NRI property management and complimentary 10-year insurance.",
+  },
 };
 
 export default async function ServicesPage() {

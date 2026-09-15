@@ -10,9 +10,21 @@ import { getContactMainData } from "@/lib/api";
 export const revalidate = 60;
 
 export const metadata = {
-  title: "Contact Us — Chameri Premium Villa Residences",
+  title: "Contact Chameri Builders — Thalassery, Kannur, Kerala",
   description:
-    "Get in touch with the Chameri team. We'd love to hear about your dream home and how we can help bring it to life.",
+    "Call +91 91889 13114, email info@chameribuilders.com, or visit our Thalassery office. Ask about Kiwano Villas and Villaments, or book a site visit today.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    type: "website",
+    url: "/contact",
+    title: "Contact Chameri Builders — Thalassery, Kannur, Kerala",
+    description: "Call +91 91889 13114, email info@chameribuilders.com, or visit our Thalassery office. Ask about Kiwano Villas and Villaments, or book a site visit today.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact Chameri Builders — Thalassery, Kannur, Kerala",
+    description: "Call +91 91889 13114, email info@chameribuilders.com, or visit our Thalassery office. Ask about Kiwano Villas and Villaments, or book a site visit today.",
+  },
 };
 
 export default async function ContactPage() {
