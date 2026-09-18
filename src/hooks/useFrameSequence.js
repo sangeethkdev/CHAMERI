@@ -395,14 +395,36 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
       }
     };
 
-    // Frame 0 — highest priority, draw as soon as it arrives.
+    /* Frame 0 — the only one fetched up front, since it is what the hero
+       actually shows before any scrolling. Everything else waits. */
     const first = makeImg(indices[0], null);
     first.fetchPriority = "high";
     first.onload = () => drawFrame(indices, 0);
     first.onerror = () => {};
 
-    // Yield once so frame 0 gets a clear run at the network first.
-    const restRAF = requestAnimationFrame(pump);
+    /* The rest of the window is deferred until the page has finished loading.
+       Starting it a frame after mount (as this used to) put ~1.7MB of frames
+       in flight alongside the page's own images, fonts and scripts, so the
+       network stayed saturated well past the point the page looked ready —
+       long enough that auditing crawlers with a fixed budget recorded the
+       page as timing out. Deferring costs nothing perceptible: the visitor
+       must scroll before frame 1 is needed, and the loader is re-aimed at the
+       playhead on every move anyway.
+
+       `load` has usually already fired by the time this effect runs (the plan
+       is resolved a frame after mount), so the readyState check is what
+       actually starts the loader in the common case. */
+    let restRAF = 0;
+    const startBulkLoad = () => {
+      if (cancelled) return;
+      restRAF = requestAnimationFrame(pump);
+    };
+
+    if (document.readyState === "complete") {
+      startBulkLoad();
+    } else {
+      window.addEventListener("load", startBulkLoad, { once: true });
+    }
 
     // ── 3. Scroll tracking + lerp loop ──────────────────────────────────
     let rawProgress    = 0;
@@ -474,6 +496,7 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
          project pages used to stack both sequences in memory. */
       cancelled = true;
       cancelAnimationFrame(restRAF);
+      window.removeEventListener("load", startBulkLoad);
       document.removeEventListener("visibilitychange", onVisibility);
       ro.disconnect();
       st.kill();

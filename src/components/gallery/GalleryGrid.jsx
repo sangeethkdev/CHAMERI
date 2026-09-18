@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
 const STATIC_COL1 = [
-  { id: 1, src: '/dummyimages/Figure → Hepburn-20-480x320.jpg.svg', alt: 'Gallery Image 1', w: 441, h: 512 },
+  { id: 1, src: '/dummyimages/gallery-hepburn.png', alt: 'Gallery Image 1', w: 441, h: 512 },
   { id: 3, src: '/dummyimages/e273958d502607f06d62edd61792f48b69b84f3e.jpg', alt: 'Gallery Image 3', w: 441, h: 483 },
   { id: 6, src: '/dummyimages/ab2a95a06e83c0793c45aa84bc54cd800e1c8716.jpg', alt: 'Gallery Image 6', w: 441, h: 489 },
 ];
 const STATIC_COL2 = [
-  { id: 2, src: '/dummyimages/Figure → Argo-5-480x720.jpg.svg', alt: 'Gallery Image 2', w: 349, h: 336 },
+  { id: 2, src: '/dummyimages/gallery-argo.png', alt: 'Gallery Image 2', w: 349, h: 336 },
   { id: 4, src: '/dummyimages/b41115b835e2232a8e61bd8d04a193c1d7a5d351.png', alt: 'Gallery Image 4', w: 349, h: 384 },
   { id: 10, src: '/dummyimages/81b44908c049fd8e0792ca40e0fdee715ba1f7b0.jpg', alt: 'Gallery Image 10', w: 349, h: 433 },
   { id: 9, src: '/dummyimages/87e89594da613bb98c472da2cf1f7376200c358b.jpg', alt: 'Gallery Image 9', w: 348, h: 301 },
@@ -35,11 +35,25 @@ function splitColumns(images) {
 function MasonryBlock({ col1, col2, col3, flat }) {
   return (
     <>
-      {/* Mobile: single naturally-ordered column (1, 2, 3, 4, 5…) */}
+      {/* Mobile: single naturally-ordered column (1, 2, 3, 4, 5…)
+
+          Only the first image is eager. The grid can run to dozens of photos
+          and every one of them used to be fetched during the initial load,
+          which on a phone meant the page kept requesting images long after it
+          looked ready — enough for an auditing crawler to give up on the page
+          before the network settled. Everything below the opening screenful
+          now waits until it is scrolled near. */}
       <div className="flex md:hidden flex-col w-full" style={{ gap: 'clamp(15px, 2.08vw, 30px)' }}>
-        {flat.map((img) => (
+        {flat.map((img, i) => (
           <div key={img.id} className="relative w-full overflow-hidden" style={{ aspectRatio: `${img.w} / ${img.h}` }}>
-            <Image src={img.src} alt={img.alt} fill sizes="100vw" className="object-cover" />
+            <Image
+              src={img.src}
+              alt={img.alt}
+              fill
+              sizes="100vw"
+              loading={i === 0 ? 'eager' : 'lazy'}
+              className="object-cover"
+            />
           </div>
         ))}
       </div>
@@ -48,13 +62,16 @@ function MasonryBlock({ col1, col2, col3, flat }) {
       <div className="hidden md:flex w-full" style={{ gap: 'clamp(15px, 2.08vw, 30px)' }}>
         {[col1, col2, col3].map((col, ci) => (
           <div key={ci} className="flex flex-col flex-1" style={{ gap: 'clamp(15px, 2.08vw, 30px)' }}>
-            {col.map((img) => (
+            {col.map((img, i) => (
               <div key={img.id} className="relative w-full overflow-hidden" style={{ aspectRatio: `${img.w} / ${img.h}` }}>
                 <Image
                   src={img.src}
                   alt={img.alt}
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
+                  // Same reasoning as the mobile column: only the top of each
+                  // column is eager, the rest load as they come into view.
+                  loading={i === 0 ? 'eager' : 'lazy'}
                   className="object-cover hover:scale-105 transition-transform duration-700 ease-out"
                 />
               </div>

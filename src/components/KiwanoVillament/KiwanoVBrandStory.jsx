@@ -23,7 +23,7 @@ import Image from "next/image";
  */
 
 const DEFAULT_IMAGES = [
-  { id: 1, src: "/dummyimages/Figure → Hepburn-20-480x320.jpg.svg", alt: "Kiwano Villament moment 1" },
+  { id: 1, src: "/dummyimages/gallery-hepburn.png", alt: "Kiwano Villament moment 1" },
   { id: 2, src: "/dummyimages/e273958d502607f06d62edd61792f48b69b84f3e.jpg", alt: "Kiwano Villament moment 2" },
   { id: 3, src: "/dummyimages/ab2a95a06e83c0793c45aa84bc54cd800e1c8716.jpg", alt: "Kiwano Villament moment 3" },
   { id: 4, src: "/dummyimages/af18e0d9d8fdfe4f4a5d97f4fbf9edd12b1ff9df.png", alt: "Kiwano Villament moment 4" },

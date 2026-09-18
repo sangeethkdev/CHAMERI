@@ -58,7 +58,7 @@ const resolveHref = (tag = '') =>
  * "Learn more" link underlined by a 92px divider. Unlike the desktop Section, this
  * is a static (non-fixed, non-parallax) stacked card.
  */
-function MobileProjectCard({ project }) {
+function MobileProjectCard({ project, index = 0 }) {
   // Same reveal as the desktop Section (Section.jsx): the background image
   // is `position: fixed` — pinned to the viewport — so the card acts as a
   // moving window sliding across a stationary image as the page scrolls,
@@ -105,7 +105,14 @@ function MobileProjectCard({ project }) {
               src={project.mobileImage || project.image}
               alt=""
               fill
-              priority
+              /* Only the first card loads eagerly. `priority` applied to every
+                 card before, which preloaded all of these multi-MB project
+                 images at once on the phone — the single biggest cost on this
+                 page, and what kept it busy long enough to be recorded as a
+                 timeout. The rest lazy-load as they are scrolled to.
+                 (`priority` itself is deprecated in Next.js 16.) */
+              loading={index === 0 ? 'eager' : 'lazy'}
+              fetchPriority={index === 0 ? 'high' : 'auto'}
               sizes="100vw"
               className="object-cover"
             />
@@ -250,8 +257,8 @@ export default function ProjectsShowcase({ cardsSection, projects }) {
 
       {/* MOBILE — stacked static cards (390px baseline) */}
       <div className="flex md:hidden flex-col w-full" style={{ background: '#EDE7DE' }}>
-        {DATA.map((project) => (
-          <MobileProjectCard key={project.id} project={project} />
+        {DATA.map((project, i) => (
+          <MobileProjectCard key={project.id} project={project} index={i} />
         ))}
       </div>
 

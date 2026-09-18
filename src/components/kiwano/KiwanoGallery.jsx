@@ -31,12 +31,12 @@ import Image from "next/image";
 const GALLERY_DATA = {
   Exterior: {
     col1: [
-      { id: 1, src: "/dummyimages/Figure → Hepburn-20-480x320.jpg.svg", alt: "Exterior 1", w: 441, h: 512 },
+      { id: 1, src: "/dummyimages/gallery-hepburn.png", alt: "Exterior 1", w: 441, h: 512 },
       { id: 3, src: "/dummyimages/e273958d502607f06d62edd61792f48b69b84f3e.jpg", alt: "Exterior 3", w: 441, h: 483 },
       { id: 6, src: "/dummyimages/ab2a95a06e83c0793c45aa84bc54cd800e1c8716.jpg", alt: "Exterior 6", w: 441, h: 489 },
     ],
     col2: [
-      { id: 2,  src: "/dummyimages/Figure → Argo-5-480x720.jpg.svg",     alt: "Exterior 2",  w: 349, h: 336 },
+      { id: 2,  src: "/dummyimages/gallery-argo.png",     alt: "Exterior 2",  w: 349, h: 336 },
       { id: 4,  src: "/dummyimages/b41115b835e2232a8e61bd8d04a193c1d7a5d351.png", alt: "Exterior 4",  w: 349, h: 384 },
       { id: 10, src: "/dummyimages/81b44908c049fd8e0792ca40e0fdee715ba1f7b0.jpg", alt: "Exterior 10", w: 349, h: 433 },
       { id: 9,  src: "/dummyimages/87e89594da613bb98c472da2cf1f7376200c358b.jpg", alt: "Exterior 9",  w: 348, h: 301 },
@@ -51,10 +51,10 @@ const GALLERY_DATA = {
     col1: [
       { id: 1, src: "/dummyimages/af18e0d9d8fdfe4f4a5d97f4fbf9edd12b1ff9df.png", alt: "Interior 1", w: 441, h: 512 },
       { id: 3, src: "/dummyimages/b41115b835e2232a8e61bd8d04a193c1d7a5d351.png", alt: "Interior 3", w: 441, h: 483 },
-      { id: 6, src: "/dummyimages/Figure → Argo-5-480x720.jpg.svg",              alt: "Interior 6", w: 441, h: 489 },
+      { id: 6, src: "/dummyimages/gallery-argo.png",              alt: "Interior 6", w: 441, h: 489 },
     ],
     col2: [
-      { id: 2,  src: "/dummyimages/Figure → Hepburn-20-480x320.jpg.svg", alt: "Interior 2",  w: 349, h: 336 },
+      { id: 2,  src: "/dummyimages/gallery-hepburn.png", alt: "Interior 2",  w: 349, h: 336 },
       { id: 4,  src: "/dummyimages/6bdc232e1c143f702a3a37c1909ea6a7c38d0002.png", alt: "Interior 4",  w: 349, h: 384 },
       { id: 10, src: "/dummyimages/87e89594da613bb98c472da2cf1f7376200c358b.jpg",  alt: "Interior 10", w: 349, h: 433 },
       { id: 9,  src: "/dummyimages/ab2a95a06e83c0793c45aa84bc54cd800e1c8716.jpg",  alt: "Interior 9",  w: 348, h: 301 },
@@ -73,12 +73,12 @@ const GALLERY_DATA = {
     ],
     col2: [
       { id: 2,  src: "/dummyimages/af18e0d9d8fdfe4f4a5d97f4fbf9edd12b1ff9df.png", alt: "Amenities 2",  w: 349, h: 336 },
-      { id: 4,  src: "/dummyimages/Figure → Hepburn-20-480x320.jpg.svg",           alt: "Amenities 4",  w: 349, h: 384 },
+      { id: 4,  src: "/dummyimages/gallery-hepburn.png",           alt: "Amenities 4",  w: 349, h: 384 },
       { id: 10, src: "/dummyimages/b41115b835e2232a8e61bd8d04a193c1d7a5d351.png",  alt: "Amenities 10", w: 349, h: 433 },
       { id: 9,  src: "/dummyimages/ab2a95a06e83c0793c45aa84bc54cd800e1c8716.jpg",  alt: "Amenities 9",  w: 348, h: 301 },
     ],
     col3: [
-      { id: 5, src: "/dummyimages/Figure → Argo-5-480x720.jpg.svg",              alt: "Amenities 5", w: 441, h: 512 },
+      { id: 5, src: "/dummyimages/gallery-argo.png",              alt: "Amenities 5", w: 441, h: 512 },
       { id: 7, src: "/dummyimages/e273958d502607f06d62edd61792f48b69b84f3e.jpg", alt: "Amenities 7", w: 440, h: 449 },
       { id: 8, src: "/dummyimages/4366c570846f17b0de12329eb1fab383893fbc5c.jpg",  alt: "Amenities 8", w: 440, h: 522 },
     ],

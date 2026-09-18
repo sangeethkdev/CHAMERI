@@ -22,7 +22,7 @@ import Text from './Text';
  * a subtle parallax as the section passes by. No reveal/wipe effect — every
  * card's image is fully visible immediately, before any scrolling happens.
  */
-export default function Section({ project }) {
+export default function Section({ project, index = 0 }) {
   const scrollTarget = useRef(null);
   const { scrollYProgress } = useScroll({
     target: scrollTarget,
@@ -69,13 +69,24 @@ export default function Section({ project }) {
                 src={project.image}
                 alt=""
                 fill
-                // Every project image is a candidate the very first frame:
-                // Lenis makes it trivial to fling straight past the fold,
-                // so relying on lazy-loading's "scrolled near viewport"
-                // heuristic (which assumes normal-paced scrolling) leaves a
-                // blank gap if a later section's image hasn't started
-                // fetching yet by the time it comes into view.
-                priority
+                /* Only the first section is `priority`.
+
+                   Every section used to carry it, on the reasoning that Lenis
+                   makes it easy to fling past the fold faster than lazy
+                   loading reacts. But `priority` does not mean "fetch early" —
+                   it emits a <link rel=preload> and opts the image out of
+                   lazy loading entirely, so all of these multi-MB project
+                   images were preloaded at the highest priority during the
+                   initial load, competing with each other and with the page's
+                   own render-blocking assets. That is what kept the page busy
+                   long enough for auditing crawlers to record a timeout.
+
+                   `priority` is also deprecated in Next.js 16 (see the note in
+                   KiwanoBrandStory), so the first section asks for an eager,
+                   high-priority fetch instead, and the rest lazy-load as they
+                   are scrolled to. */
+                loading={index === 0 ? 'eager' : 'lazy'}
+                fetchPriority={index === 0 ? 'high' : 'auto'}
                 sizes="100vw"
                 className="object-cover"
               />
