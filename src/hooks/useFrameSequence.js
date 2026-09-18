@@ -67,15 +67,32 @@ const LERP = 0.08;
  * using the connection fully. */
 const FRAME_CONCURRENCY = 6;
 
-/* Frames kept decoded either side of the playhead. 20 either side is ~40
- * resident frames: roughly 390 MB at full portrait resolution would be far
- * too much, but combined with the mobile stride below the real figure is
- * ~40 × 9.7 MB / 1 ≈ 390 MB worst case on desktop (where the budget is not a
- * constraint) and well under 100 MB on a phone once stride and the smaller
- * canvas are accounted for. Lookahead is biased forward because scrolling
- * down is the common direction. */
-const WINDOW_BEHIND = 8;
-const WINDOW_AHEAD  = 20;
+/* Frames kept decoded either side of the playhead, per device class.
+ *
+ * What costs memory is the DECODED bitmap — width × height × 4 bytes —
+ * regardless of how small the compressed file is. The portrait frames are
+ * 1170×2080, so each resident frame is ~9.3 MB no matter that it is a 134 KB
+ * WebP on disk.
+ *
+ * The first version of this used one window of 8 behind / 20 ahead for every
+ * device, on the mistaken reasoning that the mobile stride below brought the
+ * total down. It does not: stride changes WHICH frames are loaded, not how
+ * many the window holds. That left 29 resident frames — about 270 MB — plus
+ * an 11 MB canvas backing store at DPR 3, which is at or past the point where
+ * iOS kills the tab ("A problem repeatedly occurred"). Phones now get a much
+ * tighter window:
+ *
+ *     mobile  : 2 + 4 + 1  =  7 frames ≈  65 MB
+ *     desktop : 8 + 20 + 1 = 29 frames ≈ 270 MB  (no comparable limit)
+ *
+ * Lookahead is biased forward because scrolling down is the common direction.
+ * Seven frames is still ~2.5 seconds of scrub at the mobile stride, and the
+ * loader re-aims at the playhead on every move, so the window refills ahead
+ * of where the finger is going. */
+const WINDOW_BEHIND        = 8;
+const WINDOW_AHEAD         = 20;
+const MOBILE_WINDOW_BEHIND = 2;
+const MOBILE_WINDOW_AHEAD  = 4;
 
 /* Viewport width at or below which the sequence is decimated. Matches the
  * canvas DPR breakpoint in resizeCanvas. */
@@ -115,6 +132,8 @@ function pickPlan(frameSets, frameCount) {
     set:    isPortrait ? frameSets.portrait : frameSets.landscape,
     key:    `${isPortrait ? "portrait" : "landscape"}@${stride}`,
     stride,
+    behind: isMobile ? MOBILE_WINDOW_BEHIND : WINDOW_BEHIND,
+    ahead:  isMobile ? MOBILE_WINDOW_AHEAD  : WINDOW_AHEAD,
     // Indices into the *source* sequence, in playback order.
     indices: Array.from(
       { length: Math.ceil(frameCount / stride) },
@@ -224,6 +243,9 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
        continuous instead of freezing until it arrives. */
     let found = null;
     let foundIndex = -1;
+    /* Just a bound on how far back to scan, not a residency limit, so the
+       widest window is the right value here for every device: it only caps
+       the work done per tick when a stretch of frames has not loaded yet. */
     const floor = Math.max(0, slot - WINDOW_BEHIND - WINDOW_AHEAD);
     for (let s = slot; s >= floor; s -= 1) {
       const srcIndex = slots[s];
@@ -258,17 +280,21 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
      Phones report devicePixelRatio 2–3, so a canvas sized in CSS pixels holds
      a third of the detail the screen can show and the browser upscales it —
      which is why the hero looked soft on mobile but sharp on desktop (DPR 1).
-     The DPR cap depends on the viewport: phones (DPR 3) get the full 3 —
-     their CSS area is small, so even at 3× the canvas is ~3M pixels, no more
-     than a 1080p desktop at 2×. Wider viewports stay capped at 2, where a
-     4K-class canvas would make every scroll-tick redraw noticeably costly. */
+     Both classes cap at 2. Phones used to take the full 3, on the reasoning
+     that their CSS area is small — but at DPR 3 a 390×844 viewport is a
+     1170×2532 backing store, an 11 MB allocation that sits alongside the
+     resident frames for the life of the page. At 2 it is 5 MB for detail no
+     phone screen resolves at arm's length, and the source frames are 1170px
+     wide anyway, so 3× was upscaling past the available detail. Wider
+     viewports stay at 2 because a 4K-class canvas makes every scroll-tick
+     redraw noticeably costly. */
   const resizeCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const cssW = canvas.offsetWidth;
     const cssH = canvas.offsetHeight;
-    const dprCap = cssW <= MOBILE_MAX_WIDTH ? 3 : 2;
+    const dprCap = 2;
     const dpr = Math.min(window.devicePixelRatio || 1, dprCap);
     const nextW = Math.round(cssW * dpr);
     const nextH = Math.round(cssH * dpr);
@@ -298,7 +324,7 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
     if (!wrapper || !canvas) return;
 
     const plan = pickPlan(frameSets, frameCount);
-    const { set: frameSet, indices } = plan;
+    const { set: frameSet, indices, behind: winBehind, ahead: winAhead } = plan;
     const total = indices.length;
 
     framesRef.current = [];
@@ -330,7 +356,7 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
     };
 
     const inWindow = (slot) =>
-      slot >= playhead - WINDOW_BEHIND && slot <= playhead + WINDOW_AHEAD;
+      slot >= playhead - winBehind && slot <= playhead + winAhead;
 
     /* Drop everything outside the window. Called as the playhead moves, so
        residency stays bounded no matter how long the sequence is or how far
@@ -377,11 +403,11 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
         let target = -1;
 
         // Forward from the playhead first, then the short tail behind it.
-        for (let slot = playhead; slot <= playhead + WINDOW_AHEAD && slot < total; slot += 1) {
+        for (let slot = playhead; slot <= playhead + winAhead && slot < total; slot += 1) {
           if (slot >= 0 && !framesRef.current[indices[slot]]) { target = slot; break; }
         }
         if (target === -1) {
-          for (let slot = playhead - 1; slot >= playhead - WINDOW_BEHIND && slot >= 0; slot -= 1) {
+          for (let slot = playhead - 1; slot >= playhead - winBehind && slot >= 0; slot -= 1) {
             if (!framesRef.current[indices[slot]]) { target = slot; break; }
           }
         }
