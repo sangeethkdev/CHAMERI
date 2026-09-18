@@ -490,5 +490,6 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
      CSS background behind the canvas, chosen per orientation by Tailwind's
      `portrait:` variant, so the skip path needs nothing more than for the
      canvas not to mount. */
+     
   return { wrapperRef, canvasRef, textRef, staticOnly };
 }
