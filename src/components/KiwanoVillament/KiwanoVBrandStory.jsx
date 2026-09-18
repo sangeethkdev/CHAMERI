@@ -149,6 +149,25 @@ export default function KiwanoVBrandStory({ brandStory }) {
   const monthImages = activeStage?.images || [];
   const videoSrc = activeStage?.video || DEFAULT_VIDEO;
 
+  /* Release the decoder when this section unmounts, or when the month's clip
+     changes. Removing a <video> from the DOM does not free its media pipeline
+     on iOS; without an explicit teardown those sessions accumulate across
+     repeated visits to the page. */
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    return () => {
+      try {
+        el.pause();
+        el.removeAttribute("src");
+        while (el.firstChild) el.removeChild(el.firstChild);
+        el.load();
+      } catch {
+        /* Already torn down by the browser — nothing to recover. */
+      }
+    };
+  }, [videoSrc]);
+
   const handlePlayClick = () => {
     const el = videoRef.current;
     if (!el) return;

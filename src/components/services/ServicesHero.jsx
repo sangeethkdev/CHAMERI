@@ -1,3 +1,5 @@
+import BackgroundVideo from "@/components/common/BackgroundVideo";
+
 /**
  * ─────────────────────────────────────────────────────────────────────────────
  * ServicesHero
@@ -25,27 +27,22 @@
  * carousel below was enough to exhaust an iPhone, and re-entering the page
  * stacked a fresh pair each time.
  *
- * One element now serves both layouts, so a phone mounts exactly one. */
+ * One element now serves both layouts, so a phone mounts exactly one.
+ *
+ * The <video> is BackgroundVideo (a client component) rather than inline
+ * markup, because removing a video from the DOM does not release its decoder
+ * on iOS — the element has to be explicitly torn down on unmount. That is the
+ * part that made REPEATEDLY opening and leaving this page degrade the device
+ * even though any single visit was fine. Keeping it in its own component lets
+ * this hero stay a server component. */
 function HeroBackground({ videoSrc }) {
   return (
     <div className="absolute inset-0 w-full h-full -z-10">
-      <video
-        key={videoSrc}
-        autoPlay
-        muted
-        loop
-        playsInline
-        /* metadata, not the browser's autoplay default of "auto": without
-           this the full MP4 is pulled before first paint and competes with
-           the LCP text for bandwidth on mobile. The poster is a 91KB WebP of
-           the clip's own first frame, so the hero paints immediately instead
-           of sitting blank until enough video has buffered. */
-        preload="metadata"
+      <BackgroundVideo
+        src={videoSrc}
+        // A 91KB WebP of the clip's own first frame.
         poster="/videos/services-hero-poster.webp"
-        className="absolute inset-0 w-full h-full object-cover"
-      >
-        <source src={videoSrc} type="video/mp4" />
-      </video>
+      />
 
       {/* Dark overlay for text legibility */}
       <div

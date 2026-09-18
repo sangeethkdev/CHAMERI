@@ -93,6 +93,30 @@ export default function TestimonialCardMedia({
     ? 'transform 900ms cubic-bezier(0.4,0,0.2,1)'
     : 'none';
 
+  /* Release the decoder when this card stops rendering a <video> — either
+     because it scrolled away from the centre (isNearCenter going false
+     unmounts the element) or because the whole carousel unmounted on a route
+     change. Removing the element from the DOM does not free its media
+     pipeline on iOS; it has to be torn down explicitly, or the sessions
+     accumulate across visits. See useReleaseVideoOnUnmount for the details. */
+  useEffect(() => {
+    if (!mountsVideo) return;
+    const el = videoRef.current;
+    if (!el) return;
+
+    return () => {
+      try {
+        el.pause();
+        el.removeAttribute('src');
+        while (el.firstChild) el.removeChild(el.firstChild);
+        el.load();
+      } catch {
+        /* Already torn down by the browser — nothing to recover, and this
+           must not break unmounting. */
+      }
+    };
+  }, [mountsVideo]);
+
   // Only the centre card is worth streaming; the side cards are peeking
   // slivers, so they stay paused until they scroll into the middle.
   useEffect(() => {

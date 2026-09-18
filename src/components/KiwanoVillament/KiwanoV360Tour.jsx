@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useCallback, useEffect } from "react";
+import useReleaseVideoOnUnmount from "@/hooks/useReleaseVideoOnUnmount";
 import Image from "next/image";
 
 /* The CMS `media` field for this section has held either a static photo or an
@@ -96,6 +97,11 @@ function Viewer360Inner({
   pressedL, pressedR, onPressLeft, onPressRight,
   dragging, badgeX, onDragPointerDown, onDragPointerMove, onDragPointerUp, onDragPointerCancel,
 }) {
+  /* The tour clip is 14.6MB and autoplays. Removing it from the DOM does not
+     release its decoder on iOS, so leaving this page repeatedly would leave a
+     media pipeline behind each time. */
+  const tourVideoRef = useReleaseVideoOnUnmount();
+
   return (
     <div
       /* Marker the drag handler reads to size its sensitivity to this viewer */
@@ -112,6 +118,7 @@ function Viewer360Inner({
       {/* ── PHOTO or VIDEO (pans via objectPosition either way) ───── */}
       {isVideoSrc(src) ? (
         <video
+          ref={tourVideoRef}
           src={src}
           autoPlay
           muted
