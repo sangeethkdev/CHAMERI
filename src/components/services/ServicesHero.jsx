@@ -15,6 +15,50 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
+/* The hero background, shared by the mobile and desktop sections below.
+ *
+ * This markup used to be written out twice — once inside the `md:hidden`
+ * mobile section and once inside the `hidden md:block` desktop one. Those
+ * classes only control what is PAINTED: both <video> elements were in the DOM
+ * on every device, both autoplaying, each holding one of the small number of
+ * hardware decode pipelines iOS grants a page. Two heroes plus the testimonial
+ * carousel below was enough to exhaust an iPhone, and re-entering the page
+ * stacked a fresh pair each time.
+ *
+ * One element now serves both layouts, so a phone mounts exactly one. */
+function HeroBackground({ videoSrc }) {
+  return (
+    <div className="absolute inset-0 w-full h-full -z-10">
+      <video
+        key={videoSrc}
+        autoPlay
+        muted
+        loop
+        playsInline
+        /* metadata, not the browser's autoplay default of "auto": without
+           this the full MP4 is pulled before first paint and competes with
+           the LCP text for bandwidth on mobile. The poster is a 91KB WebP of
+           the clip's own first frame, so the hero paints immediately instead
+           of sitting blank until enough video has buffered. */
+        preload="metadata"
+        poster="/videos/services-hero-poster.webp"
+        className="absolute inset-0 w-full h-full object-cover"
+      >
+        <source src={videoSrc} type="video/mp4" />
+      </video>
+
+      {/* Dark overlay for text legibility */}
+      <div
+        className="absolute inset-0 w-full h-full"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 45%, rgba(0,0,0,0.4) 100%)",
+        }}
+      />
+    </div>
+  );
+}
+
 export default function ServicesHero({ hero }) {
   const heading = hero?.heading || "Let's Build Your Dream\nSomething More Exceptional.";
   const subheading =
@@ -25,12 +69,22 @@ export default function ServicesHero({ hero }) {
 
   return (
     <>
+    {/* The background video is mounted ONCE here, outside both layout
+        sections, and stretched behind whichever of them is visible. Putting
+        it inside each section meant two live <video> elements on every
+        device, since `md:hidden`/`hidden md:block` only control painting.
+        The wrapper is `relative` so the absolutely-positioned video has
+        something to size against, and `isolate` keeps the -z-10 background
+        from escaping behind the page. */}
+    <div className="relative w-full overflow-hidden isolate">
+      <HeroBackground videoSrc={videoSrc} />
+
     {/* ══════════════════════════════════════════════════════════════════════
         MOBILE — iPhone 13/14 (390px) baseline
         Figma: w:390 h:725 gap:11 pt:50 pb:50
     ═══════════════════════════════════════════════════════════════════════ */}
     <section
-      className="flex md:hidden relative w-full overflow-hidden isolate"
+      className="flex md:hidden relative w-full overflow-hidden"
       style={{
         flexDirection:  "column",
         alignItems:     "center",
@@ -42,36 +96,6 @@ export default function ServicesHero({ hero }) {
         boxSizing:      "border-box",
       }}
     >
-      {/* ── BACKGROUND VIDEO ───────────────────────────────────────────── */}
-      <div className="absolute inset-0 w-full h-full -z-10">
-        <video
-          key={videoSrc}
-          autoPlay
-          muted
-          loop
-          playsInline
-          /* metadata, not the browser's autoplay default of "auto": without
-             this the full MP4 is pulled before first paint and competes with
-             the LCP text for bandwidth on mobile. The poster is a 91KB WebP of
-             the clip's own first frame, so the hero paints immediately instead
-             of sitting blank until enough video has buffered. */
-          preload="metadata"
-          poster="/videos/services-hero-poster.webp"
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src={videoSrc} type="video/mp4" />
-        </video>
-
-        {/* Dark overlay for text legibility */}
-        <div
-          className="absolute inset-0 w-full h-full"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 45%, rgba(0,0,0,0.4) 100%)",
-          }}
-        />
-      </div>
-
       {/* ── HEADING — Figma: w:298.41 h:168  Roundo 500 38px/42px ls:-2px */}
       <h1
         className="whitespace-pre-wrap font-roundo"
@@ -97,40 +121,13 @@ export default function ServicesHero({ hero }) {
     {/* ── DESKTOP ──────────────────────────────────────────────────────────── */}
     <div className="hidden md:block">
     <section
-      className="relative w-full overflow-hidden isolate"
+      className="relative w-full overflow-hidden"
       style={{
         height: "clamp(430px, 57.014vw, 961px)",
       }}
     >
-      {/* ── BACKGROUND VIDEO ───────────────────────────────────────────── */}
-      <div className="absolute inset-0 w-full h-full -z-10">
-        <video
-          key={videoSrc}
-          autoPlay
-          muted
-          loop
-          playsInline
-          /* metadata, not the browser's autoplay default of "auto": without
-             this the full MP4 is pulled before first paint and competes with
-             the LCP text for bandwidth on mobile. The poster is a 91KB WebP of
-             the clip's own first frame, so the hero paints immediately instead
-             of sitting blank until enough video has buffered. */
-          preload="metadata"
-          poster="/videos/services-hero-poster.webp"
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src={videoSrc} type="video/mp4" />
-        </video>
-
-        {/* Dark overlay for text legibility */}
-        <div
-          className="absolute inset-0 w-full h-full"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 45%, rgba(0,0,0,0.4) 100%)",
-          }}
-        />
-      </div>
+      {/* Background video lives in the shared wrapper above — see the note
+          on HeroBackground for why it is no longer duplicated here. */}
 
       {/* ── HEADING
        * Figma: w:619  h:133  top:346  left:410.01  (centered)
@@ -214,6 +211,7 @@ export default function ServicesHero({ hero }) {
         </span>
       </div>
     </section>
+    </div>
     </div>
     </>
   );

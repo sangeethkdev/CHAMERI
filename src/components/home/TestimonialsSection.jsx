@@ -806,6 +806,7 @@ const TestimonialsSection = ({ testimonial }) => {
                 <TestimonialCardMedia
                   item={item}
                   isCenter={isCenter}
+                  isNearCenter={dist <= 1}
                   transitionEnabled={transitionEnabled}
                 />
 

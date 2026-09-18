@@ -268,6 +268,7 @@ export default function AboutTestimonialSection({ testimonialSection }) {
                 <TestimonialCardMedia
                   item={item}
                   isCenter={isCenter}
+                  isNearCenter={dist <= 1}
                   transitionEnabled={transitionEnabled}
                 />
 

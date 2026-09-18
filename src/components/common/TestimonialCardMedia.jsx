@@ -55,7 +55,26 @@ export default function TestimonialCardMedia({
   isCenter,
   transitionEnabled = true,
   className = 'object-cover',
+  /* Whether this card is close enough to the centre to be worth mounting a
+     real <video> for. The carousels triple their list for the infinite-scroll
+     illusion, so a 5-entry set becomes 15 cards — and every one of them used
+     to mount its own <video>.
+
+     Pausing an off-screen video (which this component already did) does not
+     release anything: on iOS each <video> element holds a slot in a small,
+     device-wide pool of hardware decode pipelines, plus its own buffers, for
+     as long as it is in the DOM. Fifteen of them is far past what an iPhone
+     will hand out, and re-entering the page — the exact thing being reported,
+     opening /services over and over — stacks a fresh set each time before the
+     previous ones are collected. That is what exhausts the device and makes
+     the whole phone stall or reboot, not just the tab.
+
+     Cards outside this range render their poster image instead, which costs a
+     texture and nothing else. Defaults to isCenter so any caller that does not
+     pass it gets the safest behaviour. */
+  isNearCenter,
 }) {
+  const mountsVideo = isNearCenter ?? isCenter;
   const videoRef = useRef(null);
   const youtubeRef = useRef(null);
   /* Autoplay is only permitted while muted, so every card starts muted and the
@@ -115,6 +134,29 @@ export default function TestimonialCardMedia({
   }, [muted]);
 
   if (item?.mediaType === 'video' && item.video) {
+    /* Far-from-centre card: show the poster still rather than a <video>. The
+       element is created only once the card scrolls close, and torn down again
+       when it moves away, so the number of live decoders stays small and
+       bounded no matter how many testimonials the admin adds. */
+    if (!mountsVideo) {
+      return item.img ? (
+        <Image
+          src={item.img}
+          alt={item.name || 'Testimonial'}
+          fill
+          sizes="(max-width: 768px) 90vw, 800px"
+          className={className}
+          style={{ transform, transition }}
+        />
+      ) : (
+        <div
+          className="absolute inset-0 bg-neutral-800"
+          style={{ transform, transition }}
+          aria-hidden="true"
+        />
+      );
+    }
+
     return (
       <>
         <video
