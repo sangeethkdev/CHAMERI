@@ -468,10 +468,12 @@ export default function ContactPageForm() {
      already sits on that edge, so any inset here pushes the placeholders off
      it (a flat 12px did exactly that, at every width). */
   const inputStyle = {
-    fontSize:      'clamp(16px, 1.11vw, 18px)',
+    fontSize:      'clamp(14px, 1.11vw, 18px)',
     height:        'clamp(33.75px, 3.75vw, 54px)',
     paddingBottom: 'clamp(4px, 0.4vw, 6px)',
   };
+
+  // font-size: clamp(14px, 1.11vw, 18px); height: clamp(33.75px, 3.75vw, 54px); padding-bottom: clamp(4px, 0.4vw, 6px);
 
   return (
     /*
