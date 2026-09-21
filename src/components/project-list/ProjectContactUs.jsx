@@ -93,14 +93,23 @@ const ProjectContactUs = () => {
 
   /* shared input className — only non-sizing utilities */
   const inputBase =
-    'font-geist font-regular text-[#333333CC] bg-transparent border-0 border-b border-[#000000] outline-none w-full placeholder-[#000000]/40 focus:border-[#000000] transition-colors';
+    'font-geist font-regular text-[#333333CC] bg-transparent border-0 border-b border-[#000000] outline-none w-full placeholder-[#000000]/40 focus:border-[#000000] transition-colors lg:pl-[12px]';
 
-  /* shared input inline style — reused for name, email, phone height, textarea */
+  /* shared input inline style — reused for name, email, phone height, textarea
+
+     paddingLeft is deliberately absent below lg. It was a flat 12px at every
+     width (clamp(12px, 0.4vw, 12px) has equal floor and ceiling), which on a
+     phone pushed the placeholders 12px right of the badge and heading above
+     them — the layout stacks to one column there, so those share the section's
+     own 20px edge and the offset read as a misalignment. The contact page's
+     form has no inset for exactly this reason; this now matches it.
+
+     The 12px is restored at lg+ via `lg:pl-[12px]` in inputBase, where the
+     form sits in its own column and the inset is part of the design. */
   const inputStyle = {
     fontSize:      'clamp(14px, 1.11vw, 18px)',
     height:        'clamp(33.75px, 3.75vw, 54px)',
     paddingBottom: 'clamp(4px, 0.4vw, 6px)',
-    paddingLeft:   'clamp(12px, 0.4vw, 12px)',
   };
 
   return (
@@ -282,7 +291,7 @@ const ProjectContactUs = () => {
             className="order-2 lg:order-none flex flex-col bg-[#EDE7DE] w-full lg:w-[clamp(400px,48.097vw,1240px)] lg:max-w-[clamp(300px,50.097vw,1140px)] gap-[20px] lg:gap-[clamp(25px,2.78vw,40px)] px-0 lg:px-[clamp(34px,3.82vw,55px)]"
             style={{
               paddingTop:    'clamp(17px, 1.88vw, 27px)',
-              paddingBottom: 'clamp(17px, 1.88vw, 27px)',
+              paddingBottom: 'clamp(17px, 1.88vw, 27px)',
               borderRadius:  'clamp(4px, 0.42vw, 6px)',
             }}
           >
@@ -328,8 +337,11 @@ const ProjectContactUs = () => {
                     value={form.phone}
                     onChange={handlePhoneChange}
                     placeholder="Phone number"
-                    className="contact-phone-input"
-                    style={{ width: '100%', outline: 'none',paddingLeft:"clamp(8px, 2.56vw, 15px)" }}
+                    /* Same story as the text fields: the inset is dropped
+                       below lg so the country flag lines up with the other
+                       placeholders and the heading above them. */
+                    className="contact-phone-input lg:pl-[clamp(8px,2.56vw,15px)]"
+                    style={{ width: '100%', outline: 'none' }}
                   />
                 </div>
                 <FieldError id="projects-phone-error">{errors.phone}</FieldError>

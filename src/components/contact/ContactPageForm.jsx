@@ -460,23 +460,15 @@ export default function ContactPageForm() {
   const inputBase =
     'font-geist font-regular text-[#333333CC] bg-transparent border-0 border-b border-[#000000] outline-none w-full placeholder-[#000000]/40 focus:border-[#000000] transition-colors';
 
-  /* Shared input inline style — matches the home ContactSection and
-     ProjectContactUs forms, so every contact form on the site reads the same.
+  /* Shared input inline style — mirrors the home ContactSection form exactly,
+     so both contact forms share one field metric.
 
-     The 14px floor (not 16px) is what those two use. With a 16px floor the
-     placeholders on this page rendered visibly larger than the identical
-     fields elsewhere at phone widths, since below ~1260px the clamp sits on
-     its floor and the vw term never applies.
-
-     No paddingLeft, unlike those two: the placeholder text has to start on the
-     same left edge as the "Get in touch" badge and the "Connect with us"
-     heading. This form deliberately carries no horizontal padding below lg
-     (see the `lg:px-[...]` on the <form>), so the fields already sit on that
-     edge and any inset here pushes the placeholders off it — a flat 12px did
-     exactly that, at every width. The other two forms sit inside a padded
-     container, so their 12px is measured from a different origin. */
+     No paddingLeft: the placeholder text must start on the same left edge as
+     the "Get in touch" badge and the "Connect with us" heading. The form box
+     already sits on that edge, so any inset here pushes the placeholders off
+     it (a flat 12px did exactly that, at every width). */
   const inputStyle = {
-    fontSize:      'clamp(14px, 1.11vw, 18px)',
+    fontSize:      'clamp(16px, 1.11vw, 18px)',
     height:        'clamp(33.75px, 3.75vw, 54px)',
     paddingBottom: 'clamp(4px, 0.4vw, 6px)',
   };
@@ -704,11 +696,7 @@ export default function ContactPageForm() {
                     <span
                       className="font-geist font-normal text-[#000000]"
                       style={{
-                        /* Was "clampclamp(...)", which is not valid CSS, so
-                           this label silently fell back to the inherited size
-                           and rendered out of step with "Phone number" above
-                           it — which uses this same metric. */
-                        fontSize:      'clamp(15px, 1.39vw, 22px)',
+                        fontSize:      'clampclamp(15px, 1.39vw, 22px)',
                         letterSpacing: '-1px',
                       }}
                     >

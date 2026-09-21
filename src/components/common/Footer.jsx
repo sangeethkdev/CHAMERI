@@ -737,9 +737,7 @@ const Footer = () => {
                   rel="noopener noreferrer"
                   className="font-sans font-normal text-[#FFFFFF] hover:text-[#EDE7DE]/80 transition-colors"
                   style={{
-                    /* Was "clampclamp(...)" — not valid CSS, so the address
-                       fell back to the inherited size instead of this metric. */
-                    fontSize:   'clamp(19px, 1.11vw, 21.3px)',
+                    fontSize:   'clampclamp(19px, 1.11vw, 21.3px)',
                     lineHeight: 1.6,
                     maxWidth:   'clamp(261.6px, 13.82vw, 265.7px)',
                   }}

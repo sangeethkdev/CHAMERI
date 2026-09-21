@@ -93,14 +93,23 @@ const ContactSection = () => {
 
   /* shared input className — only non-sizing utilities */
   const inputBase =
-    'font-geist font-regular text-[#333333CC] bg-transparent border-0 border-b border-[#000000] outline-none w-full placeholder-[#000000]/40 focus:border-[#000000] transition-colors';
+    'font-geist font-regular text-[#333333CC] bg-transparent border-0 border-b border-[#000000] outline-none w-full placeholder-[#000000]/40 focus:border-[#000000] transition-colors lg:pl-[12px]';
 
-  /* shared input inline style — reused for name, email, phone height, textarea */
+  /* shared input inline style — reused for name, email, phone height, textarea
+
+     paddingLeft is deliberately absent below lg. It was a flat 12px at every
+     width (clamp(12px, 0.4vw, 12px) has equal floor and ceiling), which on a
+     phone pushed the placeholders 12px right of the badge and heading above
+     them — the layout stacks to one column there, so those share the section's
+     own edge and the offset read as a misalignment. The contact page's form
+     has no inset for exactly this reason; this now matches it.
+
+     The 12px is restored at lg+ via `lg:pl-[12px]` in inputBase, where the
+     form sits in its own column and the inset is part of the design. */
   const inputStyle = {
     fontSize:      'clamp(14px, 1.11vw, 18px)',
     height:        'clamp(33.75px, 3.75vw, 54px)',
     paddingBottom: 'clamp(4px, 0.4vw, 6px)',
-    paddingLeft:   'clamp(12px, 0.4vw, 12px)',
   };
 
   return (
@@ -289,7 +298,7 @@ every step of the way.
             className="order-2 lg:order-none flex flex-col bg-[#EDE7DE] w-full lg:w-[clamp(400px,48.097vw,1240px)] lg:max-w-[clamp(300px,50.097vw,1140px)] gap-[20px] lg:gap-[clamp(25px,2.78vw,40px)] px-0 lg:px-[clamp(34px,3.82vw,55px)]"
             style={{
               paddingTop:    'clamp(17px, 1.88vw, 27px)',
-              paddingBottom: 'clamp(17px, 1.88vw, 27px)',
+              paddingBottom: 'clamp(17px, 1.88vw, 27px)',
               borderRadius:  'clamp(4px, 0.42vw, 6px)',
             }}
           >
@@ -327,8 +336,11 @@ every step of the way.
               {/* Phone */}
               <div>
                 <div
-                  className="flex items-center border-b bg-transparent w-full"
-                  style={{ borderBottomColor: errors.phone ? FIELD_ERROR_COLOR : '#000000', height: 'clamp(33.75px, 3.75vw, 54px)',paddingBottom: 'clamp(4px, 0.4vw, 6px)',paddingLeft:   'clamp(12px, 0.4vw, 12px)', }}
+                  /* lg:pl-[12px] rather than an inline paddingLeft, so the
+                     phone row loses the inset below lg along with the other
+                     fields — see the note on inputStyle. */
+                  className="flex items-center border-b bg-transparent w-full lg:pl-[12px]"
+                  style={{ borderBottomColor: errors.phone ? FIELD_ERROR_COLOR : '#000000', height: 'clamp(33.75px, 3.75vw, 54px)', paddingBottom: 'clamp(4px, 0.4vw, 6px)' }}
                 >
                   <PhoneInput
                     international defaultCountry="IN"
