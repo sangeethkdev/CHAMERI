@@ -55,6 +55,14 @@ export function trackVideoForRelease(el) {
   if (!el) return undefined;
 
   return () => {
+    /* Only tear down an element that has really left the page. A real
+       unmount (route change, or a `key` swap remounting the <video>) removes
+       the node before effect cleanups run. React's dev-only StrictMode check
+       instead runs this cleanup and then the effect again on the SAME,
+       still-attached element — stripping its source there would leave the
+       video permanently black, since nothing puts the src back. */
+    if (el.isConnected) return;
+
     try {
       el.pause();
 
