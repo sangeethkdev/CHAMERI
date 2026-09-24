@@ -701,7 +701,7 @@ const Footer = () => {
               {/* Quick Links */}
               <div className="flex flex-col" style={{ gap: 'clamp(9.9px, 1.63vw, 33.3px)' }}>
                 <h3
-                  className="font-roundo font-medium text-white"
+                  className="font-roundo font-medium text-white whitespace-nowrap"
                   style={{ fontSize: 'clamp(18px, 1.4vw, 26.6px)' }}
                 >
                   Quick Links
@@ -711,7 +711,7 @@ const Footer = () => {
                     <Link
                       key={label}
                       href={href}
-                      className="font-sans font-normal text-[#FFFFFF] hover:text-[#EDE7DE]/80 transition-colors"
+                      className="font-sans font-normal text-[#FFFFFF] hover:text-[#EDE7DE]/80 transition-colors whitespace-nowrap"
                       style={{
                         fontSize:   'clamp(15px, 1.11vw, 21.3px)',
                         lineHeight: 1.1,
@@ -726,7 +726,7 @@ const Footer = () => {
               {/* Address */}
               <div className="flex flex-col ml-0 md:ml-[clamp(20px,4.63vw,150px)]" style={{ gap: 'clamp(14.2px, 1.4vw, 26.6px)' }}>
                 <h3
-                  className="font-roundo font-medium text-white"
+                  className="font-roundo font-medium text-white whitespace-nowrap"
                   style={{ fontSize: 'clamp(18px, 1.4vw, 26.6px)' }}
                 >
                   Address
@@ -737,9 +737,9 @@ const Footer = () => {
                   rel="noopener noreferrer"
                   className="font-sans font-normal text-[#FFFFFF] hover:text-[#EDE7DE]/80 transition-colors"
                   style={{
-                    fontSize:   'clampclamp(19px, 1.11vw, 21.3px)',
+                    fontSize:   'clamp(15px, 1.11vw, 21.3px)',
                     lineHeight: 1.6,
-                    maxWidth:   'clamp(261.6px, 13.82vw, 265.7px)',
+                    maxWidth:   'clamp(150px, 13.82vw, 265.7px)',
                   }}
                 >
                   #27/205, Madapeedika, Paral (PO), Thalassery, Kannur, Kerala, 670671
@@ -749,7 +749,7 @@ const Footer = () => {
               {/* Contact Us */}
               <div className="flex flex-col ml-0 md:ml-[clamp(20px,3.63vw,140px)]" style={{ gap: 'clamp(10.2px, 1vw, 20.6px)' }}>
                 <h3
-                  className="font-roundo font-medium text-white"
+                  className="font-roundo font-medium text-white whitespace-nowrap"
                   style={{ fontSize: 'clamp(18px, 1.4vw, 26.6px)' }}
                 >
                   Contact Us

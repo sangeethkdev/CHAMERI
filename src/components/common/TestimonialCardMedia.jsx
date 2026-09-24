@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import MuteToggleButton from './MuteToggleButton';
-import useExclusiveAudio from '@/hooks/useExclusiveAudio';
+import TestimonialVideoModal from './TestimonialVideoModal';
 
 /**
  * Renders a testimonial card's background media, which the admin panel lets
@@ -11,6 +10,9 @@ import useExclusiveAudio from '@/hooks/useExclusiveAudio';
  *
  * All three render edge-to-edge inside the card's existing clip-path frame,
  * so each carousel's sizing and animation code stays untouched.
+ *
+ * Video cards never autoplay. They show a still with a play button, and
+ * clicking the card opens the video in a popup (TestimonialVideoModal).
  */
 
 // Accepts the URL shapes people actually paste — watch links, youtu.be
@@ -50,55 +52,81 @@ export function toCardMedia(card, fallbackImg) {
   return { mediaType: 'image', img: card?.cardImage || fallbackImg };
 }
 
+// A press that travels further than this is a carousel swipe, not a click,
+// so it must not open the popup.
+const CLICK_SLOP_PX = 10;
+
+/* Transparent layer over the whole card that opens the popup. It sits above
+   the carousel's quote/profile overlay (z-10) so a click anywhere on the card
+   counts, while the carousel arrows (z-20, outside the card) stay on top. */
+export function PlayTrigger({ item, onOpen }) {
+  const downRef = useRef(null);
+
+  return (
+    <button
+      type="button"
+      aria-label={item?.name ? `Play testimonial from ${item.name}` : 'Play testimonial video'}
+      className="group absolute inset-0 z-10 flex cursor-pointer items-center justify-center border-0 bg-transparent p-0"
+      // Not stopped: the carousel's swipe handler still needs this event.
+      onPointerDown={(e) => {
+        downRef.current = { x: e.clientX, y: e.clientY };
+      }}
+      onClick={(e) => {
+        const start = downRef.current;
+        downRef.current = null;
+        if (
+          start &&
+          Math.hypot(e.clientX - start.x, e.clientY - start.y) > CLICK_SLOP_PX
+        ) {
+          return;
+        }
+        onOpen();
+      }}
+    >
+      <span
+        className="flex items-center justify-center rounded-full bg-black/55 text-white backdrop-blur-sm transition-transform duration-300 group-hover:scale-110 group-hover:bg-black/70"
+        style={{ width: 'clamp(48px, 5vw, 88px)', height: 'clamp(48px, 5vw, 88px)' }}
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+          style={{ width: '42%', height: '42%', marginLeft: '8%' }}
+        >
+          <path d="M7 4.5v15a1 1 0 0 0 1.52.85l12-7.5a1 1 0 0 0 0-1.7l-12-7.5A1 1 0 0 0 7 4.5Z" />
+        </svg>
+      </span>
+    </button>
+  );
+}
+
 export default function TestimonialCardMedia({
   item,
   isCenter,
   transitionEnabled = true,
   className = 'object-cover',
   /* Whether this card is close enough to the centre to be worth mounting a
-     real <video> for. The carousels triple their list for the infinite-scroll
-     illusion, so a 5-entry set becomes 15 cards — and every one of them used
-     to mount its own <video>.
-
-     Pausing an off-screen video (which this component already did) does not
-     release anything: on iOS each <video> element holds a slot in a small,
-     device-wide pool of hardware decode pipelines, plus its own buffers, for
-     as long as it is in the DOM. Fifteen of them is far past what an iPhone
-     will hand out, and re-entering the page — the exact thing being reported,
-     opening /services over and over — stacks a fresh set each time before the
-     previous ones are collected. That is what exhausts the device and makes
-     the whole phone stall or reboot, not just the tab.
-
-     Cards outside this range render their poster image instead, which costs a
-     texture and nothing else. Defaults to isCenter so any caller that does not
-     pass it gets the safest behaviour. */
+     real <video> for its preview frame. The carousels triple their list for
+     the infinite-scroll illusion, so a 5-entry set becomes 15 cards; on iOS
+     each mounted <video> holds a slot in a small, device-wide pool of decode
+     pipelines, so only the cards near the centre get one. The rest show the
+     poster image. Defaults to isCenter for callers that do not pass it. */
   isNearCenter,
 }) {
   const mountsVideo = isNearCenter ?? isCenter;
   const videoRef = useRef(null);
-  const youtubeRef = useRef(null);
-  /* Autoplay is only permitted while muted, so every card starts muted and the
-     viewer opts into sound via the speaker button. The slot is page-wide, so
-     unmuting this card silences whichever one had sound before — two
-     testimonials never talk over each other. */
-  const [soundOn, toggleSound, releaseSound] = useExclusiveAudio();
-
-  // Sound is derived rather than stored, so a card that scrolls away from the
-  // centre goes silent on its own — otherwise an unmuted card would keep
-  // playing audio from off-screen.
-  const muted = !(isCenter && soundOn);
+  const [modalOpen, setModalOpen] = useState(false);
+  const openModal = useCallback(() => setModalOpen(true), []);
+  const closeModal = useCallback(() => setModalOpen(false), []);
 
   const transform = isCenter ? 'scale(1)' : 'scale(1.1)';
   const transition = transitionEnabled
     ? 'transform 900ms cubic-bezier(0.4,0,0.2,1)'
     : 'none';
 
-  /* Release the decoder when this card stops rendering a <video> — either
-     because it scrolled away from the centre (isNearCenter going false
-     unmounts the element) or because the whole carousel unmounted on a route
-     change. Removing the element from the DOM does not free its media
-     pipeline on iOS; it has to be torn down explicitly, or the sessions
-     accumulate across visits. See useReleaseVideoOnUnmount for the details. */
+  /* Release the decoder when this card stops rendering a <video>. Removing
+     the element from the DOM does not free its media pipeline on iOS; it has
+     to be torn down explicitly, or the sessions accumulate across visits. */
   useEffect(() => {
     if (!mountsVideo) return;
     const el = videoRef.current;
@@ -117,103 +145,13 @@ export default function TestimonialCardMedia({
     };
   }, [mountsVideo]);
 
-  // Only the centre card is worth streaming; the side cards are peeking
-  // slivers, so they stay paused until they scroll into the middle.
-  useEffect(() => {
-    const el = videoRef.current;
-    if (!el) return;
+  const isVideo = item?.mediaType === 'video' && item.video;
+  const isYoutube = item?.mediaType === 'youtube' && item.youtubeId;
 
-    if (isCenter) {
-      // play() rejects if the element unmounts mid-transition or the browser
-      // blocks autoplay; neither is actionable, so the rejection is ignored.
-      el.play().catch(() => {});
-    } else {
-      el.pause();
-      el.currentTime = 0;
-    }
-  }, [isCenter, item?.video]);
-
-  /* Scrolling a card away from the centre hands the audio slot back, rather
-     than leaving it held by a card that is no longer visible or playing —
-     otherwise the next card could not take sound without two clicks. */
-  useEffect(() => {
-    if (!isCenter && soundOn) releaseSound();
-  }, [isCenter, soundOn, releaseSound]);
-
-  // Keep the <video> element in sync with the mute state.
-  useEffect(() => {
-    if (videoRef.current) videoRef.current.muted = muted;
-  }, [muted]);
-
-  // YouTube embeds can't be muted through the DOM — the player is driven via
-  // the IFrame API's postMessage channel, which needs no extra script as long
-  // as the embed URL carries enablejsapi=1.
-  useEffect(() => {
-    const frame = youtubeRef.current;
-    if (!frame?.contentWindow) return;
-    frame.contentWindow.postMessage(
-      JSON.stringify({ event: 'command', func: muted ? 'mute' : 'unMute', args: [] }),
-      '*'
-    );
-  }, [muted]);
-
-  if (item?.mediaType === 'video' && item.video) {
-    /* Far-from-centre card: show the poster still rather than a <video>. The
-       element is created only once the card scrolls close, and torn down again
-       when it moves away, so the number of live decoders stays small and
-       bounded no matter how many testimonials the admin adds. */
-    if (!mountsVideo) {
-      return item.img ? (
-        <Image
-          src={item.img}
-          alt={item.name || 'Testimonial'}
-          fill
-          sizes="(max-width: 768px) 90vw, 800px"
-          className={className}
-          style={{ transform, transition }}
-        />
-      ) : (
-        <div
-          className="absolute inset-0 bg-neutral-800"
-          style={{ transform, transition }}
-          aria-hidden="true"
-        />
-      );
-    }
-
-    return (
-      <>
-        <video
-          ref={videoRef}
-          src={item.video}
-          poster={item.img || undefined}
-          className={`absolute inset-0 h-full w-full ${className}`}
-          // muted is what makes autoplay permissible at all; the speaker
-          // button below lets a viewer turn sound on deliberately.
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-label={item.name ? `Testimonial from ${item.name}` : 'Testimonial video'}
-          style={{ transform, transition }}
-        />
-        {/* Only the centre card is playing, so only it offers sound. */}
-        {isCenter && (
-          <MuteToggleButton
-            muted={muted}
-            onToggle={toggleSound}
-            style={{ right: '5%', bottom: '5%' }}
-          />
-        )}
-      </>
-    );
-  }
-
-  if (item?.mediaType === 'youtube' && item.youtubeId) {
-    // The player only mounts for the centre card — one iframe per slide would
-    // load a full YouTube player for every card and tank scroll performance.
-    if (!isCenter) {
-      return (
+  if (isVideo || isYoutube) {
+    let still;
+    if (isYoutube) {
+      still = (
         <Image
           src={`https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg`}
           alt={item.name || 'Testimonial'}
@@ -227,60 +165,48 @@ export default function TestimonialCardMedia({
           style={{ transform, transition }}
         />
       );
+    } else if (mountsVideo) {
+      /* Never played in the card — it is only here to show a real frame of
+         the clip. The #t fragment makes the browser seek to (and paint) a
+         frame just past the start, which is often black. */
+      still = (
+        <video
+          ref={videoRef}
+          src={`${item.video}#t=0.1`}
+          className={`absolute inset-0 h-full w-full ${className}`}
+          muted
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+          style={{ transform, transition }}
+        />
+      );
+    } else if (item.img) {
+      still = (
+        <Image
+          src={item.img}
+          alt={item.name || 'Testimonial'}
+          fill
+          sizes="(max-width: 768px) 90vw, 800px"
+          className={className}
+          style={{ transform, transition }}
+        />
+      );
+    } else {
+      still = (
+        <div
+          className="absolute inset-0 bg-neutral-800"
+          style={{ transform, transition }}
+          aria-hidden="true"
+        />
+      );
     }
-
-    const params = new URLSearchParams({
-      autoplay: '1',
-      mute: '1',
-      loop: '1',
-      playlist: item.youtubeId, // a single video only loops if it names itself here
-      controls: '0',
-      modestbranding: '1',
-      rel: '0',
-      playsinline: '1',
-      enablejsapi: '1', // required for the mute/unMute postMessage commands
-      // enablejsapi makes the player treat itself as interactive, which brings
-      // back the centre play/pause/skip overlay that controls=0 alone hides.
-      // These strip the remaining chrome so only the card's own button shows.
-      disablekb: '1',
-      fs: '0',
-      iv_load_policy: '3',
-    });
 
     return (
       <>
-        <div className="absolute inset-0 overflow-hidden" style={{ transform, transition }}>
-          {/* Oversized so YouTube's letterboxing is cropped away by the card frame */}
-          <iframe
-            ref={youtubeRef}
-            src={`https://www.youtube-nocookie.com/embed/${item.youtubeId}?${params.toString()}`}
-            title={item.name ? `Testimonial from ${item.name}` : 'Testimonial video'}
-            allow="autoplay; encrypted-media; picture-in-picture"
-            allowFullScreen
-            className="pointer-events-none absolute left-1/2 top-1/2 border-0"
-            style={{
-              width: '177.78vh',
-              height: '56.25vw',
-              minWidth: '100%',
-              minHeight: '100%',
-              transform: 'translate(-50%, -50%)',
-            }}
-          />
-          {/* Transparent shield over the player. enablejsapi=1 keeps the embed
-              interactive, so without this YouTube shows its own play/pause/skip
-              overlay on hover — the card is decorative and drives playback
-              itself, so no pointer event should ever reach the iframe. */}
-          <div className="absolute inset-0" aria-hidden="true" />
-        </div>
-        {/* Sits outside the oversized wrapper so it anchors to the card frame
-            rather than the cropped-away iframe bounds. */}
-        {isCenter && (
-          <MuteToggleButton
-            muted={muted}
-            onToggle={toggleSound}
-            style={{ right: '5%', bottom: '5%' }}
-          />
-        )}
+        {still}
+        <PlayTrigger item={item} onOpen={openModal} />
+        {modalOpen && <TestimonialVideoModal item={item} onClose={closeModal} />}
       </>
     );
   }

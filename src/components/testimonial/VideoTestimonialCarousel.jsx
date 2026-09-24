@@ -1,11 +1,10 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import Image from 'next/image';
 import { TESTIMONIALS as DEFAULT_TESTIMONIALS } from '@/data/testimonials';
-import { getYoutubeId } from '@/components/common/TestimonialCardMedia';
-import MuteToggleButton from '@/components/common/MuteToggleButton';
-import useExclusiveAudio from '@/hooks/useExclusiveAudio';
+import { getYoutubeId, PlayTrigger } from '@/components/common/TestimonialCardMedia';
+import TestimonialVideoModal from '@/components/common/TestimonialVideoModal';
 
 /**
  * ─────────────────────────────────────────────────────────────────────────────
@@ -60,52 +59,15 @@ const StarIcon = ({ size, filled = true }) => (
 );
 
 function VideoCard({ item }) {
-  const videoRef = useRef(null);
-  const youtubeRef = useRef(null);
-  const [playing, setPlaying] = useState(false);
-  /* Autoplay is only permitted while muted, so cards start silent and the
-     viewer opts into sound via the speaker button. Every card in this row is
-     on screen at once, so the slot is page-wide: unmuting one silences
-     whichever card had sound before. */
-  const [soundOn, toggleSound, releaseSound] = useExclusiveAudio();
-  const muted = !soundOn;
+  const [modalOpen, setModalOpen] = useState(false);
+  const openModal = useCallback(() => setModalOpen(true), []);
+  const closeModal = useCallback(() => setModalOpen(false), []);
 
   // Cards saved before the image/YouTube options existed carry no
   // mediaType, so anything unrecognised falls back to video.
   const isImage   = item.mediaType === 'image' && item.img;
   const isYoutube = item.mediaType === 'youtube' && item.youtubeId;
   const isVideo   = !isImage && !isYoutube;
-
-  // Keep the <video> element in sync with the mute state.
-  useEffect(() => {
-    if (videoRef.current) videoRef.current.muted = muted;
-  }, [muted]);
-
-  // YouTube embeds can't be muted through the DOM — the player is driven via
-  // the IFrame API's postMessage channel, which needs no extra script as long
-  // as the embed URL carries enablejsapi=1.
-  useEffect(() => {
-    const frame = youtubeRef.current;
-    if (!frame?.contentWindow) return;
-    frame.contentWindow.postMessage(
-      JSON.stringify({ event: 'command', func: muted ? 'mute' : 'unMute', args: [] }),
-      '*'
-    );
-  }, [muted]);
-
-  const togglePlay = () => {
-    const video = videoRef.current;
-    if (!video || !item.video) return;
-    if (playing) {
-      video.pause();
-      setPlaying(false);
-      /* Pausing hides this card's speaker button, so hand the slot back —
-         otherwise a paused card would hold audio no one could reclaim. */
-      releaseSound();
-    } else {
-      video.play().then(() => setPlaying(true)).catch(() => {});
-    }
-  };
 
   return (
     <div
@@ -121,7 +83,7 @@ function VideoCard({ item }) {
     >
       {/* Background — an uploaded image, a YouTube embed, or (the default)
           the video itself with no poster: the card shows the video's own
-          first frame and plays in place on click. `item.video` always
+          frame and plays in a popup on click. `item.video` always
           resolves (backend value or the shared local fallback), so there is
           no case where dropping the poster leaves the card blank. */}
       {isImage && (
@@ -135,44 +97,29 @@ function VideoCard({ item }) {
       )}
 
       {isYoutube && (
-        <div className="absolute inset-0 overflow-hidden">
-          {/* Oversized so YouTube's letterboxing is cropped away by the card */}
-          <iframe
-            ref={youtubeRef}
-            // enablejsapi=1 is what allows the mute/unMute postMessage commands;
-            // disablekb/fs/iv_load_policy strip the player chrome it re-enables.
-            src={`https://www.youtube-nocookie.com/embed/${item.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${item.youtubeId}&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&disablekb=1&fs=0&iv_load_policy=3`}
-            title={item.name ? `Testimonial from ${item.name}` : 'Testimonial video'}
-            allow="autoplay; encrypted-media; picture-in-picture"
-            allowFullScreen
-            className="pointer-events-none absolute left-1/2 top-1/2 border-0"
-            style={{
-              width:     '177.78vh',
-              height:    '56.25vw',
-              minWidth:  '100%',
-              minHeight: '100%',
-              transform: 'translate(-50%, -50%)',
-            }}
-          />
-          {/* Transparent shield — enablejsapi=1 keeps the embed interactive, so
-              without this YouTube shows its own play/pause/skip overlay on
-              hover. The card drives playback itself. */}
-          <div className="absolute inset-0" aria-hidden="true" />
-        </div>
+        <Image
+          src={`https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg`}
+          alt={item.name || 'Testimonial'}
+          fill
+          sizes="(max-width: 768px) 60vw, 302px"
+          className="object-cover"
+          // YouTube serves this at a fixed 480x360, so the optimizer would
+          // only add a round trip.
+          unoptimized
+        />
       )}
 
       {isVideo && (
+        /* Never played in the card — the #t fragment makes the browser seek
+           to and paint a frame just past the (often black) first one. */
         <video
-          ref={videoRef}
+          src={`${item.video}#t=0.1`}
           className="absolute inset-0 h-full w-full object-cover"
           muted
-          loop
           playsInline
-          preload="auto"
-          onEnded={() => { setPlaying(false); releaseSound(); }}
-        >
-          <source src={item.video} type="video/mp4" />
-        </video>
+          preload="metadata"
+          aria-hidden="true"
+        />
       )}
 
       <div
@@ -183,38 +130,13 @@ function VideoCard({ item }) {
         }}
       />
 
-      {/* Only the uploaded-video case is click-to-play; an image has nothing
-          to play and the YouTube embed drives itself. */}
-      {isVideo && (
-      <button
-        type="button"
-        onClick={togglePlay}
-        aria-label={playing ? 'Pause video' : 'Play video'}
-        className="absolute rounded-full border-none cursor-pointer transition-opacity duration-300"
-        style={{
-          top:            '50%',
-          left:           '50%',
-          transform:      'translate(-50%, -50%)',
-          width:          'clamp(40px, 3.889vw, 56px)',
-          height:         'clamp(40px, 3.889vw, 56px)',
-          opacity:        playing ? 0 : 1,
-        }}
-      >
-        <Image src="/icons/Vector (17).svg" alt="" fill sizes="56px" />
-      </button>
-      )}
-
-      {/* Sound control. The uploaded video is click-to-play, so it only offers
-          sound once it is actually running; the YouTube embed autoplays and so
-          can be unmuted at any time. An image card has no audio at all. */}
-      {((isVideo && playing) || isYoutube) && (
-        <MuteToggleButton
-          muted={muted}
-          onToggle={toggleSound}
-          size="clamp(28px, 2.222vw, 32px)"
-          iconSize="clamp(14px, 1.111vw, 16px)"
-          style={{ right: 'clamp(8px, 0.833vw, 12px)', top: 'clamp(8px, 0.833vw, 12px)' }}
-        />
+      {/* Same as the home-page carousel: nothing plays in the card, and a
+          click anywhere on it opens the video in a popup. */}
+      {(isVideo || isYoutube) && (
+        <>
+          <PlayTrigger item={item} onOpen={openModal} />
+          {modalOpen && <TestimonialVideoModal item={item} onClose={closeModal} />}
+        </>
       )}
 
       {/* Bottom content — quote glyph + stars, quote text, avatar row */}

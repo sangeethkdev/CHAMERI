@@ -35,32 +35,42 @@ import { useEffect, useRef } from "react";
 export default function useReleaseVideoOnUnmount() {
   const ref = useRef(null);
 
-  useEffect(() => {
-    // Captured on mount: by cleanup time React may already have detached the
-    // ref, so reading ref.current there can return null.
-    const el = ref.current;
-    if (!el) return;
-
-    return () => {
-      try {
-        el.pause();
-
-        // Drop every source the element might be using.
-        el.removeAttribute("src");
-        while (el.firstChild) el.removeChild(el.firstChild);
-
-        /* Forces WebKit to tear down the media pipeline now. Without it the
-           decode session can outlive the element. The load() of an element
-           with no source fires an abort/error internally; that is the
-           intended outcome here, not a failure. */
-        el.load();
-      } catch {
-        /* An element already torn down by the browser can throw here. There
-           is nothing to recover — the goal (no live decoder) is met either
-           way — so this must not break unmounting. */
-      }
-    };
-  }, []);
+  // Captured on mount: by cleanup time React may already have detached the
+  // ref, so reading ref.current there can return null.
+  useEffect(() => trackVideoForRelease(ref.current), []);
 
   return ref;
+}
+
+/**
+ * Non-hook form for components that manage their own <video> ref, or whose
+ * clip changes over the component's lifetime. Returns the teardown, so it can
+ * be the whole body of an effect:
+ *
+ *   useEffect(() => trackVideoForRelease(videoRef.current), [videoSrc]);
+ *
+ * Pass the element itself (read inside the effect), not the ref.
+ */
+export function trackVideoForRelease(el) {
+  if (!el) return undefined;
+
+  return () => {
+    try {
+      el.pause();
+
+      // Drop every source the element might be using.
+      el.removeAttribute("src");
+      while (el.firstChild) el.removeChild(el.firstChild);
+
+      /* Forces WebKit to tear down the media pipeline now. Without it the
+         decode session can outlive the element. The load() of an element
+         with no source fires an abort/error internally; that is the
+         intended outcome here, not a failure. */
+      el.load();
+    } catch {
+      /* An element already torn down by the browser can throw here. There
+         is nothing to recover — the goal (no live decoder) is met either
+         way — so this must not break unmounting. */
+    }
+  };
 }

@@ -662,6 +662,14 @@ function CardTexts({ card, showTexts }) {
             width: clamp(140px, 38vw, 320px);
           }
         }
+        /* Tablet: the heading wraps to two lines and the divider sits at
+           84.61%, leaving a large dead gap below the texts. Drop both blocks
+           so they settle just above the line. The heading is the taller of
+           the two, so it starts higher than the body. */
+        @media (min-width: 768px) and (max-width: 1024px) {
+          .vm-heading-text { top: 74% !important; }
+          .vm-body-text    { top: 74% !important; }
+        }
       `}</style>
 
       {/*
@@ -689,6 +697,7 @@ function CardTexts({ card, showTexts }) {
       >
         {/* Heading */}
         <div
+          className="vm-heading-text"
           style={{
             position: 'absolute',
             top: '60%',

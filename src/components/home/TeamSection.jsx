@@ -306,18 +306,12 @@ const TeamSection = ({ ourTeam }) => {
 
       {/* ══ LEFT: Sticky Sidebar ════════════════════════════════════════ */}
       <aside
-        className="flex-shrink-0 flex flex-col w-full lg:w-[clamp(260px,29.31vw,562.6px)] lg:sticky"
+        className="flex-shrink-0 flex flex-col w-full lg:w-[clamp(260px,29.31vw,562.6px)] lg:sticky lg:border-t lg:border-[rgba(34,47,48,0.1)] lg:rounded-t-lg"
         style={{
           gap:        'clamp(18.4px, 1.81vw, 34.6px)',
           paddingTop: 'clamp(0px, 3.33vw, 64px)',
           top:        0,
           alignSelf:  'flex-start',
-              borderTop: "1px solid rgba(34, 47, 48, 0.1)",
-              // borderLeft: "1px solid rgba(34, 47, 48, 0.1)",
-              // borderRight: "1px solid rgba(34, 47, 48, 0.1)",
-              borderBottom: "none",
-              borderTopLeftRadius: "8px",
-              borderTopRightRadius: "8px",
         }}
       >
         {/* Badge */}
@@ -391,17 +385,11 @@ const TeamSection = ({ ourTeam }) => {
       {/* ══ RIGHT: 2-col photo grid ══════════════════════════════════════ */}
       <aside className="flex-shrink-0 w-full lg:w-auto">
         <div
-          className="grid grid-cols-2 w-full lg:w-[clamp(300px,57.08vw,1097.3px)]"
+          className="grid grid-cols-2 w-full lg:w-[clamp(300px,57.08vw,1097.3px)] lg:border-t lg:border-[rgba(34,47,48,0.1)] lg:rounded-t-lg"
           style={{
             columnGap: 'clamp(16px, 2.4vw, 44.5px)',      // 63.36px @ 1440 → 84.5px @ 1920
             rowGap:    'clamp(16px, 3.06vw, 58.6px)',      // 44px @ 1440 → 58.6px @ 1920
             paddingTop: 'clamp(0px, 3.33vw, 64px)',
-              borderTop: "1px solid rgba(34, 47, 48, 0.1)",
-              // borderLeft: "1px solid rgba(34, 47, 48, 0.1)",
-              // borderRight: "1px solid rgba(34, 47, 48, 0.1)",
-              borderBottom: "none",
-              borderTopLeftRadius: "8px",
-              borderTopRightRadius: "8px",
           }}
         >
           {TEAM.map((member) => (

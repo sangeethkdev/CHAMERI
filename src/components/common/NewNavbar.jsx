@@ -282,7 +282,7 @@ export default function NewNavbar({ opacity = 1, showLogo = true, darkLogo = fal
              */}
             <div
               style={{
-                width:  'clamp(100px, 10.417vw, 150px)',
+                width:  'clamp(105px, 10.417vw, 150px)',
                 height: 'clamp(30px, 3.194vw, 46px)',
                 display:'flex',
                 alignItems: 'center',
@@ -299,7 +299,7 @@ export default function NewNavbar({ opacity = 1, showLogo = true, darkLogo = fal
                 aria-label="Go to the contact page"
                 className="group flex items-center no-underline bg-white hover:bg-[#334454] transition-colors duration-300 overflow-hidden cursor-pointer border-none z-50"
                 style={{
-                  width:        'clamp(98px, 10.208vw, 147px)',
+                  width:        'clamp(128px, 10.208vw, 147px)',
                   height:       'clamp(30px, 3.194vw, 46px)',
                   justifyContent: 'space-between',
                   paddingLeft:  'clamp(8px, 0.863vw, 16.43px)',
@@ -308,15 +308,18 @@ export default function NewNavbar({ opacity = 1, showLogo = true, darkLogo = fal
                   // marginTop:"clamp(20px,1vw,10px)"
                 }}
               >
-                {/* Sliding text container — Figma: w:90 h:23 */}
+                {/* Sliding text container — Figma: w:90 h:23.
+                    The floor is 72px rather than 60px: the label bottoms out at
+                    its 12px font floor below ~1150px, and "Contact Us" at 12px
+                    needs ~70px, so a 60px box clipped the final letters. */}
                 <div
                   className="relative overflow-hidden"
-                  style={{ width: 'clamp(60px, 6.25vw, 90px)', height: 'clamp(15px, 1.597vw, 23px)' }}
+                  style={{ width: 'clamp(72px, 6.25vw, 90px)', height: 'clamp(15px, 1.597vw, 23px)' }}
                 >
                   {/* Flex column of two stacked labels — Figma: w:84 */}
                   <div
                     className="flex flex-col transition-transform duration-[600ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-y-1/2"
-                    style={{ width: 'clamp(56px, 5.833vw, 84px)' }}
+                    style={{ width: 'clamp(72px, 5.833vw, 84px)' }}
                   >
                     <span
                       className="font-Geist text-black whitespace-nowrap flex items-center"

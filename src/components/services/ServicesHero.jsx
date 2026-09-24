@@ -187,7 +187,8 @@ export default function ServicesHero({ hero }) {
           top: "94.397%",
           left: "50%",
           transform: "translateX(-50%)",
-          width: "clamp(260px, 29.861vw, 460px)",
+          width: "clamp(260px, 60vw, 460px)",
+          maxWidth: "92vw",
           textAlign: "center",
         }}
       >
