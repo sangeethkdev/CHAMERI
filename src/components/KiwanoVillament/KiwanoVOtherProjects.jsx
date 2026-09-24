@@ -169,7 +169,7 @@ export default function KiwanoOtherProjects({ otherProjects }) {
             </p>
 
             <Link
-              href="/kiwano"
+              href="/kiwano-villa"
               aria-label="Learn more about Kiwano"
               style={{
                 display:        "flex",
@@ -375,7 +375,7 @@ export default function KiwanoOtherProjects({ otherProjects }) {
             {/* CTA — links across to the villas project */}
             <div className="flex items-center justify-center w-full">
               <Link
-                href="/kiwano"
+                href="/kiwano-villa"
                 aria-label="Learn more about Kiwano"
                 className="group relative flex items-center justify-center no-underline bg-[#6B859E] hover:bg-[#4a6074] transition-colors duration-500 overflow-hidden cursor-pointer border-none w-[clamp(118.6px,11.6vw,167px)] h-[clamp(36.9px,3.61vw,52px)]"
                 style={{

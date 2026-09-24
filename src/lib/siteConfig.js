@@ -22,6 +22,6 @@ export const ROUTES = [
   { path: "/gallery", changeFrequency: "monthly", priority: 0.7 },
   { path: "/testimonial", changeFrequency: "monthly", priority: 0.7 },
   { path: "/contact", changeFrequency: "yearly", priority: 0.8 },
-  { path: "/kiwano", changeFrequency: "weekly", priority: 0.9 },
+  { path: "/kiwano-villa", changeFrequency: "weekly", priority: 0.9 },
   { path: "/kiwano-villament", changeFrequency: "weekly", priority: 0.9 },
 ];

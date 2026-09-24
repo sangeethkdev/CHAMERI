@@ -41,7 +41,7 @@ const clamp = (min, design, max = design) =>
 /** Maps an admin-selected project key to its live project page, falling
  * back to the general gallery when no project was chosen. */
 const projectHref = (project) => {
-  if (project === 'kiwano') return '/kiwano';
+  if (project === 'kiwano') return '/kiwano-villa';
   if (project === 'kiwano-villament') return '/kiwano-villament';
   return '/gallery';
 };

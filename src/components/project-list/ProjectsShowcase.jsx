@@ -30,7 +30,7 @@ const PROJECTS = [
     description:
       'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim adipiscing',
     image: '/dummyimages/2702c77b1fc16911ce7e388a66de1e2c5e71c658.png',
-    href: '/kiwano',
+    href: '/kiwano-villa',
   },
   {
     id: 'kiwano-villament',
@@ -48,7 +48,7 @@ const PROJECTS = [
 // ("Kiwano Villa" / "Kiwano Villament") against them, falling back to the
 // Kiwano Villa page.
 const resolveHref = (tag = '') =>
-  /villament/i.test(tag) ? '/kiwano-villament' : '/kiwano';
+  /villament/i.test(tag) ? '/kiwano-villament' : '/kiwano-villa';
 
 /**
  * MobileProjectCard — one stacked card in the mobile "Our Projects" list.

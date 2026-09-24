@@ -11,7 +11,7 @@ import Link from 'next/link';
 /* The CTA follows whichever tab is showing, so "Learn More" always lands on the
    project the visitor is actually looking at. */
 const TAB_ROUTES = {
-  villas:     '/kiwano',
+  villas:     '/kiwano-villa',
   villaments: '/kiwano-villament',
 };
 

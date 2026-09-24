@@ -19,12 +19,19 @@ const ALLOWED_PATHS = new Set([
   '/',
   '/about',
   '/gallery',
-  '/kiwano',
+  '/kiwano-villa',
   '/kiwano-villament',
   '/services',
   '/testimonial',
   '/project-list',
 ]);
+
+// Paths that have since been renamed. A backend deployed before the rename
+// still sends the old one, so it is translated rather than rejected.
+const RENAMED_PATHS = {
+  '/kiwano': '/kiwano-villa',
+  '/kiwano-villas': '/kiwano-villa',
+};
 
 const secretsMatch = (provided, expected) => {
   if (typeof provided !== 'string') return false;
@@ -62,7 +69,13 @@ export async function POST(request) {
       ? [body.path]
       : [];
 
-  const paths = [...new Set(requested.filter((p) => ALLOWED_PATHS.has(p)))];
+  const paths = [
+    ...new Set(
+      requested
+        .map((p) => RENAMED_PATHS[p] || p)
+        .filter((p) => ALLOWED_PATHS.has(p))
+    ),
+  ];
 
   if (paths.length === 0) {
     return Response.json(

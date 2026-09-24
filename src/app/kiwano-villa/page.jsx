@@ -18,10 +18,10 @@ export const metadata = {
   title: "Kiwano Villas — 4 BHK Villas in Thalassery | Chameri",
   description:
     "Nine 4 BHK villas of 2,806 sq ft on 6.59-7.01 cent plots, in Tropical Modernism style. Pool, gym, 24x7 security. K-RERA registered, ready March 2027.",
-  alternates: { canonical: "/kiwano" },
+  alternates: { canonical: "/kiwano-villa" },
   openGraph: {
     type: "website",
-    url: "/kiwano",
+    url: "/kiwano-villa",
     title: "Kiwano Villas — 4 BHK Villas in Thalassery | Chameri",
     description: "Nine 4 BHK villas of 2,806 sq ft on 6.59-7.01 cent plots, in Tropical Modernism style. Pool, gym, 24x7 security. K-RERA registered, ready March 2027.",
   },

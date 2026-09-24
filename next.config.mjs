@@ -106,6 +106,24 @@ const nextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        /* The villa project page moved from /kiwano to /kiwano-villa. A
+           permanent (308) redirect keeps old links, bookmarks and search
+           results working and passes their ranking to the new URL. */
+        source: "/kiwano",
+        destination: "/kiwano-villa",
+        permanent: true,
+      },
+      {
+        // Briefly used interim name for the same page.
+        source: "/kiwano-villas",
+        destination: "/kiwano-villa",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
