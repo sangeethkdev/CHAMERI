@@ -87,11 +87,14 @@ export function PlayTrigger({ item, onOpen }) {
         className="flex items-center justify-center rounded-full bg-black/55 text-white backdrop-blur-sm transition-transform duration-300 group-hover:scale-110 group-hover:bg-black/70"
         style={{ width: 'clamp(48px, 5vw, 88px)', height: 'clamp(48px, 5vw, 88px)' }}
       >
+        {/* The triangle's path spans x 7–21, so a 0-based viewBox already sits
+            it right of centre; shifting the viewBox by 1 leaves only a small
+            optical nudge toward the point, which reads as centred. */}
         <svg
-          viewBox="0 0 24 24"
+          viewBox="1 0 24 24"
           fill="currentColor"
           aria-hidden="true"
-          style={{ width: '42%', height: '42%', marginLeft: '8%' }}
+          style={{ display: 'block', width: '40%', height: '40%' }}
         >
           <path d="M7 4.5v15a1 1 0 0 0 1.52.85l12-7.5a1 1 0 0 0 0-1.7l-12-7.5A1 1 0 0 0 7 4.5Z" />
         </svg>
