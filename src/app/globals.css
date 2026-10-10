@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import "tailwindcss" source("../");
 
 :root {
   --background: #ffffff;
@@ -13,7 +13,7 @@
   --font-roundo: var(--font-roundo);
   --font-outfit: var(--font-outfit);
 
-  /* ── Custom Screens / Breakpoints ───────── */
+  /* â”€â”€ Custom Screens / Breakpoints â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
@@ -61,8 +61,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── Brochure enquiry popup (BrochureFormModal.jsx) ─────────────────────────
-   Used through Tailwind's arbitrary-animation syntax, animate-[brochureModalIn_…],
+/* â”€â”€ Brochure enquiry popup (BrochureFormModal.jsx) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   Used through Tailwind's arbitrary-animation syntax, animate-[brochureModalIn_â€¦],
    for both the card's entrance and the 2-second success note. Motion is dropped
    entirely for anyone who has asked to reduce it. */
 @keyframes brochureModalIn {
@@ -84,7 +84,7 @@ body {
   }
 }
 
-/* ── Kiwano brand-story timeline (KiwanoBrandStory.jsx) ─────────────────────
+/* â”€â”€ Kiwano brand-story timeline (KiwanoBrandStory.jsx) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    Entrance played whenever the timeline's content swaps (month change remounts
    the keyed strip): a fade with a slight lift and scale, so stages read as one
    continuous timeline rather than separate slides. */
@@ -110,7 +110,7 @@ body {
   }
 }
 
-/* ── react-phone-number-input custom styles for ContactSection ──────── */
+/* â”€â”€ react-phone-number-input custom styles for ContactSection â”€â”€â”€â”€â”€â”€â”€â”€ */
 .contact-phone-input {
   width: 100%;
 }
@@ -139,7 +139,7 @@ body {
   border-color: #334454;
 }
 
-/* ── Admin-authored rich text (RichText.jsx) ───────────────────────────────
+/* â”€â”€ Admin-authored rich text (RichText.jsx) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    Font, size, colour and paragraph spacing come from the section's own inline
    styles. These rules only restore what the global reset removes, so what the
    admin composes in the editor is what renders here. */
@@ -224,7 +224,7 @@ body {
 .rich-text sub { vertical-align: sub; font-size: 0.75em; }
 .rich-text sup { vertical-align: super; font-size: 0.75em; }
 
-/* ── Hide scrollbar on horizontal scroll tracks ────────────────────────── */
+/* â”€â”€ Hide scrollbar on horizontal scroll tracks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
