@@ -3,7 +3,7 @@
 import { useCallback, useState } from 'react';
 import Image from 'next/image';
 import { TESTIMONIALS as DEFAULT_TESTIMONIALS } from '@/data/testimonials';
-import { getYoutubeId, PlayTrigger } from '@/components/common/TestimonialCardMedia';
+import { getYoutubeId, PlayTrigger, ResponsiveCover } from '@/components/common/TestimonialCardMedia';
 import TestimonialVideoModal from '@/components/common/TestimonialVideoModal';
 
 /**
@@ -68,6 +68,7 @@ function VideoCard({ item }) {
   const isImage   = item.mediaType === 'image' && item.img;
   const isYoutube = item.mediaType === 'youtube' && item.youtubeId;
   const isVideo   = !isImage && !isYoutube;
+  const hasCover  = Boolean(item.cover || item.coverMobile);
 
   return (
     <div
@@ -96,7 +97,19 @@ function VideoCard({ item }) {
         />
       )}
 
-      {isYoutube && (
+      {/* Admin-uploaded covers for video/YouTube cards (portrait one on
+          phones) — replace the auto-generated still below when set. */}
+      {!isImage && hasCover && (
+        <ResponsiveCover
+          cover={item.cover}
+          coverMobile={item.coverMobile}
+          alt={item.name || 'Testimonial'}
+          sizes="(max-width: 768px) 60vw, 302px"
+          className="object-cover"
+        />
+      )}
+
+      {isYoutube && !hasCover && (
         <Image
           src={`https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg`}
           alt={item.name || 'Testimonial'}
@@ -109,7 +122,7 @@ function VideoCard({ item }) {
         />
       )}
 
-      {isVideo && (
+      {isVideo && !hasCover && (
         /* Never played in the card — the #t fragment makes the browser seek
            to and paint a frame just past the (often black) first one. */
         <video
@@ -233,6 +246,8 @@ export default function VideoTestimonialCarousel({ reviews }) {
         video: c.video || FALLBACK_VIDEO,
         mediaType: c.mediaType || 'video',
         youtubeId: getYoutubeId(c.youtubeUrl),
+        cover: c.coverImage || '',
+        coverMobile: c.coverImageMobile || '',
         avatar: c.image || DEFAULT_TESTIMONIALS[i % DEFAULT_TESTIMONIALS.length]?.avatar,
         name: c.name,
         quote: c.quote,

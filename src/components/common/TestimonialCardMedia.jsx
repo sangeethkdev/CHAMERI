@@ -39,17 +39,49 @@ export function getYoutubeId(url) {
  */
 export function toCardMedia(card, fallbackImg) {
   const mediaType = card?.cardMediaType || 'image';
+  // Admin-uploaded covers for video/YouTube cards (desktop + a portrait one
+  // for phones). Both optional — without either, the card falls back to the
+  // video's own frame or YouTube's thumbnail.
+  const cover = card?.cardCoverImage || '';
+  const coverMobile = card?.cardCoverImageMobile || '';
 
   if (mediaType === 'video' && card?.cardVideo) {
-    return { mediaType: 'video', video: card.cardVideo, img: fallbackImg };
+    return { mediaType: 'video', video: card.cardVideo, cover, coverMobile, img: fallbackImg };
   }
 
   if (mediaType === 'youtube') {
     const youtubeId = getYoutubeId(card?.cardYoutubeUrl);
-    if (youtubeId) return { mediaType: 'youtube', youtubeId, img: fallbackImg };
+    if (youtubeId) return { mediaType: 'youtube', youtubeId, cover, coverMobile, img: fallbackImg };
   }
 
   return { mediaType: 'image', img: card?.cardImage || fallbackImg };
+}
+
+/**
+ * The admin cover for a video/YouTube card, picking the portrait upload on
+ * phone-width screens (< 640px, the carousels' own mobile breakpoint) and the
+ * landscape one above. Each falls back to the other, so uploading just one
+ * still covers every screen. Renders nothing when neither is set.
+ *
+ * Both images are in the DOM when both exist, but next/image lazy-loads and
+ * browsers skip lazy images that are display:none — only the visible one is
+ * actually downloaded.
+ */
+export function ResponsiveCover({ cover, coverMobile, alt, sizes, className, style }) {
+  const desktop = cover || coverMobile;
+  const mobile = coverMobile || cover;
+  if (!desktop) return null;
+
+  const common = { fill: true, sizes, style };
+  if (desktop === mobile) {
+    return <Image src={desktop} alt={alt} className={className} {...common} />;
+  }
+  return (
+    <>
+      <Image src={mobile} alt={alt} className={`${className} sm:hidden`} {...common} />
+      <Image src={desktop} alt={alt} className={`${className} hidden sm:block`} {...common} />
+    </>
+  );
 }
 
 // A press that travels further than this is a carousel swipe, not a click,
@@ -116,7 +148,10 @@ export default function TestimonialCardMedia({
      poster image. Defaults to isCenter for callers that do not pass it. */
   isNearCenter,
 }) {
-  const mountsVideo = isNearCenter ?? isCenter;
+  // A card with an admin cover shows that image instead, so it never needs
+  // a preview <video> (or the decoder that comes with one).
+  const hasCover = Boolean(item?.cover || item?.coverMobile);
+  const mountsVideo = (isNearCenter ?? isCenter) && !hasCover;
   const videoRef = useRef(null);
   const [modalOpen, setModalOpen] = useState(false);
   const openModal = useCallback(() => setModalOpen(true), []);
@@ -153,7 +188,20 @@ export default function TestimonialCardMedia({
 
   if (isVideo || isYoutube) {
     let still;
-    if (isYoutube) {
+    if (hasCover) {
+      // The admin's chosen cover wins over any auto-generated still, and
+      // needs no <video> element (so no decoder) at all.
+      still = (
+        <ResponsiveCover
+          cover={item.cover}
+          coverMobile={item.coverMobile}
+          alt={item.name || 'Testimonial'}
+          sizes="(max-width: 768px) 90vw, 800px"
+          className={className}
+          style={{ transform, transition }}
+        />
+      );
+    } else if (isYoutube) {
       still = (
         <Image
           src={`https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg`}
