@@ -2,6 +2,12 @@
 
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import {
+  pickFramePlan,
+  frameUrl,
+  isConstrainedConnection,
+  warmUrls,
+} from "@/lib/frameSequence";
 
 /* ─────────────────────────────────────────────────────────────────────────────
  * RoutePrefetcher — warm every page in the background after the first load
@@ -20,7 +26,7 @@ import { usePathname, useRouter } from "next/navigation";
  *
  * Nothing runs until `load` + idle, so it never competes with the current
  * page's own images, fonts or scripts. It is skipped entirely when the
- * visitor has Data Saver on or is on a 2G-class connection.
+ * visitor has Data Saver on or is on a connection slower than 4G.
  *
  * Note: router.prefetch is a no-op in `next dev`; check this with a
  * production build (`npm run build && npm start`).
@@ -38,13 +44,22 @@ const ROUTES = [
   "/contact",
 ];
 
-/* Kiwano hero frames to warm: the poster plus the first stretch of the
-   scrub, in the same set (orientation) and stride useFrameSequence will use,
-   so the first scroll on those pages is already cached. */
-const FRAME_SETS   = ["/frames/kiwano", "/frames/kiwano-villament"];
-const WARM_FRAMES  = 12;
-const MOBILE_MAX_W = 900; // matches useFrameSequence
-const MOBILE_STRIDE = 3;  // matches useFrameSequence
+/* Kiwano hero frame sequences. The WHOLE sequence is warmed — in the same
+   set (orientation) and stride the hero will use, via the shared plan in
+   lib/frameSequence — because warming only the first few frames left the
+   rest to download during the visitor's first scroll, which is what made it
+   stutter. Download size per sequence: phones ~4–10 MB (portrait WebP,
+   every 3rd frame), desktop ~27–43 MB (full landscape JPEG set). Files are
+   only downloaded into the HTTP cache here, not decoded or kept in memory. */
+const FRAME_SEQUENCES = [
+  { base: "/frames/kiwano",           count: 217 },
+  { base: "/frames/kiwano-villament", count: 217 },
+];
+
+/* Frames per sequence warmed in the first pass, before either sequence is
+   finished, so whichever Kiwano page the visitor opens first already has its
+   opening stretch cached. */
+const FIRST_PASS = 30;
 
 const STATIC_ASSETS = [
   "/images/about-hero-sketch.webp",
@@ -52,25 +67,15 @@ const STATIC_ASSETS = [
   "/videos/services-hero-poster.webp",
 ];
 
-function isConstrainedConnection() {
-  const c = navigator.connection;
-  if (!c) return false;
-  return c.saveData === true || /(^|-)2g$/.test(c.effectiveType || "");
-}
-
 function frameUrls() {
-  const isPortrait = window.innerHeight > window.innerWidth;
-  const stride     = window.innerWidth <= MOBILE_MAX_W ? MOBILE_STRIDE : 1;
-  const urls = [];
-  for (const base of FRAME_SETS) {
-    const dir = isPortrait ? `${base}/portrait` : base;
-    const ext = isPortrait ? "webp" : "jpg";
-    for (let n = 0; n < WARM_FRAMES; n += 1) {
-      const idx = String(n * stride + 1).padStart(4, "0");
-      urls.push(`${dir}/frame_${idx}.${ext}`);
-    }
-  }
-  return urls;
+  const lists = FRAME_SEQUENCES.map(({ base, count }) => {
+    const { set, indices } = pickFramePlan(base, count);
+    return indices.map((i) => frameUrl(set, i));
+  });
+  return [
+    ...lists.flatMap((urls) => urls.slice(0, FIRST_PASS)),
+    ...lists.flatMap((urls) => urls.slice(FIRST_PASS)),
+  ];
 }
 
 // requestIdleCallback is missing on Safari — fall back to a short timeout.
@@ -100,16 +105,11 @@ export default function RoutePrefetcher() {
           if (route !== pathname) router.prefetch(route);
         }
 
-        // 2. Heavy above-the-fold assets, a few at a time at low priority.
-        const assets = [...STATIC_ASSETS, ...frameUrls()];
-        const CONCURRENCY = 4;
-        for (let i = 0; i < assets.length && !cancelled; i += CONCURRENCY) {
-          await Promise.all(
-            assets.slice(i, i + CONCURRENCY).map((url) =>
-              fetch(url, { priority: "low" }).catch(() => {})
-            )
-          );
-        }
+        // 2. Hero art + both Kiwano frame sequences, a few at a time, low priority.
+        await warmUrls([...STATIC_ASSETS, ...frameUrls()], {
+          concurrency: 4,
+          shouldStop: () => cancelled,
+        });
       });
     };
 

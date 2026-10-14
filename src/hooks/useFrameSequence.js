@@ -1,8 +1,14 @@
 "use client";
 
-import { useRef, useEffect, useCallback, useMemo, useState } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {
+  pickFramePlan,
+  frameUrl,
+  isConstrainedConnection,
+  warmUrls,
+} from "@/lib/frameSequence";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -82,24 +88,18 @@ const FRAME_CONCURRENCY = 6;
  * iOS kills the tab ("A problem repeatedly occurred"). Phones now get a much
  * tighter window:
  *
- *     mobile  : 2 + 4 + 1  =  7 frames ≈  65 MB
+ *     mobile  : 2 + 6 + 1  =  9 frames ≈  85 MB
  *     desktop : 8 + 20 + 1 = 29 frames ≈ 270 MB  (no comparable limit)
  *
  * Lookahead is biased forward because scrolling down is the common direction.
- * Seven frames is still ~2.5 seconds of scrub at the mobile stride, and the
+ * Nine frames is ~3 seconds of scrub at the mobile stride, and the
  * loader re-aims at the playhead on every move, so the window refills ahead
  * of where the finger is going. */
 const WINDOW_BEHIND        = 8;
 const WINDOW_AHEAD         = 20;
 const MOBILE_WINDOW_BEHIND = 2;
-const MOBILE_WINDOW_AHEAD  = 4;
+const MOBILE_WINDOW_AHEAD  = 6;
 
-/* Viewport width at or below which the sequence is decimated. Matches the
- * canvas DPR breakpoint in resizeCanvas. */
-const MOBILE_MAX_WIDTH = 900;
-
-/* Frame stride on small viewports — every Nth source frame is used. */
-const MOBILE_STRIDE = 3;
 
 // Draw image with object-fit:cover behaviour on the canvas
 function drawCover(ctx, img, cw, ch) {
@@ -115,30 +115,15 @@ function drawCover(ctx, img, cw, ch) {
   ctx.drawImage(img, dx, dy, dw, dh);
 }
 
-/* Which extraction to use, and how coarsely to sample it.
- *
- * The orientation test is deliberately `innerHeight > innerWidth` rather than
- * a `(orientation: portrait)` media query: on iOS that query also matches
- * transient states like the keyboard being up, and every spurious match used
- * to rebuild the entire sequence. */
-function pickPlan(frameSets, frameCount) {
-  const w = window.innerWidth;
-  const h = window.innerHeight;
-  const isPortrait = h > w;
-  const isMobile   = w <= MOBILE_MAX_WIDTH;
-  const stride     = isMobile ? MOBILE_STRIDE : 1;
-
+/* Which extraction to use and how coarsely to sample it (shared with
+ * RoutePrefetcher via lib/frameSequence), plus this device's residency
+ * window. */
+function pickPlan(frameBase, frameCount) {
+  const plan = pickFramePlan(frameBase, frameCount);
   return {
-    set:    isPortrait ? frameSets.portrait : frameSets.landscape,
-    key:    `${isPortrait ? "portrait" : "landscape"}@${stride}`,
-    stride,
-    behind: isMobile ? MOBILE_WINDOW_BEHIND : WINDOW_BEHIND,
-    ahead:  isMobile ? MOBILE_WINDOW_AHEAD  : WINDOW_AHEAD,
-    // Indices into the *source* sequence, in playback order.
-    indices: Array.from(
-      { length: Math.ceil(frameCount / stride) },
-      (_, n) => Math.min(n * stride, frameCount - 1)
-    ),
+    ...plan,
+    behind: plan.isMobile ? MOBILE_WINDOW_BEHIND : WINDOW_BEHIND,
+    ahead:  plan.isMobile ? MOBILE_WINDOW_AHEAD  : WINDOW_AHEAD,
   };
 }
 
@@ -172,11 +157,6 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
      the plan, can repaint the right frame after resizing the backing store. */
   const playheadRef = useRef({ slots: null, slot: 0 });
 
-  const frameSets = useMemo(() => ({
-    landscape: { dir: frameBase,               ext: "jpg"  },
-    portrait:  { dir: `${frameBase}/portrait`, ext: "webp" },
-  }), [frameBase]);
-
   /* The resolved plan (frame set + stride), as a string key. Keying off the
      plan rather than the raw viewport is what absorbs the noisy iOS events:
      an address-bar collapse or the keyboard opening changes innerHeight but
@@ -203,7 +183,7 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
     if (staticOnly) return;
 
     const apply = () => {
-      const next = pickPlan(frameSets, frameCount).key;
+      const next = pickPlan(frameBase, frameCount).key;
       setPlanKey((prev) => (prev === next ? prev : next));
     };
 
@@ -217,7 +197,7 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
       window.removeEventListener("resize", apply);
       window.removeEventListener("orientationchange", apply);
     };
-  }, [frameSets, frameCount, staticOnly]);
+  }, [frameBase, frameCount, staticOnly]);
 
   /* Draw a frame to the canvas.
    *
@@ -234,7 +214,7 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
 
     const isReady = (srcIndex) => {
       const img = framesRef.current[srcIndex];
-      return img?.complete && img.naturalWidth > 0 ? img : null;
+      return img?.__ready ? img : null;
     };
 
     /* Fall back to the nearest earlier loaded frame. While the sequence is
@@ -323,7 +303,7 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
     const textEl  = textRef.current;
     if (!wrapper || !canvas) return;
 
-    const plan = pickPlan(frameSets, frameCount);
+    const plan = pickPlan(frameBase, frameCount);
     const { set: frameSet, indices, behind: winBehind, ahead: winAhead } = plan;
     const total = indices.length;
 
@@ -340,6 +320,7 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
     let cancelled = false;
     let inFlight  = 0;
     let playhead  = 0;   // slot index, not source index
+    const pending = new Set(); // source indices whose load is in flight
 
     /* Release a frame's decoded bitmap. Clearing `src` is the part that
        matters: nulling the array entry alone leaves Safari holding the decode
@@ -353,6 +334,11 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
       img.onerror = null;
       try { img.src = ""; } catch { /* nothing actionable */ }
       framesRef.current[srcIndex] = null;
+      /* Releasing a frame mid-download detaches the handler that would have
+         freed its in-flight slot. Before this, a fast scroll leaked those
+         slots until FRAME_CONCURRENCY were used up and the loader stopped
+         fetching for good — the hero froze on a stale frame. */
+      if (pending.delete(srcIndex)) inFlight -= 1;
     };
 
     const inWindow = (slot) =>
@@ -375,18 +361,30 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
       }
     };
 
-    const makeImg = (srcIndex, onDone) => {
+    /* A frame only counts as ready (`__ready`) once it is downloaded AND
+       decoded. `onload` alone fires before decode, and drawing an undecoded
+       image makes drawImage decode a full-size JPEG/WebP synchronously on the
+       scroll tick — the stutter on the first scroll. Until a frame is ready,
+       drawFrame keeps showing the nearest earlier one. */
+    const makeImg = (srcIndex, onSettled, priority) => {
       const img = new Image();
-      const n   = String(srcIndex + 1).padStart(4, "0");
-      // decoding=async keeps image decode off the scroll path.
       img.decoding = "async";
-      if (onDone) {
-        img.onload = onDone;
+      if (priority) img.fetchPriority = priority;
+
+      const settle = (ok) => {
+        if (framesRef.current[srcIndex] !== img) return; // released meanwhile
+        img.__ready = ok;
         // A failed frame must not stall the queue — the draw step falls back
         // to the nearest loaded frame anyway.
-        img.onerror = onDone;
-      }
-      img.src = `${frameSet.dir}/frame_${n}.${frameSet.ext}`;
+        onSettled?.();
+      };
+      img.onload = () => {
+        const decoded = typeof img.decode === "function" ? img.decode() : Promise.resolve();
+        decoded.then(() => settle(true), () => settle(img.naturalWidth > 0));
+      };
+      img.onerror = () => settle(false);
+
+      img.src = frameUrl(frameSet, srcIndex);
       framesRef.current[srcIndex] = img;
       return img;
     };
@@ -413,9 +411,11 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
         }
         if (target === -1) return; // window is full
 
+        const srcIndex = indices[target];
         inFlight += 1;
-        makeImg(indices[target], () => {
-          inFlight -= 1;
+        pending.add(srcIndex);
+        makeImg(srcIndex, () => {
+          if (pending.delete(srcIndex)) inFlight -= 1;
           pump();
         });
       }
@@ -423,10 +423,7 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
 
     /* Frame 0 — the only one fetched up front, since it is what the hero
        actually shows before any scrolling. Everything else waits. */
-    const first = makeImg(indices[0], null);
-    first.fetchPriority = "high";
-    first.onload = () => drawFrame(indices, 0);
-    first.onerror = () => {};
+    makeImg(indices[0], () => drawFrame(indices, 0), "high");
 
     /* The rest of the window is deferred until the page has finished loading.
        Starting it a frame after mount (as this used to) put ~1.7MB of frames
@@ -444,6 +441,20 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
     const startBulkLoad = () => {
       if (cancelled) return;
       restRAF = requestAnimationFrame(pump);
+
+      /* Pull the rest of the sequence into the HTTP cache in the background.
+         This only downloads — nothing is decoded or held in memory — so the
+         residency window above still bounds RAM. What it buys is that when
+         the window reaches a frame, it loads from disk instead of the
+         network, so a fast first scroll no longer outruns the downloads.
+         RoutePrefetcher usually did this already from the Home page, in
+         which case these are all instant cache hits. */
+      if (!isConstrainedConnection()) {
+        warmUrls(
+          indices.slice(winAhead + 1).map((i) => frameUrl(frameSet, i)),
+          { concurrency: 3, shouldStop: () => cancelled }
+        );
+      }
     };
 
     if (document.readyState === "complete") {
@@ -533,7 +544,7 @@ export default function useFrameSequence({ frameBase, frameCount, textFadeStart 
       drawnFrameRef.current = -1;
       playheadRef.current = { slots: null, slot: 0 };
     };
-  }, [drawFrame, resizeCanvas, planKey, staticOnly, frameSets, frameCount, textFadeStart, textFadeSpan]);
+  }, [drawFrame, resizeCanvas, planKey, staticOnly, frameBase, frameCount, textFadeStart, textFadeSpan]);
 
   /* No posterSrc is returned: both heroes already paint the first frame as a
      CSS background behind the canvas, chosen per orientation by Tailwind's
