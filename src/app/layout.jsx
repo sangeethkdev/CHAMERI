@@ -4,6 +4,7 @@ import Script from "next/script";
 import { SITE_NAME, SITE_URL } from "@/lib/siteConfig";
 import FloatingContactButtons from "@/components/common/FloatingContactButtons";
 import ScrollToTop from "@/components/common/ScrollToTop";
+import RoutePrefetcher from "@/components/common/RoutePrefetcher";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -98,6 +99,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </noscript>
         {/* End Google Tag Manager (noscript) */}
         <ScrollToTop />
+        <RoutePrefetcher />
         {children}
         <FloatingContactButtons />
       </body>

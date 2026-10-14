@@ -648,9 +648,9 @@ const Footer = () => {
                   .footer-logo { left: clamp(102px, 9.96vw, 191.5px) !important; transform: none !important; }
                 }
               `}</style>
-              <a href="/" className="footer-logo relative block w-full h-full cursor-pointer transition-opacity hover:opacity-80">
+              <Link href="/" className="footer-logo relative block w-full h-full cursor-pointer transition-opacity hover:opacity-80">
                 <Image src="/dummyimages/logo (2).svg" alt="Chameri Logo" fill className="object-contain" />
-              </a>
+              </Link>
             </div>
           </div>
 
