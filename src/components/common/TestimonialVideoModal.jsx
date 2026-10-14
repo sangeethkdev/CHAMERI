@@ -67,7 +67,14 @@ export default function TestimonialVideoModal({ item, onClose }) {
       role="dialog"
       aria-modal="true"
       aria-label={title}
-      className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-[1000] flex items-center justify-center overflow-y-auto bg-black/85 backdrop-blur-sm"
+      // Keeps the close button clear of the notch / home bar on iPhones.
+      style={{
+        paddingTop:    'max(1rem, env(safe-area-inset-top))',
+        paddingBottom: 'max(1rem, env(safe-area-inset-bottom))',
+        paddingLeft:   'max(1rem, env(safe-area-inset-left))',
+        paddingRight:  'max(1rem, env(safe-area-inset-right))',
+      }}
       onClick={onClose}
       // React events bubble through portals along the component tree, so
       // without these a drag inside the popup would reach the carousel's
@@ -75,20 +82,35 @@ export default function TestimonialVideoModal({ item, onClose }) {
       onPointerDown={(e) => e.stopPropagation()}
       onPointerUp={(e) => e.stopPropagation()}
     >
+      {/* The box is sized by height as well as width. At a fixed 1100px it
+          was ~620px tall at 16:9, so on short screens (laptops around
+          1366×657, landscape phones) the video plus the close button above
+          it overflowed the viewport and the button was pushed off the top.
+          88px = the close row (40 + 8 gap) + the overlay's vertical padding.
+          dvh is used where supported so mobile browser toolbars count. */}
+      <style>{`
+        .tvm-box { width: min(1100px, 100%, calc((100vh - 88px) * 16 / 9)); }
+        @supports (height: 100dvh) {
+          .tvm-box { width: min(1100px, 100%, calc((100dvh - 88px) * 16 / 9)); }
+        }
+      `}</style>
       <div
-        className="relative w-full max-w-[1100px]"
+        className="tvm-box relative flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close video"
-          className="absolute -top-12 right-0 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-0 bg-white/15 text-white transition-colors duration-200 hover:bg-white/30"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5" aria-hidden="true">
-            <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
-          </svg>
-        </button>
+        <div className="mb-2 flex justify-end">
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close video"
+            autoFocus
+            className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-white/15 text-white transition-colors duration-200 hover:bg-white/30 focus-visible:outline-2 focus-visible:outline-white"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
         <div className="relative w-full overflow-hidden rounded-xl bg-black" style={{ aspectRatio: '16 / 9' }}>
           {player}
         </div>
