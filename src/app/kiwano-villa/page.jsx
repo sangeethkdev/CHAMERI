@@ -1,4 +1,5 @@
-import KiwanoHero from '@/components/kiwano/KiwanoHero';
+import HeroKiwanoVilla from '@/components/kiwano/HeroKiwanoVilla';
+// import KiwanoHero from '@/components/kiwano/KiwanoHero';
 import KiwanoLuxuryVillas from '@/components/kiwano/KiwanoLuxuryVillas';
 import Kiwano360Tour from '@/components/kiwano/Kiwano360Tour';
 import KiwanoFeatures from '@/components/kiwano/KiwanoFeatures';
@@ -8,6 +9,8 @@ import KiwanoAmenities from '@/components/kiwano/KiwanoAmenities';
 import KiwanoOtherProjects from '@/components/kiwano/KiwanoOtherProjects';
 import Footer from '@/components/common/Footer';
 import { getKiwanoData } from '@/lib/api';
+
+
 
 // Re-render this page at most once a minute so admin edits go live
 // without a redeploy. Declared here (not inferred from fetch options) so the
@@ -37,7 +40,9 @@ export default async function KiwanoPage() {
 
   return (
     <main style={{ background: '#EDE7DE', minHeight: '100vh' }}>
-      <KiwanoHero hero={kiwano?.heroSection} />
+      <HeroKiwanoVilla hero={kiwano?.heroSection} />
+      {/*       <KiwanoHero hero={kiwano?.heroSection} />
+ */}
       <KiwanoLuxuryVillas luxuryVillas={kiwano?.luxuryVillasSection} />
       <KiwanoFeatures features={kiwano?.featureSection} />
       <Kiwano360Tour tour360={kiwano?.tour360Section} />

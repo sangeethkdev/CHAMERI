@@ -1,4 +1,5 @@
-import KiwanoHero from '@/components/KiwanoVillament/KiwanoVHero';
+import HeroKiwanoVillament from '@/components/KiwanoVillament/HeroKiwanoVillament';
+// import KiwanoHero from '@/components/KiwanoVillament/KiwanoVHero';
 import KiwanoLuxuryVillas from '@/components/KiwanoVillament/KiwanoVLuxuryVillas';
 import Kiwano360Tour from '@/components/KiwanoVillament/KiwanoV360Tour';
 import KiwanoFeatures from '@/components/KiwanoVillament/KiwanoVFeatures';
@@ -37,7 +38,8 @@ export default async function KiwanoVillamentPage() {
 
   return (
     <main style={{ background: '#EDE7DE', minHeight: '100vh' }}>
-      <KiwanoHero hero={kiwanoVillament?.heroSection} />
+      <HeroKiwanoVillament hero={kiwanoVillament?.heroSection} />
+      {/* <KiwanoHero hero={kiwanoVillament?.heroSection} /> */}
       <KiwanoLuxuryVillas luxuryVillas={kiwanoVillament?.luxuryVillasSection} />
       <KiwanoFeatures features={kiwanoVillament?.featureSection} />
       <Kiwano360Tour tour360={kiwanoVillament?.tour360Section} />
