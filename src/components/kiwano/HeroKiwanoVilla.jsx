@@ -14,7 +14,7 @@ import useFrameSequence from "@/hooks/useFrameSequence";
  *  4. 100%         → hero unpins, page continues to KiwanoLuxuryVillas.
  *
  * Frames live in /public/frames/kiwano:
- *   landscape — frame_0001.jpg … frame_0217.jpg  (1920×1208, desktop/tablet)
+ *   landscape — frame_0001.webp … frame_0217.webp (1920px wide, desktop/tablet)
  *   portrait  — portrait/frame_0001.webp …       (1170×2080, phones upright)
  * useFrameSequence picks the set by viewport shape, decimates on phones and
  * keeps only a small window of decoded frames resident so iOS Safari doesn't
@@ -49,8 +49,9 @@ export default function HeroKiwanoVilla({ hero }) {
     <>
       <NewNavbar />
 
-      {/* Scroll track. 300 viewports tall → the hero stays pinned for ~200
-          viewports of scroll while the frames play. Collapses to a single
+      {/* Scroll track. 500 viewports tall → the hero stays pinned for ~400
+          viewports of scroll while the frames play (longer = slower video;
+          300 felt rushed). Collapses to a single
           screen when the sequence is skipped (reduced motion / low memory). */}
       <section
         ref={wrapperRef}
@@ -58,14 +59,14 @@ export default function HeroKiwanoVilla({ hero }) {
         className={
           staticOnly
             ? "relative w-full h-screen supports-[height:100lvh]:h-lvh"
-            : "relative w-full h-[300vh] supports-[height:100lvh]:h-[300lvh]"
+            : "relative w-full h-[500vh] supports-[height:100lvh]:h-[500lvh]"
         }
       >
         {/* Pinned stage. The first frame is a CSS background, served per
             orientation, so the very first paint is already correct before
             any JS runs. */}
         <div
-          className="sticky top-0 w-full overflow-hidden h-screen supports-[height:100lvh]:h-lvh bg-cover bg-center bg-no-repeat bg-[url('/frames/kiwano/frame_0001.jpg')] portrait:bg-[url('/frames/kiwano/portrait/frame_0001.webp')]"
+          className="sticky top-0 w-full overflow-hidden h-screen supports-[height:100lvh]:h-lvh bg-cover bg-center bg-no-repeat bg-[url('/frames/kiwano/frame_0001.webp')] portrait:bg-[url('/frames/kiwano/portrait/frame_0001.webp')]"
         >
           {/* Frame canvas — cover-fit drawing handled by the hook. */}
           {!staticOnly && (

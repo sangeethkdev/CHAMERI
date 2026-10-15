@@ -49,7 +49,7 @@ const ROUTES = [
    lib/frameSequence — because warming only the first few frames left the
    rest to download during the visitor's first scroll, which is what made it
    stutter. Download size per sequence: phones ~4–10 MB (portrait WebP,
-   every 3rd frame), desktop ~27–43 MB (full landscape JPEG set). Files are
+   every 3rd frame), desktop ~18–33 MB (full landscape WebP set). Files are
    only downloaded into the HTTP cache here, not decoded or kept in memory. */
 const FRAME_SEQUENCES = [
   { base: "/frames/kiwano",           count: 217 },

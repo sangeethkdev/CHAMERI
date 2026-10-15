@@ -8,7 +8,7 @@ const FRAME_COUNT = 217;
 
 /* Two extractions of the same 217 frames, chosen by viewport orientation.
  *
- * landscape — the original 1920×1208 JPEGs. Fine on desktop, where the frame
+ * landscape — 1920px-wide WebPs (converted from the original JPEGs). Fine on desktop, where the frame
  *   is shown close to 1:1.
  * portrait  — a 9:16 centre crop at 1170×2080 (WebP) taken from the ~3600px
  *   source video. A phone held upright only ever displays a narrow vertical
@@ -47,7 +47,7 @@ export default function KiwanoHero({ hero }) {
             very first paint is already the sharp portrait crop — no flash of
             the soft landscape frame while JS decides which set to load. */}
         <div
-          className="bg-cover bg-center bg-[url('/frames/kiwano/frame_0001.jpg')] portrait:bg-[url('/frames/kiwano/portrait/frame_0001.webp')]"
+          className="bg-cover bg-center bg-[url('/frames/kiwano/frame_0001.webp')] portrait:bg-[url('/frames/kiwano/portrait/frame_0001.webp')]"
           style={{
             position:            "sticky",
             top:                 0,

@@ -28,7 +28,7 @@ export function pickFramePlan(frameBase, frameCount) {
   return {
     set: isPortrait
       ? { dir: `${frameBase}/portrait`, ext: "webp" }
-      : { dir: frameBase,               ext: "jpg"  },
+      : { dir: frameBase,               ext: "webp" },
     key:    `${isPortrait ? "portrait" : "landscape"}@${stride}`,
     stride,
     isMobile,
