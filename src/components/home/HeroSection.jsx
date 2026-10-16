@@ -985,14 +985,25 @@ export default function HeroSection({ hero }) {
               priority
             />
             {/* alt="" — the mobile copy above already carries the description,
-                so this one is decorative to avoid a duplicate announcement. */}
+                so these are decorative to avoid a duplicate announcement. */}
+            {/* Tablet (md → xl, 768–1279px — covers iPad Pro too). hero-tablet-v2.webp is a URL-safe webp of
+                "magnific_create-a-smooth-cinematic_oh4nQJS829 1 (1).png". */}
+            <Image
+              src="/images/hero-tablet-v2.webp"
+              alt=""
+              aria-hidden="true"
+              fill
+              sizes="(min-width: 768px) and (max-width: 1279px) 100vw, 0px"
+              className="object-cover object-center hidden md:block xl:hidden"
+              priority
+            />
             <Image
               src="/dummyimages/Frame 2121454280.webp"
               alt=""
               aria-hidden="true"
               fill
-              sizes="(max-width: 767px) 0px, 100vw"
-              className="object-cover object-[center_top] hidden md:block"
+              sizes="(max-width: 1279px) 0px, 100vw"
+              className="object-cover object-[center_top] hidden xl:block"
               priority
             />
           </div>
