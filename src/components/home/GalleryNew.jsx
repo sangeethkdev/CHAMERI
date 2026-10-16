@@ -331,7 +331,7 @@ const GalleryNew = ({ gallery }) => {
               <p
                 className="font-geist text-[#334454]"
                 style={{
-                  fontSize:      clamp(10, 18),
+                  fontSize:      clamp(13, 18),
                   lineHeight:    '1.09',
                   letterSpacing: '-0.44px',
                   whiteSpace:    'pre-line',
