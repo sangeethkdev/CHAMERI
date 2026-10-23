@@ -255,6 +255,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { LOGO_MARK, LOGO_WORDMARK } from '@/lib/staticAssets';
 
 /**
  * ─────────────────────────────────────────────────────────────────────────────
@@ -626,7 +627,7 @@ export default function AboutNavbar() {
               }}
             >
               <Image
-                src="/icons/logo (6).svg"
+                src={LOGO_MARK}
                 alt="Chameri mark"
                 fill
                 sizes="40px"
@@ -641,7 +642,7 @@ export default function AboutNavbar() {
               }}
             >
               <Image
-                src="/icons/logo (7).svg"
+                src={LOGO_WORDMARK}
                 alt="CHAMERI"
                 fill
                 sizes="120px"

@@ -431,6 +431,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import NewNavbar from "../common/NewNavbar";
+import { LOGO_MARK, LOGO_WORDMARK, HERO_WAVES } from "@/lib/staticAssets";
 
 // ─── Easing helpers ────────────────────────────────────────────────────────────
 const clampVal = (v, min, max) => Math.min(Math.max(v, min), max);
@@ -1002,10 +1003,10 @@ export default function HeroSection({ hero }) {
             className="absolute inset-0 w-full h-full opacity-50"
             style={{ transform: `translateY(${waveDrift}px)` }}
           >
-            <image href="/icons/Vector (1).svg" x="-15.98" y="-110" width="1453.91" height="313.69" />
-            <image href="/icons/Vector (2).svg" x="-16" y="53.02" width="1455.59" height="482.03" />
-            <image href="/icons/Vector (3).svg" x="-16" y="382.24" width="1456" height="482.43" />
-            <image href="/icons/Vector (4).svg" x="658.34" y="711.44" width="781.16" height="298.4" />
+            <image href={HERO_WAVES[0]} x="-15.98" y="-110" width="1453.91" height="313.69" />
+            <image href={HERO_WAVES[1]} x="-16" y="53.02" width="1455.59" height="482.03" />
+            <image href={HERO_WAVES[2]} x="-16" y="382.24" width="1456" height="482.43" />
+            <image href={HERO_WAVES[3]} x="658.34" y="711.44" width="781.16" height="298.4" />
           </svg>
         </div>
       </div>
@@ -1037,7 +1038,7 @@ export default function HeroSection({ hero }) {
           >
             <div style={{ position: "relative", width: `${markWidth}px`, height: `${markHeight}px` }}>
               <Image
-                src="/icons/logo (6).svg"
+                src={LOGO_MARK}
                 alt="Chameri mark"
                 fill
                 sizes={isMobile ? "200px" : "400px"}
@@ -1047,7 +1048,7 @@ export default function HeroSection({ hero }) {
             </div>
             <div style={{ position: "relative", width: `${textWidth}px`, height: `${textHeight}px` }}>
               <Image
-                src="/icons/logo (7).svg"
+                src={LOGO_WORDMARK}
                 alt="CHAMERI"
                 fill
                 sizes={isMobile ? "400px" : "800px"}

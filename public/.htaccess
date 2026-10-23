@@ -1,0 +1,23 @@
+# The host serves /public files directly, without going through Next.js, so the
+# Cache-Control rules in next.config.mjs never reach /icons, /images, etc.
+# (PageSpeed: "Use efficient cache lifetimes" → Cache TTL "None").
+# These assets are immutable — a changed file ships under a new name — so a
+# one-year cache is safe. Ignored harmlessly if the server doesn't read .htaccess.
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(svg|webp|avif|png|jpe?g|gif|ico|otf|ttf|woff2?|mp4|webm)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/avif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType font/otf "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType video/mp4 "access plus 1 year"
+</IfModule>

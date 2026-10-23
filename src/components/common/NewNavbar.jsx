@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import MenuSection from './MenuSection';
+import { LOGO_MARK, LOGO_WORDMARK } from '@/lib/staticAssets';
 
 /**
  * ─────────────────────────────────────────────────────────────────────────────
@@ -65,8 +66,8 @@ import MenuSection from './MenuSection';
  *   white-on-cream and the logo would be invisible.
  */
 export default function NewNavbar({ opacity = 1, showLogo = true, darkLogo = false }) {
-  const logoMark     = darkLogo ? '/icons/logo-mark-dark.svg'     : '/icons/logo (6).svg';
-  const logoWordmark = darkLogo ? '/icons/logo-wordmark-dark.svg' : '/icons/logo (7).svg';
+  const logoMark     = darkLogo ? '/icons/logo-mark-dark.svg'     : LOGO_MARK;
+  const logoWordmark = darkLogo ? '/icons/logo-wordmark-dark.svg' : LOGO_WORDMARK;
 
   const [visible, setVisible] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);

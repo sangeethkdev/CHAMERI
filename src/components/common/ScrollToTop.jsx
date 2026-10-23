@@ -25,11 +25,24 @@ import { usePathname } from 'next/navigation';
  * 2. iOS Safari restores scroll asynchronously after paint, so a single
  *    synchronous reset during the render pass can still be overwritten. The
  *    rAF below re-applies it on the next frame, after that restore lands.
+ *
+ * The very first mount of a fresh visit is skipped: a plain navigation
+ * already opens at the top, and writing scroll offsets while hydration has
+ * just dirtied the layout forces a synchronous reflow (PageSpeed "Forced
+ * reflow"). Reloads and back/forward still reset, as before.
  */
+let isFirstMount = true;
+
 export default function ScrollToTop() {
   const pathname = usePathname();
 
   useEffect(() => {
+    if (isFirstMount) {
+      isFirstMount = false;
+      const nav = performance.getEntriesByType?.('navigation')[0];
+      if (nav?.type === 'navigate') return;
+    }
+
     // An in-page anchor (/contact#form) is a deliberate request to land
     // somewhere other than the top — leave those alone.
     if (window.location.hash) return;

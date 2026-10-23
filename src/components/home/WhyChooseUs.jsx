@@ -5,6 +5,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import { ICON_DESIGN, ICON_EXPERTISE, ICON_PEOPLE } from '@/lib/staticAssets';
 
 /*
  * ─── CLAMP REFERENCE ────────────────────────────────────────────────────────
@@ -68,21 +69,21 @@ const STATIC_CARDS = [
   {
     img: '/dummyimages/Container.png',
     icon: <Image src="/icons/Vector.svg" alt="Design icon" width={25} height={25} />,
-    mobileIcon: <Image src="/images/692885235bac36a9a3203cd0_Group.svg (1).svg" alt="Design icon" width={25} height={25} />,
+    mobileIcon: <Image src={ICON_DESIGN} alt="Design icon" width={25} height={25} />,
     title: 'Design-Driven, Modern Approach',
     desc: 'With a portfolio of completed projects and collaborations with experienced architects, we bring proven expertise to every build. Our work speaks through real results, client satisfaction, and trusted industry partnerships.',
   },
   {
     img: '/dummyimages/Container.png',
     icon: <Image src="/icons/692885226ea01d367379ce40_Frame.svg.svg" alt="Expertise icon" width={25} height={25} />,
-    mobileIcon: <Image src="/images/692885226ea01d367379ce40_Frame.svg (1).svg" alt="Expertise icon" width={25} height={25} />,
+    mobileIcon: <Image src={ICON_EXPERTISE} alt="Expertise icon" width={25} height={25} />,
     title: 'Proven Expertise & Trusted Network',
     desc: 'With a portfolio of completed projects and collaborations with experienced architects, we bring proven expertise to every build. Our work speaks through real results, client satisfaction, and trusted industry partnerships.',
   },
   {
     img: '/dummyimages/Overlay.webp',
     icon: <Image src="/icons/healthicons_people-outline.svg" alt="People icon" width={25} height={25} />,
-    mobileIcon: <Image src="/images/healthicons_people-outline (1).svg" alt="People icon" width={25} height={25} />,
+    mobileIcon: <Image src={ICON_PEOPLE} alt="People icon" width={25} height={25} />,
     title: 'Client-Centric, Seamless Experience',
     desc: 'With a portfolio of completed projects and collaborations with experienced architects, we bring proven expertise to every build. Our work speaks through real results, client satisfaction, and trusted industry partnerships.',
   },
@@ -99,9 +100,9 @@ const ICONS = [
 ];
 
 const MOBILE_ICONS = [
-  <Image key="0" src="/images/692885235bac36a9a3203cd0_Group.svg (1).svg" alt="Design icon" width={18} height={18} />,
-  <Image key="1" src="/images/692885226ea01d367379ce40_Frame.svg (1).svg" alt="Expertise icon" width={20} height={20} />,
-  <Image key="2" src="/images/healthicons_people-outline (1).svg" alt="People icon" width={19} height={19} />,
+  <Image key="0" src={ICON_DESIGN} alt="Design icon" width={18} height={18} />,
+  <Image key="1" src={ICON_EXPERTISE} alt="Expertise icon" width={20} height={20} />,
+  <Image key="2" src={ICON_PEOPLE} alt="People icon" width={19} height={19} />,
 ];
 
 // Shown only until the admin fills in Home → Choose Us.

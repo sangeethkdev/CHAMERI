@@ -24,8 +24,8 @@ import {
  * Services hero art). These are served with year-long immutable cache
  * headers (next.config.mjs), so a warmed file is never fetched again.
  *
- * Nothing runs until `load` + idle, so it never competes with the current
- * page's own images, fonts or scripts. It is skipped entirely when the
+ * Nothing runs until `load` + the visitor's first interaction + idle, so it
+ * never competes with the current page's own images, fonts or scripts. It is skipped entirely when the
  * visitor has Data Saver on or is on a connection slower than 4G.
  *
  * Note: router.prefetch is a no-op in `next dev`; check this with a
@@ -113,16 +113,41 @@ export default function RoutePrefetcher() {
       });
     };
 
-    if (document.readyState === "complete") {
-      run();
-    } else {
-      window.addEventListener("load", run, { once: true });
-    }
+    /* Waits for load AND the visitor's first interaction. Starting on `load`
+       alone meant every page's JS (including GSAP ScrollTrigger for the Kiwano
+       pages, which measures layout as it initialises) plus ~15MB of frames
+       were evaluated/downloaded while the home intro was still playing —
+       PageSpeed charged that to Total Blocking Time and main-thread work.
+       Anyone who goes on to navigate interacts first (the home hero itself
+       needs a scroll to reveal), so the cache is still warm before a click. */
+    const INTERACTION_EVENTS = ["pointerdown", "keydown", "wheel", "touchstart", "scroll"];
+    let loaded = document.readyState === "complete";
+    let interacted = false;
+
+    const maybeRun = () => {
+      if (loaded && interacted && !cancelled) run();
+    };
+    const onLoad = () => {
+      loaded = true;
+      maybeRun();
+    };
+    const onInteract = () => {
+      if (interacted) return;
+      interacted = true;
+      INTERACTION_EVENTS.forEach((e) => window.removeEventListener(e, onInteract));
+      maybeRun();
+    };
+
+    INTERACTION_EVENTS.forEach((e) =>
+      window.addEventListener(e, onInteract, { passive: true, once: true })
+    );
+    if (!loaded) window.addEventListener("load", onLoad, { once: true });
 
     return () => {
       cancelled = true;
       cancelIdle(idleId);
-      window.removeEventListener("load", run);
+      window.removeEventListener("load", onLoad);
+      INTERACTION_EVENTS.forEach((e) => window.removeEventListener(e, onInteract));
     };
     // Run once per visit, not on every navigation.
     // eslint-disable-next-line react-hooks/exhaustive-deps

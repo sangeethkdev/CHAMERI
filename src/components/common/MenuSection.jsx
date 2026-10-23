@@ -6,6 +6,7 @@ import { useEffect, useRef, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import gsap from 'gsap';
 import { socialHref } from '@/lib/socialLinks';
+import { LOGO_MENU } from '@/lib/staticAssets';
 
 /* "Have we hydrated yet?" — the portal target (document.body) does not exist
    during SSR. useSyncExternalStore gives false on the server and true on the
@@ -497,7 +498,7 @@ export default function MenuSection({ open = false, onClose }) {
               height:    '63.2px',
             }}
           >
-            <Image src="/icons/logo (8).svg" alt="Chameri Logo" fill sizes="60px" style={{ objectFit: 'contain' }} />
+            <Image src={LOGO_MENU} alt="Chameri Logo" fill sizes="60px" style={{ objectFit: 'contain' }} />
           </Link>
 
           <button
