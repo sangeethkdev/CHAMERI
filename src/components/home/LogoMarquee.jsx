@@ -35,7 +35,10 @@ const LogoMarquee = ({ logos: apiLogos }) => {
                 src={logo}
                 alt={`Client Logo ${index}`}
                 fill
-                sizes="160px"
+                /* Mirrors the slot's clamp(120px, 12.73vw, 400px): the 120px
+                   floor holds up to ~943px wide. A flat "160px" made phones
+                   (DPR ~2) pull the 384w file for a 120px slot. */
+                sizes="(max-width: 943px) 120px, 13vw"
                 className="object-contain grayscale opacity-100"
               />
             </div>

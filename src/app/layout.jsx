@@ -73,6 +73,9 @@ export default function RootLayout({ children }) {
             below doesn't pay DNS + TLS when it finally runs. */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        {/* GTM's Meta conversions tag pulls its script from here; PageSpeed
+            listed it as the top preconnect candidate. */}
+        <link rel="preconnect" href="https://capi-automation.s3.us-east-2.amazonaws.com" />
       </head>
       <body className="min-h-full flex flex-col">
         {/* Google Tag Manager — next/script with afterInteractive instead of a

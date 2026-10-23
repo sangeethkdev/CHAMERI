@@ -839,6 +839,8 @@ const TestimonialsSection = ({ testimonial }) => {
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={item.avatar}
+                          loading="lazy"
+                          decoding="async"
                           alt={item.name}
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
@@ -920,6 +922,8 @@ const TestimonialsSection = ({ testimonial }) => {
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={item.avatar}
+                            loading="lazy"
+                            decoding="async"
                             alt={item.name}
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           />

@@ -428,7 +428,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import NewNavbar from "../common/NewNavbar";
 
@@ -474,6 +474,36 @@ const cubicBezier = (p1x, p1y, p2x, p2y) => {
 // Named after its source so the link back to the carousel stays obvious.
 const easeTestimonialReveal = cubicBezier(0.65, 0, 0.35, 1);
 
+// ─── Hero image (LCP element) ──────────────────────────────────────────────────
+// Three crops of the same villa, one per breakpoint, served as ONE <img> inside
+// a <picture>. The previous version rendered three <Image priority> elements
+// and hid two with CSS: each emitted its own preload, and a preload with
+// `sizes="0px"` still downloads the smallest candidate, so every visit fetched
+// images it never showed. With <picture> the browser picks exactly one source.
+//
+// `priority` no longer sets fetchpriority in Next 16 (it only preloads), which
+// is what PageSpeed flagged — so it is set explicitly here. The <img> is in the
+// server HTML, so the preload scanner finds it without a separate preload.
+const heroImgBase = { alt: "Chameri villa exterior", fill: true, sizes: "100vw" };
+const { props: { srcSet: heroDesktopSrcSet } } = getImageProps({
+  ...heroImgBase,
+  src: "/dummyimages/Frame 2121454280.webp",
+});
+// hero-tablet-v2.webp is a URL-safe webp of
+// "magnific_create-a-smooth-cinematic_oh4nQJS829 1 (1).png".
+const { props: { srcSet: heroTabletSrcSet } } = getImageProps({
+  ...heroImgBase,
+  src: "/images/hero-tablet-v2.webp",
+});
+// hero-mobile is a renamed copy of "iPhone 13 & 14 - 10.png" — the original
+// name's spaces and "&" broke the image URL on the production host.
+const { props: heroMobileProps } = getImageProps({
+  ...heroImgBase,
+  src: "/images/hero-mobile.webp",
+  fetchPriority: "high",
+  loading: "eager",
+});
+
 // Inverse of easeInOutCubic. The outro bakes that curve into `progress`, so
 // recovering linear time is what lets a second curve be applied cleanly instead
 // of compounding with it. Both halves are solved in closed form.
@@ -487,6 +517,7 @@ const inverseEaseInOutCubic = (y) => {
 
 export default function HeroSection({ hero }) {
   const sectionRef = useRef(null);
+  const svhLayerRef = useRef(null);
 
   const [progress, setProgress] = useState(0);
   const [animState, setAnimState] = useState("intro"); // "intro" | "waiting" | "outro" | "done"
@@ -515,15 +546,12 @@ export default function HeroSection({ hero }) {
          under the curtain on a real phone, and re-measuring on every
          address-bar animation frame is what made it jerk.
 
-         `svh` has no JS accessor, so measure it directly: one off-screen
-         probe element sized in svh, read once per resize. Falls back to
+         `svh` has no JS accessor, so read it off the background layer, which
+         is already sized `h-svh`. (This used to append a throwaway probe
+         element and measure it straight away, which forced a synchronous
+         layout on every mount — PageSpeed's "Forced reflow".) Falls back to
          innerHeight where the unit is unsupported. */
-      const probe = document.createElement("div");
-      probe.style.cssText =
-        "position:absolute;top:-9999px;left:-9999px;width:0;height:100svh;pointer-events:none;visibility:hidden";
-      document.body.appendChild(probe);
-      const svh = probe.getBoundingClientRect().height;
-      probe.remove();
+      const svh = svhLayerRef.current?.clientHeight ?? 0;
 
       setViewport({
         vw: window.innerWidth,
@@ -807,7 +835,16 @@ export default function HeroSection({ hero }) {
   } else if (progress > 0.6) {
     beigeClipTopPx = NAVBAR_H - phase3T * NAVBAR_H;
   }
-  const beigeClipPath = `inset(${beigeClipTopPx}px 0 0 0)`;
+  /* The curtain used to be revealed by clipping the beige+house layer from the
+     top. That kept the hero image (the LCP element) fully clipped — i.e. never
+     painted — until the intro and outro had played, which PageSpeed measured
+     as ~8.7s of "element render delay". The same visual is now produced the
+     other way round: the house layer is always painted, and the navy layer
+     sits ON TOP of it, clipped from the bottom so it covers exactly the band
+     above `beigeClipTopPx`. LCP ignores occlusion, so the image counts as
+     painted on first render. `calc(100% - …)` keeps the edge correct even
+     before `vh` has been measured on the client. */
+  const navyClipPath = `inset(0 0 calc(100% - ${beigeClipTopPx}px) 0)`;
 
   // ── House image scale: always fills viewport, subtle zoom-in during outro ──────────
   // Starts at 1.0 (full viewport) and zooms to 1.08 — never appears as a small box
@@ -921,18 +958,43 @@ export default function HeroSection({ hero }) {
       {/* ── Sticky Background ─────────────────────────────────────────────── */}
       {/* `fixed` until the reveal finishes — see `introCovers` above. */}
       <div
+        ref={svhLayerRef}
         className={`${introCovers ? "fixed" : "sticky"} top-0 left-0 w-full h-svh overflow-hidden pointer-events-none -z-10`}
       >
 
-        {/* Layer 0: Dark blue + waves.
+        {/* Layer 0: Beige + house — always painted (see `navyClipPath`). */}
+        <div className="absolute inset-0 w-full h-full -z-30 bg-[#EDE7DE]">
+          <div
+            className="absolute inset-0 w-full h-full"
+            style={{
+              transform: `scale3d(${bgScale}, ${bgScale}, 1)`,
+              transformOrigin: "center bottom",
+            }}
+          >
+            {/* One crop per breakpoint — a single landscape source
+                object-cover'd into a tall phone viewport loses the framing.
+                See `heroImgBase` for why this is a <picture>. */}
+            <picture>
+              <source media="(min-width: 1280px)" srcSet={heroDesktopSrcSet} sizes="100vw" />
+              <source media="(min-width: 768px)" srcSet={heroTabletSrcSet} sizes="100vw" />
+              <img
+                {...heroMobileProps}
+                className="object-cover object-[center_top] md:object-center xl:object-[center_top]"
+              />
+            </picture>
+          </div>
+        </div>
+
+        {/* Layer 1: Dark blue + waves, on top of the house and clipped from
+            the bottom as the curtain rises.
             The navy is set INLINE as well as via the class. `body` resolves to
-            white, and a class-driven background cannot paint until the 69KB
+            white, and a class-driven background cannot paint until the
             stylesheet has loaded — so the first frames of the intro rendered
             as a white flash before the backdrop appeared. An inline style is
             part of the HTML itself, so this paints on the very first frame. */}
         <div
-          className="absolute inset-0 w-full h-full -z-30 overflow-hidden pointer-events-none bg-[#2A3A4A]"
-          style={{ backgroundColor: "#2A3A4A" }}
+          className="absolute inset-0 w-full h-full -z-20 overflow-hidden pointer-events-none bg-[#2A3A4A]"
+          style={{ backgroundColor: "#2A3A4A", clipPath: navyClipPath, WebkitClipPath: navyClipPath }}
         >
           <svg
             viewBox="0 0 1440 1110"
@@ -945,68 +1007,6 @@ export default function HeroSection({ hero }) {
             <image href="/icons/Vector (3).svg" x="-16" y="382.24" width="1456" height="482.43" />
             <image href="/icons/Vector (4).svg" x="658.34" y="711.44" width="781.16" height="298.4" />
           </svg>
-        </div>
-
-        {/* Layer 1: Beige curtain + house */}
-        <div
-          className="absolute inset-0 w-full h-full -z-20 bg-[#EDE7DE]"
-          style={{ clipPath: beigeClipPath, WebkitClipPath: beigeClipPath }}
-        >
-          <div
-            className="absolute inset-0 w-full h-full"
-            style={{
-              transform: `scale3d(${bgScale}, ${bgScale}, 1)`,
-              transformOrigin: "center bottom",
-            }}
-          >
-            {/*
-             * Two crops of the same villa, one per orientation. A single
-             * landscape source object-cover'd into a tall phone viewport
-             * crops to the middle of the house and loses the framing, so
-             * mobile gets a portrait crop composed for that shape.
-             *
-             * Both are rendered and toggled with CSS rather than swapped on a
-             * JS breakpoint: this is the LCP image, so the correct one has to
-             * be in the initial HTML for the preloader to fetch it. `sizes`
-             * is what keeps that from costing anything — the hidden one
-             * matches no media condition, so the browser never downloads it.
-             */}
-            {/* hero-mobile.png is a renamed copy of "iPhone 13 & 14 - 10.png"
-                — the original name's spaces and "&" broke the image URL on
-                the production host (the & reads as a query-string separator
-                unless every proxy in front encodes it), so the served file
-                carries a URL-safe name. */}
-            <Image
-              src="/images/hero-mobile.webp"
-              alt="Chameri villa exterior"
-              fill
-              sizes="(max-width: 767px) 100vw, 0px"
-              className="object-cover object-[center_top] md:hidden"
-              priority
-            />
-            {/* alt="" — the mobile copy above already carries the description,
-                so these are decorative to avoid a duplicate announcement. */}
-            {/* Tablet (md → xl, 768–1279px — covers iPad Pro too). hero-tablet-v2.webp is a URL-safe webp of
-                "magnific_create-a-smooth-cinematic_oh4nQJS829 1 (1).png". */}
-            <Image
-              src="/images/hero-tablet-v2.webp"
-              alt=""
-              aria-hidden="true"
-              fill
-              sizes="(min-width: 768px) and (max-width: 1279px) 100vw, 0px"
-              className="object-cover object-center hidden md:block xl:hidden"
-              priority
-            />
-            <Image
-              src="/dummyimages/Frame 2121454280.webp"
-              alt=""
-              aria-hidden="true"
-              fill
-              sizes="(max-width: 1279px) 0px, 100vw"
-              className="object-cover object-[center_top] hidden xl:block"
-              priority
-            />
-          </div>
         </div>
       </div>
 

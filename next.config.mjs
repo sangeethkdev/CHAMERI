@@ -21,6 +21,14 @@ const nextConfig = {
   // Stops advertising the framework/version in every response.
   poweredByHeader: false,
 
+  experimental: {
+    /* Inlines the (~22KB) global stylesheet into the HTML instead of linking
+       it. PageSpeed reported the two CSS files as render-blocking (~650ms on
+       the critical path: HTML → CSS → first paint); inlined, the first paint
+       no longer waits on a second round trip. */
+    inlineCss: true,
+  },
+
   images: {
     /* AVIF first, then WebP. The source art is multi-MB PNG/JPEG; AVIF
        typically lands 30-50% under WebP for the same quality, and a browser
