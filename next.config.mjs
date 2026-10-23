@@ -46,7 +46,9 @@ const nextConfig = {
        `sizes` hint is missing or generous. Capping at 1920 removes that
        worst case. imageSizes covers the small fixed-width art (avatars,
        logos, icons). */
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    /* 1440 covers the common 1366–1440px laptop widths, which otherwise
+       jumped straight from 1200 to the 1920 file for full-width art. */
+    deviceSizes: [640, 750, 828, 1080, 1200, 1440, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
 
     remotePatterns: [

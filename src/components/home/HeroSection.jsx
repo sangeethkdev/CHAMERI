@@ -428,6 +428,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { preload } from "react-dom";
 import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import NewNavbar from "../common/NewNavbar";
@@ -517,6 +518,14 @@ const inverseEaseInOutCubic = (y) => {
 };
 
 export default function HeroSection({ hero }) {
+  /* Hero preloads, one per breakpoint, emitted into <head> by React. Without
+     them the browser only found the <img> after parsing past the inlined CSS
+     and queued it behind the fonts — PageSpeed measured ~1s of "resource load
+     delay". `media` means only the crop that matches is fetched. */
+  preload(heroMobileProps.src, { as: "image", media: "(max-width: 767px)", imageSrcSet: heroMobileProps.srcSet, imageSizes: "100vw", fetchPriority: "high" });
+  preload(heroMobileProps.src, { as: "image", media: "(min-width: 768px) and (max-width: 1279px)", imageSrcSet: heroTabletSrcSet, imageSizes: "100vw", fetchPriority: "high" });
+  preload(heroMobileProps.src, { as: "image", media: "(min-width: 1280px)", imageSrcSet: heroDesktopSrcSet, imageSizes: "100vw", fetchPriority: "high" });
+
   const sectionRef = useRef(null);
   const svhLayerRef = useRef(null);
 

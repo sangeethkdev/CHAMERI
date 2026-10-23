@@ -188,6 +188,11 @@ const Caption = ({ villa, gap = 3.31 }) => {
   );
 };
 
+/* Desktop cards take 41–53% of the row (md:w-[41%]…md:w-[53%]) and stack
+   full-width below md. Without a `sizes` Next assumed 100vw, so a ~685px card
+   downloaded a ~1320px image (PageSpeed "Improve image delivery"). */
+const CARD_SIZES = "(max-width: 767px) 100vw, 55vw";
+
 /** Reusable project image card */
 const ProjectCard = ({ villa, height }) => {
   const containerRef = useRef(null);
@@ -211,8 +216,8 @@ const ProjectCard = ({ villa, height }) => {
       onMouseLeave={resetCursor}
     >
       <div className="absolute inset-0 overflow-hidden">
-        <Image src={villa.img} alt={villa.name} fill className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-105" />
-        <Image src={villa.alt} alt={`${villa.name} alt`} fill className="object-cover transition-all duration-700 ease-in-out opacity-0 group-hover:scale-105 group-hover:opacity-100" />
+        <Image src={villa.img} alt={villa.name} fill sizes={CARD_SIZES} className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-105" />
+        <Image src={villa.alt} alt={`${villa.name} alt`} fill sizes={CARD_SIZES} className="object-cover transition-all duration-700 ease-in-out opacity-0 group-hover:scale-105 group-hover:opacity-100" />
         <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
       <ViewProjectBtn position={btnPos} />
@@ -546,7 +551,7 @@ const GalleryNew = ({ gallery }) => {
                 style={{ top: `${card.top}%`, left: `${card.left}%`, width: `${Math.max(card.width, MIN_CARD_WIDTH)}%` }}
               >
                 <Link href={projectHref(villa.project)} className="relative block w-full overflow-hidden" style={{ aspectRatio: card.ratio }}>
-                  <Image src={villa.img} alt={villa.name} fill className="object-cover" />
+                  <Image src={villa.img} alt={villa.name} fill sizes={`${Math.ceil(Math.max(card.width, MIN_CARD_WIDTH))}vw`} className="object-cover" />
                 </Link>
                 <Caption villa={villa} gap={3} />
               </div>
